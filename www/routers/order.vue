@@ -67,7 +67,6 @@
   import {Indicator} from 'mint-ui';
   import {InfiniteScroll} from 'mint-ui';
 
-
   export default {
     components: {header1, footer1},
     data () {

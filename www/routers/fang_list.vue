@@ -10,10 +10,6 @@
 
 .ys_item_con{margin-bottom:0.3rem}
 .price-bot input{height:100% !important;width:30% !important}
-.price-bot button{position:static !important;width:2rem !important;height:0.8rem !important}
-.btn{float:left;width:50%;text-align:center}
-.special{padding-left:0 !important}
-.special .ys_item_con{display:block;width:100%}
 .bg_gray {
   background-color: #f0eff5 !important;
   padding: .3rem .02rem;
@@ -35,8 +31,7 @@
   background-color: #16abdc;
   color: #fff;
 }
-#filter-features{height:400px;overflow-y:scroll}
-#filter-features .warpper:last-child{margin-bottom:0.5rem}
+
 </style>
 <template>
   <div>
@@ -153,12 +148,13 @@
                     </li>
                     <li class="clearfix bg_gray">
                       <div class="ys_item_con fl">
-                        <span v-for="a in areaArray" class="ys_tag" :class="{'active':areaTag===a}" :value="a" target="area" @click="selectTag($event)">{{a !== "-1" ? a + "㎡" : "不限"}}</span>
+                        <span v-for="a in areaArray" class="ys_tag">{{a ? a + "㎡" : "不限"}}</span>
                       </div>
                       <div class="ys_item_con fl">
                         <div class="price-bot">
-                          <input type="number" id="beginArea" value="" v-model.trim="areaRange[0]" maxlength="5" placeholder="平米"><i>----</i>
-                          <input type="number" id="endArea" value="" v-model.trim="areaRange[1]" maxlength="5" placeholder="平米">
+                          <input type="tel" id="beginArea" value="" maxlength="5" placeholder="平米"
+                                 v-model="size1"><i>----</i>
+                          <input type="tel" id="endArea" value="" maxlength="5" placeholder="平米" v-model="size2">
                         </div>
                       </div>
                     </li>
@@ -171,13 +167,13 @@
                     </li>
                     <li class="clearfix bg_gray">
                       <div class="ys_item_con fl">
-                        <span v-for="a in priceArray" class="ys_tag" :class="{'active':priceTag===a}" target="price" :value="a" @click="selectTag($event)">{{a !== "-1" ? a + "元" : "不限"}}</span>
+                        <span v-for="a in priceArray" class="ys_tag">{{a ? a + "元" : "不限"}}</span>
                       </div>
                       <div class="ys_item_con fl">
                         <div class="price-bot">
-                          <input type="text" id="beginPrice" value="" maxlength="5" placeholder="元"
-                                 v-model.trim="priceRange[0]"><i>----</i>
-                          <input type="text" id="endPrice" value="" maxlength="5" placeholder="元" v-model.trim="priceRange[1]">
+                          <input type="tel" id="beginPrice" value="" maxlength="5" placeholder="元"
+                                 v-model="size1"><i>----</i>
+                          <input type="tel" id="endPrice" value="" maxlength="5" placeholder="元" v-model="size2">
                         </div>
                       </div>
                     </li>
@@ -190,21 +186,7 @@
                     </li>
                     <li class="clearfix bg_gray">
                       <div class="ys_item_con fl">
-                        <span v-for="a in featureArray" class="ys_tag" :class="{'active':tsTag.indexOf(a.id)>-1}" :id="a.id" @click="pickTag($event)">{{a.topic}}</span>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-                <div class="warpper box-flex1">
-                  <ul class="box-flex1 bg-white cut-height">
-                    <li class="clearfix bg_gray special">
-                      <div class="ys_item_con fl">
-                        <div class="price-bot btn">
-                          <button rel="reset" @click.stop="setFilter($event)">重置</button>
-                        </div>
-                        <div class="price-bot btn">
-                          <button rel="confirm" @click.stop="setFilter($event)">确定</button>
-                        </div>
+                        <span v-for="a in featureArray" class="ys_tag" :id="a.id">{{a.topic}}</span>
                       </div>
                     </li>
                   </ul>
@@ -241,7 +223,7 @@
                     <dd class="supply_color ellipsis">{{item.district}}</dd>
                     <dd class="supply_color ellipsis">{{item.lpkzfy}}套房源可租</dd>
                     <dd>
-                      <dl class="supply_tag clearfix" v-if="item.label">
+                      <dl class="supply_tag clearfix" v-if="item.label !=null">
                         <dd v-for="item in item.label.split(',')" class="tagClass">{{item}}</dd>
                       </dl>
                     </dd>
@@ -267,7 +249,6 @@
   import {Indicator} from 'mint-ui';
   import {InfiniteScroll} from 'mint-ui';
   import {Toast} from 'mint-ui';
-  import {MessageBox} from 'mint-ui';
   import {Actionsheet} from 'mint-ui';
   import {Search} from 'mint-ui';
   import axios from 'axios';
@@ -291,14 +272,9 @@
         stationArray:[],
         priceFilter: "",
         areaFilter: "",
-        areaArray:["-1", "<100", "100-299", "300-499", "500-599", "1000-1499", ">1500"],
-        priceArray:["-1", "<3", "3-4.9", "5-7.9", "8-9.9", "10-14.9", ">=15"],
+        areaArray:["", "<100", "100-299", "300-499", "500-599", "1000-1499", ">1500"],
+        priceArray:["", "<3", "3-4.9", "5-7.9", "8-9.9", "10-14.9", ">=15"],
         featureArray: [],
-        priceTag: "",
-        areaTag: "",
-        tsTag: [],
-        priceRange: ["", ""],
-        areaRange: ["", ""],
 
         pricePArray: [],
         priceTArray: [],
@@ -382,78 +358,6 @@
         this.resetGetData();
         this.getFilters();
       },
-      selectTag(e){
-        const target = $(e.target), val = target.attr("value"), t = target.attr("target"), which = t ==="price" ? "priceTag" : "areaTag";
-        const range = t ==="price" ? "price_dj" : "area";
-        let final = val === "-1" ? "" : val.replace("<","0-").replace(">","").replace("=","").split("-"); 
-        if(val !== "-1" && final.length < 2){
-            final.push("10000");
-        }
-        if(val !== "-1"){
-            final[0] = t === "price" ? parseFloat(final[0]) : parseInt(final[0]);
-            final[1] = t === "price" ? parseFloat(final[1]) : parseInt(final[1]);
-        }
-
-        if(!val || !t){return;}
-        if ($(target).hasClass('active')) {
-          this[which] = val;
-          this.para[range] = "";
-          $(target).removeClass('active');
-        } else {
-          this[which] = val;
-          this.para[range] = final === "" ? final : JSON.stringify(final);
-          $(target).addClass('active');
-          $(target).siblings().removeClass('active');
-        }
-      },
-      pickTag(e){
-        const target = $(e.target), id = target.attr("id");
-        if(!id){return;}
-        if ($(target).hasClass('active')) {
-          let _t = new Set(this.tsTag);
-          _t.delete(id);
-          this.tsTag = [..._t];
-          $(target).removeClass('active');
-        } else {
-          let _t = new Set(this.tsTag);
-          _t.add(id);
-          this.tsTag = [..._t];
-          $(target).addClass('active');
-        }
-        this.para.label = this.tsTag.join(",");
-      },
-      setFilter(e){
-        const target = $(e.target), which = target.attr("rel");
-        if(which==="confirm") {
-            const aa = this.areaRange[0], ea = this.areaRange[1];
-            console.log(" ==== ", aa, ea);
-            if(aa && ea && parseInt(aa) >= parseInt(ea)){
-                MessageBox('提示', '面积区间填写有误。请重新填写');
-                return;
-            }
-            else if(aa && ea){
-                this.para.area = JSON.stringify([parseInt(aa), parseInt(ea)]);
-            }
-            const ap = this.priceRange[0], ep = this.priceRange[1];
-            if(ap && ep && parseInt(parseFloat(ap) * 100) >= parseInt(parseFloat(ep) * 100)){
-                MessageBox('提示', '价格区间填写有误。请重新填写');
-                return;
-            }
-            else if(ap && ep){
-                this.para.price_dj = JSON.stringify([parseInt(ap), parseInt(ap)]);
-            }
-        }
-
-        this.priceTag = "";
-        this.areaTag = "";
-        this.tsTag = [];
-        this.priceRange = ["", ""];
-        this.areaRange = ["", ""];
-        if (which === 'reset') {
-            return;
-        }
-        this.getData();
-      },
       getTsbq(){
           Indicator.open({
              text: '',
@@ -529,10 +433,10 @@
       },
       setAreaFilter(){
           if(this.areaFilter === '' || this.areaFilter === 'P1'){
-              this.areaFilter = 'A2';
+              this.areaFilter = 'P2';
           }
           else{
-              this.areaFilter = 'A1';
+              this.areaFilter = 'P1';
           }
           this.priceFilter = '';
           this.resetGetData();
@@ -722,14 +626,43 @@
         this.resultData = [];
         this.gRemoteData(paraObj, successCb, errorCb);
       },
+      selfInputPrice: function () {
+        if (parseInt(this.price1) < parseInt(this.price2)) {
+          if (this.priceFilterTab === 'P') {
+            this.para.price_dj = [parseInt(this.price1), parseInt(this.price2)]
+          } else {
+            this.para.price_zj = [parseInt(this.price1), parseInt(this.price2)]
+          }
+          this.getData();
+        } else {
+          Toast({
+            message: '请输入合理价格',
+            position: 'middle',
+            duration: 2000
+          });
+        }
+      },
+      selfInputSize: function () {
+        if (parseInt(this.size1) < parseInt(this.size2)) {
+          this.para.area = [parseInt(this.size1), parseInt(this.size2)];
+          this.getData();
+        } else {
+          Toast({
+            message: '请输入合理面积数字',
+            position: 'middle',
+            duration: 2000
+          });
+        }
+      },
+
       getData(){
         const paraObj = {
           "parameters": {
             "search_keywork": this.para.search_keywork,
             "district": this.para.district,
             "business": this.para.business,
-            "district1": this.para.district1,
-            "business1": this.para.business1,
+            "district1": "",
+            "business1": "",
             "line_id": this.para.line_id,
             "station_id": this.para.station_id,
             "area": this.para.area,
@@ -743,7 +676,6 @@
           "code": "30000001"
         }, this_ = this;
 
-        console.log(" === ", paraObj);
         this.currentFilterTab = 'nth';
         let successCb = function (result) {
           Indicator.close();

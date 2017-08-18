@@ -1,7 +1,7 @@
 <style scoped lang="less">
   @import "../resources/css/website/detail.less";
   @import "../resources/plugin/swiper/css/swiper.css"; /*swiper 轮播*/
-
+  .detail-icon{width:0.4rem !important;height:0.4rem !important}
 </style>
 <template>
   <div>
@@ -67,7 +67,6 @@
         <div id="houseScroll">
           <div class="size_wrap">
             <div class="size_box clearfix">
-
               <div v-for="(item,index) in area_arr" v-if="index == 0"
                    :id="item.code"
                    :class="{active:areaActive == index}"
@@ -104,12 +103,9 @@
                 </div>
               </router-link>
             </div>
-
             <div class="no_result" style="display: none" v-show="res_showFlag">暂无房源信息</div>
-
           </div>
         </div>
-
 
         <router-link :to="{path:'/list'}" id="houseListMore" v-show="more_flag" class="btn-more">查看更多</router-link>
       </div>
@@ -147,7 +143,7 @@
   import footer1 from '../components/footer.vue';
   import {Indicator} from 'mint-ui';
   import {InfiniteScroll} from 'mint-ui';
-
+  import {Toast} from 'mint-ui';
 
   import '../resources/plugin/swiper/js/swiper.min.js';
 
@@ -181,30 +177,21 @@
         property_fee: '',//物业费
         opening_date: '',//建成年代
         building_level: '',//楼盘级别
-        property_rights: '',//产权性质
         building_area: '',//建筑面积
 
         gaodeGPS: '',
-
       }
     },
     methods: {
-
       //获取筛选条件
       getSortList(){
         var _this = this;
-        //调用区域查询接口，更新数据
         this.$http.post(
-          this.$api,
-          {
-            "parameters": {},
-            "foreEndType": 2,
-            "code": "90000301"
-          }
+          this.$api + "/yhcms/web/jcsj/getTj.do"
         ).then(function (res) {
           var result = JSON.parse(res.bodyText);
           if (result.success) {
-            _this.area_arr = result.data.range_areas; //面积arr
+            _this.area_arr = result.data.range_areas;
 
             var all_area = {
               code: "area_all",
@@ -213,12 +200,17 @@
             _this.area_arr.unshift(all_area);
             $('.size_box').width(_this.area_arr.length * 2.3 + 'rem');
 
-
           } else {
-            this.$Message.error(result.message);
+            Toast({
+               message: '获取筛选条件失败: ' + result.message,
+               position: 'bottom'
+            });
           }
         }, function (res) {
-          this.$Message.error('获取区域失败');
+            Toast({
+               message: '获取筛选条件失败! 请稍候再试',
+               position: 'bottom'
+            });
         });
       },
 
@@ -226,7 +218,7 @@
       getDetail(){
         var _this = this;
         this.$http.post(
-          this.$api,
+          this.$api + "/yhcms/web/lpjbxx/getZdLpxq.do",
           {
             "parameters": {
               "building_id": this.building_id,
@@ -241,7 +233,6 @@
             "code": "30000002"
           }
         ).then(function (res) {
-
           var result = JSON.parse(res.bodyText);
           Indicator.close();
           if (result.success) {
@@ -249,59 +240,47 @@
 
               $('title').html(result.data.building_name);
 
-
-              _this.total_households = result.data.total_households == "" ? '--' : result.data.total_households; //总户数
+              _this.total_households = result.data.zhs == "" ? '--' : result.data.zhs; //总户数
               _this.district = result.data.district == null ? '区域' : result.data.district; //区域
               _this.business = result.data.business == null ? '商圈' : result.data.business; //商圈
+              _this.total_items = result.data.kzfyS == null ? '--' : result.data.kzfyS;
 
               _this.address = '[' + _this.district + '-' + _this.business + '] ' + result.data.address;
               _this.price = result.data.price == null ? '--' : result.data.price;
               _this.positionData = result.data.longitude + ',' + result.data.latitude;
-
               _this.bMap(_this.positionData);
 
               _this.building_level = result.data.building_level == null ? '--' : result.data.building_level;
 
-
               //物业信息
-              _this.property_company = result.data.property_company; //物业公司
-              _this.property_fee = result.data.property_fee; //物业费
-              _this.opening_date = result.data.opening_date; // 建成年代
+              _this.property_company = result.data.wygs; //物业公司
+              _this.property_fee = result.data.wyf; //物业费
+              _this.opening_date = result.data.kprq; // 建成年代
               _this.building_level = result.data.building_level; //楼盘级别
-              _this.property_rights = result.data.property_rights; //产权性质
               _this.building_area = result.data.building_area;  //建筑面积
             }
           }
 
         }, function (res) {
-          this.$Message.error('获取楼盘详情失败');
+          Toast({
+            message: '获取楼盘详情失败',
+            position: 'middle',
+            duration: 3000
+          });
         });
       },
 
       //获取楼盘详情页楼盘列表
       getDetList(){
         var _this = this;
-
         this.buildList = [];
         Indicator.open({
           text: '',
           spinnerType: 'fading-circle'
         });
         this.$http.post(
-          this.$api,
-          {
-            "parameters": {
-              "building_id": this.building_id,
-              "area": this.area,
-              "price_dj": this.price_dj,
-              "price_zj": this.price_zj,
-              "orderby": "D",
-              "curr_page": "1",
-              "items_perpage": "5"
-            },
-            "foreEndType": 2,
-            "code": "30000003"
-          }
+          this.$api + "/yhcms/web/lpjbxx/getZdLpxq.do",
+          {"parameters":{"building_id":this.building_id,"curr_page":"1","items_perpage":"100","area":this.area},"foreEndType":2,"code":"30000002"}
         ).then(function (res) {
           var result = JSON.parse(res.bodyText);
           Indicator.close();
@@ -309,7 +288,7 @@
             _this.buildList = result.data.houses;
             if (_this.buildList.length) {
               _this.res_showFlag = false; //不展示
-              _this.total_items = result.data.total_items == null ? '--' : result.data.total_items;
+              _this.total_items = result.data.kzfyS == null ? '--' : result.data.kzfyS;
 
               if (_this.buildList.length > 3) {
                 _this.more_flag = true;
@@ -321,7 +300,10 @@
           }
 
         }, function (res) {
-          this.$Message.error('获取楼盘列表失败');
+          Toast({
+              message: '获取楼盘列表失败! 请稍候再试',
+              position: 'bottom'
+          });
         });
       },
 
@@ -330,7 +312,6 @@
         $(e.target).addClass('active').siblings().removeClass('active');
 
         this.area = [];
-
         var min = 0, max = 0, sort_two_single = 1;
         if ($(e.target).html() == '全部') {
           this.area = "";
@@ -338,7 +319,7 @@
         } else if ($(e.target).hasClass('last')) {
           this.area = [];
           min = Math.floor($(e.target).html().match(/\d+/g)[0]);
-          max = "";
+          max = 1000000;
           this.area.push(min);
           this.area.push(max);
         } else {
@@ -349,9 +330,7 @@
           this.area.push(min);
           this.area.push(max);
         }
-
         this.getDetList();
-
       },
 
       //百度地图
@@ -374,10 +353,7 @@
           location.href = "http://m.amap.com/around/?locations=" + pos_data + "&keywords=餐厅,酒店,健身,银行&defaultIndex=" + index + "&defaultView=&searchRadius=1000&key=cc238157d6183b1d54404a704bb86171&defaultView=map";
 
         });
-
-
       }
-
     },
 
     mounted(){
@@ -399,23 +375,14 @@
       //banner swiper
       var mySwiper = new Swiper('.swiper-container', {
         loop: true,
-//        pagination: '.swiper-pagination', //分页器
         paginationClickable: true,  //分页可点
         centeredSlides: true,
         autoplay: 3500,
-        //effect : 'fade', //切换效果(淡入淡出)
-        //fade: {
-        //    crossFade: false,
-        //},
         onSlideChangeStart: function (swiper) {
-          $("#picIndex").text(swiper.realIndex + 1);
+            $("#picIndex").text(swiper.realIndex + 1);
         },
-
-        autoplayDisableOnInteraction: true  //鼠标操作时关闭autopaly
-
+        autoplayDisableOnInteraction: true
       });
-
-
     }
   }
 </script>
