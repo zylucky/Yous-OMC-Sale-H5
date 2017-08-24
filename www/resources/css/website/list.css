@@ -221,7 +221,7 @@
 .bg-white .active a {
   color: #476CBA;
 }
-.bg-white li {
+.bg-white li:not(:last-child) {
   border-bottom: 1px solid #E8E8E8;
 }
 .price-bottom {

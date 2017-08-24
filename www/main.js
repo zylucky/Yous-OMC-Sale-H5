@@ -10,7 +10,7 @@ import VueResource from 'vue-resource';
 Vue.use(VueRouter);
 Vue.use(VueResource);
 Vue.use(MintUI);
-Vue.prototype.$api = "http://192.168.0.197:8081" //api地址
+Vue.prototype.$api = "http://192.168.1.130:8081" //api地址
 Vue.config.debug = true;// 开启debug模式
 
 var router = new VueRouter({
@@ -30,8 +30,16 @@ var router = new VueRouter({
             component: require('./routers/detail.vue')
         },
         {
+            path: '/house',
+            component: require('./routers/house.vue')
+        },
+        {
             path: '/order',
             component: require('./routers/order.vue')
+        },
+        {
+            path: '/select',
+            component: require('./routers/select.vue')
         },
         {
             path: '*',

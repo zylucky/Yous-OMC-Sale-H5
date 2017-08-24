@@ -2,6 +2,15 @@
   @import "../resources/css/website/detail.less";
   @import "../resources/plugin/swiper/css/swiper.css"; /*swiper 轮播*/
   .detail-icon{width:0.4rem !important;height:0.4rem !important}
+  .bt{border-top:2px solid #e5e5e6}
+  .houseInfo div.intro{text-align:center}
+  .houseInfo div.collapse{margin:0 auto;width:85%;text-align:center;padding:.3rem 0}
+  .houseInfo div.intro span{display:inline-block;padding:.3rem 0 .1rem 0}
+  .houseInfo div.collapse i{display: inline-block;width: .3rem;height: .18rem;margin-left: .06rem;background: #fff url(../resources/images/icons/detail-icon.png) -0.18rem -0.78rem no-repeat;background-size: .64rem auto;cursor:pointer}
+  .houseInfo div.collapse.active-filter i{background-position: -0.18rem -1.04rem !important}
+  .houseInfo p{text-indent:.55rem;padding:.2rem .4rem .4rem .4rem}
+  .bg-white{height: 490px;padding-bottom: .2rem;}
+  .item span{width:47% !important}
 </style>
 <template>
   <div>
@@ -17,34 +26,23 @@
         <div id="slideBox" class="slideBox">
           <div class="swiper-container">
             <div class="swiper-wrapper">
-              <div class="swiper-slide">
+              <div class="swiper-slide" v-for="image in building_images">
                 <a href="javascript:;">
-                  <img src="../resources/images/banner/banner01.png" alt="">
-                </a>
-              </div>
-              <div class="swiper-slide">
-                <a href="javascript:;">
-                  <img src="../resources/images/banner/banner02.png" alt="">
-                </a>
-              </div>
-              <div class="swiper-slide">
-                <a href="javascript:;">
-                  <img src="../resources/images/banner/banner03.png" alt="">
+                  <img :src="image" alt="">
                 </a>
               </div>
             </div>
             <div class="banner-page">
-              <span class="pageState"><span id="picIndex">1</span>/3</span>
+              <span class="pageState"><span id="picIndex">1</span>/{{building_images.length}}</span>
             </div>
           </div>
-
         </div>
       </div>
 
       <!--office info-->
       <div class="office-info border-tb">
         <div class="banner-text">
-          <p class="ellipsis">
+          <p class="ellipsis" :title="address">
             <span class="detail-icon"></span>{{address}}</p>
         </div>
         <div class="house_msg_tit clearfix">
@@ -52,13 +50,16 @@
           <div><i></i><span v-text="total_items+'套房源可租'"></span></div>
           <span class="hou_line"></span>
         </div>
-        <div class="house_msg_content clearfix">
-          <span>建筑面积：<i v-text="building_area+'㎡'"></i></span>
-          <span>总户数：<i v-text="total_households"></i></span>
-          <span>楼盘级别：<i v-text="building_level"></i></span>
-          <span>空置率：<i v-text="vacancy_rate"></i></span>
-          <span>物业公司：<i v-text="property_company"></i></span>
-          <span>物业费：<i v-text="property_fee+'元/㎡·月'"></i></span>
+        <div class="house_msg_content item clearfix">
+          <span>建成年代：<i v-text="kprq"></i></span>
+          <span>产权性质：<i v-for="xz in chqxz">{{xz}}</i></span>
+          <span>物业公司：<i v-for="gs in wygs.split('、')">{{gs}}</i></span>
+          <span>物业费：<i v-text="wyf+'元/㎡/天'"></i></span>
+          <span>停车位数量：<i v-text="tcwsl"></i></span>
+          <span>停车费：<i v-text="tcf+'元/月'"></i></span>
+          <span>网络公司：<i v-text="wlgs"></i></span>
+          <span>供暖费：<i v-text="gnf+'元/月'"></i></span>
+          <span>可否注册：<i v-text="zc"></i></span>
         </div>
       </div>
 
@@ -94,7 +95,6 @@
               <router-link :to="{path:'order',query:{house_id:item1.id}}" class="dz-list clearfix">
                 <div class="dz_img_wrap">
                   <img :src="item1.housing_icon" alt="">
-                  <div class="img_number">12图</div>
                 </div>
                 <div class="dz_msg fl">
                   <span v-text="item1.monthly_price+'万元/月'"></span>
@@ -106,11 +106,18 @@
             <div class="no_result" style="display: none" v-show="res_showFlag">暂无房源信息</div>
           </div>
         </div>
-
-        <router-link :to="{path:'/list'}" id="houseListMore" v-show="more_flag" class="btn-more">查看更多</router-link>
+        <a id="houseListMore" v-show="more_flag" class="btn-more" @click="loadmore">查看更多</a>
       </div>
 
-      <!--map-->
+      <div class="mb08 houseInfo">
+        <div class="intro"><span>楼盘介绍</span></div>
+        <p>{{desp}}</p>
+
+        <div class="collapse active-filter bt">
+            <span @click="toggle($event)"><i class="filt-arrow"></i></span>
+        </div>
+      </div>
+
       <div class="pt20 mb08 border-tb bg-white" id="kuan">
         <h2 class="sort-title tc fb mb20">周边配套</h2>
         <div class="map-box" id="allmap"></div>
@@ -158,6 +165,7 @@
         building_id: '',
         address: '',  //楼盘地址
         price: '',  //单价
+        desp: "",
         buildList: [], //结果列表
         total_items: '',  //可租房源总数
         areaActive: 0,
@@ -170,15 +178,18 @@
         price_dj: "", // 单价
         price_zj: "", //总价
 
-        total_households: '', //总户数
-
-        vacancy_rate: '',//空置率
-        property_company: '',//物业公司
-        property_fee: '',//物业费
-        opening_date: '',//建成年代
-        building_level: '',//楼盘级别
-        building_area: '',//建筑面积
-
+        curr_page: 1, 
+        wygs: '',//物业公司
+        wyf: '',//物业费
+        kprq: '',//建成年代
+        tcf: "",
+        wlgs: "",
+        gnf: "",
+        zc: "",
+        chqxz: "",
+        tcwsl: "",
+        building_images: [],
+        property: {"1":"写字楼", "2":"公寓","3":"商务楼","4":"住宅","5":"商业","6":"酒店","7":"综合","8":"别墅","9":"商业综合体","10":"酒店式公寓"},
         gaodeGPS: '',
       }
     },
@@ -240,24 +251,28 @@
 
               $('title').html(result.data.building_name);
 
-              _this.total_households = result.data.zhs == "" ? '--' : result.data.zhs; //总户数
               _this.district = result.data.district == null ? '区域' : result.data.district; //区域
               _this.business = result.data.business == null ? '商圈' : result.data.business; //商圈
+              _this.desp = !result.data.desp ? "建外SOHO是由18栋公寓、2栋写字楼、4栋SOHO小型办公房及大量裙房组成，配套设施包括幼儿园和会所等，是北京CBD中面积最大的建筑项目，也是北京的商业心脏......": result.data.desp;
               _this.total_items = result.data.kzfyS == null ? '--' : result.data.kzfyS;
 
-              _this.address = '[' + _this.district + '-' + _this.business + '] ' + result.data.address;
+              _this.address = _this.district + result.data.address;
               _this.price = result.data.price == null ? '--' : result.data.price;
               _this.positionData = result.data.longitude + ',' + result.data.latitude;
               _this.bMap(_this.positionData);
 
-              _this.building_level = result.data.building_level == null ? '--' : result.data.building_level;
+              _this.building_images = result.data.building_images.split(";");
 
               //物业信息
-              _this.property_company = result.data.wygs; //物业公司
-              _this.property_fee = result.data.wyf; //物业费
-              _this.opening_date = result.data.kprq; // 建成年代
-              _this.building_level = result.data.building_level; //楼盘级别
-              _this.building_area = result.data.building_area;  //建筑面积
+              _this.wygs = result.data.wygs; //物业公司
+              _this.wyf = result.data.wyf; //物业费
+              _this.kprq = result.data.kprq; // 建成年代
+              _this.tcwsl = result.data.tcwsl;
+              _this.tcf = result.data.tcf;
+              _this.wlgs = result.data.wlgs;
+              _this.gnf = result.data.gnf;
+              _this.zc = result.data.zc;
+              _this.chqxz = result.data.chqxz.split('、').map((p)=>{return this.property[p]});
             }
           }
 
@@ -273,24 +288,23 @@
       //获取楼盘详情页楼盘列表
       getDetList(){
         var _this = this;
-        this.buildList = [];
         Indicator.open({
           text: '',
           spinnerType: 'fading-circle'
         });
         this.$http.post(
           this.$api + "/yhcms/web/lpjbxx/getZdLpxq.do",
-          {"parameters":{"building_id":this.building_id,"curr_page":"1","items_perpage":"100","area":this.area},"foreEndType":2,"code":"30000002"}
+          {"parameters":{"building_id":this.building_id,"curr_page":this.curr_page,"items_perpage":"5","area":this.area},"foreEndType":2,"code":"30000002"}
         ).then(function (res) {
           var result = JSON.parse(res.bodyText);
           Indicator.close();
           if (result.success) {
-            _this.buildList = result.data.houses;
+            _this.buildList = _this.buildList.concat(result.data.houses);
             if (_this.buildList.length) {
               _this.res_showFlag = false; //不展示
               _this.total_items = result.data.kzfyS == null ? '--' : result.data.kzfyS;
 
-              if (_this.buildList.length > 3) {
+              if (_this.buildList.length > 5) {
                 _this.more_flag = true;
               }
 
@@ -306,7 +320,22 @@
           });
         });
       },
-
+      toggle(e){
+        const target = $("div.collapse");
+        if (target.hasClass('active-filter')) {
+          target.removeClass('active-filter');
+          $("div.collapse").removeClass("bt");
+          $("div.intro + p").hide();
+        } else {
+          $("div.collapse").addClass("bt");
+          $("div.intro + p").show();
+          target.addClass('active-filter');
+        }
+      },
+      loadmore(){
+          this.curr_page += 1;
+          this.getDetList();
+      },
       //选择面积筛选
       sel_area_list(e){
         $(e.target).addClass('active').siblings().removeClass('active');
@@ -330,6 +359,7 @@
           this.area.push(min);
           this.area.push(max);
         }
+        this.buildList = [];
         this.getDetList();
       },
 

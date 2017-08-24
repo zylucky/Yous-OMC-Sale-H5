@@ -8,10 +8,16 @@
     }
   }
 
+.linked{color:#0000ff}
 .ys_item_con{margin-bottom:0.3rem}
 .price-bot input{height:100% !important;width:30% !important}
+.price-bot button{position:static !important;width:2rem !important;height:0.8rem !important}
+.btn{float:left;width:50%;text-align:center}
+.special{padding-left:0 !important}
+.special .ys_item_con{display:block;width:100%}
+.bg-white li{border-bottom:none !important}
+.box-flex1{border-bottom:1px solid rgb(232, 232, 232);}
 .bg_gray {
-  background-color: #f0eff5 !important;
   padding: .3rem .02rem;
   height: auto !important
 }
@@ -27,17 +33,30 @@
   margin-bottom: .08rem;
   border-radius: .1rem;
 }
-.ys_tag.active {
-  background-color: #16abdc;
-  color: #fff;
+.active {
+  background-color: #16abdc !important;
+  color: #fff !important;
 }
-
+#filter-features{height:400px;overflow-y:scroll}
+#filter-features .warpper:last-child{margin-bottom:0.5rem}
+.pos_block{z-index: 88;background-color: #fff;border-bottom: 1px solid #DCDCDC}
+.cell{text-align:center;float:left;padding:.2rem 0}
+.cell:first-child{width:25%}
+.cell:nth-child(2){width:20%}
+.cell:nth-child(3){width:20%}
+.cell:nth-child(4){width:15%}
+.cell:last-child{width:20%}
+li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
+.pv15{padding:.1rem 0 !important}
+.export{position:fixed;right:0.4rem;top:.15rem;z-index:9999}
+.export img{width:.6rem;height:.6rem;cursor:pointer}
 </style>
 <template>
   <div>
     <!--header-->
     <section id="header">
       <header1></header1>
+      <a class="export" href="#" @click.stop.prevent="exportExcel"><img src="../resources/images/icons/down.png"></a>
     </section>
     <a href="javascript:;" class="detail-search" style="position: fixed;left: 0; top: 0">
       <input type="text" id="keyword" placeholder="请输入写字楼、区域、商圈" v-model="para.search_keywork" maxlength="50"
@@ -148,13 +167,12 @@
                     </li>
                     <li class="clearfix bg_gray">
                       <div class="ys_item_con fl">
-                        <span v-for="a in areaArray" class="ys_tag">{{a ? a + "㎡" : "不限"}}</span>
+                        <span v-for="a in areaArray" class="ys_tag" :class="{'active':areaTag===a}" :value="a" target="area" @click="selectTag($event)">{{a !== "-1" ? a + "㎡" : "不限"}}</span>
                       </div>
                       <div class="ys_item_con fl">
                         <div class="price-bot">
-                          <input type="tel" id="beginArea" value="" maxlength="5" placeholder="平米"
-                                 v-model="size1"><i>----</i>
-                          <input type="tel" id="endArea" value="" maxlength="5" placeholder="平米" v-model="size2">
+                          <input type="number" @focus="filterFocus" rel="area" id="beginArea" value="" v-model.trim="areaRange[0]" maxlength="5" placeholder="平米"><i>----</i>
+                          <input type="number" @focus="filterFocus" rel="area" id="endArea" value="" v-model.trim="areaRange[1]" maxlength="5" placeholder="平米">
                         </div>
                       </div>
                     </li>
@@ -167,13 +185,13 @@
                     </li>
                     <li class="clearfix bg_gray">
                       <div class="ys_item_con fl">
-                        <span v-for="a in priceArray" class="ys_tag">{{a ? a + "元" : "不限"}}</span>
+                        <span v-for="a in priceArray" class="ys_tag" :class="{'active':priceTag===a}" target="price" :value="a" @click="selectTag($event)">{{a !== "-1" ? a + "元" : "不限"}}</span>
                       </div>
                       <div class="ys_item_con fl">
                         <div class="price-bot">
-                          <input type="tel" id="beginPrice" value="" maxlength="5" placeholder="元"
-                                 v-model="size1"><i>----</i>
-                          <input type="tel" id="endPrice" value="" maxlength="5" placeholder="元" v-model="size2">
+                          <input type="text" rel="price" @focus="filterFocus" id="beginPrice" value="" maxlength="5" placeholder="元"
+                                 v-model.trim="priceRange[0]"><i>----</i>
+                          <input type="text" rel="price" @focus="filterFocus" id="endPrice" value="" maxlength="5" placeholder="元" v-model.trim="priceRange[1]">
                         </div>
                       </div>
                     </li>
@@ -186,7 +204,21 @@
                     </li>
                     <li class="clearfix bg_gray">
                       <div class="ys_item_con fl">
-                        <span v-for="a in featureArray" class="ys_tag" :id="a.id">{{a.topic}}</span>
+                        <span v-for="a in featureArray" class="ys_tag" :class="{'active':tsTag.indexOf(a.id)>-1}" :id="a.id" @click="pickTag($event)">{{a.topic}}</span>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <div class="warpper box-flex1">
+                  <ul class="box-flex1 bg-white cut-height">
+                    <li class="clearfix bg_gray special">
+                      <div class="ys_item_con fl">
+                        <div class="price-bot btn">
+                          <button rel="reset" @click.stop="setFilter($event)">重置</button>
+                        </div>
+                        <div class="price-bot btn">
+                          <button rel="confirm" @click.stop="setFilter($event)">确定</button>
+                        </div>
                       </div>
                     </li>
                   </ul>
@@ -198,39 +230,36 @@
         </div>
 
         <!--筛选框fixed时替代div-->
-        <div  id="pos_block"></div>
+        <div class="pos_block clearfix">
+            <div class="cell"><span>楼盘</span></div>
+            <div class="cell"><span>房间号</span></div>
+            <div class="cell"><span>面积</span></div>
+            <div class="cell"><span>单价</span></div>
+            <div class="cell"><span>更多信息</span></div>
+        </div>
 
         <!--筛选结果start-->
         <ul
           v-infinite-scroll="loadMore"
           infinite-scroll-disabled="loading"
           infinite-scroll-distance="20"
-          infinite-scroll-immediate-check="checked">
-          <li class="ys_listcon pv15" v-for="item in resultData">
-            <router-link :to="{path:'/detail',query:{building_id:item.id}}" class="supply_box">
-              <div class="supply_price">
-                <span>{{item.price}}</span> 元/㎡·天
-                <i style="display: block">{{item.max_areas}}㎡</i>
+          infinite-scroll-immediate-check="checked" class="clearfix">
+          <li class="ys_listcon pv15 clearfix" :class="{'linked': select.indexOf(item.id) > -1}" v-for="item in resultData">
+              <div class="cell">
+                <span>{{item.topic}}</span>
               </div>
-              <dl class="supply">
-                <dt>
-                  <img :src="item.img_path" :alt="item.img_alt">
-                  <span class="icon720"><img src="../resources/images/icons/y720-icon.png"></span>
-                </dt>
-                <dd class="supply_msg_box">
-                  <dl>
-                    <dd class="supply_house">{{item.building_name}}</dd>
-                    <dd class="supply_color ellipsis">{{item.district}}</dd>
-                    <dd class="supply_color ellipsis">{{item.lpkzfy}}套房源可租</dd>
-                    <dd>
-                      <dl class="supply_tag clearfix" v-if="item.label !=null">
-                        <dd v-for="item in item.label.split(',')" class="tagClass">{{item}}</dd>
-                      </dl>
-                    </dd>
-                  </dl>
-                </dd>
-              </dl>
-            </router-link>
+              <div class="cell">
+                <span>{{item.zdh}} - {{item.fybh}}</span>
+              </div>
+              <div class="cell">
+                <span>{{item.housing_area}}</span>
+              </div>
+              <div class="cell">
+                <span>{{item.daily_price}}</span>
+              </div>
+              <div class="cell">
+                <span style="cursor:pointer;cursor:hand" :rel="item.id" @click.stop.prevent="makeSelect">点击进入</span>
+              </div>
           </li>
         </ul>
         <p v-if="loading" class="page-infinite-loading">
@@ -249,6 +278,7 @@
   import {Indicator} from 'mint-ui';
   import {InfiniteScroll} from 'mint-ui';
   import {Toast} from 'mint-ui';
+  import {MessageBox} from 'mint-ui';
   import {Actionsheet} from 'mint-ui';
   import {Search} from 'mint-ui';
   import axios from 'axios';
@@ -272,15 +302,14 @@
         stationArray:[],
         priceFilter: "",
         areaFilter: "",
-        areaArray:["", "<100", "100-299", "300-499", "500-599", "1000-1499", ">1500"],
-        priceArray:["", "<3", "3-4.9", "5-7.9", "8-9.9", "10-14.9", ">=15"],
+        areaArray:["-1", "<100", "100-299", "300-499", "500-599", "1000-1499", ">1500"],
+        priceArray:["-1", "<3", "3-4.9", "5-7.9", "8-9.9", "10-14.9", ">=15"],
         featureArray: [],
-
-        pricePArray: [],
-        priceTArray: [],
-        sizeArray: [],
-        subBuesiness:[],
-        stationArray:[],
+        priceTag: "",
+        areaTag: "",
+        tsTag: [],
+        priceRange: ["", ""],
+        areaRange: ["", ""],
         curTab:'',
         thirdpart:'',
         currentFilterTab: 'nth',
@@ -289,10 +318,7 @@
         loading: false,
         noMore: false,
         checked: false,
-        price1: '',
-        price2: '',
-        size1: '',
-        size2: '',
+        select: [],
         para: {
           "search_keywork": "",
           "district": "",
@@ -323,16 +349,24 @@
             top: '.88rem',
             left: 0
           });
-
-          $('#pos_block').show();
-
+          $('.pos_block').css({
+            position: 'fixed',
+            display: 'block',
+            width: '100%',
+            top: '1.78rem',
+            left: 0
+          });
         } else {
           $('.filtate-outter').css({
             position: 'relative',
             top: 0,
             left: 0
           });
-          $('#pos_block').hide();
+          $('.pos_block').css({
+            position: 'static',
+            top: 0,
+            left: 0
+          });
         }
       });
     },
@@ -355,8 +389,147 @@
         if(this.$route['query']['keyword']){
           this.para.search_keywork = this.$route['query']['keyword'];
         }
+        //
+        let select = JSON.parse(localStorage.getItem("select") || "[]");
+        select = select || [];
+        this.select = select; 
+        //
         this.resetGetData();
         this.getFilters();
+      },
+      selectTag(e){
+        const target = $(e.target), val = target.attr("value"), t = target.attr("target"), which = t ==="price" ? "priceTag" : "areaTag";
+        const range = t ==="price" ? "price_dj" : "area";
+        let final = val === "-1" ? "" : val.replace("<","0-").replace(">","").replace("=","").split("-"); 
+        if(val !== "-1" && final.length < 2){
+            final.push("10000");
+        }
+        if(val !== "-1"){
+            final[0] = t === "price" ? parseFloat(final[0]) : parseInt(final[0]);
+            final[1] = t === "price" ? parseFloat(final[1]) : parseInt(final[1]);
+        }  
+        if(which === "priceTag"){
+            this.priceRange = ["",""];
+        }
+        else{
+            this.areaRange = ["",""];
+        }
+
+        if(!val || !t){return;}
+        if ($(target).hasClass('active')) {
+          this[which] = val;
+          this.para[range] = "";
+          $(target).removeClass('active');
+        } else {
+          this[which] = val;
+          this.para[range] = final === "" ? final : JSON.stringify(final);
+          $(target).addClass('active');
+          $(target).siblings().removeClass('active');
+        }
+      },
+      pickTag(e){
+        const target = $(e.target), id = target.attr("id");
+        if(!id){return;}
+        if ($(target).hasClass('active')) {
+          let _t = new Set(this.tsTag);
+          _t.delete(id);
+          this.tsTag = [..._t];
+          $(target).removeClass('active');
+        } else {
+          let _t = new Set(this.tsTag);
+          _t.add(id);
+          this.tsTag = [..._t];
+          $(target).addClass('active');
+        }
+        this.para.label = this.tsTag.join(",");
+      },
+      filterFocus(e){
+          const target = $(e.target), rel = target.attr("rel");
+          if(rel === "price"){
+              $.each($("span[target='price']"), (idx, item)=>{$(item).removeClass("active");});
+              this.para.price_dj = "";
+          }
+          else if(rel === "area"){
+              $.each($("span[target='area']"), (idx, item)=>{$(item).removeClass("active");});
+              this.para.area = "";
+          }
+      },
+      makeSelect(e){
+          const target = $(e.target), rel = target.attr("rel"), that = this;
+          let select = JSON.parse(localStorage.getItem("select") || "[]");
+          select = select || [];
+          select.push(rel);
+          const ids = new Set(select);
+          select = [...ids];
+          localStorage.setItem("select", JSON.stringify(select));
+
+          setTimeout(function(){
+              that.$router.push({path:'/order?house_id='+rel});
+          },500);
+      },
+      exportExcel(){
+          MessageBox.confirm('确认导出房源列表？').then(action => {
+              let param = {"parameters":{ "search_keywork":"", "district":"", "business":"","district1":"", "business1":"", "line_id":"", "station_id":"","area":"", "price_dj":"", "label":"", "orderby":"", "curr_page":"","items_perpage":""}, "foreEndType":2, "code":"30000001"}, that = this;
+              Indicator.open({
+                text: '正在进行导出，请稍候...',
+                spinnerType: 'fading-circle'
+              });
+              this.$http.post(this.$api + "/yhcms/web/lpjbxx/daochu.do", param).then((res)=>{
+                  const result = JSON.parse(res.bodyText), data = result;
+                  if (data.success !== true) {
+                     Indicator.close();
+                      Toast({
+                        message: '抱歉,导出房源出错, 请稍候再试!',
+                        position: 'middle',
+                        duration: 3000
+                      });
+                  }
+                  else{
+                      Indicator.close();
+                      const link = this.$api + "/yhcms/" + data.data;
+                      setTimeout(function(){
+                          window.location = link;
+                      },500);
+                  }
+              }, (res)=>{
+                 Toast({
+                   message: '抱歉,导出房源出错, 请稍候再试!',
+                   position: 'middle',
+                   duration: 3000
+                 });
+              });
+          });
+      },
+      setFilter(e){
+        const target = $(e.target), which = target.attr("rel");
+        if(which==="confirm") {
+            const aa = this.areaRange[0], ea = this.areaRange[1];
+            if(aa && ea && parseInt(aa) >= parseInt(ea)){
+                MessageBox('提示', '面积区间填写有误。请重新填写');
+                return;
+            }
+            else if(aa && ea){
+                this.para.area = JSON.stringify([parseInt(aa), parseInt(ea)]);
+            }
+            const ap = this.priceRange[0], ep = this.priceRange[1];
+            if(ap && ep && parseInt(parseFloat(ap) * 100) >= parseInt(parseFloat(ep) * 100)){
+                MessageBox('提示', '价格区间填写有误。请重新填写');
+                return;
+            }
+            else if(ap && ep){
+                this.para.price_dj = JSON.stringify([parseInt(ap), parseInt(ap)]);
+            }
+        }
+
+        this.priceTag = "";
+        this.areaTag = "";
+        this.tsTag = [];
+        this.priceRange = ["", ""];
+        this.areaRange = ["", ""];
+        if (which === 'reset') {
+            return;
+        }
+        this.getData();
       },
       getTsbq(){
           Indicator.open({
@@ -433,10 +606,10 @@
       },
       setAreaFilter(){
           if(this.areaFilter === '' || this.areaFilter === 'P1'){
-              this.areaFilter = 'P2';
+              this.areaFilter = 'A2';
           }
           else{
-              this.areaFilter = 'P1';
+              this.areaFilter = 'A1';
           }
           this.priceFilter = '';
           this.resetGetData();
@@ -599,10 +772,11 @@
         }, this_ = this;
         let successCb = function (result) {
           Indicator.close();
-          if (result.data.data.buildings.length < this_.para.items_perpage) {
+          const data = result.data.data;
+          if (data.length < this_.para.items_perpage) {
             this_.noMore = true;
           }
-          this_.resultData = this_.resultData.concat(result.data.data.buildings)
+          this_.resultData = this_.resultData.concat(data)
           if (this_.resultData.length == 0) {
             Toast({
               message: '抱歉,暂无符合条件的房源!',
@@ -626,43 +800,14 @@
         this.resultData = [];
         this.gRemoteData(paraObj, successCb, errorCb);
       },
-      selfInputPrice: function () {
-        if (parseInt(this.price1) < parseInt(this.price2)) {
-          if (this.priceFilterTab === 'P') {
-            this.para.price_dj = [parseInt(this.price1), parseInt(this.price2)]
-          } else {
-            this.para.price_zj = [parseInt(this.price1), parseInt(this.price2)]
-          }
-          this.getData();
-        } else {
-          Toast({
-            message: '请输入合理价格',
-            position: 'middle',
-            duration: 2000
-          });
-        }
-      },
-      selfInputSize: function () {
-        if (parseInt(this.size1) < parseInt(this.size2)) {
-          this.para.area = [parseInt(this.size1), parseInt(this.size2)];
-          this.getData();
-        } else {
-          Toast({
-            message: '请输入合理面积数字',
-            position: 'middle',
-            duration: 2000
-          });
-        }
-      },
-
       getData(){
         const paraObj = {
           "parameters": {
             "search_keywork": this.para.search_keywork,
             "district": this.para.district,
             "business": this.para.business,
-            "district1": "",
-            "business1": "",
+            "district1": this.para.district1,
+            "business1": this.para.business1,
             "line_id": this.para.line_id,
             "station_id": this.para.station_id,
             "area": this.para.area,
@@ -680,8 +825,9 @@
         let successCb = function (result) {
           Indicator.close();
           this_.loading = false;
-          this_.resultData = this_.resultData.concat(result.data.data.buildings);
-          if (result.data.data.buildings < this_.para.items_perpage) {
+          const data = result.data.data;
+          this_.resultData = this_.resultData.concat(data);
+          if (data < this_.para.items_perpage) {
             this_.noMore = true;
           }
           if (this_.resultData.length == 0) {
@@ -690,7 +836,7 @@
               position: 'middle',
               duration: 3000
             });
-          } else if (this_.resultData.length > 0 && result.data.data.buildings.length == 0) {
+          } else if (this_.resultData.length > 0 && data.length == 0) {
             Toast({
               message: '已经获得当前条件的所有房源!',
               position: 'middle',
@@ -710,7 +856,7 @@
       },
 
       gRemoteData(paraobj, successcb, errorcb){
-        axios.post('/yhcms/web/lpjbxx/getZdLpjbxx.do', paraobj)
+        axios.post('/yhcms/web/lpjbxx/getWxLbFyxx.do', paraobj)
           .then(function (response) {
             if (typeof successcb === "function") {
               successcb(response)

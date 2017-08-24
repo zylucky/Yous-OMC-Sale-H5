@@ -36,9 +36,9 @@
   background-color: #16abdc !important;
   color: #fff !important;
 }
+.supply_msg_box dd.supply_house{font-size:.26rem !important}
 #filter-features{height:400px;overflow-y:scroll}
 #filter-features .warpper:last-child{margin-bottom:0.5rem}
-.zc{background-color:#ef104e !important;color:#FFF !important}
 </style>
 <template>
   <div>
@@ -227,25 +227,24 @@
           infinite-scroll-distance="20"
           infinite-scroll-immediate-check="checked">
           <li class="ys_listcon pv15" v-for="item in resultData">
-            <router-link :to="{path:'/detail',query:{building_id:item.id}}" class="supply_box">
+            <router-link :to="{path:'order',query:{house_id:item.id}}" class="supply_box">
               <div class="supply_price">
-                <span>{{item.price}}</span> 元/㎡·天
-                <i style="display: block">{{item.max_areas}}㎡</i>
+                <span>{{item.daily_price}}</span> 元/㎡·天
               </div>
               <dl class="supply">
                 <dt>
-                  <img :src="item.img_path" :alt="item.img_alt">
+                  <img :src="item.housing_icon" alt="">
                   <span class="icon720"><img src="../resources/images/icons/y720-icon.png"></span>
                 </dt>
                 <dd class="supply_msg_box">
                   <dl>
-                    <dd class="supply_house">{{item.building_name}}</dd>
+                    <dd class="supply_house">{{item.topic}}&nbsp;{{item.fybh}}</dd>
                     <dd class="supply_color ellipsis">{{item.district}}</dd>
-                    <dd class="supply_color ellipsis">{{item.lpkzfy}}套房源可租</dd>
                     <dd>
                       <dl class="supply_tag clearfix">
-                        <dd v-if="item.label" v-for="tag in item.label.split(',')" class="tagClass">{{tag}}</dd>
-                        <dd class="tagClass zc">{{item.zc}}</dd>
+                        <dd class="tagClass">{{item.housing_area}}㎡</dd>
+                        <dd v-if="item.lc" class="tagClass">{{item.lc}}</dd>
+                        <dd v-if="item.decoration_level" class="tagClass">{{item.decoration_level}}</dd>
                       </dl>
                     </dd>
                   </dl>
@@ -705,10 +704,10 @@
         }, this_ = this;
         let successCb = function (result) {
           Indicator.close();
-          if (result.data.data.buildings.length < this_.para.items_perpage) {
+          if (result.data.data.length < this_.para.items_perpage) {
             this_.noMore = true;
           }
-          this_.resultData = this_.resultData.concat(result.data.data.buildings)
+          this_.resultData = this_.resultData.concat(result.data.data)
           if (this_.resultData.length == 0) {
             Toast({
               message: '抱歉,暂无符合条件的房源!',
@@ -753,22 +752,22 @@
           "code": "30000001"
         }, this_ = this;
 
-        console.log(" === ", paraObj);
         this.currentFilterTab = 'nth';
         let successCb = function (result) {
           Indicator.close();
           this_.loading = false;
-          this_.resultData = this_.resultData.concat(result.data.data.buildings);
+
+          this_.resultData = this_.resultData.concat(result.data.data);
           if (result.data.data.buildings < this_.para.items_perpage) {
             this_.noMore = true;
           }
-          if (this_.resultData.length == 0) {
+          if (this_.resultData.length <= 0) {
             Toast({
               message: '抱歉,暂无符合条件的房源!',
               position: 'middle',
               duration: 3000
             });
-          } else if (this_.resultData.length > 0 && result.data.data.buildings.length == 0) {
+          } else if (this_.resultData.length > 0 && result.data.data.length == 0) {
             Toast({
               message: '已经获得当前条件的所有房源!',
               position: 'middle',
@@ -788,7 +787,7 @@
       },
 
       gRemoteData(paraobj, successcb, errorcb){
-        axios.post('/yhcms/web/lpjbxx/getZdLpjbxx.do', paraobj)
+        axios.post("/yhcms/web/lpjbxx/getWxLbFyxx.do", paraobj)
           .then(function (response) {
             if (typeof successcb === "function") {
               successcb(response)

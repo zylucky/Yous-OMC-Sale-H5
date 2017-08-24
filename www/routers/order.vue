@@ -1,5 +1,12 @@
 <style scoped lang="less">
   @import "../resources/css/website/order.less";
+  @import "../resources/plugin/swiper/css/swiper.css"; /*swiper 轮播*/
+  .weixin_wrap{padding-bottom:.2rem}
+  .weixin_head span{width:47% !important;margin-right: 0.2rem !important}
+  .weixin_head{padding-bottom:.3rem;border-bottom:2px solid #e5e5e6}
+  .pageState:before{margin-right: 4px;border-top: 6px solid transparent;border-bottom: 6px solid transparent;border-right: 6px solid #FFF}
+  .pageState{position: absolute;right: 15px;bottom: 4px;padding: 2px 8px;line-height: 20px;font-size: 12px;color: #FFF; z-index: 3}
+  .section{padding-bottom:.2rem}
 </style>
 <template>
   <div>
@@ -9,53 +16,62 @@
     </section>
     <!--header end-->
     <!--context-->
-    <section id="section" class="pr">
-      <div class="detail-container mb60">
+    <section id="section" class="pr section">
+      <div class="detail-container">
         <!--banner-->
         <div id="slideBox" class="slideBox">
-          <img src="../resources/images/banner/banner01.png" alt="">
-        </div>
-
-        <div class="build_price_wrap clearfix">
-          <span><i v-text="monthly_price"></i>万元/月</span>
-          <span v-text="daily_price+'元/㎡/天'"></span>
-        </div>
-
-        <div class="build_common_msg_wrap">
-          <a href="javascript:;"><span>面积</span><i v-text="room_area+'㎡'"></i></a>
-          <a href="javascript:;"><span>工位</span><i v-text="workstation"></i></a>
-          <a href="javascript:;"><span>装修</span><i v-text="decoration_level"></i></a>
-          <span class="common_ver_line"></span>
-          <span class="common_ver_line second"></span>
-        </div>
-
-        <div class="weixin_wrap">
-          <div class="weixin_head clearfix">
-            <span class="fl">楼层：<i v-text="locat_floor+'/'+floors"></i></span>
-            <span class="fl">车位：<i v-text="parking">无</i></span>
-            <span class="fl">租赁权限：<i>航远房源</i></span>
-            <span class="fl">有无租户：<i v-text="rentor"></i></span>
-          </div>
-          <div class="weixin_bot clearfix">
-            <img class="fl weixin_img" src="../resources/images/ys_weixin.jpg" alt="">
-            <div class="fl weixin_bot_box">
-              <span>销售顾问：<i>张三</i></span>
-              <span>联系方式：<i class="con_telephone">010-6726526</i></span>
-              <span class="weixin_tips">扫描或者长按识别二维码添加销售顾问为好友</span>
+          <div class="swiper-container">
+            <div class="swiper-wrapper">
+              <div class="swiper-slide" v-for="image in house_image">
+                <a href="javascript:;">
+                  <img :src="image" alt="">
+                </a>
+              </div>
+            </div>
+            <div class="banner-page">
+              <span class="pageState"><span id="picIndex">1</span>/{{house_image.length}}</span>
             </div>
           </div>
         </div>
+      </div>
+      <div class="build_price_wrap clearfix">
+        <span><i v-text="monthly_price"></i>元/月</span>
+        <span v-text="daily_price+'元/㎡/天'"></span>
+      </div>
 
+      <div class="build_common_msg_wrap">
+        <a href="javascript:;"><span>面积</span><i v-text="room_area+'㎡'"></i></a>
+        <a href="javascript:;"><span>工位</span><i v-text="workstation"></i></a>
+        <a href="javascript:;"><span>房间状态</span><i v-text="fjzt"></i></a>
+        <span class="common_ver_line"></span>
+        <span class="common_ver_line second"></span>
+      </div>
+
+      <div class="weixin_wrap">
+        <div class="weixin_head clearfix">
+          <span>楼层：<i v-text="locat_floor"></i>/<i v-text="floors"></i></span>
+          <span>可否注册：<i v-text="zc"></i></span>
+          <span>层高：<i v-text="fjcg"></i></span>
+          <span>朝向：<i v-text="chx">{{chx}}</i></span>
+          <span>建成年代：<i v-text="kprq"></i></span>
+          <span>产权性质：<i v-text="chqxz"></i></span>
+          <span>物业公司：<i v-text="wygs"></i></span>
+          <span>物业费：<i v-text="wyf+'元/㎡/天'"></i></span>
+          <span>供暖费：<i v-text="gnf+'元/月'"></i></span>
+          <span>停车费：<i v-text="tcf+'元/月'"></i></span>
+          <span>网络公司：<i v-text="wlgs"></i></span>
+        </div>
+        <div class="weixin_bot clearfix">
+          <div class="fl weixin_bot_box">
+            <span>销售顾问：<i v-text="name"></i></span>
+            <span>联系方式：<a :href="'tel:' + phone"><i class="con_telephone" v-text="phone"></i></a></span>
+          </div>
+        </div>
       </div>
       <div class="tel-order clearfix">
-
-        <a id="favoriteA" href="javascript:" class="order--attention clearfix">
-          <i id="favorite" class="detail-icon" fl></i>
-          <p class="fl">关注</p></a>
-        <a id="semwaploupanxiangqingdibu400" href="tel:010-6726526" class="phone--tel-order">
+        <a id="semwaploupanxiangqingdibu400" :href="'tel:' + phone" class="phone--tel-order">
           <img src="../resources/images/icons/phone-icon.png" class="mr05 mt-3">一键拨号</a>
       </div>
-
     </section>
     <!--context end-->
   </div>
@@ -65,6 +81,7 @@
   import header1 from '../components/header.vue';
   import footer1 from '../components/footer.vue';
   import {Indicator} from 'mint-ui';
+  import {Toast} from 'mint-ui';
   import {InfiniteScroll} from 'mint-ui';
 
   export default {
@@ -77,10 +94,23 @@
         workstation:0, //工位
         floors:0, //总楼层
         locat_floor:0, //所在楼层
-        decoration_level:0, //装修程度
+        fjzt: "", 
 
-        parking:'--', //车位
-        rentor:'--', //租户
+        house_image: [],
+        name: "",
+        phone: "",
+        fjcg: "",
+        chx: "",
+        wygs: '',//物业公司
+        wyf: '',//物业费
+        kprq: '',//建成年代
+        tcf: "",
+        wlgs: "",
+        gnf: "",
+        zc: "",
+        chqxz: "",
+        building_images: [],
+        property: {"1":"写字楼", "2":"公寓","3":"商务楼","4":"住宅","5":"商业","6":"酒店","7":"综合","8":"别墅","9":"商业综合体","10":"酒店式公寓"},
 
       }
     },
@@ -90,7 +120,7 @@
         var _this = this;
 
         this.$http.post(
-          this.$api,
+          this.$api + "/yhcms/web/lpjbxx/getWxFyxx.do",
           {
             "parameters": {
               "hourse_id": this.$route.query.house_id
@@ -103,18 +133,35 @@
           Indicator.close();
           if (result.success) {
             if (result.data) {
-              _this.daily_price = result.data.daily_price == null ? '--' : result.data.daily_price;
-              _this.monthly_price = result.data.monthly_price == null ? '--' : result.data.monthly_price;
-              _this.room_area = result.data.room_area == null ? '--' : result.data.room_area;
-              _this.workstation = result.data.room_area == null ? '--' : result.data.workstation;
-              _this.floors = result.data.floors == null ? '--' : result.data.floors;
-              _this.locat_floor = result.data.locat_floor == null ? '--' : result.data.locat_floor;
-              _this.decoration_level = result.data.decoration_level == null ? '--' : result.data.decoration_level;
+              const data = result.data[0];
+              _this.daily_price = !data.dj ? '--' : data.dj;
+              _this.monthly_price = !data.yzj ? '--' : data.yzj;
+              _this.room_area = !data.fjmj ? '--' : data.fjmj;
+              _this.workstation = !data.krgw ? '--' : data.krgw;
+              _this.floors = !data.zglc ? '--' : data.zglc;
+              _this.locat_floor = !data.lc ? '--' : data.lc;
+              _this.wyf = !data.wyf ? '--' : data.wyf;
+              _this.wygs = data.wygs;
+              _this.fjcg = !data.fjcg? '--' : data.fjcg;
+              _this.name = !data.name ? '--' : data.name;
+              _this.phone = !data.phone ? '--' : data.phone;
+              _this.house_image = data.housing_icon.split(";");
+              _this.zc = !data.zc? '--' : data.zc;
+              _this.chx = data.chx;
+              _this.kprq = data.kprq;
+              _this.chqxz = data.chqxz;
+              _this.gnf= data.gnf;
+              _this.tcf = data.tcf;
+              _this.wlgs = data.wlgs;
             }
           }
 
         }, function (res) {
-          this.$Message.error('获取楼盘详情失败');
+          Toast({
+            message: '抱歉,获取楼盘详情失败!',
+            position: 'middle',
+            duration: 3000
+          });
         });
       },
     },
