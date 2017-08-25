@@ -36,9 +36,12 @@
   background-color: #16abdc !important;
   color: #fff !important;
 }
+.supply_msg_box > dl > dd:not(:last-child){padding-bottom:.1rem}
+.supply_msg_box > dl > dd:last-child > dl > dd:not(:last-child){padding-bottom:.17rem}
 .supply_msg_box dd.supply_house{font-size:.26rem !important}
 #filter-features{height:400px;overflow-y:scroll}
 #filter-features .warpper:last-child{margin-bottom:0.5rem}
+.supply_msg_box dd.supply_house{margin-top:0 !important}
 </style>
 <template>
   <div>
@@ -47,7 +50,7 @@
       <header1></header1>
     </section>
     <a href="javascript:;" class="detail-search" style="position: fixed;left: 0; top: 0">
-      <input type="text" id="keyword" placeholder="请输入写字楼、区域、商圈" v-model="para.search_keywork" maxlength="50"
+      <input type="text" id="keyword" placeholder="请输入写字楼、分区、商圈" v-model="para.search_keywork" maxlength="50"
              @focus="changeRou">
     </a>
     <section class="section"
@@ -229,22 +232,21 @@
           <li class="ys_listcon pv15" v-for="item in resultData">
             <router-link :to="{path:'order',query:{house_id:item.id}}" class="supply_box">
               <div class="supply_price">
-                <span>{{item.daily_price}}</span> 元/㎡·天
+                <span>{{item.daily_price === '0.0' ? '' : item.daily_price}}</span> 元/㎡·天
               </div>
               <dl class="supply">
                 <dt>
-                  <img :src="item.housing_icon" alt="">
-                  <span class="icon720"><img src="../resources/images/icons/y720-icon.png"></span>
+                  <img :src="$prefix + '/' + item.housing_icon" alt="">
                 </dt>
                 <dd class="supply_msg_box">
                   <dl>
                     <dd class="supply_house">{{item.topic}}&nbsp;{{item.fybh}}</dd>
                     <dd class="supply_color ellipsis">{{item.district}}</dd>
                     <dd>
-                      <dl class="supply_tag clearfix">
-                        <dd class="tagClass">{{item.housing_area}}㎡</dd>
-                        <dd v-if="item.lc" class="tagClass">{{item.lc}}</dd>
-                        <dd v-if="item.decoration_level" class="tagClass">{{item.decoration_level}}</dd>
+                      <dl class="cell clearfix">
+                        <dd>{{item.housing_area === '0.0' ? '': item.housing_area}}㎡</dd>
+                        <dd v-if="item.lc">{{item.lc}}层</dd>
+                        <dd v-if="item.decoration_level">{{item.decoration_level}}</dd>
                       </dl>
                     </dd>
                   </dl>
@@ -319,7 +321,6 @@
           "station_id": "",
           "area": "",
           "price_dj": "",
-          "price_zj": "",
           "label": "",
           "orderby": "D",
           "curr_page": 1,
@@ -435,7 +436,6 @@
         const target = $(e.target), which = target.attr("rel");
         if(which==="confirm") {
             const aa = this.areaRange[0], ea = this.areaRange[1];
-            console.log(" ==== ", aa, ea);
             if(aa && ea && parseInt(aa) >= parseInt(ea)){
                 MessageBox('提示', '面积区间填写有误。请重新填写');
                 return;
@@ -461,7 +461,10 @@
         if (which === 'reset') {
             return;
         }
-        this.getData();
+
+        this.priceFilter = '';
+        this.areaFilter = '';
+        this.resetGetData();
       },
       getTsbq(){
           Indicator.open({
@@ -534,6 +537,7 @@
               this.priceFilter = 'P1';
           }
           this.areaFilter = '';
+
           this.resetGetData();
       },
       setAreaFilter(){
@@ -544,6 +548,7 @@
               this.areaFilter = 'A1';
           }
           this.priceFilter = '';
+
           this.resetGetData();
       },
       getQueryString: function (key) {
@@ -555,16 +560,22 @@
         this.currentFilterTab = 'nth';
       },
       changeRou: function () {
-        this.$router.push({path: '/filter'})
+        this.$router.push({path: '/filter?r=house'})
       },
       searchChoose: function (code, val, value, e) {
         switch ($(e.target).closest('li').attr('data-type')) {
           case 'positionA':
             //行政区域
             $('h2.district-h').html(value);
-            this.para.business1 = code;
+            if(value==="不限"){
+                this.para.district1 = code;
+                this.para.business1 = "";
+            }
+            else{
+                this.para.business1 = code;
+                this.para.district1 = "";
+            }
             this.para.business = "";
-            this.para.district1 = "";
             this.para.district = "";
 
             this.para.line_id = '';
@@ -573,50 +584,36 @@
           case 'positionY':
             //业务区域
             $('h2.district-h').html(value);
-            this.para.business = code;
+            if(value==="不限"){
+                this.para.business = code;
+                this.para.district = "";
+            }
+            else{
+                this.para.business = "";
+                this.para.district = code;
+            }
             this.para.business1 = "";
             this.para.district1 = "";
-            this.para.district = "";
             this.para.line_id = '';
             this.para.station_id = '';
             break;
           case 'positionL':
             $('h2.district-h').html(value);
-            this.para.station_id = code;
+            if(value==="不限"){
+                this.para.line_id = code;
+                this.para.station_id = "";
+            }
+            else{
+                this.para.line_id = "";
+                this.para.station_id = code;
+            }
             this.para.business = '';
             this.para.district = '';
             this.para.business1 = '';
             this.para.district1 = '';
             break;
-          case 'size':
-            $('h2.area-h').html(value);
-            if(code==''){
-              this.para.area = '';
-            }else{
-              this.para.area = [parseInt(val.split('-')[0]), parseInt(val.split('-')[1])];
-            }
-            break;
-          case 'priceP':
-            $('h2.price-h').html(value);
-            if(code==''){
-              this.para.price_dj = '';
-            }else{
-              this.para.price_dj = [parseInt(val.split('-')[0]), parseInt(val.split('-')[1])];
-            }
-            break;
-          case 'priceT':
-            $('h2.price-h').html(value);
-            if(code==''){
-              this.para.price_zj ='';
-            }else{
-              this.para.price_zj = [parseInt(val.split('-')[0]), parseInt(val.split('-')[1])];
-            }
-            break;
-          case 'feature':
-            $('h2.feature-h').html(value);
-            this.para.label = code;
-            break;
           default:
+            break;
         }
         this.currentFilterTab = 'nth';
         Indicator.open({
@@ -682,54 +679,16 @@
         this.currentFilterTab = $(e.target).closest('li').attr('data-type')
       },
       resetGetData: function () {
-        var paraObj = {
-          "parameters": {
-            "search_keywork": this.para.search_keywork,
-            "district": this.para.district,
-            "business": this.para.business,
-            "district1": this.para.district1,
-            "business1": this.para.business1,
-            "line_id": this.para.line_id,
-            "station_id": this.para.station_id,
-            "area": this.para.area,
-            "price_dj": this.para.price_dj,
-            "price_zj": this.para.price_zj,
-            "label": this.para.label,
-            "orderby": this.priceFilter || this.areaFilter || "D",
-            "curr_page": this.para.curr_page,
-            "items_perpage": 10
-          },
-          "foreEndType": 2,
-          "code": "30000001"
-        }, this_ = this;
-        let successCb = function (result) {
-          Indicator.close();
-          if (result.data.data.length < this_.para.items_perpage) {
-            this_.noMore = true;
-          }
-          this_.resultData = this_.resultData.concat(result.data.data)
-          if (this_.resultData.length == 0) {
-            Toast({
-              message: '抱歉,暂无符合条件的房源!',
-              position: 'middle',
-              duration: 3000
-            });
-          }
-        };
-        let errorCb = function (result) {
-          Indicator.close();
-          Toast({
-            message: '抱歉,暂无符合条件的房源!',
-            position: 'middle',
-            duration: 3000
-          });
-        };
-        Indicator.open({
-          text: '',
-          spinnerType: 'fading-circle'
-        });
+        this.noMore = false;
+        this.loading = false;
+
+        this.para.curr_page = 1;
+        this.para.label = "";
+        this.para.price_dj = "";
+        this.para.area = "";
         this.resultData = [];
-        this.gRemoteData(paraObj, successCb, errorCb);
+
+        this.getData();
       },
       getData(){
         const paraObj = {
@@ -744,7 +703,7 @@
             "area": this.para.area,
             "price_dj": this.para.price_dj,
             "label": this.para.label,
-            "orderby": "D",
+            "orderby": this.priceFilter || this.areaFilter || "D",
             "curr_page": this.para.curr_page,
             "items_perpage": 10
           },

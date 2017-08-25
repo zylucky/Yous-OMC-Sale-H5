@@ -9,16 +9,13 @@
   .houseInfo div.collapse i{display: inline-block;width: .3rem;height: .18rem;margin-left: .06rem;background: #fff url(../resources/images/icons/detail-icon.png) -0.18rem -0.78rem no-repeat;background-size: .64rem auto;cursor:pointer}
   .houseInfo div.collapse.active-filter i{background-position: -0.18rem -1.04rem !important}
   .houseInfo p{text-indent:.55rem;padding:.2rem .4rem .4rem .4rem}
-  .bg-white{height: 490px;padding-bottom: .2rem;}
-  .item span{width:47% !important}
+  .bg-white{padding-bottom: .2rem;}
+  .item span.row{width:100% !important}
+  .item span:not(.row){width:47% !important}
+  .section{padding-top:0 !important}
 </style>
 <template>
   <div>
-    <!--header-->
-    <section id="header">
-      <header1></header1>
-    </section>
-    <!--header end-->
     <!--context-->
     <section id="section" class="pr section">
       <div class="detail-container">
@@ -28,7 +25,7 @@
             <div class="swiper-wrapper">
               <div class="swiper-slide" v-for="image in building_images">
                 <a href="javascript:;">
-                  <img :src="image" alt="">
+                  <img :src="$prefix + '/' + image" alt="">
                 </a>
               </div>
             </div>
@@ -46,19 +43,19 @@
             <span class="detail-icon"></span>{{address}}</p>
         </div>
         <div class="house_msg_tit clearfix">
-          <div><i></i><span v-text="price+'元/㎡/天'"></span></div>
-          <div><i></i><span v-text="total_items+'套房源可租'"></span></div>
+          <div><i></i><span v-text="price"></span></div>
+          <div><i></i><span v-text="total_items"></span></div>
           <span class="hou_line"></span>
         </div>
         <div class="house_msg_content item clearfix">
           <span>建成年代：<i v-text="kprq"></i></span>
-          <span>产权性质：<i v-for="xz in chqxz">{{xz}}</i></span>
-          <span>物业公司：<i v-for="gs in wygs.split('、')">{{gs}}</i></span>
-          <span>物业费：<i v-text="wyf+'元/㎡/天'"></i></span>
+          <span class="row">产权性质：<i v-for="xz in chqxz">{{xz}}</i></span>
+          <span class="row">物业公司：<i v-for="gs in wygs.split('、')">{{gs}}</i></span>
+          <span>物业费：<i v-text="wyf"></i></span>
+          <span>供暖费：<i v-text="gnf"></i></span>
           <span>停车位数量：<i v-text="tcwsl"></i></span>
-          <span>停车费：<i v-text="tcf+'元/月'"></i></span>
-          <span>网络公司：<i v-text="wlgs"></i></span>
-          <span>供暖费：<i v-text="gnf+'元/月'"></i></span>
+          <span>停车费：<i v-text="tcf"></i></span>
+          <span class="row">网络公司：<i v-text="wlgs"></i></span>
           <span>可否注册：<i v-text="zc"></i></span>
         </div>
       </div>
@@ -94,11 +91,11 @@
             <div class="size_con_sub" v-for="item1 in buildList">
               <router-link :to="{path:'order',query:{house_id:item1.id}}" class="dz-list clearfix">
                 <div class="dz_img_wrap">
-                  <img :src="item1.housing_icon" alt="">
+                  <img :src="$prefix + '/' + item1.housing_icon" alt="">
                 </div>
                 <div class="dz_msg fl">
-                  <span v-text="item1.monthly_price+'万元/月'"></span>
-                  <span><i v-text="item1.housing_area+'㎡'"></i><i v-text="item1.decoration_level"></i></span>
+                  <span v-text="(item1.monthly_price==='0.0'?'':item1.monthly_price)+'元/月'"></span>
+                  <span><i v-text="(item1.housing_area==='0.0'?'':item1.housing_area)+'㎡'"></i><i v-text="item1.decoration_level"></i></span>
                   <span v-text="item1.workstation+'个工位'"></span>
                 </div>
               </router-link>
@@ -124,19 +121,19 @@
         <ul class="text-gray6 clearfix ph15" id="map_item_ul">
           <li class="supporting-item">
             <i class="supporting-icon sup-ct"></i>
-            <span class="db">餐厅 <b class="text-black">33</b></span>
+            <span class="db">餐厅 <b class="text-black">{{restaurant}}</b></span>
           </li>
           <li class="supporting-item">
             <i class="supporting-icon sup-jd"></i>
-            <span class="db">酒店 <b class="text-black">25</b></span>
+            <span class="db">酒店 <b class="text-black">{{hotel}}</b></span>
           </li>
           <li class="supporting-item">
             <i class="supporting-icon sup-js"></i>
-            <span class="db">健身 <b class="text-black">4</b></span>
+            <span class="db">健身 <b class="text-black">{{health}}</b></span>
           </li>
           <li class="supporting-item">
             <i class="supporting-icon sup-yh"></i>
-            <span class="db">银行 <b class="text-black">22</b></span>
+            <span class="db">银行 <b class="text-black">{{bank}}</b></span>
           </li>
         </ul>
       </div>
@@ -191,6 +188,12 @@
         building_images: [],
         property: {"1":"写字楼", "2":"公寓","3":"商务楼","4":"住宅","5":"商业","6":"酒店","7":"综合","8":"别墅","9":"商业综合体","10":"酒店式公寓"},
         gaodeGPS: '',
+        positionData: "",
+        restaurant: "",
+        hotel: "",
+        health: "",
+        bank: "",
+        allmap: ""
       }
     },
     methods: {
@@ -253,26 +256,47 @@
 
               _this.district = result.data.district == null ? '区域' : result.data.district; //区域
               _this.business = result.data.business == null ? '商圈' : result.data.business; //商圈
-              _this.desp = !result.data.desp ? "建外SOHO是由18栋公寓、2栋写字楼、4栋SOHO小型办公房及大量裙房组成，配套设施包括幼儿园和会所等，是北京CBD中面积最大的建筑项目，也是北京的商业心脏......": result.data.desp;
-              _this.total_items = result.data.kzfyS == null ? '--' : result.data.kzfyS;
+              _this.desp = !result.data.desp ? "": result.data.desp;
+              _this.total_items = result.data.kzfyS == null ? '暂无数据' : result.data.kzfyS + '套房源可租';
 
               _this.address = _this.district + result.data.address;
-              _this.price = result.data.price == null ? '--' : result.data.price;
+              _this.price = result.data.price == null ? '暂无数据' : result.data.price + '元/㎡/天';
               _this.positionData = result.data.longitude + ',' + result.data.latitude;
               _this.bMap(_this.positionData);
 
               _this.building_images = result.data.building_images.split(";");
 
               //物业信息
-              _this.wygs = result.data.wygs; //物业公司
-              _this.wyf = result.data.wyf; //物业费
-              _this.kprq = result.data.kprq; // 建成年代
-              _this.tcwsl = result.data.tcwsl;
-              _this.tcf = result.data.tcf;
-              _this.wlgs = result.data.wlgs;
-              _this.gnf = result.data.gnf;
-              _this.zc = result.data.zc;
+              _this.wygs = result.data.wygs || '暂无数据'; //物业公司
+              _this.wyf = !result.data.wyf ? '暂无数据' : result.data.wyf + '元/㎡/天'; //物业费
+              _this.kprq = result.data.kprq || '暂无数据'; // 建成年代
+              _this.tcwsl = result.data.tcwsl || '暂无数据';
+              _this.tcf = !result.data.tcf ? '暂无数据' : result.data.tcf + '元/月';
+              _this.wlgs = result.data.wlgs || '暂无数据';
+              _this.gnf = !result.data.gnf ? '暂无数据' : result.data.gnf + '元/月';
+              _this.zc = result.data.zc || '暂无数据';
               _this.chqxz = result.data.chqxz.split('、').map((p)=>{return this.property[p]});
+
+              /*
+              setTimeout(function(){_this.getPoi("餐厅", "restaurant");},1000);
+              setTimeout(function(){_this.getPoi("酒店", "hotel");},1000);
+              setTimeout(function(){_this.getPoi("健身", "health");},1000);
+              setTimeout(function(){_this.getPoi("银行", "bank");},1000);
+              */
+
+              //图片加载完成后,创建轮播图
+              setTimeout(function(){
+                var mySwiper = new Swiper('.swiper-container', {
+                  loop: true,
+                  paginationClickable: true,
+                  centeredSlides: true,
+                  autoplay: 3500,
+                  onSlideChangeStart: function (swiper) {
+                      $("#picIndex").text(swiper.realIndex + 1);
+                  },
+                  autoplayDisableOnInteraction: true
+                });
+              }, 1000);
             }
           }
 
@@ -302,7 +326,7 @@
             _this.buildList = _this.buildList.concat(result.data.houses);
             if (_this.buildList.length) {
               _this.res_showFlag = false; //不展示
-              _this.total_items = result.data.kzfyS == null ? '--' : result.data.kzfyS;
+              _this.total_items = !result.data.kzfyS ? '暂无数据' : result.data.kzfyS + '套房源可租';
 
               if (_this.buildList.length > 5) {
                 _this.more_flag = true;
@@ -368,6 +392,7 @@
         var _this = this;
         var posArr = pos_data.split(',');
         var map = new BMap.Map("allmap");    // 创建Map实例
+        this.allmap = map;
         var point = new BMap.Point(posArr[0], posArr[1]);
         map.centerAndZoom(new BMap.Point(posArr[0], posArr[1]), 15);  // 初始化地图,设置中心点坐标和地图级别
         map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
@@ -383,6 +408,17 @@
           location.href = "http://m.amap.com/around/?locations=" + pos_data + "&keywords=餐厅,酒店,健身,银行&defaultIndex=" + index + "&defaultView=&searchRadius=1000&key=cc238157d6183b1d54404a704bb86171&defaultView=map";
 
         });
+      },
+      getPoi(keyword, bind){
+          const that = this;
+          var options = {
+              pageCapacity: 100,
+              onSearchComplete: (results)=>{
+                  that[bind] = results.getNumPois();
+              }
+          };
+          var local = new BMap.LocalSearch(this.allmap, options);
+          local.search(keyword);
       }
     },
 
@@ -401,18 +437,6 @@
       this.getDetail(); //获取楼盘详情
 
       this.getDetList(); //获取楼盘详情页楼盘列表
-
-      //banner swiper
-      var mySwiper = new Swiper('.swiper-container', {
-        loop: true,
-        paginationClickable: true,  //分页可点
-        centeredSlides: true,
-        autoplay: 3500,
-        onSlideChangeStart: function (swiper) {
-            $("#picIndex").text(swiper.realIndex + 1);
-        },
-        autoplayDisableOnInteraction: true
-      });
     }
   }
 </script>

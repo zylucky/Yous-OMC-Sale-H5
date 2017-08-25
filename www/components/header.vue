@@ -7,10 +7,6 @@
   <div header>
     <!--header start-->
     <header id="header" class="clearfix">
-      <!-- <a href="javascript:void(0);" class="detail-search">
-          <input type="text" id="keyword" placeholder="请输入关键字搜索" value="" maxlength="50">
-      </a>
-      <i class="location_icon"></i> -->
     </header>
   </div>
   <!--header end-->
@@ -24,7 +20,6 @@
       };
     },
     methods: {
-
       showMenu: function () {
         this.popupVisible = true;
         var wwd = $("#section").width();
@@ -82,13 +77,10 @@
         $(".section").animate({
           left: "75%"
         }, 150);
-
       }
-
     },
     mounted: function () {
       var _this = this;
-
     }
   };
 </script>

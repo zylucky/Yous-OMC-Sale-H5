@@ -3,18 +3,15 @@
   @import "../resources/plugin/swiper/css/swiper.css"; /*swiper 轮播*/
   .weixin_wrap{padding-bottom:.2rem}
   .weixin_head span{width:47% !important;margin-right: 0.2rem !important}
+  .weixin_head span.row{width:100% !important}
+  .weixin_head span:not(.row){width:47% !important}
   .weixin_head{padding-bottom:.3rem;border-bottom:2px solid #e5e5e6}
   .pageState:before{margin-right: 4px;border-top: 6px solid transparent;border-bottom: 6px solid transparent;border-right: 6px solid #FFF}
   .pageState{position: absolute;right: 15px;bottom: 4px;padding: 2px 8px;line-height: 20px;font-size: 12px;color: #FFF; z-index: 3}
-  .section{padding-bottom:.2rem}
+  .section{padding-bottom:1.2rem;padding-top:0 !important}
 </style>
 <template>
   <div>
-    <!--header-->
-    <section id="header">
-      <header1></header1>
-    </section>
-    <!--header end-->
     <!--context-->
     <section id="section" class="pr section">
       <div class="detail-container">
@@ -24,7 +21,7 @@
             <div class="swiper-wrapper">
               <div class="swiper-slide" v-for="image in house_image">
                 <a href="javascript:;">
-                  <img :src="image" alt="">
+                  <img :src="$prefix + '/' + image" alt="">
                 </a>
               </div>
             </div>
@@ -35,8 +32,8 @@
         </div>
       </div>
       <div class="build_price_wrap clearfix">
-        <span><i v-text="monthly_price"></i>元/月</span>
-        <span v-text="daily_price+'元/㎡/天'"></span>
+        <span><i v-text="monthly_price"></i></span>
+        <span v-text="daily_price"></span>
       </div>
 
       <div class="build_common_msg_wrap">
@@ -54,12 +51,12 @@
           <span>层高：<i v-text="fjcg"></i></span>
           <span>朝向：<i v-text="chx">{{chx}}</i></span>
           <span>建成年代：<i v-text="kprq"></i></span>
-          <span>产权性质：<i v-text="chqxz"></i></span>
-          <span>物业公司：<i v-text="wygs"></i></span>
-          <span>物业费：<i v-text="wyf+'元/㎡/天'"></i></span>
-          <span>供暖费：<i v-text="gnf+'元/月'"></i></span>
-          <span>停车费：<i v-text="tcf+'元/月'"></i></span>
-          <span>网络公司：<i v-text="wlgs"></i></span>
+          <span class="row">产权性质：<i v-text="chqxz"></i></span>
+          <span class="row">物业公司：<i v-text="wygs"></i></span>
+          <span>物业费：<i v-text="wyf"></i></span>
+          <span>供暖费：<i v-text="gnf"></i></span>
+          <span>停车费：<i v-text="tcf"></i></span>
+          <span class="row">网络公司：<i v-text="wlgs"></i></span>
         </div>
         <div class="weixin_bot clearfix">
           <div class="fl weixin_bot_box">
@@ -134,26 +131,39 @@
           if (result.success) {
             if (result.data) {
               const data = result.data[0];
-              _this.daily_price = !data.dj ? '--' : data.dj;
-              _this.monthly_price = !data.yzj ? '--' : data.yzj;
-              _this.room_area = !data.fjmj ? '--' : data.fjmj;
-              _this.workstation = !data.krgw ? '--' : data.krgw;
-              _this.floors = !data.zglc ? '--' : data.zglc;
-              _this.locat_floor = !data.lc ? '--' : data.lc;
-              _this.wyf = !data.wyf ? '--' : data.wyf;
-              _this.wygs = data.wygs;
-              _this.fjcg = !data.fjcg? '--' : data.fjcg;
-              _this.name = !data.name ? '--' : data.name;
-              _this.phone = !data.phone ? '--' : data.phone;
+              _this.daily_price = !data.dj ? '暂无数据' : data.dj + '元/㎡/天';
+              _this.monthly_price = !data.yzj ? '暂无数据' : data.yzj + '元/月';
+              _this.room_area = !data.fjmj ? '暂无数据' : data.fjmj + '㎡';
+              _this.workstation = data.krgw || '暂无数据';
+              _this.floors = data.zglc || '暂无数据';
+              _this.locat_floor = data.lc || '暂无数据';
+              _this.wyf = !data.wyf ? '暂无数据' : data.wyf + '元/㎡/天';
+              _this.wygs = data.wygs || '暂无数据';
+              _this.fjcg = data.fjcg || '暂无数据';
+              _this.name = data.name || '暂无数据';
+              _this.phone = data.phone || '暂无数据';
               _this.house_image = data.housing_icon.split(";");
-              _this.zc = !data.zc? '--' : data.zc;
-              _this.chx = data.chx;
-              _this.kprq = data.kprq;
-              _this.chqxz = data.chqxz;
-              _this.gnf= data.gnf;
-              _this.tcf = data.tcf;
-              _this.wlgs = data.wlgs;
+              _this.zc = data.zc || '暂无数据';
+              _this.chx = data.chx || '暂无数据';
+              _this.kprq = data.kprq || '暂无数据';
+              _this.chqxz = data.chqxz || '暂无数据';
+              _this.gnf= !data.gnf ? '暂无数据' : data.gnf + '元/月';
+              _this.tcf = !data.tcf ? '暂无数据' : data.tcf + '元/月';
+              _this.wlgs = data.wlgs || '暂无数据';
             }
+
+            setTimeout(function(){
+              var mySwiper = new Swiper('.swiper-container', {
+                loop: true,
+                paginationClickable: true,
+                centeredSlides: true,
+                autoplay: 3500,
+                onSlideChangeStart: function (swiper) {
+                    $("#picIndex").text(swiper.realIndex + 1);
+                },
+                autoplayDisableOnInteraction: true
+              });
+            }, 1000);
           }
 
         }, function (res) {
@@ -171,7 +181,8 @@
         spinnerType: 'fading-circle'
       });
       this.getPerDetail();
-    }
 
+
+    }
   }
 </script>

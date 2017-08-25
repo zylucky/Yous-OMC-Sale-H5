@@ -254,7 +254,8 @@
           {name:"望京soho"},
           {name:"盈科中心"}
         ],
-        resultData: []
+        resultData: [],
+        r: ""
       }
     },
     created:function(){
@@ -268,8 +269,10 @@
     },
     methods:{
       init(){
-        axios.defaults.baseURL = 'http://116.62.71.76:8001';
+        axios.defaults.baseURL = this.$api;
         axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
+        const r = this.$route.query.r;
+        this.r = !r ? "" : r; 
       },
       clearHistoty:function(){
            this.historyArray = [];
@@ -280,16 +283,16 @@
            localStorage.setItem("historyData",JSON.stringify(this.hotArray));
       },
       toList:function(){
-        this.$router.push({path: '/list'});
+        this.$router.push({path: '/' + this.r});
       },
       toList2:function(){
         if(this.search_keyword){
              this.changeHistory(this.search_keyword);
         }
-        this.$router.push({path: '/list', query: {keyword: this.search_keyword}});
+        this.$router.push({path: '/' + this.r, query: {keyword: this.search_keyword}});
       },
       toListw:function(k){
-        this.$router.push({path: '/list', query: {keyword:k}});
+        this.$router.push({path: '/' + this.r, query: {keyword:k}});
       },
       closeFilter:function(){
         this.currentFilterTab='nth';
