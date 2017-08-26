@@ -13,6 +13,7 @@
   .item span.row{width:100% !important}
   .item span:not(.row){width:47% !important}
   .section{padding-top:0 !important}
+  .detail-icon{background-size:16px 16px !important;}
 </style>
 <template>
   <div>
@@ -51,9 +52,9 @@
           <span>建成年代：<i v-text="kprq"></i></span>
           <span class="row">产权性质：<i v-for="xz in chqxz">{{xz}}</i></span>
           <span class="row">物业公司：<i v-for="gs in wygs.split('、')">{{gs}}</i></span>
-          <span>物业费：<i v-text="wyf"></i></span>
+          <span>物&nbsp;&nbsp;业&nbsp;&nbsp;费：<i v-text="wyf"></i></span>
           <span>供暖费：<i v-text="gnf"></i></span>
-          <span>停车位数量：<i v-text="tcwsl"></i></span>
+          <span>车位数量：<i v-text="tcwsl"></i></span>
           <span>停车费：<i v-text="tcf"></i></span>
           <span class="row">网络公司：<i v-text="wlgs"></i></span>
           <span>可否注册：<i v-text="zc"></i></span>
@@ -323,15 +324,12 @@
           var result = JSON.parse(res.bodyText);
           Indicator.close();
           if (result.success) {
-            _this.buildList = _this.buildList.concat(result.data.houses);
+            const houses = result.data.houses;
+            _this.buildList = _this.buildList.concat(houses);
             if (_this.buildList.length) {
               _this.res_showFlag = false; //不展示
-              _this.total_items = !result.data.kzfyS ? '暂无数据' : result.data.kzfyS + '套房源可租';
 
-              if (_this.buildList.length > 5) {
-                _this.more_flag = true;
-              }
-
+              _this.more_flag = houses.length >= 5;
             } else {
               _this.res_showFlag = true;
             }
@@ -384,6 +382,7 @@
           this.area.push(max);
         }
         this.buildList = [];
+        this.curr_page = 1;
         this.getDetList();
       },
 

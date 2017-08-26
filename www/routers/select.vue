@@ -50,6 +50,7 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
 .pv15{padding:.1rem 0 !important}
 .export{position:fixed;right:0.4rem;top:.15rem;z-index:9999}
 .export img{width:.6rem;height:.6rem;cursor:pointer}
+.hilight a{color:#476CBA !important}
 </style>
 <template>
   <div>
@@ -59,7 +60,7 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
       <a class="export" href="#" @click.stop.prevent="exportExcel"><img src="../resources/images/icons/down.png"></a>
     </section>
     <a href="javascript:;" class="detail-search" style="position: fixed;left: 0; top: 0">
-      <input type="text" id="keyword" placeholder="请输入写字楼、分区、商圈" v-model="para.search_keywork" maxlength="50"
+      <input type="text" id="keyword" placeholder="请输入楼盘关键字搜索" v-model="para.search_keywork" maxlength="50"
              @focus="changeRou">
     </a>
     <section class="section"
@@ -77,13 +78,13 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
                     <i class="filt-arrow"></i>
                   </a>
                 </li>
-                <li data-role="filterItem" data-type="price" :class="{'active-filter':this.currentFilterTab=='price'}">
+                <li data-role="filterItem" data-type="price">
                   <a href="javascript:void(0);" @click="setPriceFilter">
                     <h2 class="ellipsis price-h">价格</h2>
                     <i class="filt-arrow"></i>
                   </a>
                 </li>
-                <li data-role="filterItem" data-type="area" :class="{'active-filter':this.currentFilterTab=='area'}">
+                <li data-role="filterItem" data-type="area">
                   <a href="javascript:void(0);" @click="setAreaFilter">
                     <h2 class="ellipsis area-h">面积</h2>
                     <i class="filt-arrow"></i>
@@ -196,18 +197,6 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
                 </div>
                 <div class="warpper box-flex1">
                   <ul class="box-flex1 bg-white cut-height">
-                    <li class="clearfix">
-                      <span class="ys_tit">特色：</span>
-                    </li>
-                    <li class="clearfix bg_gray">
-                      <div class="ys_item_con fl">
-                        <span v-for="a in featureArray" class="ys_tag" :class="{'active':tsTag.indexOf(a.id)>-1}" :id="a.id" @click="pickTag($event)">{{a.topic}}</span>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-                <div class="warpper box-flex1">
-                  <ul class="box-flex1 bg-white cut-height">
                     <li class="clearfix bg_gray special">
                       <div class="ys_item_con fl">
                         <div class="price-bot btn">
@@ -304,7 +293,6 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
         featureArray: [],
         priceTag: "",
         areaTag: "",
-        tsTag: [],
         priceRange: ["", ""],
         areaRange: ["", ""],
         curTab:'',
@@ -387,7 +375,7 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
           this.para.search_keywork = this.$route['query']['keyword'];
         }
         //
-        let select = JSON.parse(localStorage.getItem("select") || "[]");
+        let select = JSON.parse(sessionStorage.getItem("select") || "[]");
         select = select || [];
         this.select = select; 
         //
@@ -424,22 +412,6 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
           $(target).siblings().removeClass('active');
         }
       },
-      pickTag(e){
-        const target = $(e.target), id = target.attr("id");
-        if(!id){return;}
-        if ($(target).hasClass('active')) {
-          let _t = new Set(this.tsTag);
-          _t.delete(id);
-          this.tsTag = [..._t];
-          $(target).removeClass('active');
-        } else {
-          let _t = new Set(this.tsTag);
-          _t.add(id);
-          this.tsTag = [..._t];
-          $(target).addClass('active');
-        }
-        this.para.label = this.tsTag.join(",");
-      },
       filterFocus(e){
           const target = $(e.target), rel = target.attr("rel");
           if(rel === "price"){
@@ -453,12 +425,12 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
       },
       makeSelect(e){
           const target = $(e.target), rel = target.attr("rel"), that = this;
-          let select = JSON.parse(localStorage.getItem("select") || "[]");
+          let select = JSON.parse(sessionStorage.getItem("select") || "[]");
           select = select || [];
           select.push(rel);
           const ids = new Set(select);
           select = [...ids];
-          localStorage.setItem("select", JSON.stringify(select));
+          sessionStorage.setItem("select", JSON.stringify(select));
 
           setTimeout(function(){
               that.$router.push({path:'/order?house_id='+rel});
@@ -518,33 +490,17 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
             }
         }
 
-        this.priceTag = "";
-        this.areaTag = "";
-        this.tsTag = [];
-        this.priceRange = ["", ""];
-        this.areaRange = ["", ""];
         if (which === 'reset') {
+            his.priceTag = "";
+            this.areaTag = "";
+            this.priceRange = ["", ""];
+            this.areaRange = ["", ""];
             return;
         }
 
         this.priceFilter = '';
         this.areaFilter = '';
         this.resetGetData();
-      },
-      getTsbq(){
-          Indicator.open({
-             text: '',
-             spinnerType: 'fading-circle'
-          });
-          const url = this.$api + "/yhcms/web/lpjbxx/getTsbq.do";
-          let that = this;
-          this.$http.post(url).then((res)=>{
-            Indicator.close()
-            const data = JSON.parse(res.bodyText).data;
-            that.featureArray = data;
-          }, (res)=>{
-            Indicator.close()
-          });
       },
       searchSubArea:function(code,e){
         this.curTab = "a";
@@ -553,6 +509,11 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
            text: '',
            spinnerType: 'fading-circle'
         });
+
+        const li = $(e.target).parent("li"), txt = $(li).find("a").text();
+        li.addClass("hilight").siblings().removeClass("hilight");
+        this.where = txt;
+
         var paraObj = {"parameters":{"district":code},"foreEndType":2,"code":"300000010"}, this_ = this;
         axios.post('/yhcms/web/lpjbxx/getLpXzqyFq.do', paraObj)
           .then(function (response) {
@@ -569,6 +530,11 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
            text: '',
            spinnerType: 'fading-circle'
         });
+
+        const li = $(e.target).parent("li"), txt = $(li).find("a").text();
+        li.addClass("hilight").siblings().removeClass("hilight");
+        this.where = txt;
+
         var paraObj = {"parameters":{"district":code},"foreEndType":2,"code":"300000012"}, this_ = this;
         axios.post('/yhcms/web/lpjbxx/getLpYwqyFq.do', paraObj)
           .then(function (response) {
@@ -585,6 +551,11 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
            text: '',
            spinnerType: 'fading-circle'
         });
+
+        const li = $(e.target).parent("li"), txt = $(li).find("a").text();
+        li.addClass("hilight").siblings().removeClass("hilight");
+        this.where = txt;
+
         var paraObj = {"parameters":{"line_id":line},"foreEndType":2,"code":"30000008"}, this_ = this;
         axios.post('/yhcms/web/lpjbxx/getLpSubwaystation.do', paraObj)
           .then(function (response) {
@@ -594,7 +565,8 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
             Indicator.close();
         });
       },
-      setPriceFilter(){
+      setPriceFilter(e){
+          $(e.target).closest("li").toggleClass("active-filter");
           if(this.priceFilter === '' || this.priceFilter === 'P1'){
               this.priceFilter = 'P2';
           }
@@ -605,7 +577,8 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
 
           this.resetGetData();
       },
-      setAreaFilter(){
+      setAreaFilter(e){
+          $(e.target).closest("li").toggleClass("active-filter");
           if(this.areaFilter === '' || this.areaFilter === 'P1'){
               this.areaFilter = 'A2';
           }
@@ -628,13 +601,17 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
         this.$router.push({path: '/filter?r=select'})
       },
       searchChoose: function (code, val, value, e) {
-        switch ($(e.target).closest('li').attr('data-type')) {
+        const li = $(e.target).closest('li');
+        li.addClass("hilight").siblings().removeClass("hilight");
+
+        switch (li.attr('data-type')) {
           case 'positionA':
             //行政区域
             $('h2.district-h').html(value);
             if(value==="不限"){
                 this.para.district1 = code;
                 this.para.business1 = "";
+                $('h2.district-h').html(this.where || value);
             }
             else{
                 this.para.business1 = code;
@@ -650,12 +627,13 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
             //业务区域
             $('h2.district-h').html(value);
             if(value==="不限"){
-                this.para.business = code;
-                this.para.district = "";
+                this.para.district = code;
+                this.para.business = "";
+                $('h2.district-h').html(this.where || value);
             }
             else{
-                this.para.business = "";
-                this.para.district = code;
+                this.para.business = code;
+                this.para.district = "";
             }
             this.para.business1 = "";
             this.para.district1 = "";
@@ -667,6 +645,7 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
             if(value==="不限"){
                 this.para.line_id = code;
                 this.para.station_id = "";
+                $('h2.district-h').html(this.where || value);
             }
             else{
                 this.para.line_id = "";
@@ -686,6 +665,7 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
           spinnerType: 'fading-circle'
         });
         this.resultData = [];
+        this.para.curr_page = 1;
         this.getData();
       },
       getGovDistrict(){
@@ -737,11 +717,12 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
         this.getGovDistrict();
         this.getDistrict();
         this.getLines();
-        this.getTsbq();
       },
       chooseFilter: function (e) {
         var e = e || window.event;
-        this.currentFilterTab = $(e.target).closest('li').attr('data-type')
+        const li = $(e.target).closest('li');
+        this.currentFilterTab = li.attr('data-type');
+        $(li).siblings().removeClass("active-filter");
       },
       resetGetData: function () {
         this.noMore = false;

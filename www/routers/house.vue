@@ -20,6 +20,7 @@
   padding: .3rem .02rem;
   height: auto !important
 }
+.supply_msg_box dd.supply_house{font-size:.3rem !important}
 .ys_tit{line-height:0.8rem}
 .ys_tag {
   display: inline-block;
@@ -38,10 +39,10 @@
 }
 .supply_msg_box > dl > dd:not(:last-child){padding-bottom:.1rem}
 .supply_msg_box > dl > dd:last-child > dl > dd:not(:last-child){padding-bottom:.17rem}
-.supply_msg_box dd.supply_house{font-size:.26rem !important}
 #filter-features{height:400px;overflow-y:scroll}
 #filter-features .warpper:last-child{margin-bottom:0.5rem}
 .supply_msg_box dd.supply_house{margin-top:0 !important}
+.hilight a{color:#476CBA !important}
 </style>
 <template>
   <div>
@@ -50,7 +51,7 @@
       <header1></header1>
     </section>
     <a href="javascript:;" class="detail-search" style="position: fixed;left: 0; top: 0">
-      <input type="text" id="keyword" placeholder="请输入写字楼、分区、商圈" v-model="para.search_keywork" maxlength="50"
+      <input type="text" id="keyword" placeholder="请输入楼盘关键字搜索" v-model="para.search_keywork" maxlength="50"
              @focus="changeRou">
     </a>
     <section class="section"
@@ -68,13 +69,13 @@
                     <i class="filt-arrow"></i>
                   </a>
                 </li>
-                <li data-role="filterItem" data-type="price" :class="{'active-filter':this.currentFilterTab=='price'}">
+                <li data-role="filterItem" data-type="price">
                   <a href="javascript:void(0);" @click="setPriceFilter">
                     <h2 class="ellipsis price-h">价格</h2>
                     <i class="filt-arrow"></i>
                   </a>
                 </li>
-                <li data-role="filterItem" data-type="area" :class="{'active-filter':this.currentFilterTab=='area'}">
+                <li data-role="filterItem" data-type="area">
                   <a href="javascript:void(0);" @click="setAreaFilter">
                     <h2 class="ellipsis area-h">面积</h2>
                     <i class="filt-arrow"></i>
@@ -113,7 +114,7 @@
                           <a href="javascript:;">{{item.fdname}}</a></li>
                       </ul>
                       <ul class="price-ul cut-height" :class="{show:this.positionType=='y'}">
-                        <li data-type="positionL" @click="searchChoose('','','不限', $event)"><a href="javascript:;">不限</a></li>
+                        <li data-type="positionY" @click="searchChoose('','','不限', $event)"><a href="javascript:;">不限</a></li>
                         <li v-for="item in districtArray" data-type="positionY"
                             @click="searchArea(item.id, $event)">
                           <a href="javascript:;">{{item.fdname}}</a></li>
@@ -128,19 +129,16 @@
 
                     <div id="third-tab" class="warpper2 box-flex1 bg-white" :class="{show:this.curTab!=''&&this.thirdpart!=''}">
                       <ul class="price-ul cut-height" :class="{show:this.positionType=='a'}">
-                        <li data-type="positionA" @click="searchChoose('','','不限', $event)"><a href="javascript:;">不限</a></li>
                         <li v-for="item in subBuesiness" data-type="positionA"
                             @click="searchChoose(item.fdcode,'',item.fdname, $event)">
                           <a href="javascript:;">{{item.fdname}}</a></li>
                       </ul>
                       <ul class="price-ul cut-height" :class="{show:this.positionType=='y'}">
-                        <li data-type="positionA" @click="searchChoose('','','不限', $event)"><a href="javascript:;">不限</a></li>
                         <li v-for="item in otherBusiness" data-type="positionA"
                             @click="searchChoose(item.id,'',item.fdname, $event)">
                           <a href="javascript:;">{{item.fdname}}</a></li>
                       </ul>
                       <ul class="price-ul cut-height" :class="{show:this.curTab!=''&&this.thirdpart=='dt'}">
-                        <li data-type="positionL" @click="searchChoose('','','不限', $event)"><a href="javascript:;">不限</a></li>
                         <li v-for="item in stationArray" data-type="positionL"
                             @click="searchChoose(item.id,'',item.fdname, $event)">
                           <a href="javascript:;">{{item.fdname}}</a></li>
@@ -184,18 +182,6 @@
                                  v-model.trim="priceRange[0]"><i>----</i>
                           <input type="text" rel="price" @focus="filterFocus" id="endPrice" value="" maxlength="5" placeholder="元" v-model.trim="priceRange[1]">
                         </div>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-                <div class="warpper box-flex1">
-                  <ul class="box-flex1 bg-white cut-height">
-                    <li class="clearfix">
-                      <span class="ys_tit">特色：</span>
-                    </li>
-                    <li class="clearfix bg_gray">
-                      <div class="ys_item_con fl">
-                        <span v-for="a in featureArray" class="ys_tag" :class="{'active':tsTag.indexOf(a.id)>-1}" :id="a.id" @click="pickTag($event)">{{a.topic}}</span>
                       </div>
                     </li>
                   </ul>
@@ -300,7 +286,6 @@
         featureArray: [],
         priceTag: "",
         areaTag: "",
-        tsTag: [],
         priceRange: ["", ""],
         areaRange: ["", ""],
         curTab:'',
@@ -405,22 +390,6 @@
           $(target).siblings().removeClass('active');
         }
       },
-      pickTag(e){
-        const target = $(e.target), id = target.attr("id");
-        if(!id){return;}
-        if ($(target).hasClass('active')) {
-          let _t = new Set(this.tsTag);
-          _t.delete(id);
-          this.tsTag = [..._t];
-          $(target).removeClass('active');
-        } else {
-          let _t = new Set(this.tsTag);
-          _t.add(id);
-          this.tsTag = [..._t];
-          $(target).addClass('active');
-        }
-        this.para.label = this.tsTag.join(",");
-      },
       filterFocus(e){
           const target = $(e.target), rel = target.attr("rel");
           if(rel === "price"){
@@ -434,8 +403,10 @@
       },
       setFilter(e){
         const target = $(e.target), which = target.attr("rel");
+        console.log(" ======= ", which);
         if(which==="confirm") {
             const aa = this.areaRange[0], ea = this.areaRange[1];
+            console.log(" ======= ", aa, ea);
             if(aa && ea && parseInt(aa) >= parseInt(ea)){
                 MessageBox('提示', '面积区间填写有误。请重新填写');
                 return;
@@ -444,6 +415,7 @@
                 this.para.area = JSON.stringify([parseInt(aa), parseInt(ea)]);
             }
             const ap = this.priceRange[0], ep = this.priceRange[1];
+            console.log(" ======= ", ap, ep);
             if(ap && ep && parseInt(parseFloat(ap) * 100) >= parseInt(parseFloat(ep) * 100)){
                 MessageBox('提示', '价格区间填写有误。请重新填写');
                 return;
@@ -453,33 +425,17 @@
             }
         }
 
-        this.priceTag = "";
-        this.areaTag = "";
-        this.tsTag = [];
-        this.priceRange = ["", ""];
-        this.areaRange = ["", ""];
         if (which === 'reset') {
+            his.priceTag = "";
+            this.areaTag = "";
+            this.priceRange = ["", ""];
+            this.areaRange = ["", ""];
             return;
         }
 
         this.priceFilter = '';
         this.areaFilter = '';
         this.resetGetData();
-      },
-      getTsbq(){
-          Indicator.open({
-             text: '',
-             spinnerType: 'fading-circle'
-          });
-          const url = this.$api + "/yhcms/web/lpjbxx/getTsbq.do";
-          let that = this;
-          this.$http.post(url).then((res)=>{
-            Indicator.close()
-            const data = JSON.parse(res.bodyText).data;
-            that.featureArray = data;
-          }, (res)=>{
-            Indicator.close()
-          });
       },
       searchSubArea:function(code,e){
         this.curTab = "a";
@@ -488,11 +444,16 @@
            text: '',
            spinnerType: 'fading-circle'
         });
+
+        const li = $(e.target).parent("li"), txt = $(li).find("a").text();
+        li.addClass("hilight").siblings().removeClass("hilight");
+        this.where = txt;
+
         var paraObj = {"parameters":{"district":code},"foreEndType":2,"code":"300000010"}, this_ = this;
         axios.post('/yhcms/web/lpjbxx/getLpXzqyFq.do', paraObj)
           .then(function (response) {
             Indicator.close();
-            this_.subBuesiness = response.data.data.xzfq;
+            this_.subBuesiness = [{"fdcode":code,"fdname":"不限"}].concat(response.data.data.xzfq);
           }).catch(function (error) {
             Indicator.close();
         });
@@ -504,11 +465,16 @@
            text: '',
            spinnerType: 'fading-circle'
         });
+
+        const li = $(e.target).parent("li"), txt = $(li).find("a").text();
+        li.addClass("hilight").siblings().removeClass("hilight");
+        this.where = txt;
+
         var paraObj = {"parameters":{"district":code},"foreEndType":2,"code":"300000012"}, this_ = this;
         axios.post('/yhcms/web/lpjbxx/getLpYwqyFq.do', paraObj)
           .then(function (response) {
             Indicator.close();
-            this_.otherBusiness = response.data.data.ywfq;
+            this_.otherBusiness = [{"id":code,"fdname":"不限"}].concat(response.data.data.ywfq);
           }).catch(function (error) {
             Indicator.close();
         });
@@ -520,16 +486,22 @@
            text: '',
            spinnerType: 'fading-circle'
         });
+
+        const li = $(e.target).parent("li"), txt = $(li).find("a").text();
+        li.addClass("hilight").siblings().removeClass("hilight");
+        this.where = txt;
+
         var paraObj = {"parameters":{"line_id":line},"foreEndType":2,"code":"30000008"}, this_ = this;
         axios.post('/yhcms/web/lpjbxx/getLpSubwaystation.do', paraObj)
           .then(function (response) {
             Indicator.close();
-            this_.stationArray = response.data.data.subway_station;
+            this_.stationArray = [{"id":line,"fdname":"不限"}].concat(response.data.data.subway_station);
           }).catch(function (error) {
             Indicator.close();
         });
       },
-      setPriceFilter(){
+      setPriceFilter(e){
+          $(e.target).closest("li").toggleClass("active-filter");
           if(this.priceFilter === '' || this.priceFilter === 'P1'){
               this.priceFilter = 'P2';
           }
@@ -540,7 +512,8 @@
 
           this.resetGetData();
       },
-      setAreaFilter(){
+      setAreaFilter(e){
+          $(e.target).closest("li").toggleClass("active-filter");
           if(this.areaFilter === '' || this.areaFilter === 'P1'){
               this.areaFilter = 'A2';
           }
@@ -563,13 +536,17 @@
         this.$router.push({path: '/filter?r=house'})
       },
       searchChoose: function (code, val, value, e) {
-        switch ($(e.target).closest('li').attr('data-type')) {
+        const li = $(e.target).closest('li');
+        li.addClass("hilight").siblings().removeClass("hilight");
+
+        switch (li.attr('data-type')) {
           case 'positionA':
             //行政区域
             $('h2.district-h').html(value);
             if(value==="不限"){
                 this.para.district1 = code;
                 this.para.business1 = "";
+                $('h2.district-h').html(this.where || value);
             }
             else{
                 this.para.business1 = code;
@@ -585,12 +562,13 @@
             //业务区域
             $('h2.district-h').html(value);
             if(value==="不限"){
-                this.para.business = code;
-                this.para.district = "";
+                this.para.district = code;
+                this.para.business = "";
+                $('h2.district-h').html(this.where || value);
             }
             else{
-                this.para.business = "";
-                this.para.district = code;
+                this.para.business = code;
+                this.para.district = "";
             }
             this.para.business1 = "";
             this.para.district1 = "";
@@ -602,6 +580,7 @@
             if(value==="不限"){
                 this.para.line_id = code;
                 this.para.station_id = "";
+                $('h2.district-h').html(this.where || value);
             }
             else{
                 this.para.line_id = "";
@@ -621,6 +600,7 @@
           spinnerType: 'fading-circle'
         });
         this.resultData = [];
+        this.para.curr_page = 1;
         this.getData();
       },
       getGovDistrict(){
@@ -672,11 +652,12 @@
         this.getGovDistrict();
         this.getDistrict();
         this.getLines();
-        this.getTsbq();
       },
       chooseFilter: function (e) {
         var e = e || window.event;
-        this.currentFilterTab = $(e.target).closest('li').attr('data-type')
+        const li = $(e.target).closest('li');
+        this.currentFilterTab = li.attr('data-type');
+        $(li).siblings().removeClass("active-filter");
       },
       resetGetData: function () {
         this.noMore = false;

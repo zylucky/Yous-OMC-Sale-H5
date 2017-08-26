@@ -138,7 +138,7 @@
       <div id="s-header">
           <a href="javascript:void(0);" class="search-text">
             <i class="sbtn" @click="toList2"></i>
-            <input type="text" id="keyword" placeholder="请输入写字楼、区域、商圈" maxlength="50" v-model="search_keyword" autofocus="autofocus">
+            <input type="text" id="keyword" placeholder="请输入楼盘关键字搜索" maxlength="50" v-model="search_keyword" autofocus="autofocus" @keyup.enter="find">
           </a>
         <a href="javascript:void(0);" class="close-icon" @click="toList">
             <img src="http://img2.static.uban.com/www/images/xuan-close_1.png" alt="">
@@ -231,6 +231,7 @@
   import { Toast } from 'mint-ui';
   import { Actionsheet } from 'mint-ui';
   import { Search } from 'mint-ui';
+  import { MessageBox } from 'mint-ui';
   import axios from 'axios';
   import qs from 'qs';
   export default {
@@ -288,6 +289,13 @@
       toList2:function(){
         if(this.search_keyword){
              this.changeHistory(this.search_keyword);
+        }
+        this.$router.push({path: '/' + this.r, query: {keyword: this.search_keyword}});
+      },
+      find:function(){
+        if(!this.search_keyword){
+            MessageBox('提示', '请输入关键字');
+            return;
         }
         this.$router.push({path: '/' + this.r, query: {keyword: this.search_keyword}});
       },
