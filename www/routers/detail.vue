@@ -122,19 +122,19 @@
         <ul class="text-gray6 clearfix ph15" id="map_item_ul">
           <li class="supporting-item">
             <i class="supporting-icon sup-ct"></i>
-            <span class="db">餐厅 <b class="text-black">{{restaurant}}</b></span>
+            <span class="db">餐厅</span>
           </li>
           <li class="supporting-item">
             <i class="supporting-icon sup-jd"></i>
-            <span class="db">酒店 <b class="text-black">{{hotel}}</b></span>
+            <span class="db">酒店</span>
           </li>
           <li class="supporting-item">
             <i class="supporting-icon sup-js"></i>
-            <span class="db">健身 <b class="text-black">{{health}}</b></span>
+            <span class="db">健身</span>
           </li>
           <li class="supporting-item">
             <i class="supporting-icon sup-yh"></i>
-            <span class="db">银行 <b class="text-black">{{bank}}</b></span>
+            <span class="db">银行</span>
           </li>
         </ul>
       </div>

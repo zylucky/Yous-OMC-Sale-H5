@@ -579,7 +579,7 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
       },
       setAreaFilter(e){
           $(e.target).closest("li").toggleClass("active-filter");
-          if(this.areaFilter === '' || this.areaFilter === 'P1'){
+          if(this.areaFilter === '' || this.areaFilter === 'A1'){
               this.areaFilter = 'A2';
           }
           else{

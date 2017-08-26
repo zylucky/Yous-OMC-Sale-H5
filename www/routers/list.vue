@@ -438,10 +438,8 @@
       },
       setFilter(e){
         const target = $(e.target), which = target.attr("rel");
-        console.log(" ======= ", which);
         if(which==="confirm") {
             const aa = this.areaRange[0], ea = this.areaRange[1];
-            console.log(" ======= ", aa, ea);
             if(aa && ea && parseInt(aa) >= parseInt(ea)){
                 MessageBox('提示', '面积区间填写有误。请重新填写');
                 return;
@@ -450,7 +448,6 @@
                 this.para.area = JSON.stringify([parseInt(aa), parseInt(ea)]);
             }
             const ap = this.priceRange[0], ep = this.priceRange[1];
-            console.log(" ======= ", ap, ep);
             if(ap && ep && parseInt(parseFloat(ap) * 100) >= parseInt(parseFloat(ep) * 100)){
                 MessageBox('提示', '价格区间填写有误。请重新填写');
                 return;
@@ -564,7 +561,7 @@
       },
       setAreaFilter(e){
           $(e.target).closest("li").toggleClass("active-filter");
-          if(this.areaFilter === '' || this.areaFilter === 'P1'){
+          if(this.areaFilter === '' || this.areaFilter === 'A1'){
               this.areaFilter = 'A2';
           }
           else{
