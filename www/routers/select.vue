@@ -40,6 +40,7 @@
 #filter-features{height:400px;overflow-y:scroll}
 #filter-features .warpper:last-child{margin-bottom:0.5rem}
 .pos_block{z-index: 88;background-color: #fff;border-bottom: 1px solid #DCDCDC}
+.pos_block .cell{font-weight:700}
 .cell{text-align:center;float:left;padding:.2rem 0}
 .cell:first-child{width:25%}
 .cell:nth-child(2){width:20%}
@@ -187,9 +188,9 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
                       </div>
                       <div class="ys_item_con fl">
                         <div class="price-bot">
-                          <input type="text" rel="price" @focus="filterFocus" id="beginPrice" value="" maxlength="5" placeholder="元"
+                          <input type="number" rel="price" @focus="filterFocus" id="beginPrice" value="" maxlength="5" placeholder="元"
                                  v-model.trim="priceRange[0]"><i>----</i>
-                          <input type="text" rel="price" @focus="filterFocus" id="endPrice" value="" maxlength="5" placeholder="元" v-model.trim="priceRange[1]">
+                          <input type="number" rel="price" @focus="filterFocus" id="endPrice" value="" maxlength="5" placeholder="元" v-model.trim="priceRange[1]">
                         </div>
                       </div>
                     </li>
@@ -491,7 +492,7 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
         }
 
         if (which === 'reset') {
-            his.priceTag = "";
+            this.priceTag = "";
             this.areaTag = "";
             this.priceRange = ["", ""];
             this.areaRange = ["", ""];
@@ -566,19 +567,23 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
         });
       },
       setPriceFilter(e){
-          $(e.target).closest("li").toggleClass("active-filter");
-          if(this.priceFilter === '' || this.priceFilter === 'P1'){
-              this.priceFilter = 'P2';
+          const li = $(e.target).closest("li");
+          $(li).addClass("hilight").toggleClass("active-filter");
+
+          if(this.priceFilter === '' || this.priceFilter === 'P2'){
+              this.priceFilter = 'P1';
           }
           else{
-              this.priceFilter = 'P1';
+              this.priceFilter = 'P2';
           }
           this.areaFilter = '';
 
           this.resetGetData();
       },
       setAreaFilter(e){
-          $(e.target).closest("li").toggleClass("active-filter");
+          const li = $(e.target).closest("li");
+          $(li).addClass("hilight").toggleClass("active-filter");
+
           if(this.areaFilter === '' || this.areaFilter === 'A1'){
               this.areaFilter = 'A2';
           }
@@ -723,15 +728,13 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
         const li = $(e.target).closest('li');
         this.currentFilterTab = li.attr('data-type');
         $(li).siblings().removeClass("active-filter");
+        $(li).siblings().removeClass("hilight");
       },
       resetGetData: function () {
         this.noMore = false;
         this.loading = false;
 
         this.para.curr_page = 1;
-        this.para.label = "";
-        this.para.price_dj = "";
-        this.para.area = "";
         this.resultData = [];
         this.getData();
       },

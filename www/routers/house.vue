@@ -37,12 +37,13 @@
   background-color: #16abdc !important;
   color: #fff !important;
 }
-.supply_msg_box > dl > dd:not(:last-child){padding-bottom:.1rem}
+.supply_msg_box > dl > dd:not(:last-child){padding-bottom:.13rem}
 .supply_msg_box > dl > dd:last-child > dl > dd:not(:last-child){padding-bottom:.17rem}
 #filter-features{height:400px;overflow-y:scroll}
 #filter-features .warpper:last-child{margin-bottom:0.5rem}
 .supply_msg_box dd.supply_house{margin-top:0 !important}
 .hilight a{color:#476CBA !important}
+.cell > dd{float: left;margin-right: .06rem;margin-bottom: .06rem;}
 </style>
 <template>
   <div>
@@ -178,9 +179,9 @@
                       </div>
                       <div class="ys_item_con fl">
                         <div class="price-bot">
-                          <input type="text" rel="price" @focus="filterFocus" id="beginPrice" value="" maxlength="5" placeholder="元"
+                          <input type="number" rel="price" @focus="filterFocus" id="beginPrice" value="" maxlength="5" placeholder="元"
                                  v-model.trim="priceRange[0]"><i>----</i>
-                          <input type="text" rel="price" @focus="filterFocus" id="endPrice" value="" maxlength="5" placeholder="元" v-model.trim="priceRange[1]">
+                          <input type="number" rel="price" @focus="filterFocus" id="endPrice" value="" maxlength="5" placeholder="元" v-model.trim="priceRange[1]">
                         </div>
                       </div>
                     </li>
@@ -426,7 +427,7 @@
         }
 
         if (which === 'reset') {
-            his.priceTag = "";
+            this.priceTag = "";
             this.areaTag = "";
             this.priceRange = ["", ""];
             this.areaRange = ["", ""];
@@ -501,19 +502,23 @@
         });
       },
       setPriceFilter(e){
-          $(e.target).closest("li").toggleClass("active-filter");
-          if(this.priceFilter === '' || this.priceFilter === 'P1'){
-              this.priceFilter = 'P2';
+          const li = $(e.target).closest("li");
+          $(li).addClass("hilight").toggleClass("active-filter");
+
+          if(this.priceFilter === '' || this.priceFilter === 'P2'){
+              this.priceFilter = 'P1';
           }
           else{
-              this.priceFilter = 'P1';
+              this.priceFilter = 'P2';
           }
           this.areaFilter = '';
 
           this.resetGetData();
       },
       setAreaFilter(e){
-          $(e.target).closest("li").toggleClass("active-filter");
+          const li = $(e.target).closest("li");
+          $(li).addClass("hilight").toggleClass("active-filter");
+
           if(this.areaFilter === '' || this.areaFilter === 'A1'){
               this.areaFilter = 'A2';
           }
@@ -658,15 +663,13 @@
         const li = $(e.target).closest('li');
         this.currentFilterTab = li.attr('data-type');
         $(li).siblings().removeClass("active-filter");
+        $(li).siblings().removeClass("hilight");
       },
       resetGetData: function () {
         this.noMore = false;
         this.loading = false;
 
         this.para.curr_page = 1;
-        this.para.label = "";
-        this.para.price_dj = "";
-        this.para.area = "";
         this.resultData = [];
 
         this.getData();

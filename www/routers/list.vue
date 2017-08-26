@@ -458,7 +458,7 @@
         }
 
         if (which === 'reset') {
-            his.priceTag = "";
+            this.priceTag = "";
             this.areaTag = "";
             this.tsTag = [];
             this.priceRange = ["", ""];
@@ -548,19 +548,22 @@
         });
       },
       setPriceFilter(e){
-          $(e.target).closest("li").toggleClass("active-filter");
-          if(this.priceFilter === '' || this.priceFilter === 'P1'){
-              this.priceFilter = 'P2';
+          const li = $(e.target).closest("li");
+          $(li).addClass("highlight").toggleClass("active-filter");
+
+          if(this.priceFilter === '' || this.priceFilter === 'P2'){
+              this.priceFilter = 'P1';
           }
           else{
-              this.priceFilter = 'P1';
+              this.priceFilter = 'P2';
           }
           this.areaFilter = '';
 
           this.resetGetData();
       },
       setAreaFilter(e){
-          $(e.target).closest("li").toggleClass("active-filter");
+          const li = $(e.target).closest("li");
+          $(li).addClass("highlight").toggleClass("active-filter");
           if(this.areaFilter === '' || this.areaFilter === 'A1'){
               this.areaFilter = 'A2';
           }
@@ -706,14 +709,13 @@
         const li = $(e.target).closest('li');
         this.currentFilterTab = li.attr('data-type');
         $(li).siblings().removeClass("active-filter");
+        $(li).siblings().removeClass("highlight");
       },
       resetGetData: function () {
-        //this.noMore = false;
-        //this.loading = false;
+        this.noMore = false;
+        this.loading = false;
 
         this.para.curr_page = 1;
-        this.para.label = "";
-
         this.resultData = [];
         this.getData();
       },

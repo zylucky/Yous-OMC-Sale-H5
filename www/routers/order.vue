@@ -37,7 +37,7 @@
       </div>
 
       <div class="build_common_msg_wrap">
-        <a href="javascript:;"><span>面积</span><i v-text="room_area+'㎡'"></i></a>
+        <a href="javascript:;"><span>面积</span><i v-text="room_area"></i></a>
         <a href="javascript:;"><span>工位</span><i v-text="workstation"></i></a>
         <a href="javascript:;"><span>房间状态</span><i v-text="fjzt"></i></a>
         <span class="common_ver_line"></span>
@@ -140,10 +140,13 @@
               _this.wyf = !data.wyf ? '暂无数据' : data.wyf + '元/㎡/天';
               _this.wygs = data.wygs || '暂无数据';
               _this.fjcg = data.fjcg || '暂无数据';
+              _this.fjzt = data.fjzt || '暂无数据';
               _this.name = data.name || '暂无数据';
               _this.phone = data.phone || '暂无数据';
               _this.house_image = data.housing_icon.split(";");
-              _this.zc = data.zc || '暂无数据';
+
+              const zc = data.zc || '暂无数据';
+              _this.zc = zc === '0' ? '不可注册' : '可注册';
               _this.chx = data.chx || '暂无数据';
               _this.kprq = data.kprq || '暂无数据';
               _this.chqxz = data.chqxz || '暂无数据';

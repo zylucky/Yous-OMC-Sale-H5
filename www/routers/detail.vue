@@ -256,11 +256,11 @@
               $('title').html(result.data.building_name);
 
               _this.district = result.data.district == null ? '区域' : result.data.district; //区域
-              _this.business = result.data.business == null ? '商圈' : result.data.business; //商圈
+              const business = !result.data.business ? '' : '-' + result.data.business; //商圈
               _this.desp = !result.data.desp ? "": result.data.desp;
               _this.total_items = result.data.kzfyS == null ? '暂无数据' : result.data.kzfyS + '套房源可租';
 
-              _this.address = _this.district + result.data.address;
+              _this.address = '【' + _this.district  + business + '】' + result.data.address;
               _this.price = result.data.price == null ? '暂无数据' : result.data.price + '元/㎡/天';
               _this.positionData = result.data.longitude + ',' + result.data.latitude;
               _this.bMap(_this.positionData);
