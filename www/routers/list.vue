@@ -564,11 +564,11 @@
       setAreaFilter(e){
           const li = $(e.target).closest("li");
           $(li).addClass("highlight").toggleClass("active-filter");
-          if(this.areaFilter === '' || this.areaFilter === 'A1'){
-              this.areaFilter = 'A2';
+          if(this.areaFilter === '' || this.areaFilter === 'A2'){
+              this.areaFilter = 'A1';
           }
           else{
-              this.areaFilter = 'A1';
+              this.areaFilter = 'A2';
           }
           this.priceFilter = '';
 
