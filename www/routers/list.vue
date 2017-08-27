@@ -44,9 +44,9 @@
 .supply_msg_box dd.supply_house{margin-top:-0.02rem !important}
 #filter-features{height:300px;overflow-y:scroll}
 #filter-features .warpper:last-child{margin-bottom:0.5rem}
-.zc{background-color:#ef104e !important;color:#FFF !important;font-size: 0.001rem !important;}
+.zc{background-color:#ef104e !important;color:#FFF !important;font-size: 0.4em !important;}
 .highlight a{color:#476CBA !important}
-.tagClass{font-size: 0.001rem !important;}
+.tagClass{font-size: 0.4em !important;}
 </style>
 <template>
   <div>
@@ -249,7 +249,7 @@
                     <dd class="supply_color ellipsis">{{item.lpkzfy}}套房源可租</dd>
                     <dd>
                       <dl class="supply_tag clearfix">
-                        <dd v-if="item.label" v-for="tag in item.label.split(',')" class="tagClass">{{tag}}</dd>
+                        <dd v-if="item.label" v-for="tag in item.label.split(',').slice(0,3)" class="tagClass">{{tag}}</dd>
                         <dd class="tagClass zc" v-show="item.zc.indexOf('不可') < 0">{{item.zc.indexOf('不可') > -1 ? '': item.zc}}</dd>
                       </dl>
                     </dd>
