@@ -46,17 +46,17 @@
 
       <div class="weixin_wrap">
         <div class="weixin_head clearfix">
-          <span>楼层：<i v-text="locat_floor"></i>/<i v-text="floors"></i></span>
-          <span>可否注册：<i v-text="zc"></i></span>
-          <span>层高：<i v-text="fjcg"></i></span>
-          <span>朝向：<i v-text="chx">{{chx}}</i></span>
-          <span>建成年代：<i v-text="kprq"></i></span>
-          <span class="row">产权性质：<i v-text="chqxz"></i></span>
-          <span class="row">物业公司：<i v-text="wygs"></i></span>
-          <span>物业费：<i v-text="wyf"></i></span>
-          <span>供暖费：<i v-text="gnf"></i></span>
-          <span>停车费：<i v-text="tcf"></i></span>
-          <span class="row">网络公司：<i v-text="wlgs"></i></span>
+          <span>楼&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;层：<i v-text="locat_floor" style="color: #999999;"></i>/<i v-text="floors"></i></span>
+          <span>可否注册：<i v-text="zc" style="color: #999999;"></i></span>
+          <span>层&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;高：<i v-text="fjcg" style="color: #999999;"></i></span>
+          <span>朝&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;向：<i v-text="chx" style="color: #999999;">{{chx}}</i></span>
+          <span>建成年代：<i v-text="kprq" style="color: #999999;"></i></span>
+          <span>停&nbsp;&nbsp;车&nbsp;费：<i v-text="tcf" style="color: #999999;"></i></span>
+          <span class="row">产权性质：<i v-text="chqxz" style="color: #999999;"></i></span>
+          <span class="row">物业公司：<i v-text="wygs" style="color: #999999;"></i></span>
+          <span>物&nbsp;&nbsp;业&nbsp;费：<i v-text="wyf" style="color: #999999;"></i></span>
+          <span>供&nbsp;&nbsp;暖&nbsp;费：<i v-text="gnf" style="color: #999999;"></i></span>
+          <span class="row">网络公司：<i v-text="wlgs" style="color: #999999;"></i></span>
         </div>
         <div class="weixin_bot clearfix">
           <div class="fl weixin_bot_box">
