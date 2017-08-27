@@ -358,6 +358,7 @@
         if(this.$route['query']['keyword']){
           this.para.search_keywork = this.$route['query']['keyword'];
         }
+        $('title').html('房源列表');
         this.resetGetData();
         this.getFilters();
       },

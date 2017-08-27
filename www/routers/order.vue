@@ -131,6 +131,7 @@
           if (result.success) {
             if (result.data) {
               const data = result.data[0];
+              $('title').html(result.data.name);
               _this.daily_price = !data.dj ? '暂无数据' : data.dj + '元/㎡/天';
               _this.monthly_price = !data.yzj ? '暂无数据' : data.yzj + '元/月';
               _this.room_area = !data.fjmj ? '暂无数据' : data.fjmj + '㎡';
@@ -184,8 +185,6 @@
         spinnerType: 'fading-circle'
       });
       this.getPerDetail();
-
-
     }
   }
 </script>

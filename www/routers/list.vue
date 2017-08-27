@@ -378,6 +378,8 @@
         }
         this.resetGetData();
         this.getFilters();
+
+        $('title').html('楼盘列表');
       },
       selectTag(e){
         const target = $(e.target), val = target.attr("value"), t = target.attr("target"), which = t ==="price" ? "priceTag" : "areaTag";
