@@ -324,7 +324,6 @@
           "station_id": "",
           "area": "",
           "price_dj": "",
-          "price_zj": "",
           "label": "",
           "orderby": "D",
           "curr_page": 1,
@@ -461,6 +460,8 @@
         if (which === 'reset') {
             this.priceTag = "";
             this.areaTag = "";
+            this.para.price_dj = "";
+            this.para.area = "";
             this.tsTag = [];
             this.priceRange = ["", ""];
             this.areaRange = ["", ""];

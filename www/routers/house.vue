@@ -431,6 +431,8 @@
             this.areaTag = "";
             this.priceRange = ["", ""];
             this.areaRange = ["", ""];
+            this.para.price_dj = "";
+            this.para.area = "";
             return;
         }
 

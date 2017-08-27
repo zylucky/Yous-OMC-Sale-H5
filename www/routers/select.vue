@@ -315,7 +315,6 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
           "station_id": "",
           "area": "",
           "price_dj": "",
-          "price_zj": "",
           "label": "",
           "orderby": "D",
           "curr_page": 1,
@@ -496,6 +495,8 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
             this.areaTag = "";
             this.priceRange = ["", ""];
             this.areaRange = ["", ""];
+            this.para.price_dj = "";
+            this.para.area = "";
             return;
         }
 
