@@ -249,7 +249,7 @@
                     <dd class="supply_color ellipsis">{{item.lpkzfy}}套房源可租</dd>
                     <dd>
                       <dl class="supply_tag clearfix">
-                        <dd v-if="item.label" v-for="tag in item.label.split(',')" class="tagClass">{{tag}}</dd>
+                        <dd v-if="item.label" v-for="tag in item.label.split(',').slice(0,3)" class="tagClass">{{tag}}</dd>
                         <dd class="tagClass zc" v-show="item.zc.indexOf('不可') < 0">{{item.zc.indexOf('不可') > -1 ? '': item.zc}}</dd>
                       </dl>
                     </dd>
