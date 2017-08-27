@@ -54,7 +54,7 @@
           <span class="row">物业公司：<i v-for="gs in wygs.split('、')">{{gs}}</i></span>
           <span>物&nbsp;&nbsp;业&nbsp;&nbsp;费：<i v-text="wyf"></i></span>
           <span>供暖费：<i v-text="gnf"></i></span>
-          <span>车位数量：<i v-text="tcwsl"></i></span>
+          <span>车位数量：<i v-text="tcwsl==='0' ? '暂无数据': tcwsl"></i></span>
           <span>停车费：<i v-text="tcf"></i></span>
           <span class="row">网络公司：<i v-text="wlgs"></i></span>
           <span>可否注册：<i v-text="zc"></i></span>

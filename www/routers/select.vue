@@ -37,7 +37,7 @@
   background-color: #16abdc !important;
   color: #fff !important;
 }
-#filter-features{height:400px;overflow-y:scroll}
+#filter-features{height:300px;overflow-y:scroll}
 #filter-features .warpper:last-child{margin-bottom:0.5rem}
 .pos_block{z-index: 88;background-color: #fff;border-bottom: 1px solid #DCDCDC}
 .pos_block .cell{font-weight:700}
@@ -61,7 +61,7 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
       <a class="export" href="#" @click.stop.prevent="exportExcel"><img src="../resources/images/icons/down.png"></a>
     </section>
     <a href="javascript:;" class="detail-search" style="position: fixed;left: 0; top: 0">
-      <input type="text" id="keyword" placeholder="请输入楼盘关键字搜索" v-model="para.search_keywork" maxlength="50"
+      <input type="text" id="keyword" placeholder="请输入楼盘关键字搜索" v-model.trim="para.search_keywork" maxlength="50"
              @focus="changeRou">
     </a>
     <section class="section"
@@ -118,19 +118,19 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
                     </li>
                     <div id="position_filter" class="warpper2 box-flex1 bg-white" :class="{choose:this.curTab=='a'||this.curTab=='l'||this.curTab=='y'}">
                       <ul class="price-ul cut-height" :class="{show:this.positionType=='a'}">
-                        <li data-type="positionA" @click="searchChoose('','','不限', $event)"><a href="javascript:;">不限</a></li>
+                        <li data-type="positionA" @click="where='不限';subBuesiness=[];searchChoose('','','不限', $event)"><a href="javascript:;">不限</a></li>
                         <li v-for="item in govDistrictArray" data-type="positionA"
                             @click="searchSubArea(item.fdcode, $event)">
                           <a href="javascript:;">{{item.fdname}}</a></li>
                       </ul>
                       <ul class="price-ul cut-height" :class="{show:this.positionType=='y'}">
-                        <li data-type="positionL" @click="searchChoose('','','不限', $event)"><a href="javascript:;">不限</a></li>
+                        <li data-type="positionL" @click="where='不限';otherBusiness=[];searchChoose('','','不限', $event)"><a href="javascript:;">不限</a></li>
                         <li v-for="item in districtArray" data-type="positionY"
                             @click="searchArea(item.id, $event)">
                           <a href="javascript:;">{{item.fdname}}</a></li>
                       </ul>
                       <ul class="price-ul cut-height" :class="{show:this.positionType=='l'}">
-                        <li data-type="positionL" @click="searchChoose('','','不限', $event)"><a href="javascript:;">不限</a></li>
+                        <li data-type="positionL" @click="where='不限';stationArray=[];searchChoose('','','不限', $event)"><a href="javascript:;">不限</a></li>
                         <li v-for="item in lineArray" data-type="positionL"
                             @click="searchStation(item.id, $event)">
                           <a href="javascript:;">{{item.fdname}}</a></li>
@@ -144,7 +144,7 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
                           <a href="javascript:;">{{item.fdname}}</a></li>
                       </ul>
                       <ul class="price-ul cut-height" :class="{show:this.positionType=='y'}">
-                        <li v-for="item in otherBusiness" data-type="positionA"
+                        <li v-for="item in otherBusiness" data-type="positionY"
                             @click="searchChoose(item.id,'',item.fdname, $event)">
                           <a href="javascript:;">{{item.fdname}}</a></li>
                       </ul>
@@ -229,7 +229,7 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
         <ul
           v-infinite-scroll="loadMore"
           infinite-scroll-disabled="loading"
-          infinite-scroll-distance="20"
+          infinite-scroll-distance="100"
           infinite-scroll-immediate-check="checked" class="clearfix">
           <li class="ys_listcon pv15 clearfix" :class="{'linked': select.indexOf(item.id) > -1}" v-for="item in resultData">
               <div class="cell">
@@ -578,7 +578,10 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
           }
           this.areaFilter = '';
 
-          this.resetGetData();
+          const that = this;
+          setTimeout(function(){
+              that.resetGetData();
+          }, 500);
       },
       setAreaFilter(e){
           const li = $(e.target).closest("li");
@@ -592,7 +595,10 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
           }
           this.priceFilter = '';
 
-          this.resetGetData();
+          const that = this;
+          setTimeout(function(){
+              that.resetGetData();
+          }, 500);
       },
       getQueryString: function (key) {
         var t = new RegExp("(^|&)" + key + "=([^&]*)(&|$)", "i"),
@@ -790,6 +796,11 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
             duration: 3000
           });
         };
+
+        Indicator.open({
+           text: '',
+           spinnerType: 'fading-circle'
+        });
         this.gRemoteData(paraObj, successCb, errorCb);
       },
 

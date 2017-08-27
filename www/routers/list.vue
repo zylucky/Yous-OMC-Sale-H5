@@ -42,7 +42,7 @@
   color: #fff !important;
 }
 .supply_msg_box dd.supply_house{margin-top:-0.02rem !important}
-#filter-features{height:400px;overflow-y:scroll}
+#filter-features{height:300px;overflow-y:scroll}
 #filter-features .warpper:last-child{margin-bottom:0.5rem}
 .zc{background-color:#ef104e !important;color:#FFF !important}
 .highlight a{color:#476CBA !important}
@@ -54,7 +54,7 @@
       <header1></header1>
     </section>
     <a href="javascript:;" class="detail-search" style="position: fixed;left: 0; top: 0">
-      <input type="text" id="keyword" placeholder="请输入楼盘关键字搜索" v-model="para.search_keywork" maxlength="50"
+      <input type="text" id="keyword" placeholder="请输入楼盘关键字搜索" v-model.trim="para.search_keywork" maxlength="50"
              @focus="changeRou">
     </a>
     <section class="section"
@@ -111,19 +111,19 @@
                     </li>
                     <div id="position_filter" class="warpper2 box-flex1 bg-white" :class="{choose:this.curTab=='a'||this.curTab=='l'||this.curTab=='y'}">
                       <ul class="price-ul cut-height" :class="{show:this.positionType=='a'}">
-                        <li data-type="positionA" @click="where='不限';searchChoose('','','不限', $event)"><a href="javascript:;">不限</a></li>
+                        <li data-type="positionA" @click="where='不限';subBuesiness=[];searchChoose('','','不限', $event)"><a href="javascript:;">不限</a></li>
                         <li v-for="item in govDistrictArray" data-type="positionA"
                             @click="searchSubArea(item.fdcode, $event)">
                           <a href="javascript:;">{{item.fdname}}</a></li>
                       </ul>
                       <ul class="price-ul cut-height" :class="{show:this.positionType=='y'}">
-                        <li data-type="positionY" @click="where='不限';searchChoose('','','不限', $event)"><a href="javascript:;">不限</a></li>
+                        <li data-type="positionY" @click="where='不限';otherBusiness=[];searchChoose('','','不限', $event)"><a href="javascript:;">不限</a></li>
                         <li v-for="item in districtArray" data-type="positionY"
                             @click="searchArea(item.id, $event)">
                           <a href="javascript:;">{{item.fdname}}</a></li>
                       </ul>
                       <ul class="price-ul cut-height" :class="{show:this.positionType=='l'}">
-                        <li data-type="positionL" @click="where='不限';searchChoose('','','不限', $event)"><a href="javascript:;">不限</a></li>
+                        <li data-type="positionL" @click="where='不限';stationArray=[];searchChoose('','','不限', $event)"><a href="javascript:;">不限</a></li>
                         <li v-for="item in lineArray" data-type="positionL"
                             @click="searchStation(item.id, $event)">
                           <a href="javascript:;">{{item.fdname}}</a></li>
@@ -228,19 +228,20 @@
         <ul
           v-infinite-scroll="loadMore"
           infinite-scroll-disabled="loading"
-          infinite-scroll-distance="20"
+          infinite-scroll-distance="100"
           infinite-scroll-immediate-check="checked">
           <li class="ys_listcon pv15" v-for="item in resultData">
             <router-link :to="{path:'/detail',query:{building_id:item.id}}" class="supply_box">
               <div class="supply_price">
                 <span>{{item.price}}</span> 元/㎡·天
-                <i style="display: block">{{item.min_areas}} - {{item.max_areas}}㎡</i>
+                <i v-if="item.lpkzfy > 1" style="display: block">{{item.min_areas}} - {{item.max_areas}}㎡</i>
+                <i v-else style="display: block">{{item.min_areas}}㎡</i>
               </div>
               <dl class="supply">
                 <dt>
                   <img :src="$prefix + '/' + item.img_path" :alt="item.img_alt">
                 </dt>
-                <dd class="supply_msg_box">
+                <dd class="supply_msg_box clearfix">
                   <dl>
                     <dd class="supply_house">{{item.building_name}}</dd>
                     <dd class="supply_color ellipsis">{{item.district}}</dd>
@@ -559,7 +560,10 @@
           }
           this.areaFilter = '';
 
-          this.resetGetData();
+          const that = this;
+          setTimeout(function(){
+              that.resetGetData();
+          }, 500);
       },
       setAreaFilter(e){
           const li = $(e.target).closest("li");
@@ -572,7 +576,10 @@
           }
           this.priceFilter = '';
 
-          this.resetGetData();
+          const that = this;
+          setTimeout(function(){
+              that.resetGetData();
+          }, 500);
       },
       getQueryString: function (key) {
         var t = new RegExp("(^|&)" + key + "=([^&]*)(&|$)", "i"),

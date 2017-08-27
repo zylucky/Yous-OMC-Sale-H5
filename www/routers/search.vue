@@ -138,7 +138,7 @@
       <div id="s-header">
           <a href="javascript:void(0);" class="search-text">
             <i class="sbtn" @click="toList2"></i>
-            <input type="text" id="keyword" placeholder="请输入楼盘关键字搜索" maxlength="50" v-model="search_keyword" autofocus="autofocus" @keyup.enter="find">
+            <input type="text" id="keyword" placeholder="请输入楼盘关键字搜索" maxlength="50" v-model.trim="search_keyword" autofocus="autofocus" @keyup.enter="find">
           </a>
         <a href="javascript:void(0);" class="close-icon" @click="toList">
             <img src="http://img2.static.uban.com/www/images/xuan-close_1.png" alt="">
