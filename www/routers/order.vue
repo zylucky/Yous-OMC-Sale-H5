@@ -46,7 +46,7 @@
 
       <div class="weixin_wrap">
         <div class="weixin_head clearfix">
-          <span>楼&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;层：<i v-text="locat_floor" style="color: #999999;"></i>/<i v-text="floors"></i></span>
+          <span>楼&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;层：<i v-text="locat_floor" style="color: #999999;"></i></i></span>
           <span>可否注册：<i v-text="zc" style="color: #999999;"></i></span>
           <span>层&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;高：<i v-text="fjcg" style="color: #999999;"></i></span>
           <span>朝&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;向：<i v-text="chx" style="color: #999999;">{{chx}}</i></span>
