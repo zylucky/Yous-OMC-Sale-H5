@@ -10,7 +10,7 @@
   .houseInfo div.collapse.active-filter i{background-position: -0.18rem -1.04rem !important}
   .houseInfo p{text-indent:.55rem;padding:.2rem .4rem .4rem .4rem}
   .bg-white{padding-bottom: .2rem;}
-  .item span.row{width:100% !important}
+  .item span.row{width:100% !important;color:black !important;}
   .item span:not(.row){width:47% !important}
   .section{padding-top:0 !important}
   .detail-icon{background-size:16px 16px !important;}
@@ -49,15 +49,15 @@
           <span class="hou_line"></span>
         </div>
         <div class="house_msg_content item clearfix">
-          <span>建成年代：<i v-text="kprq"></i></span>
-          <span class="row">产权性质：<i v-for="xz in chqxz">{{xz}}</i></span>
-          <span class="row">物业公司：<i v-for="gs in wygs.split('、')">{{gs}}</i></span>
-          <span>物&nbsp;&nbsp;业&nbsp;&nbsp;费：<i v-text="wyf"></i></span>
-          <span>供暖费：<i v-text="gnf"></i></span>
-          <span>车位数量：<i v-text="tcwsl==='0' ? '暂无数据': tcwsl"></i></span>
-          <span>停车费：<i v-text="tcf"></i></span>
-          <span class="row">网络公司：<i v-text="wlgs"></i></span>
-          <span>可否注册：<i v-text="zc"></i></span>
+          <span style="color:black;">建成年代：<i v-text="kprq" style="color:gray;"></i></span>
+          <span class="row">产权性质：<i v-for="xz in chqxz" style="color:gray;">{{xz}}</i></span>
+          <span class="row">物业公司：<i v-for="gs in wygs.split('、')" style="color:gray;">{{gs}}</i></span>
+          <span style="color:black;">物&nbsp;&nbsp;业&nbsp;&nbsp;费：<i v-text="wyf" style="color:gray;"></i></span>
+          <span style="color:black;">供暖费：<i v-text="gnf" style="color:gray;"></i></span>
+          <span style="color:black;">车位数量：<i v-text="tcwsl==='0' ? '暂无数据': tcwsl" style="color:gray;"></i></span>
+          <span style="color:black;">停车费：<i v-text="tcf" style="color:gray;"></i></span>
+          <span class="row">网络公司：<i v-text="wlgs" style="color:gray;"></i></span>
+          <span style="color:black;">可否注册：<i v-text="zc" style="color:gray;"></i></span>
         </div>
       </div>
 
@@ -121,19 +121,19 @@
         <div class="map-box" id="allmap"></div>
         <ul class="text-gray6 clearfix ph15" id="map_item_ul">
           <li class="supporting-item">
-            <i class="supporting-icon sup-ct"></i>
+            <i class="supporting-icon sup-ct" style="position: relative;left: -0.0em;"></i>
             <span class="db">餐厅</span>
           </li>
           <li class="supporting-item">
-            <i class="supporting-icon sup-jd"></i>
+            <i class="supporting-icon sup-jd" style="position: relative;left: -0.0em;"></i>
             <span class="db">酒店</span>
           </li>
           <li class="supporting-item">
-            <i class="supporting-icon sup-js"></i>
+            <i class="supporting-icon sup-js" style="position: relative;left: -0.0em;"></i>
             <span class="db">健身</span>
           </li>
           <li class="supporting-item">
-            <i class="supporting-icon sup-yh"></i>
+            <i class="supporting-icon sup-yh" style="position: relative;left: -0.0em;"></i>
             <span class="db">银行</span>
           </li>
         </ul>
