@@ -44,9 +44,9 @@
 .supply_msg_box dd.supply_house{margin-top:-0.02rem !important}
 #filter-features{height:300px;overflow-y:scroll}
 #filter-features .warpper:last-child{margin-bottom:0.5rem}
-.zc{background-color:#ef104e !important;color:#FFF !important;font-size: 0.4em !important;}
+.zc{background-color:#ef104e !important;color:#FFF !important;font-size: 0.5em !important;}
 .highlight a{color:#476CBA !important}
-.tagClass{font-size: 0.4em !important;}
+.tagClass{font-size: 0.5em !important;}
 </style>
 <template>
   <div>
