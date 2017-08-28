@@ -329,7 +329,7 @@
             if (_this.buildList.length) {
               _this.res_showFlag = false; //不展示
 
-              _this.more_flag = houses.length >= 5;
+              _this.more_flag = _this.total_items > houses.length;
             } else {
               _this.res_showFlag = true;
             }
