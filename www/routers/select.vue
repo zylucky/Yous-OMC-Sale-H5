@@ -445,7 +445,9 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
                 text: '正在进行导出，请稍候...',
                 spinnerType: 'fading-circle'
               });
-              this.$http.post(this.$api + "/yhcms/web/lpjbxx/daochu.do", param).then((res)=>{
+
+              const domain = "http://wx.urskongjian.com:8080";
+              this.$http.post(domain + "/yhcms/web/lpjbxx/daochu.do", param).then((res)=>{
                   const result = JSON.parse(res.bodyText), data = result;
                   if (data.success !== true) {
                      Indicator.close();
