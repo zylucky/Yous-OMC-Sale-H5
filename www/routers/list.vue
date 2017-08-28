@@ -497,7 +497,7 @@
            text: '',
            spinnerType: 'fading-circle'
         });
-        const li = $(e.target).parent("li"), txt = $(li).find("a").text();
+        const li = $(e.target).closest("li"), txt = $(li).find("a").text();
         li.addClass("highlight").siblings().removeClass("highlight");
         this.where = txt;
 
@@ -518,7 +518,7 @@
            spinnerType: 'fading-circle'
         });
 
-        const li = $(e.target).parent("li"), txt = $(li).find("a").text();
+        const li = $(e.target).closest("li"), txt = $(li).find("a").text();
         li.addClass("highlight").siblings().removeClass("highlight");
         this.where = txt;
 
@@ -539,7 +539,7 @@
            spinnerType: 'fading-circle'
         });
 
-        const li = $(e.target).parent("li"), txt = $(li).find("a").text();
+        const li = $(e.target).closest("li"), txt = $(li).find("a").text();
         li.addClass("highlight").siblings().removeClass("highlight");
         this.where = txt;
 
