@@ -14,6 +14,8 @@
   .item span:not(.row){width:47% !important}
   .section{padding-top:0 !important}
   .detail-icon{background-size:16px 16px !important;}
+  .dz_msg{width:100%}
+  .dz_msg span:first-child{float:left;margin-right:.2rem}
 </style>
 <template>
   <div>
@@ -92,9 +94,11 @@
             <div class="size_con_sub" v-for="item1 in buildList">
               <router-link :to="{path:'order',query:{house_id:item1.id}}" class="dz-list clearfix">
                 <div class="dz_img_wrap">
-                  <img :src="$prefix + '/' + item1.housing_icon" alt="">
+                  <img v-if="item1.housing_icon" :src="$prefix + '/' + item1.housing_icon" alt="">
+                  <img v-else :src="$prefix + '/upload/2017-08-27/6404b4de960b81fc5403c870aefcea34.png'" alt="">
                 </div>
                 <div class="dz_msg fl">
+                  <span v-text="item1.fybh" style="float:left"></span>
                   <span v-text="(item1.monthly_price==='0.0'?'':item1.monthly_price)+'元/月'"></span>
                   <span><i v-text="(item1.housing_area==='0.0'?'':item1.housing_area)+'㎡'"></i><i v-text="item1.decoration_level"></i></span>
                   <span v-text="item1.workstation+'个工位'"></span>
@@ -166,12 +170,11 @@
         desp: "",
         buildList: [], //结果列表
         total_items: '',  //可租房源总数
+        total: 100,
         areaActive: 0,
         area_arr: [], //面积条件数组
 
         res_showFlag: false, //查询无结果showhide
-        more_flag: false, //查看更多
-
         area: "", //区域
         price_dj: "", // 单价
         price_zj: "", //总价
@@ -184,6 +187,7 @@
         wlgs: "",
         gnf: "",
         zc: "",
+        fybh: "",
         chqxz: "",
         tcwsl: "",
         building_images: [],
@@ -258,6 +262,7 @@
               _this.district = result.data.district == null ? '区域' : result.data.district; //区域
               const business = !result.data.business ? '' : '-' + result.data.business; //商圈
               _this.desp = !result.data.desp ? "": result.data.desp;
+              _this.total = result.data.kzfyS || 100;
               _this.total_items = result.data.kzfyS == null ? '暂无数据' : result.data.kzfyS + '套房源可租';
 
               _this.address = '【' + _this.district  + business + '】' + result.data.address;
@@ -275,6 +280,7 @@
               _this.tcf = !result.data.tcf ? '暂无数据' : result.data.tcf + '元/月';
               _this.wlgs = result.data.wlgs || '暂无数据';
               _this.gnf = !result.data.gnf ? '暂无数据' : result.data.gnf + '元/月';
+              _this.fybh = !result.data.fybh || '';
               _this.zc = result.data.zc || '暂无数据';
               _this.chqxz = result.data.chqxz.split('、').map((p)=>{return this.property[p]});
 
@@ -328,8 +334,6 @@
             _this.buildList = _this.buildList.concat(houses);
             if (_this.buildList.length) {
               _this.res_showFlag = false; //不展示
-
-              _this.more_flag = _this.total_items > houses.length;
             } else {
               _this.res_showFlag = true;
             }
@@ -421,6 +425,12 @@
       }
     },
 
+    computed:{
+        more_flag(){
+            const num = this.buildList.length;
+            return num > 4 && this.total > num;
+        }
+    },
     mounted(){
       var _this = this;
 

@@ -21,7 +21,8 @@
             <div class="swiper-wrapper">
               <div class="swiper-slide" v-for="image in house_image">
                 <a href="javascript:;">
-                  <img :src="$prefix + '/' + image" alt="">
+                  <img v-if="image" :src="$prefix + '/' + image" alt="">
+                  <img v-else :src="$prefix + '/upload/2017-08-27/6404b4de960b81fc5403c870aefcea34.png'" alt="">
                 </a>
               </div>
             </div>
@@ -32,6 +33,7 @@
         </div>
       </div>
       <div class="build_price_wrap clearfix">
+        <span><i v-text="fybh"></i></span>
         <span><i v-text="monthly_price"></i></span>
         <span v-text="daily_price"></span>
       </div>
@@ -99,6 +101,7 @@
         fjcg: "",
         chx: "",
         wygs: '',//物业公司
+        fybh:"",
         wyf: '',//物业费
         kprq: '',//建成年代
         tcf: "",
@@ -139,6 +142,7 @@
               _this.floors = data.zglc || '暂无数据';
               _this.locat_floor = data.lc || '暂无数据';
               _this.wyf = !data.wyf ? '暂无数据' : data.wyf + '元/㎡/天';
+              _this.fybh = data.fybh || '暂无数据';
               _this.wygs = data.wygs || '暂无数据';
               _this.fjcg = data.fjcg || '暂无数据';
               _this.fjzt = data.fjzt || '暂无数据';

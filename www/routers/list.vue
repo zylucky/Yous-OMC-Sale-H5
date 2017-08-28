@@ -240,7 +240,8 @@
               </div>
               <dl class="supply">
                 <dt>
-                  <img :src="$prefix + '/' + item.img_path" :alt="item.img_alt">
+                  <img v-if="item.img_path" :src="$prefix + '/' + item.img_path" :alt="item.img_alt">
+                  <img v-else :src="$prefix + '/upload/2017-08-27/6404b4de960b81fc5403c870aefcea34.png'" :alt="item.img_alt">
                 </dt>
                 <dd class="supply_msg_box clearfix">
                   <dl>
