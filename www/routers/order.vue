@@ -33,31 +33,32 @@
         </div>
       </div>
       <div class="build_price_wrap clearfix">
-        <span><i v-text="fybh"></i></span>
-        <span><i v-text="monthly_price"></i></span>
-        <span v-text="daily_price"></span>
+        <span><i v-text="zdh" style="color:black"></i></span>
+        <span><i v-text="fybh" style="color:black"></i></span>
+        <span><i v-text="monthly_price" style="color:#e01222"></i><i v-if="monthly_price != null" style="color:black">元/月</i></span>
+        <span v-text="daily_price" style="color:#e01222"></span><i v-if="daily_price != null">元/㎡/天</i>
       </div>
 
       <div class="build_common_msg_wrap">
-        <a href="javascript:;"><span>面积</span><i v-text="room_area"></i></a>
-        <a href="javascript:;"><span>工位</span><i v-text="workstation"></i></a>
-        <a href="javascript:;"><span>房间状态</span><i v-text="fjzt"></i></a>
+        <a href="javascript:;"><span style="color:black">面积</span><i v-text="room_area" style="color:gray"></i></a>
+        <a href="javascript:;"><span style="color:black">工位</span><i v-text="workstation" style="color:gray"></i></a>
+        <a href="javascript:;"><span style="color:black">房间状态</span><i v-text="fjzt" style="color:gray"></i></a>
         <span class="common_ver_line"></span>
         <span class="common_ver_line second"></span>
       </div>
 
       <div class="weixin_wrap">
         <div class="weixin_head clearfix">
-          <span>楼&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;层：<i v-text="locat_floor" style="color: #999999;"></i></i></span>
+          <span>楼&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;层：<i v-text="locat_floor" style="color: #999999;"></i></i></span>
           <span>可否注册：<i v-text="zc" style="color: #999999;"></i></span>
-          <span>层&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;高：<i v-text="fjcg" style="color: #999999;"></i></span>
-          <span>朝&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;向：<i v-text="chx" style="color: #999999;">{{chx}}</i></span>
+          <span>层&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;高：<i v-text="fjcg" style="color: #999999;"></i></span>
+          <span>朝&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;向：<i v-text="chx" style="color: #999999;">{{chx}}</i></span>
           <span>建成年代：<i v-text="kprq" style="color: #999999;"></i></span>
-          <span>停&nbsp;&nbsp;车&nbsp;费：<i v-text="tcf" style="color: #999999;"></i></span>
+          <span>停&nbsp;&nbsp;车&nbsp;&nbsp;费：<i v-text="tcf" style="color: #999999;"></i></span>
           <span class="row">产权性质：<i v-text="chqxz" style="color: #999999;"></i></span>
           <span class="row">物业公司：<i v-text="wygs" style="color: #999999;"></i></span>
-          <span>物&nbsp;&nbsp;业&nbsp;费：<i v-text="wyf" style="color: #999999;"></i></span>
-          <span>供&nbsp;&nbsp;暖&nbsp;费：<i v-text="gnf" style="color: #999999;"></i></span>
+          <span>物&nbsp;&nbsp;业&nbsp;&nbsp;费：<i v-text="wyf" style="color: #999999;"></i></span>
+          <span>供&nbsp;&nbsp;暖&nbsp;&nbsp;费：<i v-text="gnf" style="color: #999999;"></i></span>
           <span class="row">网络公司：<i v-text="wlgs" style="color: #999999;"></i></span>
         </div>
         <div class="weixin_bot clearfix">
@@ -101,6 +102,7 @@
         fjcg: "",
         chx: "",
         wygs: '',//物业公司
+          zdh:'',
         fybh:"",
         wyf: '',//物业费
         kprq: '',//建成年代
@@ -135,13 +137,14 @@
             if (result.data) {
               const data = result.data[0];
               $('title').html(result.data.name);
-              _this.daily_price = !data.dj ? '暂无数据' : data.dj + '元/㎡/天';
-              _this.monthly_price = !data.yzj ? '暂无数据' : data.yzj + '元/月';
+              _this.daily_price = !data.dj ? '暂无数据' : data.dj;
+              _this.monthly_price = !data.yzj ? '暂无数据' : data.yzj;
               _this.room_area = !data.fjmj ? '暂无数据' : data.fjmj + '㎡';
               _this.workstation = data.krgw || '暂无数据';
               _this.floors = data.zglc || '暂无数据';
               _this.locat_floor = data.lc || '暂无数据';
               _this.wyf = !data.wyf ? '暂无数据' : data.wyf + '元/㎡/天';
+                _this.zdh = data.zdh || '暂无数据';
               _this.fybh = data.fybh || '暂无数据';
               _this.wygs = data.wygs || '暂无数据';
               _this.fjcg = data.fjcg || '暂无数据';

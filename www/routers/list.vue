@@ -34,7 +34,7 @@
   border-radius: .1rem;
 }
 .supply_price{text-align:right}
-.supply_price > span{font-size:.4rem !important}
+.supply_price > span{font-size:.4rem !important;color:#e01222;}
 .supply_price i{font-size:.23rem !important}
 .supply_tag dd{padding:.03rem !important}
 .active {

@@ -46,8 +46,8 @@
             <span class="detail-icon"></span>{{address}}</p>
         </div>
         <div class="house_msg_tit clearfix">
-          <div><i></i><span v-text="price"></span></div>
-          <div><i></i><span v-text="total_items"></span></div>
+          <div><i></i><span v-text="price" style="color:#e01222"></span><span v-if="price != null">元/㎡/天</span></div>
+          <div><i></i><span v-text="total_items" style="color:#e01222"></span><span v-if="total_items != null">套房源可租</span></div>
           <span class="hou_line"></span>
         </div>
         <div class="house_msg_content item clearfix">
@@ -98,7 +98,8 @@
                   <img v-else :src="$prefix + '/upload/2017-08-27/6404b4de960b81fc5403c870aefcea34.png'" alt="">
                 </div>
                 <div class="dz_msg fl">
-                  <span v-text="item1.fybh" style="float:left"></span>
+                  <span v-text="item1.zdh" style="float:left"></span>
+                  <span v-text="item1.fybh" style="float:left;width: 4em;"></span>
                   <span v-text="(item1.monthly_price==='0.0'?'':item1.monthly_price)+'元/月'"></span>
                   <span><i v-text="(item1.housing_area==='0.0'?'':item1.housing_area)+'㎡'"></i><i v-text="item1.decoration_level"></i></span>
                   <span v-text="item1.workstation+'个工位'"></span>
@@ -263,10 +264,10 @@
               const business = !result.data.business ? '' : '-' + result.data.business; //商圈
               _this.desp = !result.data.desp ? "": result.data.desp;
               _this.total = result.data.kzfyS || 100;
-              _this.total_items = result.data.kzfyS == null ? '暂无数据' : result.data.kzfyS + '套房源可租';
+              _this.total_items = result.data.kzfyS == null ? '暂无数据' : result.data.kzfyS;
 
               _this.address = '【' + _this.district  + business + '】' + result.data.address;
-              _this.price = result.data.price == null ? '暂无数据' : result.data.price + '元/㎡/天';
+              _this.price = result.data.price == null ? '暂无数据' : result.data.price;
               _this.positionData = result.data.longitude + ',' + result.data.latitude;
               _this.bMap(_this.positionData);
 
