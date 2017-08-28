@@ -374,6 +374,8 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
         if(this.$route['query']['keyword']){
           this.para.search_keywork = this.$route['query']['keyword'];
         }
+
+        $('title').html("今日销控");
         //
         let select = JSON.parse(sessionStorage.getItem("select") || "[]");
         select = select || [];
