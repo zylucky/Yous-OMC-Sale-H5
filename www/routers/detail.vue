@@ -14,7 +14,7 @@
   .item span:not(.row){width:47% !important}
   .section{padding-top:0 !important}
   .detail-icon{background-size:16px 16px !important;}
-  .dz_msg{width:100%}
+  .dz_msg{width:65%}
   .dz_msg span:first-child{float:left;margin-right:.2rem}
 </style>
 <template>
@@ -424,7 +424,6 @@
           local.search(keyword);
       }
     },
-
     computed:{
         more_flag(){
             const num = this.buildList.length;

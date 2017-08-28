@@ -36,7 +36,6 @@
        .search-text {
          position: relative;
          margin-left: 6%;
-         padding-left: .70rem;
          display: block;
          width: 78%;
          height: .62rem;
@@ -50,13 +49,13 @@
            position: absolute;
            width: .36rem;
            height:.36rem;
-           left: .28rem;
+           right: .28rem;
            top: .1378rem;
             background:url(../resources/images/list/ss_01.png) center center no-repeat;
             background-size: contain;
          }
          input {
-           width: 95%;
+           width: 88%;
            color: #FFF;
            background: none;
          }
@@ -130,15 +129,14 @@
       .clearfix{
         clear: both;
       }
-
   }
 </style>
 <template>
     <div class="search">
       <div id="s-header">
           <a href="javascript:void(0);" class="search-text">
-            <i class="sbtn" @click="toList2"></i>
             <input type="text" id="keyword" placeholder="请输入楼盘关键字搜索" maxlength="50" v-model.trim="search_keyword" autofocus="autofocus" @keyup.enter="find">
+            <i class="sbtn" @click="toList2"></i>
           </a>
         <a href="javascript:void(0);" class="close-icon" @click="toList">
             <img src="http://img2.static.uban.com/www/images/xuan-close_1.png" alt="">

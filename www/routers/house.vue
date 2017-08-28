@@ -39,7 +39,7 @@
 }
 .supply_msg_box > dl > dd:not(:last-child){padding-bottom:.13rem}
 .supply_msg_box > dl > dd:last-child > dl > dd:not(:last-child){padding-bottom:.17rem}
-#filter-features{height:300px;overflow-y:scroll}
+#filter-features{height:6rem;overflow-y:scroll}
 #filter-features .warpper:last-child{margin-bottom:0.5rem}
 .supply_msg_box dd.supply_house{margin-top:0 !important}
 .hilight a{color:#476CBA !important}
@@ -187,7 +187,7 @@
                     </li>
                   </ul>
                 </div>
-                <div class="warpper box-flex1">
+                <div class="warpper box-flex1 filter-fixed">
                   <ul class="box-flex1 bg-white cut-height">
                     <li class="clearfix bg_gray special">
                       <div class="ys_item_con fl">

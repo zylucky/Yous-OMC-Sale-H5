@@ -37,7 +37,7 @@
   background-color: #16abdc !important;
   color: #fff !important;
 }
-#filter-features{height:300px;overflow-y:scroll}
+#filter-features{height:6rem;overflow-y:scroll}
 #filter-features .warpper:last-child{margin-bottom:0.5rem}
 .pos_block{z-index: 88;background-color: #fff;border-bottom: 1px solid #DCDCDC}
 .pos_block .cell{font-weight:700}
@@ -196,7 +196,7 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
                     </li>
                   </ul>
                 </div>
-                <div class="warpper box-flex1">
+                <div class="warpper box-flex1 filter-fixed">
                   <ul class="box-flex1 bg-white cut-height">
                     <li class="clearfix bg_gray special">
                       <div class="ys_item_con fl">
@@ -440,7 +440,7 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
       },
       exportExcel(){
           MessageBox.confirm('确认导出房源列表？').then(action => {
-              let param = {"parameters":{ "search_keywork":"", "district":"", "business":"","district1":"", "business1":"", "line_id":"", "station_id":"","area":"", "price_dj":"", "label":"", "orderby":"", "curr_page":"","items_perpage":""}, "foreEndType":2, "code":"30000001"}, that = this;
+              let param = {"parameters":{ "search_keywork":this.para.search_keywork, "district":this.para.district, "business":this.para.business,"district1":this.para.district1, "business1":this.para.business1, "line_id":this.para.line_id, "station_id":this.para.station_id,"area":this.para.area, "price_dj":this.para.price_dj, "label":this.para.label.join(","), "orderby":"D", "curr_page":"","items_perpage":""}, "foreEndType":2, "code":"30000001"}, that = this;
               Indicator.open({
                 text: '正在进行导出，请稍候...',
                 spinnerType: 'fading-circle'
