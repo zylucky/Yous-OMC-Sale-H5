@@ -460,7 +460,7 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
                   }
                   else{
                       Indicator.close();
-                      const link = this.$api + "/yhcms/" + data.data;
+                      const link = domain + "/yhcms/" + data.data;
                       setTimeout(function(){
                           window.location = link;
                       },500);
