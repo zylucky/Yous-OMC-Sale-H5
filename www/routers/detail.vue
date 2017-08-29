@@ -266,7 +266,9 @@
               _this.total = result.data.kzfyS || 100;
               _this.total_items = result.data.kzfyS == null ? '暂无数据' : result.data.kzfyS;
 
-              _this.address = '【' + _this.district  + business + '】' + result.data.address;
+              let district = _this.district  + business;
+              district = !district ? result.data.address : '【' + district + '】' + result.data.address;
+              _this.address = district;
               _this.price = result.data.price == null ? '暂无数据' : result.data.price;
               _this.positionData = result.data.longitude + ',' + result.data.latitude;
               _this.bMap(_this.positionData);
