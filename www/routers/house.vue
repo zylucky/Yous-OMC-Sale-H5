@@ -22,8 +22,9 @@
 }
 .supply_house{width:100% !important}
 .supply_msg_box dd.supply_house{font-size:.3rem !important}
-.supply_price{top:.83rem !important}
+.supply_price{top:.79rem !important}
 .supply_price > span{color:red;font-size:.4rem}
+.supply_color{min-height:.32rem}
 .ys_tit{line-height:0.8rem}
 .ys_tag {
   display: inline-block;
