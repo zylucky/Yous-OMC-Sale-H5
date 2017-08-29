@@ -16,6 +16,7 @@
   .detail-icon{background-size:16px 16px !important;}
   .dz_msg{width:65%}
   .dz_msg span:first-child{float:left;margin-right:.2rem}
+  .dz_msg span:nth-child(2) > i:first-child{color:red;margin-right:.04rem !important}
 </style>
 <template>
   <div>
@@ -42,7 +43,7 @@
       <!--office info-->
       <div class="office-info border-tb">
         <div class="banner-text">
-          <p class="ellipsis" :title="address">
+          <p v-if="address" class="ellipsis" :title="address">
             <span class="detail-icon"></span>{{address}}</p>
         </div>
         <div class="house_msg_tit clearfix">
@@ -52,6 +53,7 @@
         </div>
         <div class="house_msg_content item clearfix">
           <span style="color:black;">建成年代：<i v-text="kprq" style="color:gray;"></i></span>
+          <span style="color:black;">可否注册：<i v-text="zc" style="color:gray;"></i></span>
           <span class="row">产权性质：<i v-for="xz in chqxz" style="color:gray;">{{xz}}</i></span>
           <span class="row">物业公司：<i v-for="gs in wygs.split('、')" style="color:gray;">{{gs}}</i></span>
           <span style="color:black;">物&nbsp;&nbsp;业&nbsp;&nbsp;费：<i v-text="wyf" style="color:gray;"></i></span>
@@ -59,7 +61,6 @@
           <span style="color:black;">车位数量：<i v-text="tcwsl==='0' ? '暂无数据': tcwsl" style="color:gray;"></i></span>
           <span style="color:black;">停车费：<i v-text="tcf" style="color:gray;"></i></span>
           <span class="row">网络公司：<i v-text="wlgs" style="color:gray;"></i></span>
-          <span style="color:black;">可否注册：<i v-text="zc" style="color:gray;"></i></span>
         </div>
       </div>
 
@@ -98,9 +99,8 @@
                   <img v-else :src="$prefix + '/upload/2017-08-27/6404b4de960b81fc5403c870aefcea34.png'" alt="">
                 </div>
                 <div class="dz_msg fl">
-                  <span v-text="item1.zdh" style="float:left"></span>
-                  <span v-text="item1.fybh" style="float:left;width: 4em;"></span>
-                  <span v-text="(item1.monthly_price==='0.0'?'':item1.monthly_price)+'元/月'"></span>
+                  <span>{{item1.zdh}} - {{item1.fybh}}</span>
+                  <span><i v-text="item1.monthly_price==='0.0'?'':item1.monthly_price"></i><i>元/月</i></span>
                   <span><i v-text="(item1.housing_area==='0.0'?'':item1.housing_area)+'㎡'"></i><i v-text="item1.decoration_level"></i></span>
                   <span v-text="item1.workstation+'个工位'"></span>
                 </div>

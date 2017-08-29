@@ -20,7 +20,10 @@
   padding: .3rem .02rem;
   height: auto !important
 }
+.supply_house{width:100% !important}
 .supply_msg_box dd.supply_house{font-size:.3rem !important}
+.supply_price{top:.83rem !important}
+.supply_price > span{color:red;font-size:.4rem}
 .ys_tit{line-height:0.8rem}
 .ys_tag {
   display: inline-block;
@@ -228,7 +231,7 @@
                 </dt>
                 <dd class="supply_msg_box">
                   <dl>
-                    <dd class="supply_house">{{item.topic}}&nbsp;{{item.fybh}}</dd>
+                    <dd class="supply_house">{{item.topic}}&nbsp;&nbsp;{{item.zdh}} - {{item.fybh}}</dd>
                     <dd class="supply_color ellipsis">{{item.district}}</dd>
                     <dd>
                       <dl class="cell clearfix">

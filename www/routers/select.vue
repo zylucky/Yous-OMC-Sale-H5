@@ -440,7 +440,8 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
       },
       exportExcel(){
           MessageBox.confirm('确认导出房源列表？').then(action => {
-              let param = {"parameters":{ "search_keywork":this.para.search_keywork, "district":this.para.district, "business":this.para.business,"district1":this.para.district1, "business1":this.para.business1, "line_id":this.para.line_id, "station_id":this.para.station_id,"area":this.para.area, "price_dj":this.para.price_dj, "label":this.para.label.join(","), "orderby":"D", "curr_page":"","items_perpage":""}, "foreEndType":2, "code":"30000001"}, that = this;
+              const l = this.para.label, label = l.join ? l.join(",") : l;
+              let param = {"parameters":{ "search_keywork":this.para.search_keywork, "district":this.para.district, "business":this.para.business,"district1":this.para.district1, "business1":this.para.business1, "line_id":this.para.line_id, "station_id":this.para.station_id,"area":this.para.area, "price_dj":this.para.price_dj, "label":l, "orderby":"D", "curr_page":"","items_perpage":""}, "foreEndType":2, "code":"30000001"}, that = this;
               Indicator.open({
                 text: '正在进行导出，请稍候...',
                 spinnerType: 'fading-circle'
