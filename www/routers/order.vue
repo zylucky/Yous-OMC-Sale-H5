@@ -143,7 +143,7 @@
               _this.workstation = data.krgw || '暂无数据';
               _this.floors = data.zglc || '暂无数据';
               _this.locat_floor = data.lc || '暂无数据';
-              _this.wyf = !data.wyf ? '暂无数据' : data.wyf + '元/㎡/天';
+              _this.wyf = !data.wyf ? '暂无数据' : data.wyf + '元/㎡/月';
                 _this.zdh = data.zdh || '暂无数据';
               _this.fybh = data.fybh || '暂无数据';
               _this.wygs = data.wygs || '暂无数据';
@@ -158,7 +158,7 @@
               _this.chx = data.chx || '暂无数据';
               _this.kprq = data.kprq || '暂无数据';
               _this.chqxz = data.chqxz || '暂无数据';
-              _this.gnf= !data.gnf ? '暂无数据' : data.gnf + '元/月';
+              _this.gnf= !data.gnf ? '暂无数据' : data.gnf + '元/㎡/季';
               _this.tcf = !data.tcf ? '暂无数据' : data.tcf + '元/月';
               _this.wlgs = data.wlgs || '暂无数据';
             }

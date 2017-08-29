@@ -275,12 +275,12 @@
 
               //物业信息
               _this.wygs = result.data.wygs || '暂无数据'; //物业公司
-              _this.wyf = !result.data.wyf ? '暂无数据' : result.data.wyf + '元/㎡/天'; //物业费
+              _this.wyf = !result.data.wyf ? '暂无数据' : result.data.wyf + '元/㎡/月'; //物业费
               _this.kprq = result.data.kprq || '暂无数据'; // 建成年代
               _this.tcwsl = result.data.tcwsl || '暂无数据';
               _this.tcf = !result.data.tcf ? '暂无数据' : result.data.tcf + '元/月';
               _this.wlgs = result.data.wlgs || '暂无数据';
-              _this.gnf = !result.data.gnf ? '暂无数据' : result.data.gnf + '元/月';
+              _this.gnf = !result.data.gnf ? '暂无数据' : result.data.gnf + '元/㎡/季';
               _this.fybh = !result.data.fybh || '';
               _this.zc = result.data.zc || '暂无数据';
               _this.chqxz = result.data.chqxz.split('、').map((p)=>{return this.property[p]});
