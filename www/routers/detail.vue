@@ -44,7 +44,7 @@
       <div class="office-info border-tb">
         <div class="banner-text">
           <p v-if="address" class="ellipsis" :title="address">
-            <span class="detail-icon"></span>{{address}}</p>
+            <span class="detail-icon" style="color:#5b5b5b;"></span>{{address}}</p>
         </div>
         <div class="house_msg_tit clearfix">
           <div><i></i><span v-text="price" style="color:#e01222"></span><span v-if="price != null">元/㎡/天</span></div>
@@ -52,15 +52,15 @@
           <span class="hou_line"></span>
         </div>
         <div class="house_msg_content item clearfix">
-          <span style="color:black;">建成年代：<i v-text="kprq" style="color:gray;"></i></span>
-          <span style="color:black;">可否注册：<i v-text="zc" style="color:gray;"></i></span>
-          <span class="row">产权性质：<i v-for="xz in chqxz" style="color:gray;">{{xz}}</i></span>
-          <span class="row">物业公司：<i v-for="gs in wygs.split('、')" style="color:gray;">{{gs}}</i></span>
-          <span style="color:black;">物&nbsp;&nbsp;业&nbsp;&nbsp;费：<i v-text="wyf" style="color:gray;"></i></span>
-          <span style="color:black;">供暖费：<i v-text="gnf" style="color:gray;"></i></span>
-          <span style="color:black;">车位数量：<i v-text="tcwsl==='0' ? '暂无数据': tcwsl" style="color:gray;"></i></span>
-          <span style="color:black;">停车费：<i v-text="tcf" style="color:gray;"></i></span>
-          <span class="row">网络公司：<i v-text="wlgs" style="color:gray;"></i></span>
+          <span style="color:black;">建成年代：<i v-text="kprq" style="color:#5b5b5b;"></i></span>
+          <span style="color:black;">可否注册：<i v-text="zc" style="color:#5b5b5b;"></i></span>
+          <span class="row">产权性质：<i v-for="xz in chqxz" style="color:#5b5b5b;">{{xz}}</i></span>
+          <span class="row">物业公司：<i v-for="gs in wygs.split('、')" style="color:#5b5b5b;">{{gs}}</i></span>
+          <span style="color:black;">物&nbsp;&nbsp;业&nbsp;&nbsp;费：<i v-text="wyf" style="color:#5b5b5b;"></i></span>
+          <span style="color:black;">供暖费：<i v-text="gnf" style="color:#5b5b5b;"></i></span>
+          <span style="color:black;">车位数量：<i v-text="tcwsl==='0' ? '暂无数据': tcwsl" style="color:#5b5b5b;"></i></span>
+          <span style="color:black;">停车费：<i v-text="tcf" style="color:#5b5b5b;"></i></span>
+          <span class="row">网络公司：<i v-text="wlgs" style="color:#5b5b5b;"></i></span>
         </div>
       </div>
 

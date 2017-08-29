@@ -40,26 +40,26 @@
       </div>
 
       <div class="build_common_msg_wrap">
-        <a href="javascript:;"><span style="color:black">面积</span><i v-text="room_area" style="color:gray"></i></a>
-        <a href="javascript:;"><span style="color:black">工位</span><i v-text="workstation" style="color:gray"></i></a>
-        <a href="javascript:;"><span style="color:black">房间状态</span><i v-text="fjzt" style="color:gray"></i></a>
+        <a href="javascript:;"><span style="color:black">面积</span><i v-text="room_area" style="color:#5b5b5b;"></i></a>
+        <a href="javascript:;"><span style="color:black">工位</span><i v-text="workstation" style="color:#5b5b5b;"></i></a>
+        <a href="javascript:;"><span style="color:black">房间状态</span><i v-text="fjzt" style="color:#5b5b5b;"></i></a>
         <span class="common_ver_line"></span>
         <span class="common_ver_line second"></span>
       </div>
 
       <div class="weixin_wrap">
         <div class="weixin_head clearfix">
-          <span>楼&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;层：<i v-text="locat_floor" style="color: #999999;"></i></i></span>
-          <span>可否注册：<i v-text="zc" style="color: #999999;"></i></span>
-          <span>层&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;高：<i v-text="fjcg" style="color: #999999;"></i></span>
-          <span>朝&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;向：<i v-text="chx" style="color: #999999;">{{chx}}</i></span>
-          <span>建成年代：<i v-text="kprq" style="color: #999999;"></i></span>
-          <span>停&nbsp;&nbsp;车&nbsp;&nbsp;费：<i v-text="tcf" style="color: #999999;"></i></span>
-          <span class="row">产权性质：<i v-text="chqxz" style="color: #999999;"></i></span>
-          <span class="row">物业公司：<i v-text="wygs" style="color: #999999;"></i></span>
-          <span>物&nbsp;&nbsp;业&nbsp;&nbsp;费：<i v-text="wyf" style="color: #999999;"></i></span>
-          <span>供&nbsp;&nbsp;暖&nbsp;&nbsp;费：<i v-text="gnf" style="color: #999999;"></i></span>
-          <span class="row">网络公司：<i v-text="wlgs" style="color: #999999;"></i></span>
+          <span>楼&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;层：<i v-text="locat_floor" style="color: #5b5b5b;"></i></i></span>
+          <span>可否注册：<i v-text="zc" style="color: #5b5b5b;"></i></span>
+          <span>层&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;高：<i v-text="fjcg" style="color: #5b5b5b;"></i></span>
+          <span>朝&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;向：<i v-text="chx" style="color: #5b5b5b;">{{chx}}</i></span>
+          <span>建成年代：<i v-text="kprq" style="color: #5b5b5b;"></i></span>
+          <span>停&nbsp;&nbsp;车&nbsp;&nbsp;费：<i v-text="tcf" style="color: #5b5b5b;"></i></span>
+          <span class="row">产权性质：<i v-text="chqxz" style="color: #5b5b5b;"></i></span>
+          <span class="row">物业公司：<i v-text="wygs" style="color: #5b5b5b;"></i></span>
+          <span>物&nbsp;&nbsp;业&nbsp;&nbsp;费：<i v-text="wyf" style="color: #5b5b5b;"></i></span>
+          <span>供&nbsp;&nbsp;暖&nbsp;&nbsp;费：<i v-text="gnf" style="color: #5b5b5b;"></i></span>
+          <span class="row">网络公司：<i v-text="wlgs" style="color: #5b5b5b;"></i></span>
         </div>
         <div class="weixin_bot clearfix">
           <div class="fl weixin_bot_box">
