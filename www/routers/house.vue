@@ -191,6 +191,18 @@
                     </li>
                   </ul>
                 </div>
+                <div class="warpper box-flex1">
+                  <ul class="box-flex1 bg-white cut-height">
+                    <li class="clearfix">
+                      <span class="ys_tit">产权性质：</span>
+                    </li>
+                    <li class="clearfix bg_gray">
+                      <div class="ys_item_con fl">
+                        <span v-for="a in chqxz" class="ys_tag" :class="{'active':xzTag.indexOf(a) > -1}" :id="a" @click="pickTag($event)">{{a}}</span>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
                 <div class="warpper box-flex1 filter-fixed">
                   <ul class="box-flex1 bg-white cut-height">
                     <li class="clearfix bg_gray special">
@@ -290,8 +302,10 @@
         areaArray:["-1", "<100", "100-299", "300-499", "500-599", "1000-1499", ">1500"],
         priceArray:["-1", "<3", "3-4.9", "5-7.9", "8-9.9", "10-14.9", ">=15"],
         featureArray: [],
+        chqxz: ["写字楼","公寓","商务楼","住宅","商业","酒店","综合","别墅","商业综合体","酒店式公寓"],
         priceTag: "",
         areaTag: "",
+        xzTag: [],
         priceRange: ["", ""],
         areaRange: ["", ""],
         curTab:'',
@@ -313,6 +327,7 @@
           "area": "",
           "price_dj": "",
           "label": "",
+          "chqxz": "",
           "orderby": "D",
           "curr_page": 1,
           "items_perpage": 10,
@@ -397,6 +412,22 @@
           $(target).siblings().removeClass('active');
         }
       },
+      pickTag(e){
+        const target = $(e.target), id = target.attr("id");
+        if(!id){return;}
+        if ($(target).hasClass('active')) {
+          let _t = new Set(this.xzTag);
+          _t.delete(id);
+          this.xzTag = [..._t];
+          $(target).removeClass('active');
+        } else {
+          let _t = new Set(this.xzTag);
+          _t.add(id);
+          this.xzTag = [..._t];
+          $(target).addClass('active');
+        }
+        this.para.chqxz = this.xzTag.join("、");
+      },
       filterFocus(e){
           const target = $(e.target), rel = target.attr("rel");
           if(rel === "price"){
@@ -410,10 +441,8 @@
       },
       setFilter(e){
         const target = $(e.target), which = target.attr("rel");
-        console.log(" ======= ", which);
         if(which==="confirm") {
             const aa = this.areaRange[0], ea = this.areaRange[1];
-            console.log(" ======= ", aa, ea);
             if(aa && ea && parseInt(aa) >= parseInt(ea)){
                 MessageBox('提示', '面积区间填写有误。请重新填写');
                 return;
@@ -422,7 +451,6 @@
                 this.para.area = JSON.stringify([parseInt(aa), parseInt(ea)]);
             }
             const ap = this.priceRange[0], ep = this.priceRange[1];
-            console.log(" ======= ", ap, ep);
             if(ap && ep && parseInt(parseFloat(ap) * 100) >= parseInt(parseFloat(ep) * 100)){
                 MessageBox('提示', '价格区间填写有误。请重新填写');
                 return;
@@ -434,11 +462,13 @@
 
         if (which === 'reset') {
             this.priceTag = "";
+            this.xzTag = [];
             this.areaTag = "";
             this.priceRange = ["", ""];
             this.areaRange = ["", ""];
             this.para.price_dj = "";
             this.para.area = "";
+            this.para.chqxz = "";
             return;
         }
 
@@ -701,6 +731,7 @@
             "area": this.para.area,
             "price_dj": this.para.price_dj,
             "label": this.para.label,
+            "chqxz": this.para.chqxz,
             "orderby": this.priceFilter || this.areaFilter || "D",
             "curr_page": this.para.curr_page,
             "items_perpage": 10
