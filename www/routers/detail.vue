@@ -101,7 +101,7 @@
                 <div class="dz_msg fl">
                   <span>{{item1.zdh}} - {{item1.fybh}}</span>
                   <span><i v-text="item1.monthly_price==='0.0'?'':item1.monthly_price"></i><i>元/月</i></span>
-                  <span><i v-text="(item1.housing_area==='0.0'?'':item1.housing_area)+'㎡'"></i><i v-text="item1.decoration_level"></i></span>
+                  <span><i v-text="(item1.housing_area==='0.0'?'':item1.housing_area)+'㎡'"></i><i v-text="item1.fjzt"></i></span>
                   <span v-text="item1.workstation+'个工位'"></span>
                 </div>
               </router-link>
@@ -126,19 +126,19 @@
         <div class="map-box" id="allmap"></div>
         <ul class="text-gray6 clearfix ph15" id="map_item_ul">
           <li class="supporting-item">
-            <i class="supporting-icon sup-ct" style="position: relative;left: -0.0em;"></i>
+            <i class="supporting-icon sup-ct img12" style="position: relative;left: -0.0em;"></i>
             <span class="db">餐厅</span>
           </li>
           <li class="supporting-item">
-            <i class="supporting-icon sup-jd" style="position: relative;left: -0.0em;"></i>
+            <i class="supporting-icon sup-jd img13" style="position: relative;left: -0.0em;"></i>
             <span class="db">酒店</span>
           </li>
           <li class="supporting-item">
-            <i class="supporting-icon sup-js" style="position: relative;left: -0.0em;"></i>
+            <i class="supporting-icon sup-js img14" style="position: relative;left: -0.0em;"></i>
             <span class="db">健身</span>
           </li>
           <li class="supporting-item">
-            <i class="supporting-icon sup-yh" style="position: relative;left: -0.0em;"></i>
+            <i class="supporting-icon sup-yh img15" style="position: relative;left: -0.0em;"></i>
             <span class="db">银行</span>
           </li>
         </ul>
