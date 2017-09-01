@@ -9,6 +9,8 @@
   .pageState:before{margin-right: 4px;border-top: 6px solid transparent;border-bottom: 6px solid transparent;border-right: 6px solid #FFF}
   .pageState{position: absolute;right: 15px;bottom: 4px;padding: 2px 8px;line-height: 20px;font-size: 12px;color: #FFF; z-index: 3}
   .section{padding-bottom:1.2rem;padding-top:0 !important}
+  .gift{padding-top:.3rem;width:100% !important}
+  .weixin_bot .weixin_bot_box span{font-size:.27rem !important}
 </style>
 <template>
   <div>
@@ -60,6 +62,9 @@
           <span>供&nbsp;&nbsp;暖&nbsp;&nbsp;费：<i v-text="gnf" style="color: #5b5b5b;"></i></span>
           <span class="row">网络公司：<i v-text="wlgs" style="color: #5b5b5b;"></i></span>
         </div>
+        <div class="weixin_head gift clearfix">
+          <span class="row">礼品等级：<i v-text="lpdj"></i></i></span>
+        </div>
         <div class="weixin_bot clearfix">
           <div class="fl weixin_bot_box">
             <span>销售顾问：<i v-text="name"></i></span>
@@ -110,6 +115,7 @@
         gnf: "",
         zc: "",
         chqxz: "",
+        lpdj: "",
         building_images: [],
         property: {"1":"写字楼", "2":"公寓","3":"商务楼","4":"住宅","5":"商业","6":"酒店","7":"综合","8":"别墅","9":"商业综合体","10":"酒店式公寓"},
 
@@ -160,6 +166,7 @@
               _this.gnf= !data.gnf ? '暂无数据' : data.gnf + '元/㎡/季';
               _this.tcf = !data.tcf ? '暂无数据' : data.tcf + '元/月';
               _this.wlgs = data.wlgs || '暂无数据';
+              _this.lpdj = data.lpsort || '暂无数据';
             }
 
             setTimeout(function(){
