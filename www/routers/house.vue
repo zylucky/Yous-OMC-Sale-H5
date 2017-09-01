@@ -250,7 +250,7 @@
                       <dl class="cell clearfix">
                         <dd>{{item.housing_area === '0.0' ? '': item.housing_area}}㎡</dd>
                         <dd v-if="item.lc">{{item.lc}}层</dd>
-                        <dd v-if="item.decoration_level">{{item.decoration_level}}</dd>
+                        <dd v-if="item.fjzt">{{item.fjzt}}</dd>
                       </dl>
                     </dd>
                   </dl>

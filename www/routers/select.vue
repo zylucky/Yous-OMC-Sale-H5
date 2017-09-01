@@ -48,9 +48,10 @@
 .cell:nth-child(4){width:15%}
 .cell:last-child{width:20%}
 li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
-.pv15{padding:.1rem 0 !important}
+.pv15{padding:0 !important}
 .export{position:fixed;right:0.4rem;top:.15rem;z-index:9999}
 .export img{width:.6rem;height:.6rem;cursor:pointer}
+.new{background: url('../resources/images/icons/new.jpg') no-repeat;background-size:26px 26px}
 .hilight a{color:#476CBA !important}
 </style>
 <template>
@@ -244,7 +245,7 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
           infinite-scroll-distance="100"
           infinite-scroll-immediate-check="checked" class="clearfix">
           <li class="ys_listcon pv15 clearfix" :class="{'linked': select.indexOf(item.id) > -1}" v-for="item in resultData">
-              <div class="cell">
+              <div class="cell" :class="{'new': item.bsh==1}">
                 <span>{{item.topic}}</span>
               </div>
               <div class="cell">
@@ -490,7 +491,7 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
                   }
                   else{
                       Indicator.close();
-                      const link = this.$api + "/yhcms/" + data.data;
+                      const link = domain + "/yhcms/" + data.data;
                       setTimeout(function(){
                           window.location = link;
                       },500);
