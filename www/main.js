@@ -12,9 +12,11 @@ Vue.use(VueResource);
 Vue.use(MintUI);
 //Vue.prototype.$api = "http://192.168.137.54:8081" //api地址
 Vue.prototype.$api = "http://wx.urskongjian.com:8080" //api地址
+//Vue.prototype.$api = "http://omc.urskongjian.com" //api地址可以随意改
 //Vue.prototype.$api = "http://192.168.0.222:8080" //api地址
 Vue.prototype.$prefix = "http://116.62.68.26:81" //图片前缀
-Vue.prototype.$export = "http://wx.urskongjian.com:8080" //图片前缀
+Vue.prototype.$export = "http://wx.urskongjian.com:8080" //
+//Vue.prototype.$export = "http://omc.urskongjian.com" //可以随意改
 //Vue.config.debug = true;// 开启debug模式
 Vue.config.debug = true;// 开启debug模式
 
