@@ -239,12 +239,12 @@
               </div>
               <dl class="supply">
                 <dt>
-                  <img v-if="item.img_path" :src="$prefix + '/' + item.img_path" :alt="item.img_alt">
+                  <img v-if="item.housing_icon" :src="$prefix + '/' + item.housing_icon" :alt="item.img_alt">
                   <img v-else :src="$prefix + '/upload/2017-08-27/6404b4de960b81fc5403c870aefcea34.png'" :alt="item.img_alt">
                 </dt>
                 <dd class="supply_msg_box">
                   <dl>
-                    <dd class="supply_house">{{item.topic}}&nbsp;&nbsp;{{item.zdh}} - {{item.fybh}}</dd>
+                    <dd class="supply_house">{{item.topic}}&nbsp;&nbsp;<span v-if="item.zdh !== '独栋'">{{item.zdh}} - </span>{{item.fybh}}</dd>
                     <dd class="supply_color ellipsis">{{item.district}}</dd>
                     <dd>
                       <dl class="cell clearfix">

@@ -35,7 +35,8 @@
         </div>
       </div>
       <div class="build_price_wrap clearfix">
-        <span><i v-text="zdh" style="color:black"></i> - <i v-text="fybh" style="color:black"></i></span>
+        <span v-if="zdh === '独栋'"><i v-text="fybh" style="color:black"></i></span>
+        <span v-else><i v-text="zdh" style="color:black"></i> - <i v-text="fybh" style="color:black"></i></span>
         <span><i v-text="monthly_price" style="color:#e01222"></i><i v-if="monthly_price != null" style="color:black">元/月</i></span>
         <span v-text="daily_price" style="color:#e01222"></span><i v-if="daily_price != null">元/㎡/天</i>
       </div>
@@ -141,15 +142,19 @@
           if (result.success) {
             if (result.data) {
               const data = result.data[0];
-              $('title').html(result.data.name);
+              $('title').html(result.data[0].topic);
               _this.daily_price = !data.dj ? '暂无数据' : data.dj;
               _this.monthly_price = !data.yzj ? '暂无数据' : data.yzj;
               _this.room_area = !data.fjmj ? '暂无数据' : data.fjmj + '㎡';
               _this.workstation = data.krgw || '暂无数据';
               _this.floors = data.zglc || '暂无数据';
               _this.locat_floor = data.lc || '暂无数据';
-              _this.wyf = !data.wyf ? '暂无数据' : data.wyf + '元/㎡/月';
-                _this.zdh = data.zdh || '暂无数据';
+              if(data.wyf == 0){
+                  _this.wyf = '已包含';
+              }else{
+                  _this.wyf = !data.wyf ? '暂无数据' : data.wyf + '元/㎡/月'; //物业费
+              }
+              _this.zdh = data.zdh || '暂无数据';
               _this.fybh = data.fybh || '暂无数据';
               _this.wygs = data.wygs || '暂无数据';
               _this.fjcg = data.fjcg || '暂无数据';
@@ -163,7 +168,11 @@
               _this.chx = data.chx || '暂无数据';
               _this.kprq = data.kprq || '暂无数据';
               _this.chqxz = data.chqxz || '暂无数据';
-              _this.gnf= !data.gnf ? '暂无数据' : data.gnf + '元/㎡/季';
+              if(data.gnf == 0){
+                  _this.gnf = '已包含';
+              }else{
+                  _this.gnf= !data.gnf ? '暂无数据' : data.gnf + '元/㎡/季'; //供暖费
+              }
               _this.tcf = !data.tcf ? '暂无数据' : data.tcf + '元/月';
               _this.wlgs = data.wlgs || '暂无数据';
               _this.lpdj = data.lpsort || '暂无数据';
