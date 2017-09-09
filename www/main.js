@@ -15,7 +15,7 @@ Vue.use(MintUI);
 
 // 微信判断是否关注
 const api = "http://omc.urskongjian.com/yhcms/web/jcsj/userAuth.do";
-const FollowInfo = () => { return axios.post(`${api}`, {})};
+const FollowInfo = () => { return axios.post(api, {})};
 
 Vue.prototype.$prefix = "http://116.62.68.26:81" //图片前缀
 
@@ -59,6 +59,10 @@ var router = new VueRouter({
             component: require('./routers/select.vue')
         },
         {
+            path: '/error',
+            component: require('./routers/error.vue')
+        },
+        {
             path: '*',
             component: require('./routers/list.vue')
         }
@@ -66,19 +70,25 @@ var router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    FollowInfo().then((res)=>{
-        const subscribed = res.data.subscribe;
-        if(subscribed == 1){
-            next();
-        }
-        else{
-            window.location = 'https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI0NjY4ODM5OQ==#wechat_redirect';
-        }
-    }).catch((err)=>{
-        // 出错了
-        window.location = 'https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI0NjY4ODM5OQ==#wechat_redirect';
-        //next();
-    });
+    if(to.path === '/error'){
+        next();
+    }
+    else{
+        FollowInfo().then((res)=>{
+            const subscribed = res.data.subscribe;
+            if(subscribed == 1){
+                next();
+            }
+            else{
+                window.location = 'https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI0NjY4ODM5OQ==#wechat_redirect';
+            }
+        }).catch((err)=>{
+            // 出错了
+            //window.location = 'https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI0NjY4ODM5OQ==#wechat_redirect';
+            localStorage.setItem("error", err.toString());
+            next({path:'/error'});
+        });
+    }
 });
 
 new Vue({
