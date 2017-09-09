@@ -729,7 +729,13 @@
 
         this.para.curr_page = 1;
         this.resultData = [];
+
+        Indicator.open({
+           text: '',
+           spinnerType: 'fading-circle'
+        });
         this.getData();
+        Indicator.close();
       },
       getData(){
         const paraObj = {

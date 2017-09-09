@@ -35,7 +35,8 @@
         </div>
       </div>
       <div class="build_price_wrap clearfix">
-        <span><i v-text="zdh" style="color:black"></i> - <i v-text="fybh" style="color:black"></i></span>
+        <span v-if="zdh.indexOf('独栋') > -1"><i v-text="zdh" style="color:black"></i> - <i v-text="fybh" style="color:black"></i></span>
+        <span v-else><i v-text="fybh" style="color:black"></i></span>
         <span><i v-text="monthly_price" style="color:#e01222"></i><i v-if="monthly_price != null" style="color:black">元/月</i></span>
         <span v-text="daily_price" style="color:#e01222"></span><i v-if="daily_price != null">元/㎡/天</i>
       </div>

@@ -244,7 +244,8 @@
                 </dt>
                 <dd class="supply_msg_box">
                   <dl>
-                    <dd class="supply_house">{{item.topic}}&nbsp;&nbsp;{{item.zdh}} - {{item.fybh}}</dd>
+                    <dd v-if="item.zdh.indexOf('独栋') > -1" class="supply_house">{{item.topic}}&nbsp;&nbsp;{{item.zdh}} - {{item.fybh}}</dd>
+                    <dd v-else class="supply_house">{{item.topic}}&nbsp;&nbsp;{{item.fybh}}</dd>
                     <dd class="supply_color ellipsis">{{item.district}}</dd>
                     <dd>
                       <dl class="cell clearfix">
@@ -716,7 +717,13 @@
         this.para.curr_page = 1;
         this.resultData = [];
 
+        Indicator.open({
+           text: '',
+           spinnerType: 'fading-circle'
+        });
         this.getData();
+
+        Indicator.close();
       },
       getData(){
         const paraObj = {
