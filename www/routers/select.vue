@@ -799,7 +799,7 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
             "chqxz": this.para.chqxz,
             "orderby": this.priceFilter || this.areaFilter || "D",
             "curr_page": this.para.curr_page,
-            "items_perpage": 10
+            "items_perpage": 30
           },
           "foreEndType": 2,
           "code": "30000001"
