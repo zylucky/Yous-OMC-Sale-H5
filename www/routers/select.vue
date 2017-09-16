@@ -1,3 +1,4 @@
+<script src="../main.js"></script>
 <style scoped lang="less">
   @import "../resources/css/website/list.less";
   .page-infinite-loading {
@@ -111,9 +112,9 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
                     <li class="price-sub" :class="{act:this.positionType=='a'}" @click="positionType='a';curTab=''">
                       <a href="javascript:void(0);" style="color: #302F35;">行政区域</a>
                     </li>
-                    <li class="price-sub" :class="{act:this.positionType=='y'}" @click="positionType='y';curTab=''">
+                    <!--<li class="price-sub" :class="{act:this.positionType=='y'}" @click="positionType='y';curTab=''">
                       <a href="javascript:void(0);" style="color: #302F35;">业务区域</a>
-                    </li>
+                    </li>-->
                     <li class="price-sub" :class="{act:this.positionType=='l'}" @click="positionType='l';curTab=''">
                       <a href="javascript:void(0);" style="color: #302F35;">地铁</a>
                     </li>
@@ -244,12 +245,13 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
           infinite-scroll-disabled="loading"
           infinite-scroll-distance="100"
           infinite-scroll-immediate-check="checked" class="clearfix" style="height: 55em;">
-          <li class="ys_listcon pv15 clearfix" :class="{'linked': select.indexOf(item.id) > -1}" v-for="item in resultData">
+          <li @click.stop.prevent="makeSelect" :rel="item.id" class="ys_listcon pv15 clearfix" :class="{'linked': select.indexOf(item.id) > -1}" v-for="item in resultData">
               <div class="cell" :class="{'new': item.bsh==1}">
                 <span>{{item.topic}}</span>
               </div>
               <div class="cell">
-                <span>{{item.zdh}} - {{item.fybh}}</span>
+                <span v-if="item.zdh.indexOf('独栋') > -1">{{item.fybh}}</span>
+                <span v-else>{{item.zdh}} - {{item.fybh}}</span>
               </div>
               <div class="cell">
                 <span>{{item.housing_area==='0.0'?'':item.housing_area}}</span>
@@ -258,7 +260,7 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
                 <span>{{item.daily_price==='0.0'?'':item.daily_price}}</span>
               </div>
               <div class="cell">
-                <span style="cursor:pointer;cursor:hand" :rel="item.id" @click.stop.prevent="makeSelect">点击进入</span>
+                <span style="cursor:pointer;cursor:hand">点击进入</span>
               </div>
           </li>
         </ul>
@@ -448,6 +450,7 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
       },
       filterFocus(e){
           const target = $(e.target), rel = target.attr("rel");
+          this.noMore = true;
           if(rel === "price"){
               $.each($("span[target='price']"), (idx, item)=>{$(item).removeClass("active");});
               this.para.price_dj = "";
@@ -458,7 +461,7 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
           }
       },
       makeSelect(e){
-          const target = $(e.target), rel = target.attr("rel"), that = this;
+          const target = $(e.target).closest("li"), rel = target.attr("rel"), that = this;
           let select = JSON.parse(sessionStorage.getItem("select") || "[]");
           select = select || [];
           select.push(rel);
@@ -522,7 +525,7 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
                 return;
             }
             else if(ap && ep){
-                this.para.price_dj = JSON.stringify([parseInt(ap), parseInt(ap)]);
+                this.para.price_dj = JSON.stringify([parseInt(ap), parseFloat(ep)]);
             }
         }
 
@@ -811,10 +814,10 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
           this_.loading = false;
           const data = result.data.data;
           this_.resultData = this_.resultData.concat(data);
-          if (data < this_.para.items_perpage) {
+          if (data.buildings < this_.para.items_perpage) {
             this_.noMore = true;
           }
-          if (this_.resultData.length == 0) {
+          if (this_.resultData.length <= 0) {
             Toast({
               message: '抱歉,暂无符合条件的房源!',
               position: 'middle',

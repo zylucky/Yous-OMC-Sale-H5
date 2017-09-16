@@ -104,9 +104,9 @@
                     <li class="price-sub" :class="{act:this.positionType=='a'}" @click="positionType='a';curTab=''">
                       <a href="javascript:void(0);" style="color: #302F35;">行政区域</a>
                     </li>
-                    <li class="price-sub" :class="{act:this.positionType=='y'}" @click="positionType='y';curTab=''">
+                    <!--<li class="price-sub" :class="{act:this.positionType=='y'}" @click="positionType='y';curTab=''">
                       <a href="javascript:void(0);" style="color: #302F35;">业务区域</a>
-                    </li>
+                    </li>-->
                     <li class="price-sub" :class="{act:this.positionType=='l'}" @click="positionType='l';curTab=''">
                       <a href="javascript:void(0);" style="color: #302F35;">地铁</a>
                     </li>
@@ -457,7 +457,7 @@
                 return;
             }
             else if(ap && ep){
-                this.para.price_dj = JSON.stringify([parseInt(ap), parseInt(ap)]);
+                this.para.price_dj = JSON.stringify([parseInt(ap), parseFloat(ep)]);
             }
         }
 
@@ -763,16 +763,16 @@
           Indicator.close();
           this_.loading = false;
           this_.resultData = this_.resultData.concat(result.data.data.buildings);
-          if (result.data.data.buildings < this_.para.items_perpage) {
+          if (result.data.data < this_.para.items_perpage) {
             this_.noMore = true;
           }
-          if (this_.resultData.length == 0) {
+          if (this_.resultData.length <= 0) {
             Toast({
               message: '抱歉,暂无符合条件的房源!',
               position: 'middle',
               duration: 3000
             });
-          } else if (this_.resultData.length > 0 && result.data.data.buildings.length == 0) {
+          } else if (this_.resultData.length > 0 && result.data.data.length == 0) {
             Toast({
               message: '已经获得当前条件的所有楼盘!',
               position: 'middle',
@@ -809,7 +809,7 @@
           }
         });
       },
-
+      //这块是干什么的？？
       loadMore(){
         if (!this.loading && !this.noMore) {
           this.loading = true;
