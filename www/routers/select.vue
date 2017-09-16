@@ -41,7 +41,7 @@
 #filter-features .warpper:last-child{margin-bottom:0.5rem}
 .pos_block{z-index: 88;background-color: #fff;border-bottom: 1px solid #DCDCDC}
 .pos_block .cell{font-weight:700}
-.cell{text-align:center;float:left;padding:.2rem 0}
+.cell{text-align:center;float:left;padding:.2rem 0;}
 .cell:first-child{width:25%}
 .cell:nth-child(2){width:20%}
 .cell:nth-child(3){width:20%}
@@ -243,7 +243,7 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
           v-infinite-scroll="loadMore"
           infinite-scroll-disabled="loading"
           infinite-scroll-distance="100"
-          infinite-scroll-immediate-check="checked" class="clearfix">
+          infinite-scroll-immediate-check="checked" class="clearfix" style="height: 55em;">
           <li class="ys_listcon pv15 clearfix" :class="{'linked': select.indexOf(item.id) > -1}" v-for="item in resultData">
               <div class="cell" :class="{'new': item.bsh==1}">
                 <span>{{item.topic}}</span>
@@ -479,7 +479,7 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
                 spinnerType: 'fading-circle'
               });
 
-              this.$http.post(this.$export + "/yhcms/web/lpjbxx/daochu.do", param).then((res)=>{
+              this.$http.post(this.$api + "/yhcms/web/lpjbxx/daochu.do", param).then((res)=>{
                   const result = JSON.parse(res.bodyText), data = result;
                   if (data.success !== true) {
                      Indicator.close();
@@ -491,7 +491,7 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
                   }
                   else{
                       Indicator.close();
-                      const link = domain + "/yhcms/" + data.data;
+                      const link = this.$api + "/yhcms/" + data.data;
                       setTimeout(function(){
                           window.location = link;
                       },500);

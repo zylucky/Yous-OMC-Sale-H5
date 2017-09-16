@@ -774,7 +774,7 @@
             });
           } else if (this_.resultData.length > 0 && result.data.data.buildings.length == 0) {
             Toast({
-              message: '已经获得当前条件的所有房源!',
+              message: '已经获得当前条件的所有楼盘!',
               position: 'middle',
               duration: 3000
             });
