@@ -104,9 +104,9 @@
                     <li class="price-sub" :class="{act:this.positionType=='a'}" @click="positionType='a';curTab=''">
                       <a href="javascript:void(0);" style="color: #302F35;">行政区域</a>
                     </li>
-                    <!--<li class="price-sub" :class="{act:this.positionType=='y'}" @click="positionType='y';curTab=''">
+                    <li class="price-sub" :class="{act:this.positionType=='y'}" @click="positionType='y';curTab=''">
                       <a href="javascript:void(0);" style="color: #302F35;">业务区域</a>
-                    </li>-->
+                    </li>
                     <li class="price-sub" :class="{act:this.positionType=='l'}" @click="positionType='l';curTab=''">
                       <a href="javascript:void(0);" style="color: #302F35;">地铁</a>
                     </li>
@@ -336,6 +336,10 @@
       }
     },
     mounted(){
+        //jquery中删除style样式
+      $("body").removeAttr("style");
+      $("html").removeAttr("style");
+      /*console.log("mounted=================",this.para.curr_page);*/
       this.init();
 
       //下滑时，条件tab固定
@@ -360,7 +364,7 @@
       });
     },
     created: function () {
-
+        /*console.log("created=================",this.para.curr_page);*/
     },
     computed: {
       unitword(){
@@ -378,6 +382,7 @@
         if(this.$route['query']['keyword']){
           this.para.search_keywork = this.$route['query']['keyword'];
         }
+
         this.resetGetData();
         this.getFilters();
 
@@ -608,7 +613,7 @@
             if(value==="不限"){
                 this.para.district1 = code;
                 this.para.business1 = "";
-                $('h2.district-h').html(this.where || value);
+                 var a = $('h2.district-h').html(this.where || value);
             }
             else{
                 this.para.business1 = code;
@@ -725,7 +730,7 @@
       },
       resetGetData: function () {
         this.noMore = false;
-        this.loading = false;
+        this.loading = true;
 
         this.para.curr_page = 1;
         this.resultData = [];
@@ -809,11 +814,13 @@
           }
         });
       },
-      //这块是干什么的？？
+      //这块是干什么的
       loadMore(){
+          /*console.log("loadMore1=================",this.para.curr_page);*/
         if (!this.loading && !this.noMore) {
           this.loading = true;
           this.para.curr_page += 1;
+            /*console.log("loadMore2=================",this.para.curr_page);*/
           this.getData();
         }
       }

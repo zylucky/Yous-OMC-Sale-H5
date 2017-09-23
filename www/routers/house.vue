@@ -107,9 +107,9 @@
                     <li class="price-sub" :class="{act:this.positionType=='a'}" @click="positionType='a';curTab=''">
                       <a href="javascript:void(0);" style="color: #302F35;">行政区域</a>
                     </li>
-                    <!--<li class="price-sub" :class="{act:this.positionType=='y'}" @click="positionType='y';curTab=''">
+                    <li class="price-sub" :class="{act:this.positionType=='y'}" @click="positionType='y';curTab=''">
                       <a href="javascript:void(0);" style="color: #302F35;">业务区域</a>
-                    </li>-->
+                    </li>
                     <li class="price-sub" :class="{act:this.positionType=='l'}" @click="positionType='l';curTab=''">
                       <a href="javascript:void(0);" style="color: #302F35;">地铁</a>
                     </li>
@@ -339,6 +339,8 @@
       }
     },
     mounted(){
+      $("body").removeAttr("style");
+      $("html").removeAttr("style");
       this.init();
 
       //下滑时，条件tab固定
@@ -756,20 +758,20 @@
           this_.loading = false;
 
           this_.resultData = this_.resultData.concat(result.data.data);
-          if (result.data.data.buildings < this_.para.items_perpage) {
+          if (result.data.data.length < this_.para.items_perpage) {
             this_.noMore = true;
           }
           if (this_.resultData.length <= 0) {
             Toast({
               message: '抱歉,暂无符合条件的房源!',
               position: 'middle',
-              duration: 3000
+              duration: 1000
             });
           } else if (this_.resultData.length > 0 && result.data.data.length == 0) {
             Toast({
               message: '已经获得当前条件的所有房源!',
               position: 'middle',
-              duration: 3000
+              duration: 1000
             });
           }
         };
@@ -778,7 +780,7 @@
           Toast({
             message: '抱歉,暂无符合条件的房源!',
             position: 'middle',
-            duration: 3000
+            duration: 1000
           });
         };
 

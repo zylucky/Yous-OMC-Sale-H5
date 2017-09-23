@@ -112,9 +112,9 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
                     <li class="price-sub" :class="{act:this.positionType=='a'}" @click="positionType='a';curTab=''">
                       <a href="javascript:void(0);" style="color: #302F35;">行政区域</a>
                     </li>
-                    <!--<li class="price-sub" :class="{act:this.positionType=='y'}" @click="positionType='y';curTab=''">
+                    <li class="price-sub" :class="{act:this.positionType=='y'}" @click="positionType='y';curTab=''">
                       <a href="javascript:void(0);" style="color: #302F35;">业务区域</a>
-                    </li>-->
+                    </li>
                     <li class="price-sub" :class="{act:this.positionType=='l'}" @click="positionType='l';curTab=''">
                       <a href="javascript:void(0);" style="color: #302F35;">地铁</a>
                     </li>
@@ -342,6 +342,8 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
       }
     },
     mounted(){
+      $("body").removeAttr("style");
+      $("html").removeAttr("style");
       this.init();
 
       //下滑时，条件tab固定
@@ -489,7 +491,7 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
                       Toast({
                         message: '抱歉,导出房源出错, 请稍候再试!',
                         position: 'middle',
-                        duration: 3000
+                        duration: 1000
                       });
                   }
                   else{
@@ -503,7 +505,7 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
                  Toast({
                    message: '抱歉,导出房源出错, 请稍候再试!',
                    position: 'middle',
-                   duration: 3000
+                   duration: 1000
                  });
               });
           });
@@ -814,20 +816,20 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
           this_.loading = false;
           const data = result.data.data;
           this_.resultData = this_.resultData.concat(data);
-          if (data.buildings < this_.para.items_perpage) {
+          if (data.length < this_.para.items_perpage) {
             this_.noMore = true;
           }
           if (this_.resultData.length <= 0) {
             Toast({
               message: '抱歉,暂无符合条件的房源!',
               position: 'middle',
-              duration: 3000
+              duration: 1000
             });
           } else if (this_.resultData.length > 0 && data.length == 0) {
             Toast({
               message: '已经获得当前条件的所有房源!',
               position: 'middle',
-              duration: 3000
+              duration: 1000
             });
           }
         };
@@ -836,7 +838,7 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
           Toast({
             message: '抱歉,暂无符合条件的房源!',
             position: 'middle',
-            duration: 3000
+            duration: 1000
           });
         };
 

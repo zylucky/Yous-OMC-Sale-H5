@@ -1,6 +1,7 @@
 <style scoped lang="less">
   @import "../resources/css/website/detail.less";
-  @import "../resources/plugin/swiper/css/swiper.css"; /*swiper 轮播*/
+  @import "../resources/plugin/swiper/css/swiper.css"; /*swiper 轮播white-space  ellipsis*/
+
   .detail-icon{width:0.4rem !important;height:0.4rem !important}
   .bt{border-top:2px solid #e5e5e6}
   .houseInfo div.intro{text-align:center}
@@ -78,7 +79,7 @@
       <!--office info-->
       <div class="office-info border-tb">
         <div class="banner-text">
-          <p v-if="address" class="ellipsis" :title="address">
+          <p v-if="address" :title="address">
             <span class="detail-icon" style="color:#5b5b5b;"></span>{{address}}</p>
         </div>
         <div class="house_msg_tit clearfix">
@@ -140,9 +141,16 @@
                     <i v-if="item1.zdh.indexOf('独栋')> -1">{{item1.fybh}}</i>
                     <i v-else>{{item1.zdh}} - {{item1.fybh}}</i>
                   </span>
-                  <span><i v-text="item1.monthly_price==='0.0'?'':item1.monthly_price"></i><i>元/月</i></span>
-                  <span><i v-text="(item1.housing_area==='0.0'?'':item1.housing_area)+'㎡'"></i><i v-text="item1.fjzt"></i></span>
-                  <span v-text="item1.workstation+'个工位'"></span>
+                  <span style="border:0px solid red;height:.5rem;"></span>
+                  <span>
+                       <i v-text="item1.daily_price==='0.0'?'':item1.daily_price"></i><i>元/㎡·天</i>
+                      <i v-text="item1.monthly_price==='0.0'?'':item1.monthly_price"></i><i>元/月</i>
+                  </span>
+                  <span>
+                      <i v-text="(item1.housing_area==='0.0'?'':item1.housing_area)+'㎡'"></i>
+                      <i v-text="item1.workstation+'个工位'"></i>
+                      <i v-text="item1.fjzt"></i>
+                  </span>
                 </div>
               </router-link>
             </div>
@@ -194,7 +202,7 @@
         <div id="slideBox" class="slideBox">
           <div class="swiper-container">
             <div class="swiper-wrapper">
-              <div class="swiper-slide" v-for="image in building_images">
+              <div class="swiper-slide" v-for="image in building_images" style="transition-duration: 0ms !important;">
                 <a href="javascript:;" @click="enlarge">
                   <img :src="$prefix + '/' + image" alt="">
                 </a>
@@ -216,8 +224,10 @@
   import {Indicator} from 'mint-ui';
   import {InfiniteScroll} from 'mint-ui';
   import {Toast} from 'mint-ui';
+  import { Swipe, SwipeItem } from 'mint-ui';
 
   import '../resources/plugin/swiper/js/swiper.min.js';
+
 
   export default {
     components: {
@@ -268,8 +278,10 @@
     },
     methods: {
       cancel(){
-          $("body").css({"overflow":"auto"});
-          $("html").css({"overflow":"auto"});
+          $("body").css({"overflow":"scroll"});
+          $("html").css({"overflow":"scroll"});
+          /*$("body").removeClass({"overflow":"auto"});
+          $("html").removeClass({"overflow":"auto"});*/
           this.large = false;
       },
       enlarge(){

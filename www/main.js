@@ -72,9 +72,35 @@ var router = new VueRouter({
         {
             path: '*',
             component: require('./routers/list.vue')
+        },
+        {
+            path: '/test',
+            component: require('./routers/test.vue')
         }
     ]
 });
+
+//这块是在手机端打印时候打印到error页面里（在这里面可以查看错误）
+/*router.beforeEach((to, from, next) => {
+    if(to.path === '/error'){
+        next();
+    }else{
+        FollowInfo().then((res)=>{
+            const subscribed = res.data.subscribe;
+            if(subscribed == 1){
+                next();
+            }else{
+                window.location = 'https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI0NjY4ODM5OQ==#wechat_redirect';
+            }
+        }).catch((err)=>{
+            // 出错了
+            //window.location = 'https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI0NjY4ODM5OQ==#wechat_redirect';
+            localStorage.setItem("error", err.toString());
+            next({path:'/error'});
+        });
+    }
+});*/
+
 
 router.beforeEach((to, from, next) => {
     /*FollowInfo().then((res)=>{
@@ -88,7 +114,7 @@ router.beforeEach((to, from, next) => {
     }).catch((err)=>{
         // 出错了
         window.location = 'https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI0NjY4ODM5OQ==#wechat_redirect';
-        //next();
+        next();
     });*/
    next();
 });
