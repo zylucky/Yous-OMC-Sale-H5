@@ -1,3 +1,4 @@
+
 /**
  * Created by aresn on 16/6/20.
  */
@@ -102,8 +103,8 @@ var router = new VueRouter({
 });*/
 
 
-router.beforeEach((to, from, next) => {
-    /*FollowInfo().then((res)=>{
+/*router.beforeEach((to, from, next) => {
+    /!*FollowInfo().then((res)=>{
         const subscribed = res.data.subscribe;
         if(subscribed == 1){
             next();
@@ -115,9 +116,9 @@ router.beforeEach((to, from, next) => {
         // 出错了
         window.location = 'https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI0NjY4ODM5OQ==#wechat_redirect';
         next();
-    });*/
+    });*!/
    next();
-});
+});*/
 
 new Vue({
     el: '#app',
