@@ -23,9 +23,8 @@ Vue.prototype.$prefix = "http://116.62.68.26:81" //图片前缀222
 /*Vue.prototype.$export = "http://wx.urskongjian.com:8080" //*/
 //Vue.prototype.$export = "http://omc.urskongjian.com" //可以随意改
 
-// 微信判断是否关注
-/*const api = "http://omc.urskongjian.com/yhcms/web/jcsj/userAuth.do";
-const FollowInfo = () => { return axios.post(`${api}`, {})};*/
+const api = "http://omc.urskongjian.com/yhcms/web/jcsj/userAuth.do";
+const FollowInfo = () => { return axios.post(api, {})};
 
 /*
 Vue.prototype.$prefix = "http://116.62.68.26:81" //图片前缀
@@ -71,6 +70,10 @@ var router = new VueRouter({
             component: require('./routers/select.vue')
         },
         {
+            path: '/error',
+            component: require('./routers/error.vue')
+        },
+        {
             path: '*',
             component: require('./routers/list.vue')
         },
@@ -81,11 +84,11 @@ var router = new VueRouter({
     ]
 });
 
-//这块是在手机端打印时候打印到error页面里（在这里面可以查看错误）
-/*router.beforeEach((to, from, next) => {
+router.beforeEach((to, from, next) => {
     if(to.path === '/error'){
         next();
-    }else{
+    }
+    else{
         FollowInfo().then((res)=>{
             const subscribed = res.data.subscribe;
             if(subscribed == 1){
@@ -100,25 +103,7 @@ var router = new VueRouter({
             next({path:'/error'});
         });
     }
-});*/
-
-
-/*router.beforeEach((to, from, next) => {
-    /!*FollowInfo().then((res)=>{
-        const subscribed = res.data.subscribe;
-        if(subscribed == 1){
-            next();
-        }
-        else{
-            window.location = 'https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI0NjY4ODM5OQ==#wechat_redirect';
-        }
-    }).catch((err)=>{
-        // 出错了
-        window.location = 'https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI0NjY4ODM5OQ==#wechat_redirect';
-        next();
-    });*!/
-   next();
-});*/
+});
 
 new Vue({
     el: '#app',
