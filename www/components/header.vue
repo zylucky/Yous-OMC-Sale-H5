@@ -2,12 +2,48 @@
   @import "../resources/css/reset.less";
   @import "../resources/css/color.less";
   @import "../resources/css/base.less";
+  @import "../resources/css/website/list2.less";
+
+  [header]{
+    .mint-popup{
+      width:100%;
+      position: fixed;
+      left:0;
+      top:0;
+    }
+  }
 </style>
 <template>
   <div header>
     <!--header start-->
     <header id="header" class="clearfix">
+      <label class="side_nav side-nav" @click.native="popupVisible= true"  v-on:click="showMenu">
+        <img src="../resources/images/ys_more.png" width="20" alt="">
+      </label>
+      <a href="javascript:;" class="detail-search" style="position: fixed;left: 0; top: 0">
+        <input type="text" id="keyword" placeholder="请输入关键字搜索" v-model="para.search_keywork" maxlength="50"
+               @focus="changeRou">
+      </a>
+      <router-view></router-view>
     </header>
+    <mt-popup v-model="popupVisible" position="left" class="mint-popup-3" :modal="false">
+      <!--左侧登录div-->
+      <div class="main-nav-wrapper sidenav" style="height: 628px;">
+        <div class="user-box clearfix">
+          <img class="portrait" src="../resources/images/por_icon.png" alt="">
+          <div class="user_name tc mb20">{{username}}</div>
+          <div class="ys_function tc">
+            <!--<router-link :to="{path:'/list2'}" id="first_list_link">精选房源</router-link>-->
+            <a href="javascript:;" @click="house">精选房源</a>
+            <a href="javascript:;" @click="select">今日销控</a>
+            <a href="javascript:;" @click="list">楼盘列表</a>
+            <a href="javascript:;" @click="percent">个人中心</a>
+            <a href="javascript:;" @click="modify_pwd">修改密码</a>
+          </div>
+        </div>
+        <a href="javascript:;" class="log_out_btn" @click="login_out()">退出登录</a>
+      </div>
+    </mt-popup>
   </div>
   <!--header end-->
 </template>
@@ -16,10 +52,20 @@
   export default {
     data() {
       return {
-        popupVisible: false
+        popupVisible: false,
+          username:"",
+          para: {
+              "search_keywork": "",
+          },
       };
     },
     methods: {
+        init(){
+            this.para.search_keywork = this.$route.query.keyword;
+        },
+        changeRou: function () {
+            this.$router.push({path: '/search?rt=index'})
+        },
       showMenu: function () {
         this.popupVisible = true;
         var wwd = $("#section").width();
@@ -66,8 +112,8 @@
               }, 150);
               this.popupVisible = false;
               $("#zhezhao").remove();
-              $('html').css({'height': 'auto', 'overflow': 'auto'});
-              $('body').css({'height': 'auto', 'overflow': 'auto'});
+              $('html').removeAttr("style");
+              $("body").removeAttr("style");
             }
           )
         });
@@ -77,10 +123,71 @@
         $(".section").animate({
           left: "75%"
         }, 150);
+      },
+      house(){
+          $("#zhezhao").remove();
+          $('html').removeAttr("style");
+          $("body").removeAttr("style");
+          this.$router.push({path:'/house'});
+      },
+      select(){
+          $("#zhezhao").remove();
+          $('html').removeAttr("style");
+          $("body").removeAttr("style");
+          this.$router.push({path:'/select'});
+      },
+      list(){
+        $("#zhezhao").remove();
+        $('html').removeAttr("style");
+        $("body").removeAttr("style");
+        this.$router.push({path:'/'});
+      },
+      percent(){
+        $("#zhezhao").remove();
+        $('html').removeAttr("style");
+        $("body").removeAttr("style");
+        this.$router.push({path:'/percent'});
+      },
+
+      modify_pwd(){
+          $("#zhezhao").remove();
+          $('html').removeAttr("style");
+          $("body").removeAttr("style");
+          this.$router.push({path:'/modify_pwd'});
+      },
+      login_out(){
+          $("#zhezhao").remove();
+          const url = this.$api + "/yhcms/web/wxqx/getSgUser.do";
+          const user22 = JSON.parse(localStorage.getItem('cook'));
+          let that = this;
+          this.$http.post(url,{ "cookie":user22.sjs,"foreEndType":2,"code":"300000086"}).then((res)=>{
+              Indicator.close()
+              const data = JSON.parse(res.bodyText).success;
+              if(data){
+                  $('html').removeAttr("style");
+                  $("body").removeAttr("style");
+                  //$('html').css({'height': 'auto', 'overflow': 'auto'});
+                  localStorage.removeItem('cook');
+                  this.$router.push({path:'/login'});
+              }else{
+                  Toast({
+                      message: '系统异常，请稍后再试!',
+                      position: 'middle',
+                      duration: 3000
+                  });
+              }
+          }, (res)=>{
+              Indicator.close()
+          });
       }
     },
     mounted: function () {
       var _this = this;
+      let user = JSON.parse(localStorage.getItem('user'));
+      this.username = user;
+      $('#first_list_link').click(function(){
+          $("#zhezhao").remove();
+      });
     }
   };
 </script>

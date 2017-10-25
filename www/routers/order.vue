@@ -89,8 +89,8 @@
         </div>
       </div>
       <div class="build_price_wrap clearfix" style="font-size: 0.35rem;">
-        <span v-if="zdh.indexOf('独栋') > -1" style="font-size: 1rem !important;font-weight: 900 !important;"><i v-text="fybh" style="color:black;"></i></span>
-        <span v-else><i v-text="zdh" style="color:black"></i> - <i v-text="fybh" style="color:black"></i></span>
+        <span v-if="zdh.indexOf('独栋') > -1" style="font-weight: 900 !important;"><i v-text="fybh" style="color:black;font-weight: 900 !important;"></i></span>
+        <span v-else><i v-text="zdh" style="color:black;font-weight: 900 !important;"></i> - <i v-text="fybh" style="color:black;font-weight: 900 !important;"></i></span>
       </div>
 
       <div class="build_common_msg_wrap">

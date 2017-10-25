@@ -54,10 +54,10 @@
     <section id="header">
       <header1></header1>
     </section>
-    <a href="javascript:;" class="detail-search" style="position: fixed;left: 0; top: 0">
+    <!--<a href="javascript:;" class="detail-search" style="position: fixed;left: 0; top: 0">
       <input type="text" id="keyword" placeholder="请输入楼盘关键字搜索" v-model.trim="para.search_keywork" maxlength="50"
              @focus="changeRou">
-    </a>
+    </a>-->
     <section class="section"
              :class="{'in-filter':this.currentFilterTab=='district'||this.currentFilterTab=='price'||this.currentFilterTab=='area'||this.currentFilterTab=='features'}">
       <div class="option">
@@ -336,6 +336,66 @@
       }
     },
     mounted(){
+        //var wxcode = this.GetQueryString("code");
+        /*if(wxcode == null){
+            window.location = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx109df14878717ecb&redirect_uri=http%3A%2F%2Fomc.urskongjian.com%2Fwanx%2F%23%2Flist&response_type=code&scope=snsapi_base&state=123#wechat_redirect";
+        }else{
+            alert(wxcode);
+            /!*$.get("http://omc.urskongjian.com/yhcms/web/jcsj/getOpenid.do?code="+wxcode,
+                {
+                },
+                {
+                    headers:{
+                        "Access-Control-Allow-Origin":"*",
+                        "Access-Control-Allow-Headers":"Origin, X-Requested-With, Content-Type, Accept",
+                        "Access-Control-Allow-Methods":"GET, PUT, DELETE, POST, OPTIONS"
+
+                    },
+                    dataType: 'jsonp',
+                    crossDomain: true
+                }
+            ).then((data) => {
+                alert("aa2");
+                var data = JSON.parse(data.bodyText).data;
+                alert(data);
+                alert(data.subscribe);
+                if (data.subscribe == 1 || data.subscribe == 3 ) {
+                    next();
+                } else {
+                    alert("aa3");
+                    window.location.href = "https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI0NjY4ODM5OQ==#wechat_redirect";
+                }
+            }).catch(function(response) {
+                console.log(response)
+            });*!/
+
+
+            this.$http.post(
+                this.$api + "/yhcms/web/jcsj/getOpenid.do?code="+wxcode
+            ).then(function (res) {
+                var data = JSON.parse(res.bodyText);
+                if (data.success) {
+                    if (data.subscribe == 1 || data.subscribe == 3 ) {
+                        alert(111);
+                        next();
+                    } else {
+                        alert("aa3");
+                        window.location.href = "https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI0NjY4ODM5OQ==#wechat_redirect";
+                    }
+
+                } else {
+                    Toast({
+                        message: '获取筛选条件失败: ' + data.message,
+                        position: 'bottom'
+                    });
+                }
+            }, function (res) {
+                Toast({
+                    message: '获取筛选条件失败! 请稍候再试',
+                    position: 'bottom'
+                });
+            });
+        }*/
         //jquery中删除style样式
       $("body").removeAttr("style");
       $("html").removeAttr("style");
@@ -496,6 +556,7 @@
             Indicator.close()
           });
       },
+        //点击行政区域获取后面的数据方法
       searchSubArea:function(code,e){
         this.curTab = "a";
         this.thirdpart = "sq";
@@ -591,11 +652,11 @@
               that.resetGetData();
           }, 500);
       },
-      getQueryString: function (key) {
+      /*getQueryString: function (key) {
         var t = new RegExp("(^|&)" + key + "=([^&]*)(&|$)", "i"),
           n = window.location.search.substr(1).match(t);
         return null != n ? decodeURI(n[2]) : "";
-      },
+      },*/
       closeFilter: function () {
         this.currentFilterTab = 'nth';
       },
