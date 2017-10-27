@@ -108,6 +108,26 @@ var router = new VueRouter({
             component: require('./routers/real_name_auth.vue')
         },
         {
+            path: '/per_cen',
+            component: require('./routers/per_cen.vue')
+        },
+        {
+            path: '/per_information',
+            component: require('./routers/per_information.vue')
+        },
+        {
+            path: '/chang_phone',
+            component: require('./routers/chang_phone.vue')
+        },
+        {
+            path: '/reser_page',
+            component: require('./routers/reser_page.vue')
+        },
+        {
+            path: '/my_reser',
+            component: require('./routers/my_reser.vue')
+        },
+        {
             path: '/test',
             component: require('./routers/test.vue')
         }
