@@ -128,6 +128,10 @@ var router = new VueRouter({
             component: require('./routers/my_reser.vue')
         },
         {
+            path: '/my_collection',
+            component: require('./routers/my_collection.vue')
+        },
+        {
             path: '/test',
             component: require('./routers/test.vue')
         }

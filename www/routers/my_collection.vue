@@ -53,7 +53,8 @@
 </style>
 <template>
     <div>
-        <section ><!--class="section"
+        <section >
+            <!--class="section"
             :class="{'in-filter':this.currentFilterTab=='district'||this.currentFilterTab=='price'||this.currentFilterTab=='area'||this.currentFilterTab=='features'}"-->
             <div class="option">
                 <!--筛选结果start-->
@@ -62,12 +63,14 @@
                         infinite-scroll-disabled="loading"
                         infinite-scroll-distance="100"
                         infinite-scroll-immediate-check="checked">
+
                     <li class="ys_listcon pv15" v-for="item in resultData">
-                        <router-link :to="{path:'order',query:{house_id:item.id}}" class="supply_box" style="border-bottom: 0px !important;">
+
+                        <router-link :to="{path:'order',query:{house_id:item.id}}" class="supply_box" style="border-bottom: 0px !important;border-bottom: 0px !important;float: right;width: 90% !important;">
                             <div class="supply_price">
                                 <span>{{item.daily_price === '0.0' ? '' : item.daily_price}}</span> 元/㎡·天
                             </div>
-                            <dl class="supply" style="height: 1.75rem !important;clear: both;">
+                            <dl class="supply">
                                 <dt>
                                     <img v-if="item.housing_icon" :src="$prefix + '/' + item.housing_icon" :alt="item.img_alt">
                                     <img v-else :src="$prefix + '/upload/2017-08-27/6404b4de960b81fc5403c870aefcea34.png'" :alt="item.img_alt">
@@ -86,24 +89,19 @@
                                         </dd>
                                     </dl>
                                 </dd>
-
                             </dl>
                         </router-link>
-                        <dd>
-                            <dl style="height: .45rem;">
-                                <dd class="" style="width: 1.5rem;margin-top: -.3rem;">看房时间：</dd>
-                                <dd class="" style="width: 3rem;margin-left: 1.5rem;margin-top: -.37rem;">2017-11-13 10:00</dd>
-                                <dd class="" style="float: right;margin-top: -.4rem;border: 1xp solid;border: 1px solid rgb(0,0,0);" @click="delete1">删除</dd>
-                            </dl>
-                        </dd>
+                        <span style="border: 1px solid red;position: relative;top: 1rem;">
+                            <input type="checkbox" checked="checked" v-model="checkbox1" style="-webkit-appearance:checkbox !important;">
+                        </span>
 
                         <!--已过期-->
-                        <div style="background-color:#DCDCDC;z-index: 12;opacity: 0.5;">
+                        <!--<div style="background-color:#DCDCDC;z-index: 12;opacity: 0.5;">
                             <router-link :to="{path:'order',query:{house_id:item.id}}" class="supply_box">
                                 <div class="supply_price">
                                     <span>{{item.daily_price === '0.0' ? '' : item.daily_price}}</span> 元/㎡·天
                                 </div>
-                                <dl class="supply" style="height: 1.75rem !important;clear: both;">
+                                <dl class="supply">
                                     <dt>
                                         <img v-if="item.housing_icon" :src="$prefix + '/' + item.housing_icon" :alt="item.img_alt">
                                         <img v-else :src="$prefix + '/upload/2017-08-27/6404b4de960b81fc5403c870aefcea34.png'" :alt="item.img_alt">
@@ -123,18 +121,11 @@
                                             </dd>
                                         </dl>
                                     </dd>
-
                                 </dl>
                             </router-link>
-                            <dd>
-                                <dl style="height: .45rem;">
-                                    <dd class="" style="width: 1.5rem;margin-top: -.3rem;color: #302f35;">看房时间：</dd>
-                                    <dd class="" style="width: 3rem;margin-left: 1.5rem;margin-top: -.37rem;color: #302f35;">2017-11-13 10:00</dd>
-                                    <dd class="" style="float: right;margin-top: -.4rem;border: 1xp solid;border: 1px solid rgb(0,0,0);color: #302f35;" @click="delete1">删除</dd>
-                                </dl>
-                            </dd>
-                        </div>
+                        </div>-->
                     </li>
+
                 </ul>
                 <p v-if="loading" class="page-infinite-loading">
                     <mt-spinner type="fading-circle"></mt-spinner>
@@ -164,6 +155,7 @@
         },
         data () {
             return {
+                checkbox1:[],
                 districtArray: [],
                 govDistrictArray: [],
                 lineArray:[],
@@ -250,10 +242,10 @@
         methods: {
             init(){
                 /*axios.defaults.baseURL = this.$api;
-                axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
-                if(this.$route['query']['keyword']){
-                    this.para.search_keywork = this.$route['query']['keyword'];
-                }*/
+                 axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
+                 if(this.$route['query']['keyword']){
+                 this.para.search_keywork = this.$route['query']['keyword'];
+                 }*/
                 $('title').html('房源列表');
                 this.resetGetData();
                 this.getFilters();
@@ -675,8 +667,8 @@
                 });
             },
             delete1(){
-              alert(1111);
-              return;
+                alert(1111);
+                return;
             },
 
             loadMore(){

@@ -146,7 +146,7 @@
         $("#zhezhao").remove();
         $('html').removeAttr("style");
         $("body").removeAttr("style");
-        this.$router.push({path:'/percent'});
+        this.$router.push({path:'/per_cen'});
       },
 
       modify_pwd(){
