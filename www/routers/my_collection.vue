@@ -53,7 +53,7 @@
 </style>
 <template>
     <div>
-        <section >
+        <section>
             <!--class="section"
             :class="{'in-filter':this.currentFilterTab=='district'||this.currentFilterTab=='price'||this.currentFilterTab=='area'||this.currentFilterTab=='features'}"-->
             <div class="option">
@@ -66,7 +66,7 @@
 
                     <li class="ys_listcon pv15" v-for="item in resultData">
 
-                        <router-link :to="{path:'order',query:{house_id:item.id}}" class="supply_box" style="border-bottom: 0px !important;border-bottom: 0px !important;float: right;width: 90% !important;">
+                        <router-link :to="{path:'order',query:{house_id:item.id}}" class="supply_box" style="border-bottom: 0px !important;border-bottom: 0px !important;width: 90% !important;float: right;">
                             <div class="supply_price">
                                 <span>{{item.daily_price === '0.0' ? '' : item.daily_price}}</span> 元/㎡·天
                             </div>
@@ -91,13 +91,14 @@
                                 </dd>
                             </dl>
                         </router-link>
-                        <span style="border: 1px solid red;position: relative;top: 1rem;">
-                            <input type="checkbox" checked="checked" v-model="checkbox1" style="-webkit-appearance:checkbox !important;">
+                        <span style="position: relative;top: 0.8rem;float: left;">
+                            <input type="checkbox" name="items" style="-webkit-appearance:checkbox !important;width: 0.3rem;height: 0.5rem;">
                         </span>
 
-                        <!--已过期-->
-                        <!--<div style="background-color:#DCDCDC;z-index: 12;opacity: 0.5;">
-                            <router-link :to="{path:'order',query:{house_id:item.id}}" class="supply_box">
+
+                        <!--房源已下架-->
+                        <div style="background-color:#DCDCDC;z-index: 12;opacity: 0.5;">
+                            <router-link :to="{path:'order',query:{house_id:item.id}}" class="supply_box" style="border-bottom: 0px !important;border-bottom: 0px !important;width: 90% !important;float: right;">
                                 <div class="supply_price">
                                     <span>{{item.daily_price === '0.0' ? '' : item.daily_price}}</span> 元/㎡·天
                                 </div>
@@ -111,7 +112,7 @@
                                             <dd v-if="item.zdh.indexOf('独栋') > -1" class="supply_house">{{item.topic}}&nbsp;&nbsp;{{item.fybh}}</dd>
                                             <dd v-else class="supply_house">{{item.topic}}&nbsp;&nbsp;{{item.zdh}} - {{item.fybh}}</dd>
                                             <dd class="supply_color ellipsis">{{item.district}}</dd>
-                                            <dd class="" style="color: black;font-weight: 600;position: absolute;top: 0.8rem;left: 0.5rem;font-size: 0.35rem;">已过期</dd>
+                                            <dd class="" style="color: black;font-weight: 600;position: absolute;top: 0.8rem;left: 0.2rem;font-size: 0.35rem;">房源已下架</dd>
                                             <dd>
                                                 <dl class="cell clearfix">
                                                     <dd>{{item.housing_area === '0.0' ? '': item.housing_area}}㎡</dd>
@@ -123,13 +124,20 @@
                                     </dd>
                                 </dl>
                             </router-link>
-                        </div>-->
+                            <span style="position: relative;top: 0.8rem;float: left;">
+                                <input type="checkbox" style="-webkit-appearance:checkbox !important;width: 0.3rem;height: 0.5rem;">
+                            </span>
+                        </div>
                     </li>
 
                 </ul>
                 <p v-if="loading" class="page-infinite-loading">
                     <mt-spinner type="fading-circle"></mt-spinner>
                 </p>
+                <div style="border:1px solid red;width:100%;height:0.6rem;background-color:#DCDCDC;position: fixed;bottom: 0px;z-index: 13;">
+                    <span style="background-color: 	#FFFFFF;"><input @click="quanxuan" type="checkbox" style="-webkit-appearance:checkbox !important;">全选</span>
+                    <span>2222</span>
+                </div>
             </div>
             <div class="mask" id="maskEl" @click="closeFilter"
                  :class="{show:this.currentFilterTab=='district'||this.currentFilterTab=='features'}">
@@ -146,6 +154,7 @@
     import {Search} from 'mint-ui';
     import axios from 'axios';
     import qs from 'qs';
+    import { Checklist } from 'mint-ui';
     export default {
         components: {
             InfiniteScroll,
@@ -249,6 +258,23 @@
                 $('title').html('房源列表');
                 this.resetGetData();
                 this.getFilters();
+            },
+            quanxuan(){
+                alert(1111);
+                var checkElements=document.getElementsByName('items');
+                if (this.checked) {
+                    for(var i=0;i<checkElements.length;i++){
+                        var checkElement=checkElements[i];
+                        checkElement.checked="checked";
+                    }
+
+                }
+                else{
+                    for(var i=0;i<checkElements.length;i++){
+                        var checkElement=checkElements[i];
+                        checkElement.checked=null;
+                    }
+                }
             },
             selectTag(e){
                 const target = $(e.target), val = target.attr("value"), t = target.attr("target"), which = t ==="price" ? "priceTag" : "areaTag";
