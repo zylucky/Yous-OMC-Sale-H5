@@ -38,7 +38,6 @@
             <a href="javascript:;" @click="select">今日销控</a>
             <a href="javascript:;" @click="list">楼盘列表</a>
             <a href="javascript:;" @click="percent">个人中心</a>
-            <a href="javascript:;" @click="modify_pwd">修改密码</a>
           </div>
         </div>
         <a href="javascript:;" class="log_out_btn" @click="login_out()">退出登录</a>

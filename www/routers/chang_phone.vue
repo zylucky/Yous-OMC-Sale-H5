@@ -17,20 +17,20 @@
                 <li class="clearfix pr">
                     <span class="ys_tit w224"><i>*</i> 新手机号：</span>
                     <div class="ys_item_con fl" style="width: 3.5rem !important;">
-                        <input type="password" value="" v-model="ypwd" placeholder="请输入新手机号">
+                        <input type="password" value="" v-model="nphone" placeholder="请输入新手机号">
                     </div>
                     <span class="">获取验证码</span>
                 </li>
                 <li class="clearfix pr">
                     <span class="ys_tit w224"><i>*</i> 验证码：</span>
                     <div class="ys_item_con fl">
-                        <input class="npwd" type="password" value="" v-model="npwd" placeholder="请输入验证码">
+                        <input class="npwd" type="password" value="" v-model="yzm" placeholder="请输入验证码">
                     </div>
                 </li>
-                <li class="clearfix pr">
-                    <span class="ys_tit w224"></span>
-                    <div class="ys_item_con fl">更换手机号不会影响您个人中心的内容和数据您将使用新手机号登录</div>
-                </li>
+                <div style="margin-top: 0.4rem;">
+                    <span style="width: 7.5rem;clear: both;margin-left: 0.2rem;"><img src="../resources/images/icons/icon.jpg"></span>
+                    <span style="float: right;width: 6.5rem;margin-right: 0.3rem;">更换手机号不会影响您个人中心的内容和数据您将使用新手机号登录</span>
+                </div>
             </ul>
         <a href="javascript:;" class="ys_default_btn mb80" @click="saveAreaMsg">保存</a>
         </div>
@@ -46,51 +46,50 @@
     export default {
         data () {
             return {
-                ypwd:null,
-                npwd:null,
-                anpwd:null,
+                nphone:null,
+                yzm:null,
             }
         },
         methods: {
             saveAreaMsg(){
-                if(this.ypwd != null && this.npwd != null &&this.anpwd != null ){
-                    if(this.ypwd != this.npwd){
-                        if(this.npwd == this.anpwd){
-                            const _this = this;
-                            const user22 = JSON.parse(localStorage.getItem('cook'));
-                            console.log(user22.sjs);
-                            const sha1 = crypto.createHash('sha1'), md5 = crypto.createHash('md5');
-                            const sha11 = crypto.createHash('sha1'), md51 = crypto.createHash('md5');
-                            sha1.update(this.ypwd);
-                            sha11.update(this.npwd);
-                            const pwd = sha1.digest('hex');
-                            md5.update(pwd);
-                            const npwd1 = sha11.digest('hex');
-                            md51.update(npwd1);
-                            const ypwd = md5.digest("hex");
-                            const npwd = md51.digest("hex");
+                if(this.nphone != null && this.yzm != null){
+                    const _this = this;
+                    const user22 = JSON.parse(localStorage.getItem('cooknx'));
+                    this.$http.post(
+                        this.$api + "/yhcms/web/qduser/getUser1.do",
+                        {
+                            "parameters":{
+                                "phone":this.nphone,
+                                "cookie":user22.sjs
+                            },
+                            "foreEndType":2,
+                            "code":"5"
+                        }
+                    ).then(function (res) {
+                        Indicator.close();
+                        var result = JSON.parse(res.bodyText);
+                        if (result.success) {
                             this.$http.post(
-                                this.$api + "/yhcms/web/jcsj/updatesg.do",
+                                this.$api + "/yhcms/web/qduser/updatePhoneUser.do",
                                 {
-                                    "upass": ypwd,
-                                    "updateupass": npwd,
-                                    "cookie": user22.sjs,
-                                    "foreEndType": 2,
-                                    "code": "300000045"
+                                    "parameters":{
+                                        "phone":this.nphone,
+                                        "cookie":user22.sjs
+                                    },
+                                    "foreEndType":2,
+                                    "code":"5"
                                 }
                             ).then(function (res) {
                                 Indicator.close();
                                 var result = JSON.parse(res.bodyText);
                                 if (result.success) {
                                     Toast({
-                                        message: '修改密码成功',
-                                        position: 'bottom',
-                                        duration: 1000
+                                        message: '手机号修改成功！',
+                                        position: 'bottom'
                                     });
-                                    localStorage.removeItem('cook');
-                                    //在这个方法中的跳转格式_this.$router.push({path:'/index'});这里必须加_this不能改为this
+
                                     setTimeout(function(){
-                                        _this.$router.push({path:'/index'});
+                                        _this.$router.push({path:'/per_information'});
                                     },1000);
 
                                 } else {
@@ -101,18 +100,16 @@
                                 }
                             }, function (res) {
                                 Indicator.close();
-                                Toast({
-                                    message: '修改密码失败! 请稍候再试',
-                                    position: 'bottom'
-                                });
                             });
-                        }else{
-                            MessageBox('提示',"两次输入的密码不一样！");
+                        } else {
+                            Toast({
+                                message: result.message,
+                                position: 'bottom'
+                            });
                         }
-                    }else{
-                        MessageBox('提示',"原始密码和新密码一样！");
-                    }
-
+                    }, function (res) {
+                        Indicator.close();
+                    });
                 }else{
                     MessageBox('提示',"必填项不能为空！");
                 }

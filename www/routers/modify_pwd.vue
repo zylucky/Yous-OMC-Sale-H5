@@ -67,7 +67,7 @@
                     if(this.ypwd != this.npwd){
                         if(this.npwd == this.anpwd){
                             const _this = this;
-                            const user22 = JSON.parse(localStorage.getItem('cook'));
+                            const user22 = JSON.parse(localStorage.getItem('cooknx'));
                             console.log(user22.sjs);
                             const sha1 = crypto.createHash('sha1'), md5 = crypto.createHash('md5');
                             const sha11 = crypto.createHash('sha1'), md51 = crypto.createHash('md5');
@@ -80,13 +80,15 @@
                             const ypwd = md5.digest("hex");
                             const npwd = md51.digest("hex");
                             this.$http.post(
-                                this.$api + "/yhcms/web/jcsj/updatesg.do",
+                                this.$api + "/yhcms/web/qduser/updatePassUser.do",
                                 {
-                                    "upass": ypwd,
-                                    "updateupass": npwd,
-                                    "cookie": user22.sjs,
-                                    "foreEndType": 2,
-                                    "code": "300000045"
+                                    "parameters": {
+                                        "pass":this.ypwd,
+                                        "cookie":user22.sjs,
+                                        "pass1":this.npwd
+                                    },
+                                    "foreEndType":2,
+                                    "code":"5"
                                 }
                             ).then(function (res) {
                                 Indicator.close();
@@ -97,12 +99,9 @@
                                         position: 'bottom',
                                         duration: 1000
                                     });
-                                    localStorage.removeItem('cook');
-                                    //在这个方法中的跳转格式_this.$router.push({path:'/index'});这里必须加_this不能改为this
                                     setTimeout(function(){
                                         _this.$router.push({path:'/index'});
                                     },1000);
-
                                 } else {
                                     Toast({
                                         message: result.message,

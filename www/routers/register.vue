@@ -2,51 +2,57 @@
     @import "../resources/css/reset.css";
     @import "../resources/css/base2.less";
     .tsbq{width:100% !important}
-
+    i{
+        color:rgb(255,0,0);
+    }
 </style>
 <template>
     <div class="all_elements">
         <div class="build_top">
             <ul class="ys_item_ul mb60">
                 <li class="clearfix">
-                    <span class="ys_tit">姓名</span>
+                    <span class="ys_tit" style="width: 1.5rem !important;"><i>*</i>姓名</span>
                     <div class="ys_item_con fl">
                         <input type="text" value="" v-model="name" placeholder="请输入真实姓名">
                     </div>
                 </li>
                 <li class="clearfix">
-                    <span class="ys_tit">电话</span>
-                    <div class="ys_item_con fl" style="width: 4rem !important;">
-                        <input type="text" value="" v-model="phone" placeholder="请输入手机号">
-                    </div>
-                    <span class="">获取验证码</span>
-                </li>
-                <li class="clearfix">
-                    <span class="ys_tit">验证码</span>
-                    <div class="ys_item_con fl">
-                        <input type="text" value="" v-model="verificode" placeholder="请输入验证码">
-                    </div>
-                </li>
-                <li class="clearfix">
-                    <span class="ys_tit">密码</span>
+                    <span class="ys_tit" style="width: 1.5rem !important;"><i>*</i>密码</span>
                     <div class="ys_item_con fl">
                         <input type="text" value="" v-model="pwd" placeholder="请设置密码">
                     </div>
                 </li>
                 <li class="clearfix">
-                    <span class="ys_tit">确认密码</span>
+                    <span class="ys_tit" style="width: 1.5rem !important;"><i>*</i>确认密码</span>
                     <div class="ys_item_con fl">
                         <input type="text" value="" v-model="apwd" placeholder="请再次确认密码">
                     </div>
                 </li>
                 <li class="clearfix">
-                    <span class="ys_tit">渠道公司</span>
+                    <span class="ys_tit" style="width: 1.5rem !important;"><i>*</i>电话</span>
+                    <div class="ys_item_con fl" style="width: 4rem !important;">
+                        <input type="text" value="" v-model="phone" placeholder="请输入手机号">
+                    </div>
+                    <span class="">
+                        <span v-if="code == 1"><a href="javascript:;" @click="getverificode">获取验证码</a></span>
+                        <span v-if="code == 2"><a href="javascript:;" @click="getverificode">59s</a></span>
+                        <span v-if="code == 3"><a href="javascript:;" @click="getverificode">重新获取</a></span>
+                    </span>
+                </li>
+                <li class="clearfix">
+                    <span class="ys_tit" style="width: 1.5rem !important;"><i>*</i>验证码</span>
+                    <div class="ys_item_con fl">
+                        <input type="text" value="" v-model="verificode" @blur="yzverificode" placeholder="请输入验证码">
+                    </div>
+                </li>
+                <li class="clearfix">
+                    <span class="ys_tit" style="width: 1.5rem !important;">渠道公司</span>
                     <div class="ys_item_con fl">
                         <input type="text" value="" v-model="bindcomp" placeholder="绑定公司">
                     </div>
                 </li>
                 <li class="clearfix">
-                    <span class="ys_tit">所属项目</span>
+                    <span class="ys_tit" style="width: 1.5rem !important;">所属项目</span>
                     <div class="ys_item_con fl">
                         <input type="text" value="" v-model="project" placeholder="所属项目">
                     </div>
@@ -74,13 +80,15 @@
 
         data () {
             return {
-                "name": "", //姓名
+                "name": null, //姓名
                 "phone":null, //电话
-                "verificode": "", //验证码
+                "verificode": null, //验证码
                 "pwd": null, //密码
                 "apwd": null, //确认密码
                 "bindcomp": "", //渠道公司
+                bindcompid:null,//渠道公司的id
                 "project": "", //所属项目
+                code:1,
             }
         },
         computed:{
@@ -88,32 +96,101 @@
         },
         methods: {
             register(){
-                this.$router.push({path:'/login'});
-            },
+                if(this.name != null && this.phone != null && this.verificode != null && this.pwd != null && this.apwd != null){
+                    const _this = this, sjsd = {"sjs":(new Date)};
+                    const url = this.$api + "/yhcms/web/qduser/register.do";
+                    let that = this;
+                    this.$http.post(url, {"parameters":{"cookie":sjsd.sjs,"name":this.name,"phone":this.phone,"pass":this.pwd,"gsid":this.bindcompid,"gsname":this.bindcomp,"xmname":this.project},"foreEndType":2,"code":"1"}).then((res)=>{
+                        Indicator.close();
+                        var result = JSON.parse(res.bodyText);
+                        if(result.success){
+                            Toast({
+                                message: '注册成功',
+                                position: 'bottom',
+                                duration: 1000
+                            });
 
-            //选择tag
-            selectTag(e){
-                const target = $(e.target), val = target.attr("value");
-                if(!val){return;}
-
-                if ($(e.target).hasClass('active')) {
-                    let tsbq_t = new Set(this.tsbq);
-                    tsbq_t.delete(val);
-                    this.tsbq = [...tsbq_t];
-
-                    $(e.target).removeClass('active');
-                } else {
-                    let tsbq_t = new Set(this.tsbq);
-                    tsbq_t.add(val);
-                    this.tsbq = [...tsbq_t];
-
-                    $(e.target).addClass('active');
+                            setTimeout(function(){
+                                _this.$router.push({path:'/login'});
+                            },1000);
+                        }else{
+                            Toast({
+                                message: '注册失败: ' + result.message,
+                                position: 'bottom'
+                            });
+                        }
+                    }, (res)=>{
+                        Indicator.close();
+                    });
+                }else{
+                    Toast({
+                        message: '必填项不能为空！',
+                        position: 'bottom'
+                    });
                 }
             },
-            fanhui(){
-                window.history.go(-1);
+            //生成验证码
+            getverificode(){
+                const user22 = JSON.parse(localStorage.getItem('cooknx'));
+                const url = this.$api + "/yhcms/web/qduser/getCode.do";
+                let that = this;
+                this.$http.post(url,
+                    {
+                        "parameters":{
+                            "cookie":user22.sjs,
+                            "phone":this.phone,
+                        },
+                        "foreEndType":2,
+                        "code":"14"
+                    }
+                    ).then((res)=>{
+                    Indicator.close();
+                    var result = JSON.parse(res.bodyText);
+                    if(result.success){
+                        Toast({
+                            message: '验证码已发送，请稍等！',
+                            position: 'bottom',
+                            duration: 1000
+                        });
+                    }else{
+                        Toast({
+                            message: '验证码发送失败: ' + result.message,
+                            position: 'bottom'
+                        });
+                    }
+                }, (res)=>{
+                    Indicator.close();
+                });
             },
+            //验证验证码
+            yzverificode(){
+                const user22 = JSON.parse(localStorage.getItem('cooknx'));
+                const url = this.$api + "/yhcms/web/qduser/compareCode.do";
+                let that = this;
+                this.$http.post(url,
+                    {
+                        "parameters":{
+                            "cookie":user22.sjs,
+                            "code":this.verificode,
+                        },
+                        "foreEndType":2,
+                        "code":"15"
+                    }
+                ).then((res)=>{
+                    Indicator.close();
+                    var result = JSON.parse(res.bodyText);
+                    if(result.success){
 
+                    }else{
+                        Toast({
+                            message: '验证码发送失败: ' + result.message,
+                            position: 'bottom'
+                        });
+                    }
+                }, (res)=>{
+                    Indicator.close();
+                });
+            },
         },
         mounted(){
 

@@ -88,7 +88,7 @@ var router = new VueRouter({
             component: require('./routers/list.vue')
         },
         {
-            path: '/register',
+            path: '/register',//注册页面
             component: require('./routers/register.vue')
         },
         {
@@ -96,39 +96,43 @@ var router = new VueRouter({
             component: require('./routers/login.vue')
         },
         {
-            path: '/modify_pwd',
+            path: '/modify_pwd',//修改密码页面
             component: require('./routers/modify_pwd.vue')
         },
         {
-            path: '/forgot_pwd',
+            path: '/reset_pwd',//重置密码页面
+            component: require('./routers/modify_pwd.vue')
+        },
+        {
+            path: '/forgot_pwd',//忘记密码页面
             component: require('./routers/forgot_pwd.vue')
         },
         {
-            path: '/real_name_auth',
+            path: '/real_name_auth',//实名认证页面
             component: require('./routers/real_name_auth.vue')
         },
         {
-            path: '/per_cen',
+            path: '/per_cen',//个人中心页面
             component: require('./routers/per_cen.vue')
         },
         {
-            path: '/per_information',
+            path: '/per_information',//个人信息页面
             component: require('./routers/per_information.vue')
         },
         {
-            path: '/chang_phone',
+            path: '/chang_phone',//更换手机号
             component: require('./routers/chang_phone.vue')
         },
         {
-            path: '/reser_page',
+            path: '/reser_page',//预约页面
             component: require('./routers/reser_page.vue')
         },
         {
-            path: '/my_reser',
+            path: '/my_reser',//我的预约页面
             component: require('./routers/my_reser.vue')
         },
         {
-            path: '/my_collection',
+            path: '/my_collection',//我的收藏页面
             component: require('./routers/my_collection.vue')
         },
         {

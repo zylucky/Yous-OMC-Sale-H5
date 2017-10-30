@@ -17,7 +17,7 @@
                 <li class="clearfix pr">
                     <span class="ys_tit w224"><i>*</i> 姓名：</span>
                     <div class="ys_item_con fl"">
-                    <input type="password" value="" v-model="phone" placeholder="请输入姓名">
+                    <input type="password" value="" v-model="name" placeholder="请输入姓名">
         </div>
         </li>
         <li class="clearfix pr">
@@ -44,72 +44,52 @@
     export default {
         data () {
             return {
-                phone:null,
+                name:null,
                 verificode:null,
             }
         },
         methods: {
             saveAreaMsg(){
                 if(this.ypwd != null && this.npwd != null &&this.anpwd != null ){
-                    if(this.ypwd != this.npwd){
-                        if(this.npwd == this.anpwd){
-                            const _this = this;
-                            const user22 = JSON.parse(localStorage.getItem('cook'));
-                            console.log(user22.sjs);
-                            const sha1 = crypto.createHash('sha1'), md5 = crypto.createHash('md5');
-                            const sha11 = crypto.createHash('sha1'), md51 = crypto.createHash('md5');
-                            sha1.update(this.ypwd);
-                            sha11.update(this.npwd);
-                            const pwd = sha1.digest('hex');
-                            md5.update(pwd);
-                            const npwd1 = sha11.digest('hex');
-                            md51.update(npwd1);
-                            const ypwd = md5.digest("hex");
-                            const npwd = md51.digest("hex");
-                            this.$http.post(
-                                this.$api + "/yhcms/web/jcsj/updatesg.do",
-                                {
-                                    "upass": ypwd,
-                                    "updateupass": npwd,
-                                    "cookie": user22.sjs,
-                                    "foreEndType": 2,
-                                    "code": "300000045"
-                                }
-                            ).then(function (res) {
-                                Indicator.close();
-                                var result = JSON.parse(res.bodyText);
-                                if (result.success) {
-                                    Toast({
-                                        message: '修改密码成功',
-                                        position: 'bottom',
-                                        duration: 1000
-                                    });
-                                    localStorage.removeItem('cook');
-                                    //在这个方法中的跳转格式_this.$router.push({path:'/index'});这里必须加_this不能改为this
-                                    setTimeout(function(){
-                                        _this.$router.push({path:'/index'});
-                                    },1000);
-
-                                } else {
-                                    Toast({
-                                        message: result.message,
-                                        position: 'bottom'
-                                    });
-                                }
-                            }, function (res) {
-                                Indicator.close();
-                                Toast({
-                                    message: '修改密码失败! 请稍候再试',
-                                    position: 'bottom'
-                                });
-                            });
-                        }else{
-                            MessageBox('提示',"两次输入的密码不一样！");
+                    const _this = this;
+                    const user22 = JSON.parse(localStorage.getItem('cook'));
+                    this.$http.post(
+                        this.$api + "/yhcms/web/qduser/updateCard.do",
+                        {
+                            "parameters":{
+                                "card":this.verificode,
+                                "cookie":user22.sjs,
+                                "name":this.name
+                            },
+                            "foreEndType":2,
+                            "code":"8"
                         }
-                    }else{
-                        MessageBox('提示',"原始密码和新密码一样！");
-                    }
+                    ).then(function (res) {
+                        Indicator.close();
+                        var result = JSON.parse(res.bodyText);
+                        if (result.success) {
+                            Toast({
+                                message: '认证成功！',
+                                position: 'bottom',
+                                duration: 1000
+                            });
+                            setTimeout(function(){
+                                _this.$router.push({path:'/per_information'});
+                            },1000);
 
+                        } else {
+                            Toast({
+                                message: result.message,
+                                position: 'bottom'
+                            });
+                        }
+                    }, function (res) {
+                        Indicator.close();
+                        Toast({
+                            message: '认证失败! 请稍候再试',
+                            position: 'bottom'
+                        });
+                    });
                 }else{
                     MessageBox('提示',"必填项不能为空！");
                 }

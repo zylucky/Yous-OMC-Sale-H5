@@ -26,19 +26,19 @@
                     <a href="">立即认证</a>
                 </li>
                 <li class="clearfix">
-                    <span class="ys_tit"><img src=""></span>
+                    <span @click="per_information" class="ys_tit"><a href="javascript:;"><img src="../resources/images/icons/icon.jpg"></a></span>
                     <div class="ys_item_con fl">个人信息</div>
                 </li>
                 <li class="clearfix">
-                    <span class="ys_tit"><img src=""></span>
+                    <span @click="my_collection" class="ys_tit"><a href="javascript:;"><img src="../resources/images/icons/icon.jpg"></a></span>
                     <div class="ys_item_con fl">我的收藏</div>
                 </li>
                 <li class="clearfix">
-                    <span class="ys_tit"><img src=""></span>
+                    <span @click="my_reser" class="ys_tit"><a href="javascript:;"><img src="../resources/images/icons/icon.jpg"></a></span>
                     <div class="ys_item_con fl">我的预约</div>
                 </li>
                 <li class="clearfix" @click="modify_pwd">
-                    <span class="ys_tit"><img src=""></span>
+                    <span @click="modify_pwd" class="ys_tit"><a href="javascript:;"><img src="../resources/images/icons/icon.jpg"></a></span>
                     <div class="ys_item_con fl">修改密码</div>
                 </li>
             </ul>
@@ -156,6 +156,16 @@
             modify_pwd(){
                 this.$router.push({path:'/modify_pwd'});
             },
+            per_information(){
+                this.$router.push({path:'/per_information'});
+            },
+            my_collection(){
+                this.$router.push({path:'/my_collection'});
+            },
+            my_reser(){
+                this.$router.push({path:'/my_reser'});
+            },
+
 
             //日期panel展示
             openPicker() {

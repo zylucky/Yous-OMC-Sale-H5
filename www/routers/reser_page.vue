@@ -27,7 +27,7 @@
                                placeholder="请选择看房时间"
                                v-model="kprq"
                                @click="openPicker()">
-                        <i class="calendar_icon" style="top:0px !important;" @click="openPicker()">&gt;</i>
+                        <i class="calendar_icon" style="top:0px !important;background-color: white !important;" @click="openPicker()">&gt;</i>
                     </div>
                 </li>
                 <li class="clearfix pr">

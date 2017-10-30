@@ -32,7 +32,7 @@
             <span class="pin"></span>
         </div>
         </ul>
-        <a href="javascript:;" class="ys_default_btn mb80" @click="saveAreaMsg">提交</a>
+        <a href="javascript:;" class="ys_default_btn mb80" @click="saveAreaMsg">下一步</a>
     </div>
     </div>
 </template>
@@ -52,66 +52,38 @@
         },
         methods: {
             saveAreaMsg(){
-                if(this.ypwd != null && this.npwd != null &&this.anpwd != null ){
-                    if(this.ypwd != this.npwd){
-                        if(this.npwd == this.anpwd){
-                            const _this = this;
-                            const user22 = JSON.parse(localStorage.getItem('cook'));
-                            console.log(user22.sjs);
-                            const sha1 = crypto.createHash('sha1'), md5 = crypto.createHash('md5');
-                            const sha11 = crypto.createHash('sha1'), md51 = crypto.createHash('md5');
-                            sha1.update(this.ypwd);
-                            sha11.update(this.npwd);
-                            const pwd = sha1.digest('hex');
-                            md5.update(pwd);
-                            const npwd1 = sha11.digest('hex');
-                            md51.update(npwd1);
-                            const ypwd = md5.digest("hex");
-                            const npwd = md51.digest("hex");
-                            this.$http.post(
-                                this.$api + "/yhcms/web/jcsj/updatesg.do",
-                                {
-                                    "upass": ypwd,
-                                    "updateupass": npwd,
-                                    "cookie": user22.sjs,
-                                    "foreEndType": 2,
-                                    "code": "300000045"
-                                }
-                            ).then(function (res) {
-                                Indicator.close();
-                                var result = JSON.parse(res.bodyText);
-                                if (result.success) {
-                                    Toast({
-                                        message: '修改密码成功',
-                                        position: 'bottom',
-                                        duration: 1000
-                                    });
-                                    localStorage.removeItem('cook');
-                                    //在这个方法中的跳转格式_this.$router.push({path:'/index'});这里必须加_this不能改为this
-                                    setTimeout(function(){
-                                        _this.$router.push({path:'/index'});
-                                    },1000);
-
-                                } else {
-                                    Toast({
-                                        message: result.message,
-                                        position: 'bottom'
-                                    });
-                                }
-                            }, function (res) {
-                                Indicator.close();
-                                Toast({
-                                    message: '修改密码失败! 请稍候再试',
-                                    position: 'bottom'
-                                });
-                            });
-                        }else{
-                            MessageBox('提示',"两次输入的密码不一样！");
+                if(this.phone != null && this.verificode != null){
+                    const _this = this;
+                    this.$http.post(
+                        this.$api + "/yhcms/web/qduser/getRemUser.do",
+                        {
+                            "parameters":{
+                                "phone":this.phone
+                            },
+                            "foreEndType":2,
+                            "code":"12"
                         }
-                    }else{
-                        MessageBox('提示',"原始密码和新密码一样！");
-                    }
+                    ).then(function (res) {
+                        Indicator.close();
+                        var result = JSON.parse(res.bodyText);
+                        if (result.success) {
+                            setTimeout(function(){
+                                _this.$router.push({path:'/reset_pwd'});
+                            },1000);
 
+                        } else {
+                            Toast({
+                                message: result.message,
+                                position: 'bottom'
+                            });
+                        }
+                    }, function (res) {
+                        Indicator.close();
+                        Toast({
+                            message: '修改密码失败! 请稍候再试',
+                            position: 'bottom'
+                        });
+                    });
                 }else{
                     MessageBox('提示',"必填项不能为空！");
                 }
