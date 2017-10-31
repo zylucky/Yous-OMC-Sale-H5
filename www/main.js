@@ -41,8 +41,10 @@ Vue.prototype.$prefix = "http://116.62.68.26:81" //图片前缀
 //Vue.prototype.$export = "http://192.168.0.222:8080" //图片前缀
 
 // 生产环境
-Vue.prototype.$api = "http://omc.urskongjian.com" //api地址
+//Vue.prototype.$api = "http://omc.urskongjian.com" //api地址
 Vue.prototype.$export = "http://omc.urskongjian.com" //导出
+
+Vue.prototype.$api = "http://116.62.68.26:8080" //api地址
 
 //Vue.config.debug = true;// 开启debug模式
 Vue.config.debug = true;// 开启debug模式
@@ -100,8 +102,8 @@ var router = new VueRouter({
             component: require('./routers/modify_pwd.vue')
         },
         {
-            path: '/reset_pwd',//重置密码页面
-            component: require('./routers/modify_pwd.vue')
+            path: '/reset_pwd/:phone',//重置密码页面
+            component: require('./routers/reset_pwd.vue')
         },
         {
             path: '/forgot_pwd',//忘记密码页面

@@ -44,12 +44,14 @@
     export default {
         data () {
             return {
+                phone:null,
                 npwd:null,
                 anpwd:null,
             }
         },
         methods: {
             saveAreaMsg(){
+                this.phone = this.$route.params.phone;
                 if(this.npwd != null && this.anpwd != null ){
                     if(this.npwd == this.anpwd){
                         const _this = this;
@@ -63,9 +65,9 @@
                             this.$api + "/yhcms/web/qduser/updateRemPass.do",
                             {
                                 "parameters":{
-                                    "phone":"",
+                                    "phone":this.phone,
                                     "cookie":user22.sjs,
-                                    "pass":this.npwd
+                                    "pass":npwd
                                 },
                                 "foreEndType":2,
                                 "code":"13"
@@ -104,7 +106,7 @@
             },
         },
         mounted(){
-
+           /* this.getdata();*/
         },
     }
 </script>

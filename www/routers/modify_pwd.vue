@@ -68,7 +68,6 @@
                         if(this.npwd == this.anpwd){
                             const _this = this;
                             const user22 = JSON.parse(localStorage.getItem('cooknx'));
-                            console.log(user22.sjs);
                             const sha1 = crypto.createHash('sha1'), md5 = crypto.createHash('md5');
                             const sha11 = crypto.createHash('sha1'), md51 = crypto.createHash('md5');
                             sha1.update(this.ypwd);
@@ -83,9 +82,9 @@
                                 this.$api + "/yhcms/web/qduser/updatePassUser.do",
                                 {
                                     "parameters": {
-                                        "pass":this.ypwd,
+                                        "pass":ypwd,
                                         "cookie":user22.sjs,
-                                        "pass1":this.npwd
+                                        "pass1":npwd
                                     },
                                     "foreEndType":2,
                                     "code":"5"

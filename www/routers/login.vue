@@ -48,7 +48,7 @@
                         <a href="javascript:;" style="line-height: 1.4rem;margin-top: .14rem;" class="ys_btn" @click="login">登 录</a>
                     </div>
                     <div class="inp_item login">
-                        <a href="javascript:;" style="line-height: 1.4rem;margin-top: .14rem" class="ys_btn" @click="login">注 册</a>
+                        <a href="javascript:;" style="line-height: 1.4rem;margin-top: .14rem" class="ys_btn" @click="register">注 册</a>
                     </div>
                 </div>
             </div>
@@ -70,7 +70,6 @@
         },
         methods: {
             forgot_pwd(){
-                alert(44);
                 this.$router.push({path:'/forgot_pwd'});
             },
             login(){
@@ -84,29 +83,29 @@
                 sha1.update(this.password);
                 const pwd = sha1.digest('hex');
                 const sjsd = {"sjs":(new Date)};
-                localStorage.setItem('cookwx', JSON.stringify(sjsd));
-                let user22 = JSON.parse(localStorage.getItem('cookwx'));
+                localStorage.setItem('cooknx', JSON.stringify(sjsd));
+                let user22 = JSON.parse(localStorage.getItem('cooknx'));
                 md5.update(pwd);
                 const password = md5.digest("hex");
                 this.$http.post(
-                    this.$api + "/yhcms/web/jcsj/login.do",
+                    this.$api + "/yhcms/web/qduser/login.do",
                     {
-                        "parameters": {
-                            "uaccounts": un,
-                            "upass": password,
+                        "parameters":{
+                            "phone":this.username,
+                            "upass":password
                         },
-                        "foreEndType": 2,
-                        "code": "300000045",
                         "cookie":user22.sjs,
+                        "foreEndType":2,
+                        "code":"8"
                     }
                 ).then(function (res) {
                     Indicator.close();
                     var result = JSON.parse(res.bodyText);
                     if (result.success) {
                         const msg = {"user": name,"time":(new Date).getMilliseconds()};
-                        localStorage.setItem('loginwx', JSON.stringify(msg));
-                        localStorage.setItem('userwx', JSON.stringify(result.uname));
-                        let ss = JSON.parse(localStorage.getItem('userwx'));
+                        localStorage.setItem('loginnx', JSON.stringify(msg));
+                        localStorage.setItem('usernx', JSON.stringify(result.uname));
+                        let ss = JSON.parse(localStorage.getItem('usernx'));
                         console.log(ss);
                         Toast({
                             message: '登录成功',
@@ -131,6 +130,9 @@
                         position: 'bottom'
                     });
                 });
+            },
+            register(){
+                this.$router.push({path:'/register'});
             }
         },
         mounted(){

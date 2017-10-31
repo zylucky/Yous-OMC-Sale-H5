@@ -17,24 +17,23 @@
                 </div>
             </div>
             <ul class="ys_item_ul mb60">
-                <li class="clearfix">
+                <li class="clearfix" v-if="wsxx == 1">
                     <span class="ys_tit" style="width: 2.8rem !important;">您的个人信息还未完善</span>
                     <a href="" style="width: 2.25rem !important;">立即完善</a>
                 </li>
-                <li class="clearfix">
-                    <span class="ys_tit" style="width: 2.24rem !important;">您的还未实名认证</span>
-                    <a href="">立即认证</a>
+                <li class="clearfix" v-if="wsxx == 2">
+                    <span class="ys_tit" style="width: 4rem !important;">您的实名认证已通过！</span>
                 </li>
-                <li class="clearfix">
-                    <span @click="per_information" class="ys_tit"><a href="javascript:;"><img src="../resources/images/icons/icon.jpg"></a></span>
+                <li class="clearfix" @click="per_information">
+                    <span class="ys_tit"><a href="javascript:;"><img src="../resources/images/icons/icon.jpg"></a></span>
                     <div class="ys_item_con fl">个人信息</div>
                 </li>
-                <li class="clearfix">
-                    <span @click="my_collection" class="ys_tit"><a href="javascript:;"><img src="../resources/images/icons/icon.jpg"></a></span>
+                <li class="clearfix" @click="my_collection">
+                    <span class="ys_tit"><a href="javascript:;"><img src="../resources/images/icons/icon.jpg"></a></span>
                     <div class="ys_item_con fl">我的收藏</div>
                 </li>
-                <li class="clearfix">
-                    <span @click="my_reser" class="ys_tit"><a href="javascript:;"><img src="../resources/images/icons/icon.jpg"></a></span>
+                <li class="clearfix" @click="my_reser">
+                    <span class="ys_tit"><a href="javascript:;"><img src="../resources/images/icons/icon.jpg"></a></span>
                     <div class="ys_item_con fl">我的预约</div>
                 </li>
                 <li class="clearfix" @click="modify_pwd">
@@ -63,6 +62,7 @@
 
         data () {
             return {
+                wsxx:10,//完善信息的状态
                 "name": "姓名", //
                 "topic": "", //楼盘名称
                 "address": "", //地址
@@ -82,75 +82,10 @@
                 "tsbq_all":[],
                 "ryzt":"",//人员状态的权限
                 "qxzt":"",//权限状态码
-
-                //特色标签权限的判断
-                /*teqx:true,
-                 kfsqx:false,
-                 cqxzqx:true,
-                 lpjjqx:false,
-                 zxptqx:false,
-                 lpsjqx:false,
-                 plsjsqx:false,
-                 lpsjsfgqx:false,
-                 kprqqx:true,
-                 lpjbqx:true,
-                 lppzqx:true,
-                 saveqx:true,*/
-                teqx:0,
-                kfsqx:0,
-                cqxzqx:0,
-                lpjjqx:0,
-                zxptqx:0,
-                lpsjqx:0,
-                plsjsqx:0,
-                lpsjsfgqx:0,
-                kprqqx:0,
-                lpjbqx:0,
-                lppzqx:0,
-                saveqx:0,
-
-
-                //日期
-                pickerValue: '',
-                startDate: new Date("1990-01-01"),
-
-                //楼盘级别
-                lpjb: '',
-                slots: [
-                    {
-                        values: ['5A', '甲', '乙', '公寓', '商务', '综合'],
-                    }
-                ],
-
-                //品质
-                slots_quality: [
-                    {
-                        values: ["优", "良", "差"],  //1优 2良 3差
-                    }
-                ],
-
-
-
-                //级别弹窗显示隐藏
-                popupVisible: false,
-
-                //品质弹窗隐藏
-                popQuality: false,
-
-
             }
         },
         computed:{
-            chqxz_c(){
-                if(this.chqxz.length < 1){
-                    return "请选择标签";
-                }
-            },
-            tsbq_t(){
-                if(this.tsbq.length < 1){
-                    return "请选择标签";
-                }
-            }
+
         },
         methods: {
             modify_pwd(){
@@ -265,40 +200,30 @@
 
             //获取后台的数据
             getInitData(){
-                const lpid = this.$route.params.lpid;
-                Indicator.open({
+                /*Indicator.open({
                     text: '',
                     spinnerType: 'fading-circle'
-                });
-                const url = this.$api + "/yhcms/web/lpjbxx/getLpjbxx.do";
+                });*/
+                const user22 = JSON.parse(localStorage.getItem('cooknx'));
+                const url = this.$api + "/yhcms/web/qduser/getQdUser.do";
                 let that = this;
-                this.$http.post(url, {"parameters":{ "lpid":lpid},"foreEndType":2,"code":"30000008"}).then((res)=>{
-                    Indicator.close()
+                this.$http.post(url,{"cookie":user22.sjs,"foreEndType":2,"code":"3"}).then((res)=>{
+                    Indicator.close();
+                    const result = JSON.parse(res.bodyText);
+                    if(result.success){
+                        const data = JSON.parse(res.bodyText).data.qduser;
+                        const data1 = JSON.parse(res.bodyText).data.mppic;
+                        if(data1.length != 0 && data.gsname != "" && data.xmname != "" && data.card != ""){
+                            this.wsxx = 1;
+                        }
+                    }
                     const data = JSON.parse(res.bodyText).data;
+                    console.log(data);
                     that.lpid = lpid;
                     that.topic = data.topic;
                     that.address = data.address;
                     that.kfsh = data.kfsh;
                     $('title').html(that.topic);
-                    if(data.lpjb==1){
-                        that.lpjb ="5A" ;
-                    }
-                    if(data.lpjb==2){
-                        that.lpjb ="甲" ;
-                    }
-                    if(data.lpjb==3){
-                        that.lpjb ="乙" ;
-                    }
-
-                    if(data.lpjb==4){
-                        that.lpjb ="公寓" ;
-                    }
-                    if(data.lpjb==5){
-                        that.lpjb ="商务" ;
-                    }
-                    if(data.lpjb==6){
-                        that.lpjb ="综合" ;
-                    }
                     that.zxjnjg = data.zxjnjg;
                     that.shyl = data.shyl;
                     that.hshkzbl = data.kzbl;
@@ -306,68 +231,6 @@
                     that.lpsjgs = data.lpsjgs;
                     that.lpsjs = data.lpsjs;
                     that.lpsjfg = data.lpsjfg;
-                    //只有查看和空白字段添加的权限
-                    if(this.qxzt == 20 || this.qxzt == 30 || this.qxzt == 42){
-                        this.saveqx = false;
-                        this.teqx = false;
-                        if(this.tsbq.length == 0){
-                            this.teqx = true;
-                            this.saveqx = true;
-                        }
-                        this.kfsqx = true;
-                        if(this.kfsh == ""){
-                            this.kfsqx = false;
-                            this.saveqx = true;
-                        }
-                        this.cqxzqx = false;
-                        // if(this.chqxz.length == 0){
-                        if(data.chqxz==''){
-                            this.cqxzqx = true;
-                            this.saveqx = true;
-                        }
-                        this.lpjjqx = true;
-                        if(this.zxjnjg == ""){
-                            this.lpjjqx = false;
-                            this.saveqx = true;
-                        }
-                        this.zxptqx = true;
-                        if(this.zxptmx == ""){
-                            this.zxptqx = false;
-                            this.saveqx = true;
-                        }
-                        this.lpsjqx = true;
-                        if(this.lpsjgs == ""){
-                            this.lpsjqx = false;
-                            this.saveqx = true;
-                        }
-                        this.plsjsqx = true;
-                        if(this.lpsjs == ""){
-                            this.plsjsqx = false;
-                            this.saveqx = true;
-                        }
-                        this.lpsjsfgqx = true;
-                        if(this.lpsjfg == ""){
-                            this.lpsjsfgqx = false;
-                            this.saveqx = true;
-                        }
-                        this.kprqqx = false;
-                        if(data.kprq == ""){
-                            this.kprqqx = true;
-                            this.saveqx = true;
-                        }
-                        this.lpjbqx = false;
-                        if(data.lpjb == ""){
-                            this.lpjbqx = true;
-                            this.saveqx = true;
-                        }
-                        this.lppzqx = false;
-                        if(data.lppz == ""){
-                            this.lppzqx = true;
-                            this.saveqx = true;
-                        }
-
-                    }
-
                     //this.tebqqxpd();
                 }, (res)=>{
                     Indicator.close()

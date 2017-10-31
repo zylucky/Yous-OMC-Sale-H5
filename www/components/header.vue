@@ -157,7 +157,7 @@
       login_out(){
           $("#zhezhao").remove();
           const url = this.$api + "/yhcms/web/wxqx/getSgUser.do";
-          const user22 = JSON.parse(localStorage.getItem('cook'));
+          const user22 = JSON.parse(localStorage.getItem('cooknx'));
           let that = this;
           this.$http.post(url,{ "cookie":user22.sjs,"foreEndType":2,"code":"300000086"}).then((res)=>{
               Indicator.close()
@@ -166,7 +166,7 @@
                   $('html').removeAttr("style");
                   $("body").removeAttr("style");
                   //$('html').css({'height': 'auto', 'overflow': 'auto'});
-                  localStorage.removeItem('cook');
+                  localStorage.removeItem('cooknx');
                   this.$router.push({path:'/login'});
               }else{
                   Toast({
@@ -182,7 +182,7 @@
     },
     mounted: function () {
       var _this = this;
-      let user = JSON.parse(localStorage.getItem('user'));
+      let user = JSON.parse(localStorage.getItem('usernx'));
       this.username = user;
       $('#first_list_link').click(function(){
           $("#zhezhao").remove();
