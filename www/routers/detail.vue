@@ -142,11 +142,11 @@
                     <i v-else>{{item1.zdh}} - {{item1.fybh}}</i>
                   </span>
                   <span style="border:0px solid red;height:.5rem;"></span>
-                  <span>
+                  <span style="width: 4rem;">
                        <i v-text="item1.daily_price==='0.0'?'':item1.daily_price"></i><i>元/㎡·天</i>
                       <i v-text="item1.monthly_price==='0.0'?'':item1.monthly_price"></i><i>元/月</i>
                   </span>
-                  <span>
+                  <span style="width: 4rem;">
                       <i v-text="(item1.housing_area==='0.0'?'':item1.housing_area)+'㎡'"></i>
                       <i v-text="item1.workstation+'个工位'"></i>
                       <i v-text="item1.fjzt"></i>

@@ -21,9 +21,9 @@
                     <span class="ys_tit" style="width: 2.8rem !important;">您的个人信息还未完善</span>
                     <a href="" style="width: 2.25rem !important;">立即完善</a>
                 </li>
-                <li class="clearfix" v-if="wsxx == 2">
+                <!--<li class="clearfix" v-if="wsxx == 2">
                     <span class="ys_tit" style="width: 4rem !important;">您的实名认证已通过！</span>
-                </li>
+                </li>-->
                 <li class="clearfix" @click="per_information">
                     <span class="ys_tit"><a href="javascript:;"><img src="../resources/images/icons/icon.jpg"></a></span>
                     <div class="ys_item_con fl">个人信息</div>
@@ -62,7 +62,7 @@
 
         data () {
             return {
-                wsxx:10,//完善信息的状态
+                wsxx:1,//完善信息的状态
                 "name": "姓名", //
                 "topic": "", //楼盘名称
                 "address": "", //地址
@@ -212,43 +212,16 @@
                     const result = JSON.parse(res.bodyText);
                     if(result.success){
                         const data = JSON.parse(res.bodyText).data.qduser;
-                        const data1 = JSON.parse(res.bodyText).data.mppic;
-                        if(data1.length != 0 && data.gsname != "" && data.xmname != "" && data.card != ""){
+                        const data1 = JSON.parse(res.bodyText).data.mppic1;
+                        const data2 = JSON.parse(res.bodyText).data.mppic2;
+                        if(data1.length != 0 && data2.length != 0 && data.gsname != "" && data.xmname != "" && data.card != ""){
+                            this.wsxx = 11;
+                        }else{
                             this.wsxx = 1;
                         }
                     }
-                    const data = JSON.parse(res.bodyText).data;
-                    console.log(data);
-                    that.lpid = lpid;
-                    that.topic = data.topic;
-                    that.address = data.address;
-                    that.kfsh = data.kfsh;
-                    $('title').html(that.topic);
-                    that.zxjnjg = data.zxjnjg;
-                    that.shyl = data.shyl;
-                    that.hshkzbl = data.kzbl;
-                    that.zxptmx = data.zxptmx;
-                    that.lpsjgs = data.lpsjgs;
-                    that.lpsjs = data.lpsjs;
-                    that.lpsjfg = data.lpsjfg;
-                    //this.tebqqxpd();
                 }, (res)=>{
-                    Indicator.close()
-                });
-            },
-            getTsbq(){
-                Indicator.open({
-                    text: '',
-                    spinnerType: 'fading-circle'
-                });
-                const url = this.$api + "/yhcms/web/lpjbxx/getTsbq.do";
-                let that = this;
-                this.$http.post(url).then((res)=>{
-                    Indicator.close()
-                    const data = JSON.parse(res.bodyText).data;
-                    that.tsbq_all = data;
-                }, (res)=>{
-                    Indicator.close()
+                    Indicator.close();
                 });
             },
             fanhui(){

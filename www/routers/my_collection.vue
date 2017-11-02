@@ -213,7 +213,6 @@
             $("body").removeAttr("style");
             $("html").removeAttr("style");
             this.init();
-
             //下滑时，条件tab固定
             $(window).scroll(function () {
                 if ($(window).scrollTop() > 0) {
@@ -679,7 +678,7 @@
                 });
                 this.gRemoteData(paraObj, successCb, errorCb);
             },
-
+            //房源信息列表的数据
             gRemoteData(paraobj, successcb, errorcb){
                 axios.post("/yhcms/web/lpjbxx/getWxLbFyxx.do", paraobj)
                     .then(function (response) {

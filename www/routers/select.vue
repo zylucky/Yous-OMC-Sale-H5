@@ -307,7 +307,7 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
         areaArray:["-1", "<100", "100-299", "300-499", "500-599", "1000-1499", ">1500"],
         priceArray:["-1", "<3", "3-4.9", "5-7.9", "8-9.9", "10-14.9", ">=15"],
         featureArray: [],
-        chqxz: ["写字楼","公寓","商务楼","住宅","商业","酒店","综合","别墅","商业综合体","酒店式公寓"],
+        chqxz: ["写字楼","公寓","商务楼","商业"],
         priceTag: "",
         areaTag: "",
         xzTag: [],
