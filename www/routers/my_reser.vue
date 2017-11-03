@@ -63,6 +63,7 @@
                         infinite-scroll-distance="100"
                         infinite-scroll-immediate-check="checked">
                     <li class="ys_listcon pv15" v-for="item in resultData">
+                        <div v-if="item.sid === 1">
                         <router-link :to="{path:'order',query:{house_id:item.id}}" class="supply_box" style="border-bottom: 0px !important;">
                             <div class="supply_price">
                                 <span>{{item.daily_price === '0.0' ? '' : item.daily_price}}</span> 元/㎡·天
@@ -92,13 +93,14 @@
                         <dd>
                             <dl style="height: .45rem;">
                                 <dd class="" style="width: 1.5rem;margin-top: -.3rem;">看房时间：</dd>
-                                <dd class="" style="width: 3rem;margin-left: 1.5rem;margin-top: -.37rem;">2017-11-13 10:00</dd>
+                                <dd class="" style="width: 3rem;margin-left: 1.5rem;margin-top: -.37rem;">{{item.ltime}}</dd>
                                 <dd class="" style="float: right;margin-top: -.4rem;border: 1xp solid;border: 1px solid rgb(0,0,0);" @click="delete1">删除</dd>
                             </dl>
                         </dd>
+                        </div>
 
                         <!--已过期-->
-                        <div style="background-color:#DCDCDC;z-index: 12;opacity: 0.5;">
+                        <div style="background-color:#DCDCDC;z-index: 12;opacity: 0.5;" v-else>
                             <router-link :to="{path:'order',query:{house_id:item.id}}" class="supply_box">
                                 <div class="supply_price">
                                     <span>{{item.daily_price === '0.0' ? '' : item.daily_price}}</span> 元/㎡·天
@@ -129,7 +131,7 @@
                             <dd>
                                 <dl style="height: .45rem;">
                                     <dd class="" style="width: 1.5rem;margin-top: -.3rem;color: #302f35;">看房时间：</dd>
-                                    <dd class="" style="width: 3rem;margin-left: 1.5rem;margin-top: -.37rem;color: #302f35;">2017-11-13 10:00</dd>
+                                    <dd class="" style="width: 3rem;margin-left: 1.5rem;margin-top: -.37rem;color: #302f35;">{{item.ltime}}</dd>
                                     <dd class="" style="float: right;margin-top: -.4rem;border: 1xp solid;border: 1px solid rgb(0,0,0);color: #302f35;" @click="delete1">删除</dd>
                                 </dl>
                             </dd>
@@ -254,7 +256,7 @@
                 if(this.$route['query']['keyword']){
                     this.para.search_keywork = this.$route['query']['keyword'];
                 }*/
-                $('title').html('房源列表');
+                $('title').html('我的预约列表');
                 this.resetGetData();
                 this.getFilters();
             },
@@ -601,20 +603,10 @@
                 Indicator.close();
             },
             getData(){
+                const user22 = JSON.parse(localStorage.getItem('cooknx'));
                 const paraObj = {
                     "parameters": {
-                        "search_keywork": this.para.search_keywork,
-                        "district": this.para.district,
-                        "business": this.para.business,
-                        "district1": this.para.district1,
-                        "business1": this.para.business1,
-                        "line_id": this.para.line_id,
-                        "station_id": this.para.station_id,
-                        "area": this.para.area,
-                        "price_dj": this.para.price_dj,
-                        "label": this.para.label,
-                        "chqxz": this.para.chqxz,
-                        "orderby": this.priceFilter || this.areaFilter || "D",
+                        "cookie":user22.sjs,
                         "curr_page": this.para.curr_page,
                         "items_perpage": 10
                     },
@@ -663,7 +655,7 @@
             },
 
             gRemoteData(paraobj, successcb, errorcb){
-                axios.post("/yhcms/web/lpjbxx/getWxLbFyxx.do", paraobj)
+                axios.post("/yhcms/web/orderhouse/getWxOrder.do", paraobj)
                     .then(function (response) {
                         if (typeof successcb === "function") {
                             successcb(response)
@@ -674,6 +666,18 @@
                     }
                 });
             },
+            /*gRemoteData(paraobj, successcb, errorcb){
+                axios.post("/yhcms/web/orderhouse/getWxOrder.do", paraobj)
+                    .then(function (response) {
+                        if (typeof successcb === "function") {
+                            successcb(response)
+                        }
+                    }).catch(function (error) {
+                    if (typeof errorcb === "function") {
+                        errorcb(error)
+                    }
+                });
+            },*/
             delete1(){
               alert(1111);
               return;

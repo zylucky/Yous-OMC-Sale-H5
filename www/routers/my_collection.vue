@@ -53,19 +53,57 @@
 </style>
 <template>
     <div>
+        <!--header-->
+        <!--<section id="header">
+            <header1></header1>
+        </section>-->
+        <a href="javascript:;" class="detail-search" style="position: fixed;left: 0; top: 0;">
+            <input type="text" id="keyword" placeholder="请输入楼盘关键字搜索" v-model.trim="para.search_keywork" maxlength="50"
+                   @focus="changeRou">
+        </a>
         <section>
-            <!--class="section"
-            :class="{'in-filter':this.currentFilterTab=='district'||this.currentFilterTab=='price'||this.currentFilterTab=='area'||this.currentFilterTab=='features'}"-->
-            <div class="option">
                 <!--筛选结果start-->
-                <ul
-                        v-infinite-scroll="loadMore"
-                        infinite-scroll-disabled="loading"
-                        infinite-scroll-distance="100"
-                        infinite-scroll-immediate-check="checked">
+            <ul
+                    v-infinite-scroll="loadMore"
+                    infinite-scroll-disabled="loading"
+                    infinite-scroll-distance="100"
+                    infinite-scroll-immediate-check="checked" style="margin-top: 1rem;">
 
-                    <li class="ys_listcon pv15" v-for="item in resultData">
+                <li class="ys_listcon pv15" v-for="item in resultData">
+                    <div v-if="item.sid == 1">
+                    <router-link :to="{path:'order',query:{house_id:item.id}}" class="supply_box" style="border-bottom: 0px !important;border-bottom: 0px !important;width: 90% !important;float: right;">
+                        <div class="supply_price">
+                            <span>{{item.daily_price === '0.0' ? '' : item.daily_price}}</span> 元/㎡·天
+                        </div>
+                        <dl class="supply">
+                            <dt>
+                                <img v-if="item.housing_icon" :src="$prefix + '/' + item.housing_icon" :alt="item.img_alt">
+                                <img v-else :src="$prefix + '/upload/2017-08-27/6404b4de960b81fc5403c870aefcea34.png'" :alt="item.img_alt">
+                            </dt>
+                            <dd class="supply_msg_box">
+                                <dl>
+                                    <dd v-if="item.zdh.indexOf('独栋') > -1" class="supply_house">{{item.topic}}&nbsp;&nbsp;{{item.fybh}}</dd>
+                                    <dd v-else class="supply_house">{{item.topic}}&nbsp;&nbsp;{{item.zdh}} - {{item.fybh}}</dd>
+                                    <dd class="supply_color ellipsis">{{item.district}}</dd>
+                                    <dd>
+                                        <dl class="cell clearfix">
+                                            <dd>{{item.housing_area === '0.0' ? '': item.housing_area}}㎡</dd>
+                                            <dd v-if="item.lc">{{item.lc}}层</dd>
+                                            <dd v-if="item.decoration_level" class="tagClass zc" style="font-size: 0.22rem !important;padding: 0.03rem;">{{item.decoration_level}}</dd>
+                                        </dl>
+                                    </dd>
+                                </dl>
+                            </dd>
+                        </dl>
+                    </router-link>
+                    <span style="position: relative;top: 0.8rem;float: left;">
+                        <input type="checkbox" name="checkdel" v-model="item.id" :value="item.id" style="-webkit-appearance:checkbox !important;width: 0.3rem;height: 0.5rem;">
+                        <!--<input v-else type="checkbox" checked="checked" name="items" style="-webkit-appearance:checkbox !important;width: 0.3rem;height: 0.5rem;">-->
+                    </span>
+                    </div>
 
+                    <!--房源已下架-->
+                    <div v-else style="background-color:#DCDCDC;z-index: 12;opacity: 0.5;">
                         <router-link :to="{path:'order',query:{house_id:item.id}}" class="supply_box" style="border-bottom: 0px !important;border-bottom: 0px !important;width: 90% !important;float: right;">
                             <div class="supply_price">
                                 <span>{{item.daily_price === '0.0' ? '' : item.daily_price}}</span> 元/㎡·天
@@ -80,6 +118,7 @@
                                         <dd v-if="item.zdh.indexOf('独栋') > -1" class="supply_house">{{item.topic}}&nbsp;&nbsp;{{item.fybh}}</dd>
                                         <dd v-else class="supply_house">{{item.topic}}&nbsp;&nbsp;{{item.zdh}} - {{item.fybh}}</dd>
                                         <dd class="supply_color ellipsis">{{item.district}}</dd>
+                                        <dd class="" style="color: black;font-weight: 600;position: absolute;top: 0.8rem;left: 0.2rem;font-size: 0.35rem;">房源已下架</dd>
                                         <dd>
                                             <dl class="cell clearfix">
                                                 <dd>{{item.housing_area === '0.0' ? '': item.housing_area}}㎡</dd>
@@ -92,52 +131,20 @@
                             </dl>
                         </router-link>
                         <span style="position: relative;top: 0.8rem;float: left;">
-                            <input type="checkbox" name="items" style="-webkit-appearance:checkbox !important;width: 0.3rem;height: 0.5rem;">
+                            <input type="checkbox" name="checkdel" v-model="item.id" :value="item.id" style="-webkit-appearance:checkbox !important;width: 0.3rem;height: 0.5rem;">
+                            <!--<input v-else type="checkbox" checked="checked" style="-webkit-appearance:checkbox !important;width: 0.3rem;height: 0.5rem;">-->
+                           <!-- <img src="../resources/images/icons/checkbox_img 1.png" style="border: 1px solid red;">-->
                         </span>
+                    </div>
+                </li>
 
-
-                        <!--房源已下架-->
-                        <div style="background-color:#DCDCDC;z-index: 12;opacity: 0.5;">
-                            <router-link :to="{path:'order',query:{house_id:item.id}}" class="supply_box" style="border-bottom: 0px !important;border-bottom: 0px !important;width: 90% !important;float: right;">
-                                <div class="supply_price">
-                                    <span>{{item.daily_price === '0.0' ? '' : item.daily_price}}</span> 元/㎡·天
-                                </div>
-                                <dl class="supply">
-                                    <dt>
-                                        <img v-if="item.housing_icon" :src="$prefix + '/' + item.housing_icon" :alt="item.img_alt">
-                                        <img v-else :src="$prefix + '/upload/2017-08-27/6404b4de960b81fc5403c870aefcea34.png'" :alt="item.img_alt">
-                                    </dt>
-                                    <dd class="supply_msg_box">
-                                        <dl>
-                                            <dd v-if="item.zdh.indexOf('独栋') > -1" class="supply_house">{{item.topic}}&nbsp;&nbsp;{{item.fybh}}</dd>
-                                            <dd v-else class="supply_house">{{item.topic}}&nbsp;&nbsp;{{item.zdh}} - {{item.fybh}}</dd>
-                                            <dd class="supply_color ellipsis">{{item.district}}</dd>
-                                            <dd class="" style="color: black;font-weight: 600;position: absolute;top: 0.8rem;left: 0.2rem;font-size: 0.35rem;">房源已下架</dd>
-                                            <dd>
-                                                <dl class="cell clearfix">
-                                                    <dd>{{item.housing_area === '0.0' ? '': item.housing_area}}㎡</dd>
-                                                    <dd v-if="item.lc">{{item.lc}}层</dd>
-                                                    <dd v-if="item.decoration_level" class="tagClass zc" style="font-size: 0.22rem !important;padding: 0.03rem;">{{item.decoration_level}}</dd>
-                                                </dl>
-                                            </dd>
-                                        </dl>
-                                    </dd>
-                                </dl>
-                            </router-link>
-                            <span style="position: relative;top: 0.8rem;float: left;">
-                                <input type="checkbox" style="-webkit-appearance:checkbox !important;width: 0.3rem;height: 0.5rem;">
-                            </span>
-                        </div>
-                    </li>
-
-                </ul>
-                <p v-if="loading" class="page-infinite-loading">
-                    <mt-spinner type="fading-circle"></mt-spinner>
-                </p>
-                <div style="border:1px solid red;width:100%;height:0.6rem;background-color:#DCDCDC;position: fixed;bottom: 0px;z-index: 13;">
-                    <span style="background-color: 	#FFFFFF;"><input @click="quanxuan" type="checkbox" style="-webkit-appearance:checkbox !important;">全选</span>
-                    <span>2222</span>
-                </div>
+            </ul>
+            <p v-if="loading" class="page-infinite-loading">
+                <mt-spinner type="fading-circle"></mt-spinner>
+            </p>
+            <div style="width:100%;height:0.6rem;background-color:#DCDCDC;position: fixed;bottom: 0px;z-index: 13;">
+                <span style="float: left;background-color:#FFFFFF;"><input @click="quanxuan" type="checkbox" style="-webkit-appearance:checkbox !important;">全选</span>
+                <span @click="deleteshan" style="float: right;"><a href="javascript:;">删除</a></span>
             </div>
             <div class="mask" id="maskEl" @click="closeFilter"
                  :class="{show:this.currentFilterTab=='district'||this.currentFilterTab=='features'}">
@@ -146,6 +153,8 @@
     </div>
 </template>
 <script>
+    import header1 from '../components/header.vue';
+    import footer1 from '../components/footer.vue';
     import {Indicator} from 'mint-ui';
     import {InfiniteScroll} from 'mint-ui';
     import {Toast} from 'mint-ui';
@@ -154,9 +163,10 @@
     import {Search} from 'mint-ui';
     import axios from 'axios';
     import qs from 'qs';
-    import { Checklist } from 'mint-ui';
     export default {
         components: {
+            header1,
+            footer1,
             InfiniteScroll,
             Toast,
             Actionsheet,
@@ -164,7 +174,7 @@
         },
         data () {
             return {
-                checkbox1:[],
+                qunxu:true,
                 districtArray: [],
                 govDistrictArray: [],
                 lineArray:[],
@@ -213,6 +223,7 @@
             $("body").removeAttr("style");
             $("html").removeAttr("style");
             this.init();
+
             //下滑时，条件tab固定
             $(window).scroll(function () {
                 if ($(window).scrollTop() > 0) {
@@ -233,7 +244,6 @@
                     $('#pos_block').hide();
                 }
             });
-
         },
         created: function () {
 
@@ -249,31 +259,14 @@
         },
         methods: {
             init(){
-                /*axios.defaults.baseURL = this.$api;
-                 axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
-                 if(this.$route['query']['keyword']){
-                 this.para.search_keywork = this.$route['query']['keyword'];
-                 }*/
+                axios.defaults.baseURL = this.$api;
+                axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
+                if(this.$route['query']['keyword']){
+                    this.para.search_keywork = this.$route['query']['keyword'];
+                }
                 $('title').html('房源列表');
                 this.resetGetData();
                 this.getFilters();
-            },
-            quanxuan(){
-                alert(1111);
-                var checkElements=document.getElementsByName('items');
-                if (this.checked) {
-                    for(var i=0;i<checkElements.length;i++){
-                        var checkElement=checkElements[i];
-                        checkElement.checked="checked";
-                    }
-
-                }
-                else{
-                    for(var i=0;i<checkElements.length;i++){
-                        var checkElement=checkElements[i];
-                        checkElement.checked=null;
-                    }
-                }
             },
             selectTag(e){
                 const target = $(e.target), val = target.attr("value"), t = target.attr("target"), which = t ==="price" ? "priceTag" : "areaTag";
@@ -618,9 +611,9 @@
                 Indicator.close();
             },
             getData(){
-                const paraObj = {
+               /* {
                     "parameters": {
-                        "search_keywork": this.para.search_keywork,
+                    "search_keywork": this.para.search_keywork,
                         "district": this.para.district,
                         "business": this.para.business,
                         "district1": this.para.district1,
@@ -634,9 +627,20 @@
                         "orderby": this.priceFilter || this.areaFilter || "D",
                         "curr_page": this.para.curr_page,
                         "items_perpage": 10
-                    },
+                },
                     "foreEndType": 2,
                     "code": "30000001"
+                }*/
+                const user22 = JSON.parse(localStorage.getItem('cooknx'));
+                const paraObj = {
+                    "parameters":{
+                        "cookie":user22.sjs,
+                        "search_keywork":this.para.search_keywork,
+                        "curr_page":this.para.curr_page,
+                        "items_perpage":10
+                    },
+                    "foreEndType":2,
+                    "code":"16"
                 }, this_ = this;
 
 
@@ -678,9 +682,9 @@
                 });
                 this.gRemoteData(paraObj, successCb, errorCb);
             },
-            //房源信息列表的数据
+
             gRemoteData(paraobj, successcb, errorcb){
-                axios.post("/yhcms/web/lpjbxx/getWxLbFyxx.do", paraobj)
+                axios.post("/yhcms/web/collecthouse/getWxCollect.do", paraobj)
                     .then(function (response) {
                         if (typeof successcb === "function") {
                             successcb(response)
@@ -691,10 +695,6 @@
                     }
                 });
             },
-            delete1(){
-                alert(1111);
-                return;
-            },
 
             loadMore(){
                 if (!this.loading && !this.noMore) {
@@ -702,7 +702,69 @@
                     this.para.curr_page += 1;
                     this.getData();
                 }
-            }
+            },
+            quanxuan(e){
+
+                if(this.qunxu){
+                    this.qunxu = false;
+                }else{
+                    this.qunxu = true;
+                }
+            },
+
+
+            deleteshan(){
+                var arraycheckdel = "";//定义一个变量用于存放选中状态的复选框的值(id)
+                var checkdel = document.getElementsByName("checkdel");//获取所有名为‘checkdel’的值
+                console.log(checkdel+"wwwwww");
+                //循环checkdel
+                for ( var i = 0; i < checkdel.length; i++) {
+                    //如果第i个复选框为选中状态，就把值存进事先定义的arraycheckdel之中(这里进行了拼接，在没个id后面加一个',',方便后台对字符串进行拆分)
+                    if (checkdel[i].checked) {
+                        arraycheckdel += checkdel[i].value + ",";
+                    }
+                }
+
+                //如果当前没有任何记录被选中，则提示用户至少需要选中一条记录才可以进行删除
+                if (arraycheckdel == "") {
+                    Toast({
+                        message: '抱歉,当前没有任何选中项!',
+                        position: 'middle',
+                        duration: 1000
+                    });
+                    return;
+                }
+                const _this = this;
+                console.log(arraycheckdel);
+                this.$http.post(
+                    this.$api + "/yhcms/web/collecthouse/delCollect.do",
+                    {"checkdel":arraycheckdel,"foreEndType":2,"code":"18"}
+                ).then(function (res) {
+                    Indicator.close();
+                    var result = JSON.parse(res.bodyText);
+                    if (result.success) {
+                        Toast({
+                            message: '修改密码成功',
+                            position: 'bottom',
+                            duration: 1000
+                        });
+                        setTimeout(function(){
+                            _this.$router.push({path:'/index'});
+                        },1000);
+                    } else {
+                        Toast({
+                            message: result.message,
+                            position: 'bottom'
+                        });
+                    }
+                }, function (res) {
+                    Indicator.close();
+                    Toast({
+                        message: '修改密码失败! 请稍候再试',
+                        position: 'bottom'
+                    });
+                });
+            },
         },
     }
 </script>

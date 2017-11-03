@@ -61,29 +61,6 @@
                     </div>
                 </li>
             </ul>
-           <!-- <div class="common_title">名片</div>
-            <div class="image_wrap clearfix mb140">
-                <div v-if="hx < 2" class="upload_btn mr10 fl">
-                    <input @change='add_img2' id="file_add" tag="hx" type="file">
-                </div>
-                <div class="img_demo fl pr" v-for='(item,index) in hxList' v-if="item.isdelete==0">
-                    <img class="upload_demo_img" :src="item.id==='xxx'? item.url : $prefix + '/' + item.url" alt="" />
-                    <i class="delete_icon" tag="hx" @click='delete_img(index, item.id, $event)'></i>
-                </div>
-            </div>
-            <div class="image_wrap clearfix mb140">
-                <div v-if="fm < 2" class="upload_btn mr10 fl">
-                    <input @change='add_img3' id="file_add" tag="fm" type="file">
-                </div>
-                <div class="img_demo fl pr" v-for='(item,index) in fmList' v-if="item.isdelete==0">
-                    <img class="upload_demo_img" :src="item.id==='xxx'? item.url : $prefix + '/' + item.url" alt="" />
-                    <i class="delete_icon" tag="fm" @click='delete_img(index, item.id, $event)'></i>
-                </div>
-            </div>-->
-
-
-
-
             <div class="all_elements">
                 <div class="build_top">
                     <div class="common_title">名片</div>
@@ -308,32 +285,7 @@
                 });
             },
             chang_phone(){
-                const _this = this, url = this.$api + "/yhcms/web/qduser/getUser.do";
-                let that = this;
-                this.$http.post(url,
-                    {
-                        "parameters":{
-                            "phone":this.phone,
-                        },
-                        "foreEndType":2,
-                        "code":"1"
-                    }
-                ).then((res)=>{
-                    Indicator.close();
-                    var result = JSON.parse(res.bodyText);
-                    if(result.success){
-                        setTimeout(function(){
-                            _this.$router.push({path:'/chang_phone'});
-                        },1000);
-                    }else{
-                        Toast({
-                            message: result.message,
-                            position: 'bottom'
-                        });
-                    }
-                }, (res)=>{
-                    Indicator.close();
-                });
+                this.$router.push({path:'/chang_phone'});
             },
             real_name_auth(){
                 this.$router.push({path:'/real_name_auth'});

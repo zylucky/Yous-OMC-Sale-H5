@@ -17,14 +17,14 @@
                 <li class="clearfix pr">
                     <span class="ys_tit w224"><i>*</i> 新手机号：</span>
                     <div class="ys_item_con fl" style="width: 3.5rem !important;">
-                        <input type="password" value="" v-model="nphone" placeholder="请输入新手机号">
+                        <input type="number" value="" v-model="nphone" @blur="lose_phone" placeholder="请输入新手机号">
                     </div>
-                    <span class="">获取验证码</span>
+                    <span class="" @click="getverificode">获取验证码</span>
                 </li>
                 <li class="clearfix pr">
                     <span class="ys_tit w224"><i>*</i> 验证码：</span>
                     <div class="ys_item_con fl">
-                        <input class="npwd" type="password" value="" v-model="yzm" placeholder="请输入验证码">
+                        <input class="npwd" type="text" value="" v-model="yzm" placeholder="请输入验证码">
                     </div>
                 </li>
                 <div style="margin-top: 0.4rem;">
@@ -51,6 +51,91 @@
             }
         },
         methods: {
+            lose_phone(){
+                if(this.nphone != null){
+                    const user22 = JSON.parse(localStorage.getItem('cooknx'));
+                    const _this = this, url = this.$api + "/yhcms/web/qduser/getUser1.do";
+                    let that = this;
+                    this.$http.post(url,
+                        {
+                            "parameters":{
+                                "phone":this.nphone,
+                                "cookie":user22.sjs
+                            },
+                            "foreEndType":2,
+                            "code":"5"
+                        }
+                    ).then((res)=>{
+                        Indicator.close();
+                        var result = JSON.parse(res.bodyText);
+                        if(result.success){
+                            let that = this;
+                            this.$http.post(this.$api + "/yhcms/web/qduser/getUser.do", {"parameters":{"phone":this.nphone},"foreEndType":2,"code":"4"}).then((res)=>{
+                                Indicator.close();
+                                var result = JSON.parse(res.bodyText);
+                                if(result.success){
+
+                                }else{
+                                    Toast({
+                                        message: result.message,
+                                        position: 'bottom'
+                                    });
+                                    this.nphone = null;
+                                }
+                            }, (res)=>{
+                                Indicator.close();
+                            });
+                        }else{
+                            Toast({
+                                message: result.message,
+                                position: 'bottom'
+                            });
+                            this.nphone = null;
+                        }
+                    }, (res)=>{
+                        Indicator.close();
+                    });
+                }else{
+                    Toast({
+                        message: '手机号不能为空！',
+                        position: 'bottom'
+                    });
+                }
+            },
+
+            getverificode(){
+                const _this = this;
+                const user22 = JSON.parse(localStorage.getItem('cooknx'));
+                const url = this.$api + "/yhcms/web/qduser/getCode.do";
+                let that = this;
+                this.$http.post(url,
+                    {
+                        "parameters":{
+                            "cookie":user22.sjs,
+                            "phone":this.nphone,
+                        },
+                        "foreEndType":2,
+                        "code":"14"
+                    }
+                ).then((res)=>{
+                    Indicator.close();
+                    var result = JSON.parse(res.bodyText);
+                    if(result.success){
+                        Toast({
+                            message: '验证码已发送，请稍等！',
+                            position: 'bottom',
+                            duration: 1000
+                        });
+                    }else{
+                        Toast({
+                            message: '验证码发送失败: ' + result.message,
+                            position: 'bottom'
+                        });
+                    }
+                }, (res)=>{
+                    Indicator.close();
+                });
+            },
             saveAreaMsg(){
                 if(this.nphone != null && this.yzm != null){
                     const _this = this;

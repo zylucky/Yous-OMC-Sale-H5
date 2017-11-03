@@ -129,8 +129,20 @@
           </div>
         </div>
       </div>
-      <div class="tel-order clearfix">
-        <a id="semwaploupanxiangqingdibu400" :href="'tel:' + phone" class="phone--tel-order">
+      <div v-if="Collection" class="tel-order clearfix" style="width: 40% !important;left: 0%;" @click="Collectionss">
+        <a id="semwaploupanxiangqingdibu400" href="javascript:;" class="phone--tel-order">
+          <img src="../resources/images/icons/Collection-icon1.png" class="mr05 mt-3">收藏</a>
+      </div>
+      <div v-else class="tel-order clearfix" style="width: 40% !important;left: 0%;">
+        <a id="semwaploupanxiangqingdibu400" href="javascript:;" class="phone--tel-order">
+          <img src="../resources/images/icons/Collection-icon.png" class="mr05 mt-3">已收藏</a>
+      </div>
+     <!-- <div class="tel-order clearfix" style="width: 40% !important;left: 20%;" @click="book_house">
+        <a id="semwaploupanxiangqingdibu400" href="javascript:;" class="phone&#45;&#45;tel-order" style="background-color: rgb(323,76,61) !important;">
+          <img src="../resources/images/icons/book-house.png" class="mr05 mt-3">预约看房</a>
+      </div>-->
+      <div class="tel-order clearfix" style="width: 60% !important;left: 40%;">
+        <a id="semwaploupanxiangqingdibu400" :href="'tel:' + phone" class="phone--tel-order" style="background-color: rgb(255,140,0) !important;">
           <img src="../resources/images/icons/phone-icon.png" class="mr05 mt-3">一键拨号</a>
       </div>
     </section>
@@ -176,6 +188,7 @@
         lpdj: "",
         building_images: [],
         property: {"1":"写字楼", "2":"公寓","3":"商务楼","4":"住宅","5":"商业","6":"酒店","7":"综合","8":"别墅","9":"商业综合体","10":"酒店式公寓"},
+        Collection:true,
 
       }
     },
@@ -266,6 +279,32 @@
             duration: 3000
           });
         });
+      },
+      book_house(){
+          this.$router.push({path: '/reser_page?house_id=' + this.$route.query.house_id});
+      },
+      Collectionss(){
+          this.Collection = false;
+          const user22 = JSON.parse(localStorage.getItem('cooknx'));
+          const url = this.$api + "/yhcms/web/collecthouse/saveCollect.do";
+          let that = this;
+          this.$http.post(url, {"parameters":{"id":this.$route.query.house_id,"cookie":user22.sjs},"foreEndType":2,"code":"16"}).then((res)=>{
+              Indicator.close();
+              var result = JSON.parse(res.bodyText);
+              if(result.success){
+                  Toast({
+                      message: '收藏房源成功！',
+                      position: 'bottom'
+                  });
+              }else{
+                  Toast({
+                      message: result.message,
+                      position: 'bottom'
+                  });
+              }
+          }, (res)=>{
+              Indicator.close();
+          });
       },
     },
     mounted(){

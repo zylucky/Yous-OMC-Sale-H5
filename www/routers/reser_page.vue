@@ -10,13 +10,13 @@
             <ul class="ys_item_ul mb60">
                 <li class="clearfix">
                     <span class="ys_tit" style="width: 1.5rem !important;">姓名：</span>
-                    <div class="ys_item_con fl" v-text="topic"></div>
+                    <div class="ys_item_con fl" v-text="name"></div>
                 </li>
                 <li class="clearfix pr">
                     <span class="ys_tit" style="width: 1.5rem !important;">电话：</span>
                     <div class="ys_item_con fl">
-                        <input type="text" value="" v-model="lpjb" placeholder="请选择" @click="openLevel">
-                        <i class="right_arrow" @click="openLevel">&gt;</i>
+                        <input type="text" value="" v-model="phone" readonly placeholder="请选择">
+                        <i class="right_arrow" @click="chang_phone">&gt;</i>
                     </div>
                 </li>
                 <li class="clearfix pr">
@@ -25,14 +25,14 @@
                         <input type="text" value=""
                                readonly
                                placeholder="请选择看房时间"
-                               v-model="kprq"
+                               v-model="seetime"
                                @click="openPicker()">
                         <i class="calendar_icon" style="top:0px !important;background-color: white !important;" @click="openPicker()">&gt;</i>
                     </div>
                 </li>
                 <li class="clearfix pr">
                     <span>备注：</span>
-                    <textarea style="background-color: white !important;" rows="3" cols="20" placeholder="请输入看房说明"></textarea>
+                    <textarea v-model="beizhu" style="background-color: white !important;" rows="3" cols="20" placeholder="请输入看房说明"></textarea>
                 </li>
 
             </ul>
@@ -51,23 +51,34 @@
                 @confirm="handleConfirm">
         </mt-datetime-picker>
 
-        <!--楼盘级别-->
-        <mt-popup v-model="popupVisible" position="bottom" class="mint-popup-4">
-            <div class="picker-toolbar">
-                <span class="mint-datetime-action mint-datetime-cancel" @click="sureLevel">取消</span>
-                <span class="mint-datetime-action mint-datetime-confirm" @click="sureLevel">确定</span>
-            </div>
-            <mt-picker :slots="slots" @change="selectLevel"></mt-picker>
-        </mt-popup>
 
-        <!--楼盘品质-->
-        <mt-popup v-model="popQuality" position="bottom" class="mint-popup-4">
-            <div class="picker-toolbar">
-                <span class="mint-datetime-action mint-datetime-cancel" @click="sureQuality">取消</span>
-                <span class="mint-datetime-action mint-datetime-confirm" @click="sureQuality">确定</span>
-            </div>
-            <mt-picker :slots="slots_quality" @change="selectQuality"></mt-picker>
-        </mt-popup>
+
+
+
+        <div class="" v-show="agnphone" style="height: 100%;position: fixed;top: 0px;background-color: white;width: 100%;">
+            <ul class="ys_item_ul mb60">
+                <li class="clearfix pr">
+                    <span class="ys_tit w224"><i>*</i> 新手机号：</span>
+                    <div class="ys_item_con fl" style="width: 3.5rem !important;">
+                        <input type="number" value="" v-model="nphone" @blur="lose_phone" placeholder="请输入新手机号">
+                    </div>
+                    <span class="" @click="getverificode">获取验证码</span>
+                </li>
+                <li class="clearfix pr">
+                    <span class="ys_tit w224"><i>*</i> 验证码：</span>
+                    <div class="ys_item_con fl">
+                        <input class="npwd" type="text" value="" v-model="yzm" placeholder="请输入验证码">
+                    </div>
+                </li>
+                <div style="margin-top: 0.4rem;">
+                    <span style="width: 7.5rem;clear: both;margin-left: 0.2rem;"><img src="../resources/images/icons/icon.jpg"></span>
+                    <span style="float: right;width: 6.5rem;margin-right: 0.3rem;">更换手机号不会影响您个人中心的内容和数据您将使用新手机号登录</span>
+                </div>
+            </ul>
+            <a href="javascript:;" class="ys_default_btn mb80" @click="saveAreaMsg">保存</a>
+        </div>
+
+
 
 
     </div>
@@ -101,56 +112,19 @@
 
         data () {
             return {
-                "lpid": "", //楼盘id
-                "topic": "", //楼盘名称
-                "address": "", //地址
-                "tsbq": [], //特色标签
-                "kfsh": "", //开发商名称
-                "kprq": "", //开盘日期(必选)
-                "lpjb": "", //楼盘级别(必选)
-                "chqxz": [], //产权性质
-                "lppz": "", //楼盘品质 1优 2良 3差
-                "zxjnjg": "", //均价
-                "shyl": "",  //使用率
-                "hshkzbl": "", //户数空置比例
-                "zxptmx": "",  //装修设施配套明细
-                "lpsjgs": "", //楼盘设计公司
-                "lpsjs": "", //楼盘设计师
-                "lpsjfg": "", //楼盘设计风格
-                "tsbq_all":[],
-                "ryzt":"",//人员状态的权限
-                "qxzt":"",//权限状态码
-
-                //特色标签权限的判断
-                /*teqx:true,
-                 kfsqx:false,
-                 cqxzqx:true,
-                 lpjjqx:false,
-                 zxptqx:false,
-                 lpsjqx:false,
-                 plsjsqx:false,
-                 lpsjsfgqx:false,
-                 kprqqx:true,
-                 lpjbqx:true,
-                 lppzqx:true,
-                 saveqx:true,*/
-                teqx:0,
-                kfsqx:0,
-                cqxzqx:0,
-                lpjjqx:0,
-                zxptqx:0,
-                lpsjqx:0,
-                plsjsqx:0,
-                lpsjsfgqx:0,
-                kprqqx:0,
-                lpjbqx:0,
-                lppzqx:0,
-                saveqx:0,
+                "name": "", //姓名
+                "phone": "", //电话
+                nphone:"",
+                yzm:"",
+                "seetime": "", //预约看房
+                "beizhu": [], //备注
+                house_id:"",//房源id
+                agnphone:false,//是否显示更换手机号
 
 
                 //日期
                 pickerValue: '',
-                startDate: new Date("1990-01-01"),
+                startDate: new Date("1990-01-01 12:00"),
 
                 //楼盘级别
                 lpjb: '',
@@ -179,27 +153,8 @@
             }
         },
         computed:{
-            chqxz_c(){
-                if(this.chqxz.length < 1){
-                    return "请选择标签";
-                }
-                const map = {"1":"写字楼", "2":"公寓","3":"商务楼","4":"住宅","5":"商业","6":"酒店","7":"综合","8":"别墅","9":"商业综合体","10":"酒店式公寓"};
-                let tip = this.chqxz.map((item,idx)=>{return map[item.toString()]});
-                return tip.join(",");
-            },
-            tsbq_t(){
-                if(this.tsbq.length < 1){
-                    return "请选择标签";
-                }
-                let tags = this.tsbq.map((t)=>{
-                    for(let i = 0; i < this.tsbq_all.length; ++i){
-                        if(this.tsbq_all[i].id === t){
-                            return this.tsbq_all[i].topic;
-                        }
-                    }
-                });
-                return tags.join(",");
-            }
+
+
         },
         methods: {
 
@@ -210,13 +165,100 @@
 
             //日期确定
             handleConfirm(value){
-                this.kprq = this.transformDate(value);
+                this.seetime = this.transformDate(value);
             },
 
-            //楼盘类型panel展示
-            openLevel() {
-                //this.lpjb = '乙';
-                this.popupVisible = true;
+            //更换手机号
+            chang_phone(){
+                this.agnphone = true;
+            },
+            saveAreaMsg(){
+                this.agnphone = false;
+                this.phone = this.nphone;
+            },
+            lose_phone(){
+                if(this.nphone != null){
+                    const user22 = JSON.parse(localStorage.getItem('cooknx'));
+                    const _this = this, url = this.$api + "/yhcms/web/qduser/getUser1.do";
+                    let that = this;
+                    this.$http.post(url,
+                        {
+                            "parameters":{
+                                "phone":this.nphone,
+                                "cookie":user22.sjs
+                            },
+                            "foreEndType":2,
+                            "code":"5"
+                        }
+                    ).then((res)=>{
+                        Indicator.close();
+                        var result = JSON.parse(res.bodyText);
+                        if(result.success){
+                            let that = this;
+                            this.$http.post(this.$api + "/yhcms/web/qduser/getUser.do", {"parameters":{"phone":this.nphone},"foreEndType":2,"code":"4"}).then((res)=>{
+                                Indicator.close();
+                                var result = JSON.parse(res.bodyText);
+                                if(result.success){
+
+                                }else{
+                                    Toast({
+                                        message: result.message,
+                                        position: 'bottom'
+                                    });
+                                    this.nphone = null;
+                                }
+                            }, (res)=>{
+                                Indicator.close();
+                            });
+                        }else{
+                            Toast({
+                                message: result.message,
+                                position: 'bottom'
+                            });
+                            this.nphone = null;
+                        }
+                    }, (res)=>{
+                        Indicator.close();
+                    });
+                }else{
+                    Toast({
+                        message: '手机号不能为空！',
+                        position: 'bottom'
+                    });
+                }
+            },
+            getverificode(){
+                const _this = this;
+                const user22 = JSON.parse(localStorage.getItem('cooknx'));
+                const url = this.$api + "/yhcms/web/qduser/getCode.do";
+                let that = this;
+                this.$http.post(url,
+                    {
+                        "parameters":{
+                            "cookie":user22.sjs,
+                            "phone":this.nphone,
+                        },
+                        "foreEndType":2,
+                        "code":"14"
+                    }
+                ).then((res)=>{
+                    Indicator.close();
+                    var result = JSON.parse(res.bodyText);
+                    if(result.success){
+                        Toast({
+                            message: '验证码已发送，请稍等！',
+                            position: 'bottom',
+                            duration: 1000
+                        });
+                    }else{
+                        Toast({
+                            message: '验证码发送失败: ' + result.message,
+                            position: 'bottom'
+                        });
+                    }
+                }, (res)=>{
+                    Indicator.close();
+                });
             },
 
 
@@ -301,64 +343,31 @@
 
             //获取后台的数据
             getInitData(){
-                const lpid = this.$route.params.lpid;
+                this.house_id = this.$route.query.house_id;
+                const user22 = JSON.parse(localStorage.getItem('cooknx'));
                 Indicator.open({
                     text: '',
                     spinnerType: 'fading-circle'
                 });
-                const url = this.$api + "/yhcms/web/lpjbxx/getLpjbxx.do";
+                const url = this.$api + "/yhcms/web/qduser/getQdUser.do";
                 let that = this;
-                this.$http.post(url, {"parameters":{ "lpid":lpid},"foreEndType":2,"code":"30000008"}).then((res)=>{
-                    Indicator.close()
-                    const data = JSON.parse(res.bodyText).data;
-                    that.lpid = lpid;
-                    that.topic = data.topic;
-                    that.address = data.address;
-                    that.tsbq = data.tsbq.map((t)=>{return t.id});
-                    that.kfsh = data.kfsh;
-                    $('title').html(that.topic);
-                    if(data.kprq!=''){
-                        that.kprq = data.kprq.substring(0,10);
+                this.$http.post(url, {"cookie":user22.sjs,"foreEndType":2,"code":"3"}).then((res)=>{
+                    Indicator.close();
+                    const result = JSON.parse(res.bodyText);
+                    if(result.success){
+                        const data = JSON.parse(res.bodyText).data.qduser;
+                        this.name = data.name;
+                        this.phone = data.phone;
+                    }else{
+                        Toast({
+                            message: result.message,
+                            position: 'bottom',
+                            duration: 1000
+                        });
                     }
-                    if(data.lpjb==1){
-                        that.lpjb ="5A" ;
-                    }
-                    if(data.lpjb==2){
-                        that.lpjb ="甲" ;
-                    }
-                    if(data.lpjb==3){
-                        that.lpjb ="乙" ;
-                    }
-
-                    if(data.lpjb==4){
-                        that.lpjb ="公寓" ;
-                    }
-                    if(data.lpjb==5){
-                        that.lpjb ="商务" ;
-                    }
-                    if(data.lpjb==6){
-                        that.lpjb ="综合" ;
-                    }
-
-                    that.chqxz = data.chqxz.split("、");
-                    if(data.lppz==1){
-                        that.lppz ="优" ;
-                    }else  if(data.lppz==2){
-                        that.lppz ="良" ;
-                    }else  if(data.lppz==3){
-                        that.lppz ="差" ;
-                    }
-
-                    that.zxjnjg = data.zxjnjg;
-                    that.shyl = data.shyl;
-                    that.hshkzbl = data.kzbl;
-                    that.zxptmx = data.zxptmx;
-                    that.lpsjgs = data.lpsjgs;
-                    that.lpsjs = data.lpsjs;
-                    that.lpsjfg = data.lpsjfg;
-                    //this.tebqqxpd();
+                    $('title').html("预约看房");
                 }, (res)=>{
-                    Indicator.close()
+                    Indicator.close();
                 });
             },
 
@@ -380,7 +389,7 @@
 
             //特色标签权限的判断
             tebqqxpd(){
-                let user22 = JSON.parse(localStorage.getItem('cook'));
+                let user22 = JSON.parse(localStorage.getItem('cooknx'));
                 const url = this.$api + "/yhcms/web/wxqx/getLpqx.do";
                 this.$http.post(url, {"cookie":user22.sjs,"lpid":this.$route.params.lpid,"foreEndType":2,"code":"30000008"}).then((res)=>{
                     Indicator.close();
@@ -452,19 +461,6 @@
             },
             saveBuildMsg(){
                 var _this = this;
-                if(this.topic==''){
-                    MessageBox('提示', '请填写楼盘名称');
-                    return;
-                }
-
-                var tt= this.chqxz.join("、");
-                if(tt==''){
-                    MessageBox('提示', '请选择产权性质');
-                    return;
-                }
-
-
-
                 /*if(!this.kfsh){
                  MessageBox('提示', '请填写开发商');
                  return;
@@ -501,55 +497,45 @@
                  _this.$router.push({path:'/list2'});
                  },1000);
                  */
+                let user22 = JSON.parse(localStorage.getItem('cooknx'));
                 this.$http.post(
-                    this.$api + "/yhcms/web/lpjbxx/saveLp.do",
+                    this.$api + "/yhcms/web/orderhouse/saveOrder.do",
                     {
-                        "parameters": {
-                            "lpid": this.lpid, //楼盘id
-                            "topic": this.topic, //楼盘名称
-                            "address": this.address, //地址
-                            "tsbq": "、" + this.tsbq.join("、") + "、", //特色标签
-                            "kfsh": this.kfsh, //开发商名称
-                            "kprq": this.kprq, //开盘日期(必选)
-                            "lpjb": level[this.lpjb], //楼盘级别(必选)
-                            "chqxz": this.chqxz.join("、"), //产权性质
-                            "lppz": lang[this.lppz], //楼盘品质 1优 2良 3差
-                            "zxjnjg": this.zxjnjg, //均价
-                            "shyl": this.shyl,  //使用率
-                            "hshkzbl": this.hshkzbl, //户数空置比例
-                            "zxptmx": this.zxptmx,  //装修设施配套明细
-                            "lpsjgs": this.lpsjgs, //楼盘设计公司
-                            "lpsjs": this.lpsjs, //楼盘设计师
-                            "lpsjfg": this.lpsjfg //楼盘设计风格
-                        },
-                        "foreEndType": 2,
-                        "code": "300000041"
+                        "parameters":
+                            {
+                                "phone":this.phone,
+                                "cookie":user22.sjs,
+                                "id":this.house_id,
+                                "remark":this.beizhu,
+                                "ltime":this.seetime
+                            },
+                        "foreEndType":2,
+                        "code":"19"
                     }
                 ).then(function (res) {
                     Indicator.close();
                     var result = JSON.parse(res.bodyText);
                     if (result.success) {
                         Toast({
-                            message: '保存成功',
+                            message: '添加预约房源成功',
                             position: 'bottom',
                             duration: 1000
                         });
 
                         setTimeout(function(){
                             history.go(-1);
-                            // _this.$router.push({path:'/index'});
                         },1000);
                     } else {
                         //this.$Message.error(res.message);
                         Toast({
-                            message: '保存失败: ' + result.message,
+                            message: '添加预约房源失败: ' + result.message,
                             position: 'bottom'
                         });
                     }
                 }, function (res) {
                     //this.$Message.error('保存失败');
                     Toast({
-                        message: '保存失败! 请稍候再试',
+                        message: '添加预约房源失败! 请稍候再试',
                         position: 'bottom'
                     });
                 });

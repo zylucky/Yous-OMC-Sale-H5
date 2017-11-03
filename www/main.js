@@ -15,10 +15,10 @@ Vue.use(VueRouter);
 Vue.use(VueResource);
 Vue.use(MintUI);
 
-
+Vue.prototype.$api = "http://116.62.68.26:8080" //api地址116的地址ip
 //Vue.prototype.$api = "http://192.168.137.54:8081" //api地址
 /*Vue.prototype.$api = "http://wx.urskongjian.com:8080" //api地址*/
-Vue.prototype.$api = "http://omc.urskongjian.com" //api地址可以随意改
+//Vue.prototype.$api = "http://omc.urskongjian.com" //api地址可以随意改
 //Vue.prototype.$api = "http://192.168.0.222:8080" //api地址
 Vue.prototype.$prefix = "http://116.62.68.26:81" //图片前缀222
 /*Vue.prototype.$export = "http://wx.urskongjian.com:8080" //*/
@@ -42,7 +42,7 @@ Vue.prototype.$prefix = "http://116.62.68.26:81" //图片前缀
 //Vue.prototype.$api = "http://omc.urskongjian.com" //api地址
 Vue.prototype.$export = "http://omc.urskongjian.com" //导出
 
-//Vue.prototype.$api = "http://116.62.68.26:8080" //api地址
+
 
 //Vue.config.debug = true;// 开启debug模式
 Vue.config.debug = true;// 开启debug模式
@@ -203,7 +203,7 @@ var router = new VueRouter({
 
 
 
-router.beforeEach((to, from, next) => {
+/*router.beforeEach((to, from, next) => {
       if(window.location.href.indexOf('from') !=-1){
         var url=window.location.href;
         //分享的链接
@@ -262,7 +262,7 @@ router.beforeEach((to, from, next) => {
         }
 
     }    
-});
+});*/
 new Vue({
     el: '#app',
     router: router,
