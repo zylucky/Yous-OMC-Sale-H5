@@ -97,8 +97,8 @@
                         </dl>
                     </router-link>
                     <span style="position: relative;top: 0.8rem;float: left;">
-                        <input type="checkbox" name="checkdel" v-model="item.id" :value="item.id" style="-webkit-appearance:checkbox !important;width: 0.3rem;height: 0.5rem;">
-                        <!--<input v-else type="checkbox" checked="checked" name="items" style="-webkit-appearance:checkbox !important;width: 0.3rem;height: 0.5rem;">-->
+                        <input class="ss" type="checkbox" name="checkdel" :value="item.id" style="-webkit-appearance:checkbox !important;width: 0.3rem;height: 0.5rem;">
+                        <!--<input v-else checked="checked" type="checkbox" name="checkdel2" :value="item.id" style="-webkit-appearance:checkbox !important;width: 0.3rem;height: 0.5rem;">-->
                     </span>
                     </div>
 
@@ -143,7 +143,7 @@
                 <mt-spinner type="fading-circle"></mt-spinner>
             </p>
             <div style="width:100%;height:0.6rem;background-color:#DCDCDC;position: fixed;bottom: 0px;z-index: 13;">
-                <span style="float: left;background-color:#FFFFFF;"><input @click="quanxuan" type="checkbox" style="-webkit-appearance:checkbox !important;">全选</span>
+                <span style="float: left;background-color:#FFFFFF;"><input @click="quanxuan" id="checkbox-id" type="checkbox" style="-webkit-appearance:checkbox !important;">全选</span>
                 <span @click="deleteshan" style="float: right;"><a href="javascript:;">删除</a></span>
             </div>
             <div class="mask" id="maskEl" @click="closeFilter"
@@ -703,13 +703,38 @@
                     this.getData();
                 }
             },
-            quanxuan(e){
+            quanxuan(){
+                var check22 = document.getElementsByClassName("ss");
+                console.log(check22+"wwwwww");
+                if($('#checkbox-id').is(':checked')) {
+                    for ( var i = 0; i < check22.length; i++) {
+                        if (check22[i].checked) {
 
-                if(this.qunxu){
-                    this.qunxu = false;
+                        }else{
+                            check22[i].checked = true;
+                        }
+                        
+                    }
+                     $('.ss').attr('checked',true);
                 }else{
-                    this.qunxu = true;
+                    for ( var i = 0; i < check22.length; i++) {
+                        if (check22[i].checked) {
+                            check22[i].checked = false;
+                        }else{
+                        
+                        }
+                        
+                    }
+                     $('.ss').attr('checked',false);
                 }
+
+
+
+                
+
+
+                
+                
             },
 
 
