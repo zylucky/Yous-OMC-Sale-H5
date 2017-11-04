@@ -45,19 +45,29 @@
                 <li class="clearfix">
                     <span class="ys_tit" style="width: 1.7rem !important;">渠道公司</span>
                     <div class="ys_item_con fl">
-                        <input type="text" value="" v-model="bindcomp" placeholder="绑定公司">
+                        <!--<input type="text" value="" v-model="bindcomp" placeholder="绑定公司">-->
+                        <select v-model='qdid' @change="qdxz2" placeholder="请选择渠道">
+                            <option value="0"> 请选择渠道</option>
+                            <option v-for="option in slots" v-bind:value="option.id">
+                                {{ option.gsname}}
+                            </option>
+                        </select>
                     </div>
+
+                   <!-- <asp:DropDownList ID="ddlCountry" runat="server" data-placeholder="Choose a Country..."
+                                      Width="200px" class="chzn-select">
+                    </asp:DropDownList>-->
                 </li>
                 <li class="clearfix">
                     <span class="ys_tit" style="width: 1.7rem !important;">所属项目</span>
                     <div class="ys_item_con fl">
-                        <input type="text" value="" v-model="project" placeholder="所属项目">
+                        <input type="text" value="" readonly v-model="project" placeholder="所属项目">
                     </div>
                 </li>
                 <li class="clearfix">
                     <span class="ys_tit" style="width: 1.7rem !important;">身份证号</span>
                     <div class="ys_item_con fl">
-                        <input type="text" value="" v-model="code" placeholder="身份账号">
+                        <input type="text" value=""  @blur="lose_card" v-model="code" placeholder="身份账号">
                     </div>
                 </li>
             </ul>
@@ -101,10 +111,11 @@
     export default {
         data(){
             return{
+                qdid:"",
+                slots:[],
                 name: "",
                 phone: "",
                 bindcomp: "",
-                bindcompid: "",
                 project:"",
                 code:"",
                 imgList:[],
@@ -116,6 +127,43 @@
             }
         },
         methods:{
+            qdxz2(){
+                console.log(this.slots);
+                console.log(this.qdid);
+                for(var i=0;i<this.slots.length;i++){
+                    if(this.qdid == this.slots[i].id){
+                        alert(222);
+                        this.project = this.slots[i].xmname;
+                        this.bindcomp = this.slots[i].gsname;
+                    }
+                }
+
+            },
+            //正则身份证号的验证
+            yzcard(){
+                var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+                if(reg.test(this.code))
+                {
+                }else{
+                    Toast({
+                        message: '身份证输入不合法',
+                        position: 'bottom',
+                        duration: 1000
+                    });
+                    return  false;
+                }
+            },
+            lose_card(){
+                if(this.code == ""){
+                    Toast({
+                        message: '身份证号不能为空!',
+                        position: 'bottom',
+                        duration: 1000
+                    });
+                    return false;
+                }
+                this.yzcard();
+            },
             delete_img(index, id, event){
                 const tag = $(event.target).attr("tag"), which = tag === "lp" ? "imgList":"fmList";
                 const filter = tag === "lp" ? "il" : "fl";
@@ -257,7 +305,7 @@
 
                 this.$http.post(
                     this.$api + "/yhcms/web/qduser/updateUser.do",
-                    {"parameters":{"gsid":this.bindcompid,"gsname":this.bindcomp,"xmname":this.project,"cookie":user22.sjs,"name":this.name,"phone":this.phone,"mptp1":fp,"mptp2":fm},"foreEndType":2,"code":"2"}).then((res)=>{
+                    {"parameters":{"gsid":this.qdid,"gsname":this.bindcomp,"xmname":this.project,"cookie":user22.sjs,"name":this.name,"phone":this.phone,"card":this.code,"mptp1":fp,"mptp2":fm},"foreEndType":2,"code":"2"}).then((res)=>{
                     Indicator.close();
                     var result = JSON.parse(res.bodyText);
                     if (result.success) {
@@ -300,6 +348,16 @@
                 }
             },*/
             getInitData(){
+                this.$http.post(
+                    this.$api + "/yhcms/web/qduser/getQdCompany.do"
+                ).then((res)=> {
+                    Indicator.close();
+                    const qdData=JSON.parse(res.bodyText).data;
+                    this.slots = qdData;
+                }, (res)=>{
+                    Indicator.close();
+                });
+                this.qdid = 0;
                 const user22 = JSON.parse(localStorage.getItem('cooknx'));
                 Indicator.open({
                     text: '',
@@ -316,9 +374,10 @@
                         const data2 = JSON.parse(res.bodyText).data.mppic2;
                         this.name = data.name;
                         this.phone = data.phone;
-                        this.bindcomp = data.bindcomp;
-                        this.project = data.project;
-                        this.code = data.code;
+                        this.qdid = data.gsid;
+                        this.bindcomp = data.gsname;
+                        this.project = data.xmname;
+                        this.code = data.card;
                         this.imgList = data1;
                         this.fmList = data2;
                         this.il = this.imgList.length;

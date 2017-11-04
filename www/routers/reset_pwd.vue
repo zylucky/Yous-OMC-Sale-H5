@@ -17,13 +17,13 @@
                 <li class="clearfix pr">
                     <span class="ys_tit w224"><i>*</i> 新密码：</span>
                     <div class="ys_item_con fl">
-                        <input class="npwd" type="password" value="" v-model="npwd" placeholder="请设置密码">
+                        <input class="npwd" type="password" value="" v-model.trim="npwd" placeholder="请设置密码">
                     </div>
                 </li>
                 <li class="clearfix pr">
                     <span class="ys_tit w224"><i>*</i> 确认密码：</span>
                     <div class="ys_item_con fl">
-                        <input type="password" value="" v-model="anpwd" placeholder="请再次确认密码">
+                        <input type="password" value="" v-model.trim="anpwd" placeholder="请再次确认密码">
                     </div>
                 </li>
                 <div>
@@ -55,6 +55,7 @@
                 if(this.npwd != null && this.anpwd != null ){
                     if(this.npwd == this.anpwd){
                         const _this = this;
+                        //获取当前的cookie--------
                         const user22 = JSON.parse(localStorage.getItem('cooknx'));
                         const sha11 = crypto.createHash('sha1'), md51 = crypto.createHash('md5');
                         sha11.update(this.npwd);
@@ -81,6 +82,7 @@
                                     position: 'bottom',
                                     duration: 1000
                                 });
+                                //缺少保存cookie-----------------------------------
                                 setTimeout(function(){
                                     _this.$router.push({path:'/index'});
                                 },1000);
@@ -107,6 +109,7 @@
         },
         mounted(){
            /* this.getdata();*/
+           $('title').html('忘记密码');
         },
     }
 </script>

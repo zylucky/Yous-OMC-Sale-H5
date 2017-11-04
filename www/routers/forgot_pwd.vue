@@ -15,9 +15,9 @@
         <div class="build_top">
             <ul class="ys_item_ul mb60">
                 <li class="clearfix pr">
-                    <span class="ys_tit w224"><i>*</i> 电话：</span>
+                    <span class="ys_tit w224"><i>*</i> 手机号：</span>
                     <div class="ys_item_con fl"">
-                    <input style="width: 65% !important;" type="number" value="" v-model="phone" placeholder="请输入电话">
+                    <input style="width: 65% !important;" type="number"  value="" v-model.trim="phone" placeholder="请输入手机号"> 
                     <span class="" @click="getverificode">获取验证码</span>
         </div>
 
@@ -25,14 +25,14 @@
         <li class="clearfix pr">
             <span class="ys_tit w224"><i>*</i> 验证码：</span>
             <div class="ys_item_con fl">
-                <input class="npwd" type="text" value="" v-model="verificode" placeholder="请输入验证码">
+                <input class="npwd" type="number" value="" v-model="verificode" placeholder="请输入验证码">
             </div>
         </li>
         <div>
             <span class="pin"></span>
         </div>
         </ul>
-        <a href="javascript:;" class="ys_default_btn mb80" @click="saveAreaMsg">下一步</a>
+        <a href="javascript:;" class="ys_default_btn mb80" @click="yzverificode">下一步</a>
     </div>
     </div>
 </template>
@@ -48,6 +48,7 @@
             return {
                 phone:null,
                 verificode:null,
+                djverificode:1,
             }
         },
         methods: {
@@ -77,10 +78,101 @@
                     });
                 });
             },*/
+             yzphone(){
+                var reg = /^0?1[3|4|5|6|7|8|9][0-9]\d{8}$/;
+                if(this.phone==''||this.phone==null){
+                Toast({
+                        message: '手机号不能为空！',
+                        position: 'bottom',
+                        duration: 1000
+                    });
+                    return false;
+                }else{
+                if (!reg.test(this.phone)) {
+                    Toast({
+                        message: '手机号格式输入有误,请重新输入！',
+                        position: 'bottom',
+                        duration: 1000
+                    });
+                    this.phone = null;
+                    return false;
+                }
+
+                  if(this.phone != ''){
+                    const _this = this;
+                    this.$http.post(
+                        this.$api + "/yhcms/web/qduser/getRemUser.do",
+                        {
+                            "parameters":{
+                                "phone":this.phone
+                            },
+                            "foreEndType":2,
+                            "code":"12"
+                        }
+                    ).then(function (res) {
+                        Indicator.close();
+                        var result = JSON.parse(res.bodyText);
+                        if (result.success) {      
+
+                        } else {
+                            Toast({
+                                message: result.message,
+                                position: 'bottom'
+                            });
+                                this.phone=null;
+                        }
+                    }, function (res) {
+                        Indicator.close();
+                        Toast({
+                            message: '修改密码失败! 请稍候再试',
+                            position: 'bottom'
+                        });
+                    });
+                }
+
+                }
+            },
             getverificode(){
+                this.djverificode = 2;
+            //判断手机号
+                 var reg = /^0?1[3|4|5|6|7|8|9][0-9]\d{8}$/;
+                if(this.phone==''||this.phone==null){
+                Toast({
+                        message: '手机号不能为空！',
+                        position: 'bottom',
+                        duration: 1000
+                    });
+                    return false;
+                }else{
+                if (!reg.test(this.phone)) {
+                    Toast({
+                        message: '手机号格式输入有误,请重新输入！',
+                        position: 'bottom',
+                        duration: 1000
+                    });
+                    this.phone = null;
+                    return false;
+                }
+                //判断系统中有无此手机号注册信息
+                 if(this.phone != ''){
+                    const _this = this;
+                    this.$http.post(
+                        this.$api + "/yhcms/web/qduser/getRemUser.do",
+                        {
+                            "parameters":{
+                                "phone":this.phone
+                            },
+                            "foreEndType":2,
+                            "code":"12"
+                        }
+                    ).then(function (res) {
+                        Indicator.close();
+                        var result = JSON.parse(res.bodyText);
+                        if (result.success) {
+
                 const _this = this, sjsd = {"sjs":(new Date)};
-                localStorage.setItem('cooknx', JSON.stringify(sjsd));
-                const user22 = JSON.parse(localStorage.getItem('cooknx'));
+                localStorage.setItem('cooknxcode', JSON.stringify(sjsd));
+                const user22 = JSON.parse(localStorage.getItem('cooknxcode'));
                 const url = this.$api + "/yhcms/web/qduser/getCode.do";
                 let that = this;
                 this.$http.post(url,
@@ -109,37 +201,88 @@
                     }
                 }, (res)=>{
                     Indicator.close();
-                });
+                });       
+                        } else {
+                            Toast({
+                                message: result.message,
+                                position: 'bottom'
+                            });
+                             this.phone=null;
+
+                        }
+                    }, function (res) {
+                        Indicator.close();
+                        Toast({
+                            message: '修改密码失败! 请稍候再试',
+                            position: 'bottom'
+                        });
+                    });
+                }
+
+                }
+
             },
             //验证验证码
             yzverificode(){
-                const user22 = JSON.parse(localStorage.getItem('cooknx'));
-                const url = this.$api + "/yhcms/web/qduser/compareCode.do";
-                let that = this;
-                this.$http.post(url,
-                    {
-                        "parameters":{
-                            "cookie":user22.sjs,
-                            "code":this.verificode,
-                        },
-                        "foreEndType":2,
-                        "code":"15"
-                    }
-                ).then((res)=>{
-                    Indicator.close();
-                    var result = JSON.parse(res.bodyText);
-                    if(result.success){
-
-                    }else{
-                        this.verificode = null;
+                if(this.djverificode == 2){
+                    if(this.phone==''||this.phone==null){
                         Toast({
-                            message: result.message,
-                            position: 'bottom'
+                            message: '手机号不能为空！',
+                            position: 'bottom',
+                            duration: 1000
+                        });
+                        return false;
+                    }
+                    if(this.verificode==''||this.verificode==null){
+                        Toast({
+                            message: '验证码不能为空！',
+                            position: 'bottom',
+                            duration: 1000
+                        });
+                        return false;
+                    }else{
+                        const user22 = JSON.parse(localStorage.getItem('cooknxcode'));
+                        const url = this.$api + "/yhcms/web/qduser/compareCode.do";
+                        let that = this;
+                        let _this = this;
+                        this.$http.post(url,
+                            {
+                                "parameters":{
+                                    "cookie":user22.sjs,
+                                    "code":this.verificode,
+                                },
+                                "foreEndType":2,
+                                "code":"15"
+                            }
+                        ).then((res)=>{
+                            Indicator.close();
+                            var result = JSON.parse(res.bodyText);
+                            if(result.success){
+                                //成功跳转到  修改密码
+                                setTimeout(function(){
+                                    alert("aaa");
+                                    _this.$router.push({path:'/reset_pwd/'+_this.phone});
+                                },1000);
+
+                            }else{
+                                this.verificode = null;
+                                Toast({
+                                    message: result.message,
+                                    position: 'bottom'
+                                });
+                            }
+                        }, (res)=>{
+                            Indicator.close();
                         });
                     }
-                }, (res)=>{
-                    Indicator.close();
-                });
+                }else{
+                    Toast({
+                        message: '验证码错误！',
+                        position: 'bottom',
+                        duration: 1000
+                    });
+                }
+
             },
             saveAreaMsg(){
                 if(this.phone != null && this.verificode != null){
@@ -181,6 +324,7 @@
         },
         mounted(){
             /*this.getdata();*/
+            $('title').html('忘记密码');
         },
     }
 </script>

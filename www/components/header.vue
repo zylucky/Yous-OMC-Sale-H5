@@ -30,24 +30,31 @@
       <!--左侧登录div-->
       <div class="main-nav-wrapper sidenav" style="height: 628px;">
         <div class="user-box clearfix">
-          <img class="portrait" src="../resources/images/por_icon.png" alt="">
-          <div class="user_name tc mb20">{{username}}</div>
+          <div class="mb20">
+            <div>
+              <img style="margin: .6rem auto .6rem !important;" class="portrait" src="../resources/images/por_icon.png" alt="">
+            </div>
+            <div class="tc" style="margin-top: -0.5rem;">{{username}}</div>
+          </div>
           <div class="ys_function tc">
             <!--<router-link :to="{path:'/list2'}" id="first_list_link">精选房源</router-link>-->
             <a href="javascript:;" @click="house">精选房源</a>
             <a href="javascript:;" @click="select">今日销控</a>
             <a href="javascript:;" @click="list">楼盘列表</a>
+          </div>
+          <div class="tc ys_function">
             <a href="javascript:;" @click="percent">个人中心</a>
           </div>
         </div>
-        <a href="javascript:;" class="log_out_btn" @click="login_out()">退出登录</a>
+        <a href="javascript:;" class="log_out_btn" style="bottom:1.5rem;" @click="login_out()">退出登录</a>
       </div>
     </mt-popup>
   </div>
   <!--header end-->
 </template>
 <script type="text/babel">
-  import $ from 'jquery'
+  import $ from 'jquery';
+  import {Indicator} from 'mint-ui';
   export default {
     data() {
       return {
@@ -77,7 +84,7 @@
           width: "" + wwd + "px",
           height: "" + wgd + "px",
           "background-color": "#000",
-          "z-index": "12",
+          "z-index": "1200",
           opacity: "0.5",
           position: "absolute",
           top: "0px",
@@ -86,7 +93,7 @@
         $(".sidenav").css("left", "-100%");
         $(".sidenav").show();
         $("#zhezhao").animate({
-          left: "75%"
+          left: "60%"
         }, 150);
         $("#zhezhao").animate({
           backgroundColor: "#000000"
@@ -117,10 +124,10 @@
           )
         });
         $("#section").animate({
-          left: "75%"
+          left: "60%"
         }, 150);
         $(".section").animate({
-          left: "75%"
+          left: "60%"
         }, 150);
       },
       house(){
@@ -156,11 +163,11 @@
       },
       login_out(){
           $("#zhezhao").remove();
-          const url = this.$api + "/yhcms/web/wxqx/getSgUser.do";
+          const url = this.$api + "/yhcms/web/qduser/loginOut.do";
           const user22 = JSON.parse(localStorage.getItem('cooknx'));
           let that = this;
-          this.$http.post(url,{ "cookie":user22.sjs,"foreEndType":2,"code":"300000086"}).then((res)=>{
-              Indicator.close()
+          this.$http.post(url,{"cookie":user22.sjs,"foreEndType":2,"code":"10"}).then((res)=>{
+              Indicator.close();
               const data = JSON.parse(res.bodyText).success;
               if(data){
                   $('html').removeAttr("style");
@@ -176,7 +183,7 @@
                   });
               }
           }, (res)=>{
-              Indicator.close()
+              Indicator.close();
           });
       }
     },
