@@ -11,7 +11,7 @@
     }
 
     .mt5rem {
-        margin-top: .5rem;
+        margin-top: .55rem;
     }
     .forgor_pwd{
         width: 1.5rem;
@@ -32,6 +32,10 @@
                     <div class="inp_item">
                         <div class="inp_bg"></div>
                         <i class="ys_icon user"></i>
+<<<<<<< HEAD
+=======
+                        <i class="ys_icon1 user"></i>
+>>>>>>> 5535e31cc74daf75744a27f4269ed08da3654c0c
                         <input type="number" id="userName"
                                class="mt5rem" value=""
                                v-model.trim="username" @blur="yzphone"  placeholder="请输入手机号">
@@ -39,17 +43,32 @@
                     <div class="inp_item">
                         <div class="inp_bg"></div>
                         <i class="ys_icon pass"></i>
+<<<<<<< HEAD
                         <input type="password" value="" class="mt5rem" @blur="lose_pwd" v-model.trim="password" placeholder="请输入密码">
                     </div>
                     <div class="forgor_pwd">
                         <a href="javascript:;" @click="forgot_pwd">忘记密码</a>
+=======
+                        <i class="ys_icon1 pass"></i>
+                        <input type="password" value="" class="mt5rem" @blur="lose_pwd" v-model.trim="password" placeholder="请输入密码">
+>>>>>>> 5535e31cc74daf75744a27f4269ed08da3654c0c
                     </div>
+                    
                     <div class="inp_item login" style="margin-top: .5rem;clear: both;">
                         <a href="javascript:;" style="line-height: 1.4rem;margin-top: .14rem;" class="ys_btn" @click="login">登 录</a>
                     </div>
-                    <div class="inp_item login">
-                        <a href="javascript:;" style="line-height: 1.4rem;margin-top: .14rem" class="ys_btn" @click="register">注 册</a>
+                    <div style="margin-top: -0.2rem;">     
+                        <span class="forgor_pwd">           
+                            <a href="javascript:;" @click="forgot_pwd">忘记密码？</a>
+                        </span>  
+                        <!--<span class="inp_item">
+                            <a href="javascript:;" style="line-height: 1.4rem;margin-top: .14rem" class="ys_btn" @click="register">新用户注册</a>
+                        </span>--> 
+                        <span class="forgor_pwd" style="float:left !important;margin-left: 0.2rem">
+                            <a href="javascript:;" @click="register">新用户注册</a>
+                        </span>                   
                     </div>
+                    
                 </div>
             </div>
         </div>

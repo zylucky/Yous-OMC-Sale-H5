@@ -8,6 +8,7 @@
 .login_box {
   width: 5.4rem;
   margin: 0 auto;
+  margin-top: -1rem;
 }
 
 .all_wrap{
@@ -31,7 +32,7 @@
       top: .15rem;
       width: 100%;
       height: 1.5rem;
-      background: url("../../images/login/login_inp01.png") no-repeat  left center;
+      //background: url("../../images/login/login_inp01.png") no-repeat  left center;
       background-size: 5.4rem 2.2rem;
     }
     &.login {
@@ -42,26 +43,43 @@
       width: .34rem;
       height: .34rem;
       position: absolute;
-      left: .9rem;
+      left: .3rem;
       top: .75rem;
       &.user {
         background: url("../../images/login/user_icon.png") no-repeat;
-        background-size: .3rem .3rem;
+        background-size: .35rem .35rem;
       }
 
       &.pass {
         background: url("../../images/login/pass_icon.png") no-repeat;
-        background-size: .3rem .3rem;
+        background-size: .35rem .35rem;
+      }
+    }
+    .ys_icon1 {
+      width: .34rem;
+      height: .34rem;
+      position: absolute;
+      left: .8rem;
+      top: .8rem;
+      &.user {
+        background: url("../../images/login/user_icon22.png") no-repeat;
+        background-size: 1.5px 13px;
+      }
+
+      &.pass {
+        background: url("../../images/login/user_icon22.png") no-repeat;
+        background-size: 1.5px 13px;
       }
     }
     input {
       height:.8rem;
       line-height: .8rem;
-      padding-left: 1.45rem;
+      padding-left: 1rem;
       color: @cl_white;
       font-size: @font30;
       position: relative;
       z-index: 1;
+      width:100%;
       background-color: rgba(0,0,0,.2);
       &:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
         color: @cl_white;
