@@ -71,7 +71,7 @@
 
                 <li class="ys_listcon pv15" v-for="item in resultData">
                     <div v-if="item.sid == 1">
-                    <router-link :to="{path:'order',query:{house_id:item.id}}" class="supply_box" style="border-bottom: 0px !important;border-bottom: 0px !important;width: 90% !important;float: right;">
+                    <router-link :to="{path:'order',query:{house_id:item.fyid}}" class="supply_box" style="border-bottom: 0px !important;border-bottom: 0px !important;width: 90% !important;float: right;">
                         <div class="supply_price">
                             <span>{{item.daily_price === '0.0' ? '' : item.daily_price}}</span> 元/㎡·天
                         </div>
@@ -104,7 +104,7 @@
 
                     <!--房源已下架-->
                     <div v-else style="background-color:#DCDCDC;z-index: 12;opacity: 0.5;">
-                        <router-link :to="{path:'order',query:{house_id:item.id}}" class="supply_box" style="border-bottom: 0px !important;border-bottom: 0px !important;width: 90% !important;float: right;">
+                        <router-link :to="{path:'order',query:{house_id:item.fyid}}" class="supply_box" style="border-bottom: 0px !important;border-bottom: 0px !important;width: 90% !important;float: right;">
                             <div class="supply_price">
                                 <span>{{item.daily_price === '0.0' ? '' : item.daily_price}}</span> 元/㎡·天
                             </div>
@@ -131,7 +131,8 @@
                             </dl>
                         </router-link>
                         <span style="position: relative;top: 0.8rem;float: left;">
-                            <input type="checkbox" name="checkdel" v-model="item.id" :value="item.id" style="-webkit-appearance:checkbox !important;width: 0.3rem;height: 0.5rem;">
+                            <input class="ss" type="checkbox" name="checkdel" :value="item.id" style="-webkit-appearance:checkbox !important;width: 0.3rem;height: 0.5rem;">
+                            <!--<input type="checkbox" name="checkdel" v-model="item.id" :value="item.id" style="-webkit-appearance:checkbox !important;width: 0.3rem;height: 0.5rem;">-->
                             <!--<input v-else type="checkbox" checked="checked" style="-webkit-appearance:checkbox !important;width: 0.3rem;height: 0.5rem;">-->
                            <!-- <img src="../resources/images/icons/checkbox_img 1.png" style="border: 1px solid red;">-->
                         </span>
@@ -763,7 +764,7 @@
                 console.log(arraycheckdel);
                 this.$http.post(
                     this.$api + "/yhcms/web/collecthouse/delCollect.do",
-                    {"checkdel":arraycheckdel,"foreEndType":2,"code":"18"}
+                    {"checkdel":arraycheckdel.substring(0,arraycheckdel.length-1),"foreEndType":2,"code":"18"}
                 ).then(function (res) {
                     Indicator.close();
                     var result = JSON.parse(res.bodyText);

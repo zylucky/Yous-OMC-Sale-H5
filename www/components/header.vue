@@ -47,7 +47,8 @@
   <!--header end-->
 </template>
 <script type="text/babel">
-  import $ from 'jquery'
+  import $ from 'jquery';
+  import {Indicator} from 'mint-ui';
   export default {
     data() {
       return {
@@ -156,11 +157,11 @@
       },
       login_out(){
           $("#zhezhao").remove();
-          const url = this.$api + "/yhcms/web/wxqx/getSgUser.do";
+          const url = this.$api + "/yhcms/web/qduser/loginOut.do";
           const user22 = JSON.parse(localStorage.getItem('cooknx'));
           let that = this;
-          this.$http.post(url,{ "cookie":user22.sjs,"foreEndType":2,"code":"300000086"}).then((res)=>{
-              Indicator.close()
+          this.$http.post(url,{"cookie":user22.sjs,"foreEndType":2,"code":"10"}).then((res)=>{
+              Indicator.close();
               const data = JSON.parse(res.bodyText).success;
               if(data){
                   $('html').removeAttr("style");
@@ -176,7 +177,7 @@
                   });
               }
           }, (res)=>{
-              Indicator.close()
+              Indicator.close();
           });
       }
     },

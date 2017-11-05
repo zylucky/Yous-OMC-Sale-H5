@@ -112,6 +112,7 @@
 
         data () {
             return {
+                djverificode:1,
                 "name": "", //姓名
                 "phone": "", //电话
                 nphone:"",
@@ -173,8 +174,17 @@
                 this.agnphone = true;
             },
             saveAreaMsg(){
-                this.agnphone = false;
-                this.phone = this.nphone;
+                if(this.djverificode == 2){
+                    this.agnphone = false;
+                    this.phone = this.nphone;
+                }else{
+                    Toast({
+                        message: '验证码错误！',
+                        position: 'bottom',
+                        duration: 1000
+                    });
+                }
+
             },
             lose_phone(){
                 if(this.nphone != null){
@@ -228,8 +238,10 @@
                 }
             },
             getverificode(){
-                const _this = this;
-                const user22 = JSON.parse(localStorage.getItem('cooknx'));
+                this.djverificode = 2;
+                const _this = this, sjsd = {"sjs":(new Date)};
+                localStorage.setItem('cooknxcode', JSON.stringify(sjsd));
+                const user22 = JSON.parse(localStorage.getItem('cooknxcode'));
                 const url = this.$api + "/yhcms/web/qduser/getCode.do";
                 let that = this;
                 this.$http.post(url,
