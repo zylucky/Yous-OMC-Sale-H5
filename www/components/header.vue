@@ -11,6 +11,10 @@
       left:0;
       top:0;
     }
+    .headback{
+      background: url("../resources/images/left_list/headback.png") no-repeat;
+      background-size: 100% 100%;
+    }
   }
 </style>
 <template>
@@ -30,7 +34,7 @@
       <!--左侧登录div-->
       <div class="main-nav-wrapper sidenav" style="height: 628px;">
         <div class="user-box clearfix">
-          <div class="mb20">
+          <div class="mb20 headback" style="border: 1px solid rgb(0,0,205);height: 4rem;">
             <div>
               <img style="margin: .6rem auto .6rem !important;" class="portrait" src="../resources/images/por_icon.png" alt="">
             </div>
@@ -38,12 +42,12 @@
           </div>
           <div class="ys_function tc">
             <!--<router-link :to="{path:'/list2'}" id="first_list_link">精选房源</router-link>-->
-            <a href="javascript:;" @click="house">精选房源</a>
-            <a href="javascript:;" @click="select">今日销控</a>
-            <a href="javascript:;" @click="list">楼盘列表</a>
+            <a href="javascript:;" style="color: black !important;" @click="house">精选房源</a>
+            <a href="javascript:;" style="color: black !important;" @click="select">今日销控</a>
+            <a href="javascript:;" style="color: black !important;" @click="list">楼盘列表</a>
           </div>
           <div class="tc ys_function">
-            <a href="javascript:;" @click="percent">个人中心</a>
+            <a href="javascript:;" style="color: black !important;" @click="percent">个人中心</a>
           </div>
         </div>
         <a href="javascript:;" class="log_out_btn" style="bottom:1.5rem;" @click="login_out()">退出登录</a>

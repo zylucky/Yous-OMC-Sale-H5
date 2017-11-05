@@ -13,13 +13,13 @@
                 <li class="clearfix">
                     <span class="ys_tit" style="width: 1.5rem !important;"><i>*</i>姓名</span>
                     <div class="ys_item_con fl">
-                        <input type="text" value="" v-model.trim="name" placeholder="请输入真实姓名">
+                        <input type="text" value="" v-model.trim="name" onkeyup="this.value=this.value.replace(/^ +| +$/g,'')" placeholder="请输入真实姓名">
                     </div>
                 </li>
                 <li class="clearfix">
                     <span class="ys_tit" style="width: 1.5rem !important;"><i>*</i>密码</span>
                     <div class="ys_item_con fl">
-                        <input type="password" value="" @blur="lose_pwd" v-model="pwd" placeholder="请设置密码">
+                        <input type="password" value="" @blur="lose_pwd" v-model="pwd" onkeyup="this.value=this.value.replace(/^ +| +$/g,'')" placeholder="请设置密码">
                     </div>
                 </li>
                 <li class="clearfix">
@@ -30,7 +30,7 @@
                 </li>
                 <li class="clearfix">
                     <span class="ys_tit" style="width: 1.5rem !important;"><i>*</i>手机号</span>
-                    <div class="ys_item_con fl" style="width: 4rem !important;">
+                    <div class="ys_item_con fl" style="width: 3.5rem !important;">
                         <input type="number" value="" v-model.trim="phone" placeholder="请输入手机号">
                     </div>
                     <!--<span class="">
@@ -40,10 +40,10 @@
                         <span v-if="sendMsgDisabled">{{time+'秒后获取'}}</span>
                         <span v-if="!sendMsgDisabled">send</span>
                     </span>-->
-                    <span id="example" class="">
-                        <span v-if="sendMsgDisabled"><a href="javascript:;" @click="send">{{time+'秒后获取'}}</a></span>
+                    <span id="example">
+                        <span v-if="sendMsgDisabled == 2"><a href="javascript:;">{{time+'秒后获取'}}</a></span>
                         <span v-if="!sendMsgDisabled"><a href="javascript:;" @click="send">获取验证码</a></span>
-                        <span v-if="code == 3"><a href="javascript:;" @click="send">重新获取</a></span>
+                        <span v-if="sendMsgDisabled == 3"><a href="javascript:;" @click="send">重新获取验证码</a></span>
                     </span>
                 </li>
                 <li class="clearfix">
@@ -112,16 +112,101 @@
 
         },
         methods: {
+            //生成验证码
             send() {
-                let me = this;
-                me.sendMsgDisabled = true;
-                let interval = window.setInterval(function() {
-                    if ((me.time--) <= 0) {
-                        me.time = 60;
-                        me.sendMsgDisabled = false;
-                        window.clearInterval(interval);
-                    }
-                }, 1000);
+                this.djverificode = 2;
+                if(this.phone==''||this.phone==null){
+                    Toast({
+                        message: '手机号不能为空！',
+                        position: 'bottom',
+                        duration: 1000
+                    });
+                    return false;
+                }
+                //手机号验证
+                var reg = /^0?1[3|4|5|6|7|8|9][0-9]\d{8}$/;
+                if (!reg.test(this.phone)) {
+                    Toast({
+                        message: '手机号格式输入有误,请重新输入！',
+                        position: 'bottom',
+                        duration: 1000
+                    });
+                    this.phone = null;
+                    return false;
+                }
+                //判断数据库中有无此手机号注册信息
+                if(this.phone != null){
+                    const url = this.$api + "/yhcms/web/qduser/getUser.do";
+
+                    this.$http.post(url, {"parameters":{"phone":this.phone},"foreEndType":2,"code":"4"}).then((res)=>{
+                        Indicator.close();
+                        var result = JSON.parse(res.bodyText);
+                        if(result.success){
+                            //可以注册 发送验证码   获取当前的cookie
+
+                            const _this = this, sjsd = {"sjs":(new Date)};
+                            localStorage.setItem('cooknxcode', JSON.stringify(sjsd));
+                            const user22 = JSON.parse(localStorage.getItem('cooknxcode'));
+                            const url = this.$api + "/yhcms/web/qduser/getCode.do";
+                            let that = this;
+                            this.$http.post(url,
+                                {
+                                    "parameters":{
+                                        "cookie":user22.sjs,
+                                        "phone":this.phone,
+                                    },
+                                    "foreEndType":2,
+                                    "code":"14"
+                                }
+                            ).then((res)=>{
+                                Indicator.close();
+                                var result = JSON.parse(res.bodyText);
+                                if(result.success){
+                                    Toast({
+                                        message: '验证码已发送，请稍等！',
+                                        position: 'bottom',
+                                        duration: 1000
+                                    });
+                                    let me = this;
+                                    me.sendMsgDisabled = 2;
+                                    let interval = window.setInterval(function() {
+                                        if ((me.time--) <= 0) {
+                                            me.time = 59;
+                                            me.sendMsgDisabled = 3;
+                                            window.clearInterval(interval);
+                                        }
+                                    }, 1000);
+                                }else{
+                                    Toast({
+                                        message: '验证码发送失败: ' + result.message,
+                                        position: 'bottom'
+                                    });
+                                    return false;
+                                }
+                            }, (res)=>{
+                                Indicator.close();
+                            });
+
+
+                        }else{
+                            Toast({
+                                message: result.message,
+                                position: 'bottom'
+                            });
+                            this.phone = null;
+                            return false;
+                        }
+                    }, (res)=>{
+                        Indicator.close();
+                        return false;
+                    });
+                }else{
+                    Toast({
+                        message: '手机号不能为空！',
+                        position: 'bottom'
+                    });
+                    return false;
+                }
             },
             qdxz2(){
                 console.log(this.slots);
@@ -298,90 +383,7 @@
                 }
 
             },
-            //生成验证码
-            getverificode(){
-                this.djverificode = 2;
-                if(this.phone==''||this.phone==null){
-                    Toast({
-                                message: '手机号不能为空！',
-                                position: 'bottom',
-                                duration: 1000
-                            });
-                            return false;
-                }
-                //手机号验证
-                 var reg = /^0?1[3|4|5|6|7|8|9][0-9]\d{8}$/;
-                    if (!reg.test(this.phone)) {
-                        Toast({
-                            message: '手机号格式输入有误,请重新输入！',
-                            position: 'bottom',
-                            duration: 1000
-                        });
-                        this.phone = null;
-                        return false;
-                    }
-                    //判断数据库中有无此手机号注册信息
-                     if(this.phone != null){
-                            const url = this.$api + "/yhcms/web/qduser/getUser.do";
 
-                            this.$http.post(url, {"parameters":{"phone":this.phone},"foreEndType":2,"code":"4"}).then((res)=>{
-                                Indicator.close();
-                                var result = JSON.parse(res.bodyText);
-                                if(result.success){
-                                //可以注册 发送验证码   获取当前的cookie
-
-                                    const _this = this, sjsd = {"sjs":(new Date)};
-                                    localStorage.setItem('cooknxcode', JSON.stringify(sjsd));
-                                    const user22 = JSON.parse(localStorage.getItem('cooknxcode'));
-                                    const url = this.$api + "/yhcms/web/qduser/getCode.do";
-                                    let that = this;
-                                    this.$http.post(url,
-                                        {
-                                            "parameters":{
-                                                "cookie":user22.sjs,
-                                                "phone":this.phone,
-                                            },
-                                            "foreEndType":2,
-                                            "code":"14"
-                                        }
-                                        ).then((res)=>{
-                                        Indicator.close();
-                                        var result = JSON.parse(res.bodyText);
-                                        if(result.success){
-                                            Toast({
-                                                message: '验证码已发送，请稍等！',
-                                                position: 'bottom',
-                                                duration: 1000
-                                            });
-                                        }else{
-                                            Toast({
-                                                message: '验证码发送失败: ' + result.message,
-                                                position: 'bottom'
-                                            });
-                                        }
-                                    }, (res)=>{
-                                        Indicator.close();
-                                    });
-
-
-                                }else{
-                                    Toast({
-                                        message: result.message,
-                                        position: 'bottom'
-                                    });
-                                    this.phone = null;
-                                    return false;
-                                }
-                            }, (res)=>{
-                                Indicator.close();
-                            });
-                        }else{
-                            Toast({
-                                message: '手机号不能为空！',
-                                position: 'bottom'
-                            });
-                     }
-            },
             //验证验证码
             yzverificode(){
 

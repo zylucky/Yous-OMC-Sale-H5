@@ -36,7 +36,7 @@
                     </div>
                 </li>
                 <li class="clearfix">
-                    <span class="ys_tit" style="width: 1.7rem !important;">电话</span>
+                    <span class="ys_tit" style="width: 1.7rem !important;">手机号</span>
                     <div class="ys_item_con fl" style="width: 4rem !important;">
                         <input type="text" value="" readonly v-model="phone" placeholder="请输入手机号">
                     </div>
@@ -75,7 +75,7 @@
                 <div class="build_top">
                     <div class="common_title">名片</div>
                     <div class="image_wrap clearfix mb140">
-                        <div v-if="il < 5" class="upload_btn mr10 fl">
+                        <div v-if="il < 1" class="upload_btn mr10 fl">
                             <input @change='add_img1' id="file_add" tag="lp" type="file" multiple>
                         </div>
                         <div class="img_demo fl pr" v-for='(item,index) in imgList' v-if="item.isdelete==0">
@@ -85,7 +85,7 @@
                     </div>
                     <!--<div class="common_title">楼盘封面图</div>-->
                     <div class="image_wrap clearfix mb140">
-                        <div v-if="fl < 1" class="upload_btn mr10 fl">
+                        <div v-if="fl < 0" class="upload_btn mr10 fl">
                             <input @change='add_img2' id="file_add" tag="fm" type="file">
                         </div>
                         <div class="img_demo fl pr" v-for='(item,index) in fmList' v-if="item.isdelete==0">
@@ -95,7 +95,7 @@
                     </div>
                     <div>
                         <span style="width: 7.5rem;clear: both;margin-left: 0.2rem;"><img src="../resources/images/icons/icon.jpg"></span>
-                        <span style="float: right;width: 6.5rem;margin-right: 0.3rem;">名片禁止使用Photoshop等修图软件造价，一经发现，将取消合作！</span>
+                        <span style="float: right;width: 6rem;margin-right: 0.3rem;">名片禁止使用Photoshop等修图软件造价，一经发现，将取消合作！</span>
                     </div>
                 </div>
                 <a href="javascript:;" style="clear: both;margin-top: 0.8rem;" class="ys_default_btn mb80" @click.stop.prevent="saveToserver">保存</a>
@@ -316,7 +316,7 @@
                         });
 
                         setTimeout(function(){
-                            that.$router.push({path:'/index'});
+                            that.$router.push({path:'/per_cen'});
                         },1000);
                     } else {
                         Toast({

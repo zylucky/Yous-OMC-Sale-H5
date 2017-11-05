@@ -224,7 +224,7 @@
             $("body").removeAttr("style");
             $("html").removeAttr("style");
             this.init();
-
+            $('title').html('我的收藏');
             //下滑时，条件tab固定
             $(window).scroll(function () {
                 if ($(window).scrollTop() > 0) {
@@ -728,17 +728,7 @@
                     }
                      $('.ss').attr('checked',false);
                 }
-
-
-
-                
-
-
-                
-                
             },
-
-
             deleteshan(){
                 var arraycheckdel = "";//定义一个变量用于存放选中状态的复选框的值(id)
                 var checkdel = document.getElementsByName("checkdel");//获取所有名为‘checkdel’的值
@@ -761,7 +751,6 @@
                     return;
                 }
                 const _this = this;
-                console.log(arraycheckdel);
                 this.$http.post(
                     this.$api + "/yhcms/web/collecthouse/delCollect.do",
                     {"checkdel":arraycheckdel.substring(0,arraycheckdel.length-1),"foreEndType":2,"code":"18"}
@@ -770,13 +759,13 @@
                     var result = JSON.parse(res.bodyText);
                     if (result.success) {
                         Toast({
-                            message: '修改密码成功',
+                            message: '删除成功',
                             position: 'bottom',
                             duration: 1000
                         });
-                        setTimeout(function(){
+                       /* setTimeout(function(){
                             _this.$router.push({path:'/index'});
-                        },1000);
+                        },1000);*/
                     } else {
                         Toast({
                             message: result.message,
@@ -786,7 +775,7 @@
                 }, function (res) {
                     Indicator.close();
                     Toast({
-                        message: '修改密码失败! 请稍候再试',
+                        message: '删除失败! 请稍候再试',
                         position: 'bottom'
                     });
                 });

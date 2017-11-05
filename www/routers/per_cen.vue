@@ -306,7 +306,7 @@
         },
         mounted(){
             this.getInitData();
-
+            $('title').html('个人中心');
         },
     }
 </script>

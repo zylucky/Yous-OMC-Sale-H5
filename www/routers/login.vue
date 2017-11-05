@@ -9,7 +9,10 @@
             display: inline-block;
         }
     }
-
+    .back{
+        background: url("../resources/images/login/login_inp0234.png") no-repeat;
+        background-size: 5.55rem 1rem;
+    }
     .mt5rem {
         margin-top: .55rem;
     }
@@ -27,34 +30,24 @@
 <template>
     <div class="all_elements" id="ys_user">
         <div class="all_wrap">
+           <!-- <i class="back"></i>-->
             <div class="login_wrap">
                 <div class="login_box" >
                     <div class="inp_item">
                         <div class="inp_bg"></div>
                         <i class="ys_icon user"></i>
-<<<<<<< HEAD
-=======
                         <i class="ys_icon1 user"></i>
->>>>>>> 5535e31cc74daf75744a27f4269ed08da3654c0c
-                        <input type="number" id="userName"
+                        <input type="number" id="userName"  style="border: 0.5px solid rgb(255,255,255);background-image:  url('../resources/images/login/login_inp0234.png') no-repeat"
                                class="mt5rem" value=""
                                v-model.trim="username" @blur="yzphone"  placeholder="请输入手机号">
                     </div>
                     <div class="inp_item">
                         <div class="inp_bg"></div>
                         <i class="ys_icon pass"></i>
-<<<<<<< HEAD
-                        <input type="password" value="" class="mt5rem" @blur="lose_pwd" v-model.trim="password" placeholder="请输入密码">
-                    </div>
-                    <div class="forgor_pwd">
-                        <a href="javascript:;" @click="forgot_pwd">忘记密码</a>
-=======
                         <i class="ys_icon1 pass"></i>
-                        <input type="password" value="" class="mt5rem" @blur="lose_pwd" v-model.trim="password" placeholder="请输入密码">
->>>>>>> 5535e31cc74daf75744a27f4269ed08da3654c0c
+                        <input type="password" style="border: 0.5px solid rgb(255,255,255);" value="" class="mt5rem" @blur="lose_pwd" v-model.trim="password" onkeyup="this.value=this.value.replace(/^ +| +$/g,'')" placeholder="请输入密码">
                     </div>
-                    
-                    <div class="inp_item login" style="margin-top: .5rem;clear: both;">
+                    <div class="inp_item login loginss" style="margin-top: .5rem;clear: both;">
                         <a href="javascript:;" style="line-height: 1.4rem;margin-top: .14rem;" class="ys_btn" @click="login">登 录</a>
                     </div>
                     <div style="margin-top: -0.2rem;">     

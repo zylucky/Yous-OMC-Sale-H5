@@ -17,8 +17,12 @@
                 <li class="clearfix pr">
                     <span class="ys_tit w224"><i>*</i> 手机号：</span>
                     <div class="ys_item_con fl"">
-                    <input style="width: 65% !important;" type="number"  value="" v-model.trim="phone" placeholder="请输入手机号"> 
-                    <span class="" @click="getverificode">获取验证码</span>
+                    <input style="width: 53% !important;" type="number"  value="" v-model.trim="phone" placeholder="请输入手机号">
+                    <span id="example">
+                        <span v-if="sendMsgDisabled == 2"><a href="javascript:;">{{time+'秒后获取'}}</a></span>
+                        <span v-if="!sendMsgDisabled"><a href="javascript:;" @click="send">获取验证码</a></span>
+                        <span v-if="sendMsgDisabled == 3"><a href="javascript:;" @click="send">重新获取验证码</a></span>
+                    </span>
         </div>
 
         </li>
@@ -49,6 +53,8 @@
                 phone:null,
                 verificode:null,
                 djverificode:1,
+                time: 60, // 发送验证码倒计时
+                sendMsgDisabled: false
             }
         },
         methods: {
@@ -78,6 +84,102 @@
                     });
                 });
             },*/
+            send() {
+                this.djverificode = 2;
+                //判断手机号
+                var reg = /^0?1[3|4|5|6|7|8|9][0-9]\d{8}$/;
+                if(this.phone==''||this.phone==null){
+                    Toast({
+                        message: '手机号不能为空！',
+                        position: 'bottom',
+                        duration: 1000
+                    });
+                    return false;
+                }else{
+                    if (!reg.test(this.phone)) {
+                        Toast({
+                            message: '手机号格式输入有误,请重新输入！',
+                            position: 'bottom',
+                            duration: 1000
+                        });
+                        this.phone = null;
+                        return false;
+                    }
+                    //判断系统中有无此手机号注册信息
+                    if(this.phone != ''){
+                        const _this = this;
+                        this.$http.post(
+                            this.$api + "/yhcms/web/qduser/getRemUser.do",
+                            {
+                                "parameters":{
+                                    "phone":this.phone
+                                },
+                                "foreEndType":2,
+                                "code":"12"
+                            }
+                        ).then(function (res) {
+                            Indicator.close();
+                            var result = JSON.parse(res.bodyText);
+                            if (result.success) {
+                                const _this = this, sjsd = {"sjs":(new Date)};
+                                localStorage.setItem('cooknxcode', JSON.stringify(sjsd));
+                                const user22 = JSON.parse(localStorage.getItem('cooknxcode'));
+                                const url = this.$api + "/yhcms/web/qduser/getCode.do";
+                                let that = this;
+                                this.$http.post(url,
+                                    {
+                                        "parameters":{
+                                            "cookie":user22.sjs,
+                                            "phone":this.phone,
+                                        },
+                                        "foreEndType":2,
+                                        "code":"14"
+                                    }
+                                ).then((res)=>{
+                                    Indicator.close();
+                                    var result = JSON.parse(res.bodyText);
+                                    if(result.success){
+                                        Toast({
+                                            message: '验证码已发送，请稍等！',
+                                            position: 'bottom',
+                                            duration: 1000
+                                        });
+                                        let me = this;
+                                        me.sendMsgDisabled = 2;
+                                        let interval = window.setInterval(function() {
+                                            if ((me.time--) <= 0) {
+                                                me.time = 59;
+                                                me.sendMsgDisabled = 3;
+                                                window.clearInterval(interval);
+                                            }
+                                        }, 1000);
+                                    }else{
+                                        Toast({
+                                            message: '验证码发送失败: ' + result.message,
+                                            position: 'bottom'
+                                        });
+                                    }
+                                }, (res)=>{
+                                    Indicator.close();
+                                });
+                            } else {
+                                Toast({
+                                    message: result.message,
+                                    position: 'bottom'
+                                });
+                                this.phone=null;
+
+                            }
+                        }, function (res) {
+                            Indicator.close();
+                            Toast({
+                                message: '修改密码失败! 请稍候再试',
+                                position: 'bottom'
+                            });
+                        });
+                    }
+                }
+            },
              yzphone(){
                 var reg = /^0?1[3|4|5|6|7|8|9][0-9]\d{8}$/;
                 if(this.phone==''||this.phone==null){
@@ -133,93 +235,6 @@
                 }
             },
             getverificode(){
-                this.djverificode = 2;
-            //判断手机号
-                 var reg = /^0?1[3|4|5|6|7|8|9][0-9]\d{8}$/;
-                if(this.phone==''||this.phone==null){
-                Toast({
-                        message: '手机号不能为空！',
-                        position: 'bottom',
-                        duration: 1000
-                    });
-                    return false;
-                }else{
-                if (!reg.test(this.phone)) {
-                    Toast({
-                        message: '手机号格式输入有误,请重新输入！',
-                        position: 'bottom',
-                        duration: 1000
-                    });
-                    this.phone = null;
-                    return false;
-                }
-                //判断系统中有无此手机号注册信息
-                 if(this.phone != ''){
-                    const _this = this;
-                    this.$http.post(
-                        this.$api + "/yhcms/web/qduser/getRemUser.do",
-                        {
-                            "parameters":{
-                                "phone":this.phone
-                            },
-                            "foreEndType":2,
-                            "code":"12"
-                        }
-                    ).then(function (res) {
-                        Indicator.close();
-                        var result = JSON.parse(res.bodyText);
-                        if (result.success) {
-
-                const _this = this, sjsd = {"sjs":(new Date)};
-                localStorage.setItem('cooknxcode', JSON.stringify(sjsd));
-                const user22 = JSON.parse(localStorage.getItem('cooknxcode'));
-                const url = this.$api + "/yhcms/web/qduser/getCode.do";
-                let that = this;
-                this.$http.post(url,
-                    {
-                        "parameters":{
-                            "cookie":user22.sjs,
-                            "phone":this.phone,
-                        },
-                        "foreEndType":2,
-                        "code":"14"
-                    }
-                ).then((res)=>{
-                    Indicator.close();
-                    var result = JSON.parse(res.bodyText);
-                    if(result.success){
-                        Toast({
-                            message: '验证码已发送，请稍等！',
-                            position: 'bottom',
-                            duration: 1000
-                        });
-                    }else{
-                        Toast({
-                            message: '验证码发送失败: ' + result.message,
-                            position: 'bottom'
-                        });
-                    }
-                }, (res)=>{
-                    Indicator.close();
-                });       
-                        } else {
-                            Toast({
-                                message: result.message,
-                                position: 'bottom'
-                            });
-                             this.phone=null;
-
-                        }
-                    }, function (res) {
-                        Indicator.close();
-                        Toast({
-                            message: '修改密码失败! 请稍候再试',
-                            position: 'bottom'
-                        });
-                    });
-                }
-
-                }
 
             },
             //验证验证码
