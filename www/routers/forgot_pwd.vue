@@ -275,7 +275,6 @@
                             if(result.success){
                                 //成功跳转到  修改密码
                                 setTimeout(function(){
-                                    alert("aaa");
                                     _this.$router.push({path:'/reset_pwd/'+_this.phone});
                                 },1000);
 

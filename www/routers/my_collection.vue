@@ -469,7 +469,7 @@
                 this.currentFilterTab = 'nth';
             },
             changeRou: function () {
-                this.$router.push({path: '/filter?r=house'})
+                this.$router.push({path: '/filter?r=my_collection'})
             },
             searchChoose: function (code, val, value, e) {
                 const li = $(e.target).closest('li');
@@ -763,9 +763,9 @@
                             position: 'bottom',
                             duration: 1000
                         });
-                       /* setTimeout(function(){
-                            _this.$router.push({path:'/index'});
-                        },1000);*/
+                        setTimeout(function(){
+                            _this.init();
+                        },1000);
                     } else {
                         Toast({
                             message: result.message,

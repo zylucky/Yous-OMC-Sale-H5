@@ -129,11 +129,11 @@
           </div>
         </div>
       </div>
-      <div v-if="Collection" class="tel-order clearfix" style="width: 40% !important;left: 0%;" @click="Collectionss">
+      <div v-if="colle == 1" class="tel-order clearfix" style="width: 40% !important;left: 0%;" @click="Collectionss">
         <a id="semwaploupanxiangqingdibu400" href="javascript:;" class="phone--tel-order">
           <img src="../resources/images/icons/Collection-icon1.png" class="mr05 mt-3">收藏</a>
       </div>
-      <div v-else class="tel-order clearfix" style="width: 40% !important;left: 0%;">
+      <div v-else class="tel-order clearfix" style="width: 40% !important;left: 0%;" @click="Collectionss2">
         <a id="semwaploupanxiangqingdibu400" href="javascript:;" class="phone--tel-order">
           <img src="../resources/images/icons/Collection-icon.png" class="mr05 mt-3">已收藏</a>
       </div>
@@ -189,6 +189,7 @@
         building_images: [],
         property: {"1":"写字楼", "2":"公寓","3":"商务楼","4":"住宅","5":"商业","6":"酒店","7":"综合","8":"别墅","9":"商业综合体","10":"酒店式公寓"},
         Collection:true,
+        colle:1,
 
       }
     },
@@ -202,6 +203,44 @@
           $("body").css({"overflow":"hidden"});
           $("html").css({"overflow":"hidden"});
           this.large = true;
+      },
+      coole(){
+          const user22 = JSON.parse(localStorage.getItem('cooknx'));
+          const _this = this, url1 = this.$api + "/yhcms/web/qduser/compareFy.do";
+          let that = this;
+          this.$http.post(url1, {"parameters":{"cookie":user22.sjs,"id":this.$route.query.house_id},"foreEndType":2,"code":"30000001"}).then((res)=>{
+              Indicator.close();
+              var result = JSON.parse(res.bodyText);
+              if(result.success){
+                  this.colle = 1;//还没有收藏这个房源
+              }else{
+                  this.colle = 2;
+              }
+          }, (res)=>{
+              Indicator.close();
+          });
+
+
+
+
+
+/*
+          const user22 = JSON.parse(localStorage.getItem('cooknx'));
+
+          this.$http.post(url1,
+
+          ).then((res)=>{
+              Indicator.close();
+              alert(222);
+              var result = JSON.parse(res.bodyText);
+              if(result.success){
+                  this.colle = 1;//还没有收藏这个房源
+              }else{
+                  this.colle = 2;
+              }
+          }, (res)=>{
+              Indicator.close();
+          });*/
       },
       //获取某一办公楼详情
       getPerDetail(){
@@ -220,7 +259,7 @@
           var result = JSON.parse(res.bodyText);
           Indicator.close();
           if (result.success) {
-            if (result.data) {
+
               const data = result.data[0];
               $('title').html(result.data[0].topic);
               _this.daily_price = !data.dj ? '暂无数据' : data.dj + '元/㎡/天';
@@ -270,8 +309,6 @@
                 autoplayDisableOnInteraction: true
               });
             }, 1000);
-          }
-
         }, function (res) {
           Toast({
             message: '抱歉,获取楼盘详情失败!',
@@ -284,7 +321,6 @@
           this.$router.push({path: '/reser_page?house_id=' + this.$route.query.house_id});
       },
       Collectionss(){
-          this.Collection = false;
           const user22 = JSON.parse(localStorage.getItem('cooknx'));
           const url = this.$api + "/yhcms/web/collecthouse/saveCollect.do";
           let that = this;
@@ -292,6 +328,7 @@
               Indicator.close();
               var result = JSON.parse(res.bodyText);
               if(result.success){
+                  this.colle = 2;
                   Toast({
                       message: '收藏房源成功！',
                       position: 'bottom'
@@ -306,12 +343,36 @@
               Indicator.close();
           });
       },
+      Collectionss2(){
+        const user22 = JSON.parse(localStorage.getItem('cooknx'));
+        const url = this.$api + "/yhcms/web/collecthouse/cancelCollect.do";
+        let that = this;
+        this.$http.post(url, {"cookie":user22.sjs,"fyid":this.$route.query.house_id}).then((res)=>{
+            Indicator.close();
+            var result = JSON.parse(res.bodyText);
+            if(result.success){
+                this.colle = 1;
+                Toast({
+                    message: '取消收藏房源成功！',
+                    position: 'bottom'
+                });
+            }else{
+                Toast({
+                    message: result.message,
+                    position: 'bottom'
+                });
+            }
+        }, (res)=>{
+            Indicator.close();
+        });
+      },
     },
     mounted(){
-      Indicator.open({
+     /* Indicator.open({
         text: '',
         spinnerType: 'fading-circle'
-      });
+      });*/
+      this.coole();
       this.getPerDetail();
     }
   }

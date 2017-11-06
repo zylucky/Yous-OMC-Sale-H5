@@ -1,9 +1,16 @@
 <style scoped lang="less">
     @import "../resources/css/reset.css";
     @import "../resources/css/base2.less";
+    @import "../resources/css/website/select2.min.css";
     .tsbq{width:100% !important}
     i{
         color:rgb(255,0,0);
+    }
+    .select2-container{
+        width:400px !important;
+    }
+    .select2-container .select2-selection--multiple{
+        height:auto;
     }
 </style>
 <template>
@@ -64,6 +71,31 @@
                         </select>
                     </div>
                 </li>
+                <!--<li class="clearfix">
+                    <span class="ys_tit" style="width: 1.5rem !important;">渠道公司</span>
+                    <div class="ys_item_con fl">
+                        <select v-model='qdid' @change="qdxz2" placeholder="请选择渠道" class="js-example-basic-multiple" id="cyry" style="width: 200px">
+                            <option value="0"> 请选择渠道</option>
+                            <option v-for="option in slots" value="option.id">
+                                {{ option.gsname}}
+                            </option>
+                        </select>
+                    </div>
+                </li>-->
+
+
+
+                <!--<li class="clearfix">
+                    <span class="ys_tit" style="width: 1.5rem !important;">渠道公司</span>
+                    <div class="ys_item_con fl">
+                        &lt;!&ndash;<input type="text" value="" v-model="bindcomp" placeholder="绑定公司">&ndash;&gt;
+                        <select v-model='qdid' @change="qdxz2(qdid)" placeholder="请选择渠道"  class="js-example-basic-multiple" id="cyry" multiple="multiple" style="width: 500px">
+                            <option v-for="option in slots" v-bind:value="option.id">
+                                {{ option.gsname}}
+                            </option>
+                        </select>
+                    </div>
+                </li>-->
                 <li class="clearfix">
                     <span class="ys_tit" style="width: 1.5rem !important;">所属项目</span>
                     <div class="ys_item_con fl">
@@ -83,6 +115,7 @@
 
     import {DatetimePicker} from 'mint-ui';  //日期选择
     import {Popup} from 'mint-ui'; //弹窗
+    import '../resources/js/select2.min.js';
 
     export default {
         components: {
@@ -209,6 +242,7 @@
                 }
             },
             qdxz2(){
+                alert($("#cyry").val());
                 console.log(this.slots);
                 console.log(this.qdid);
                 for(var i=0;i<this.slots.length;i++){
@@ -341,7 +375,7 @@
                                                 position: 'bottom',
                                                 duration: 1000
                                             });
-
+                                            localStorage.setItem('usernx', JSON.stringify(this.name));
                                             setTimeout(function(){
                                                 _this.$router.push({path:'/index'});
                                             },1000);
@@ -443,10 +477,13 @@
                     Indicator.close();
                     const qdData=JSON.parse(res.bodyText).data;
                     this.slots = qdData;
+                    console.log(this.slots);
                 }, (res)=>{
                     Indicator.close();
                 });
+                console.log(this.qdid);
                 this.qdid = 0;
+                console.log(this.qdid);
                 Indicator.open({
                     text: '',
                     spinnerType: 'fading-circle'
@@ -454,6 +491,11 @@
             },
         },
         mounted(){
+            $("#cyry").select2({//责任销售多选框选择初始化
+                placeholder: "请输入渠道公司名称",
+                maximumSelectionLength:1,//最多可选4个
+                tokenSeparators: [',', ' ']
+            });
             $('title').html('用户注册');
             this.getInitData();
         },

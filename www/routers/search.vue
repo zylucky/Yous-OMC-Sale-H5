@@ -282,7 +282,8 @@
            localStorage.setItem("historyData",JSON.stringify(this.hotArray));
       },
       toList:function(){
-        this.$router.push({path: '/' + this.r});
+        //this.$router.push({path: '/' + this.r});
+          history.go(-1);
       },
       toList2:function(){
         if(this.search_keyword){

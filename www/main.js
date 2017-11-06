@@ -263,6 +263,23 @@ router.beforeEach((to, from, next) => {
                                         }else{
                                             next({path: '/login'});
                                         }
+                                        $.post("http://116.62.68.26:8080/yhcms/web/qduser/getQdLogin.do", {
+                                                "foreEndType": 2,
+                                                "code": "300000045",
+                                                "cookie": user22.sjs,
+                                            },
+                                            function (data) {
+                                                next();
+                                                if (data.success) {
+                                                } else {
+                                                    if (data.userzt == 2) {
+                                                        next({path: '/login'});
+                                                    } else {
+                                                        next({path: '/login'});
+                                                    }
+                                                }
+                                                //alert(data); // John
+                                            }, "json");
                                     }
                                 }else{
                                     next({path: '/login'});

@@ -66,8 +66,11 @@
                 </li>
                 <li class="clearfix">
                     <span class="ys_tit" style="width: 1.7rem !important;">身份证号</span>
-                    <div class="ys_item_con fl">
+                    <div class="ys_item_con fl" v-if="statu == 0">
                         <input type="text" value=""  @blur="lose_card" v-model="code" placeholder="身份账号">
+                    </div>
+                    <div class="ys_item_con fl" v-else>
+                        <input type="text" value="" readonly v-model="code" placeholder="身份账号">
                     </div>
                 </li>
             </ul>
@@ -85,7 +88,7 @@
                     </div>
                     <!--<div class="common_title">楼盘封面图</div>-->
                     <div class="image_wrap clearfix mb140">
-                        <div v-if="fl < 0" class="upload_btn mr10 fl">
+                        <div v-if="fl < 1" class="upload_btn mr10 fl">
                             <input @change='add_img2' id="file_add" tag="fm" type="file">
                         </div>
                         <div class="img_demo fl pr" v-for='(item,index) in fmList' v-if="item.isdelete==0">
@@ -124,12 +127,11 @@
                 fl: 0,
                 upload: 0,
                 uploaded: 0,
+                statu:0,
             }
         },
         methods:{
             qdxz2(){
-                console.log(this.slots);
-                console.log(this.qdid);
                 for(var i=0;i<this.slots.length;i++){
                     if(this.qdid == this.slots[i].id){
                         alert(222);
@@ -141,7 +143,7 @@
             },
             //正则身份证号的验证
             yzcard(){
-                var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+                var reg = /(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}$)/;
                 if(reg.test(this.code))
                 {
                 }else{
@@ -150,6 +152,7 @@
                         position: 'bottom',
                         duration: 1000
                     });
+                    this.code = "";
                     return  false;
                 }
             },
@@ -291,10 +294,6 @@
             saveImageData(){
                 const user22 = JSON.parse(localStorage.getItem('cooknx'));
                 const that = this;
-                Indicator.open({
-                    text: '保存中...',
-                    spinnerType: 'fading-circle'
-                });
 
                 let fp = this.imgList.map((item, idx)=>{
                     return {"id": item.id, "isdelete": item.isdelete, "url": item.url};
@@ -302,35 +301,51 @@
                 let fm = this.fmList.map((item, idx)=>{
                     return {"id": item.id, "isdelete": item.isdelete, "url": item.url};
                 });
+                var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+                if(reg.test(this.code))
+                {
+                    Indicator.open({
+                        text: '保存中...',
+                        spinnerType: 'fading-circle'
+                    });
 
-                this.$http.post(
-                    this.$api + "/yhcms/web/qduser/updateUser.do",
-                    {"parameters":{"gsid":this.qdid,"gsname":this.bindcomp,"xmname":this.project,"cookie":user22.sjs,"name":this.name,"phone":this.phone,"card":this.code,"mptp1":fp,"mptp2":fm},"foreEndType":2,"code":"2"}).then((res)=>{
-                    Indicator.close();
-                    var result = JSON.parse(res.bodyText);
-                    if (result.success) {
-                        Toast({
-                            message: '保存成功',
-                            position: 'bottom',
-                            duration: 1000
-                        });
+                    this.$http.post(
+                        this.$api + "/yhcms/web/qduser/updateUser.do",
+                        {"parameters":{"gsid":this.qdid,"gsname":this.bindcomp,"xmname":this.project,"cookie":user22.sjs,"name":this.name,"phone":this.phone,"card":this.code,"mptp1":fp,"mptp2":fm},"foreEndType":2,"code":"2"}).then((res)=>{
+                        Indicator.close();
+                        var result = JSON.parse(res.bodyText);
+                        if (result.success) {
+                            Toast({
+                                message: '保存成功',
+                                position: 'bottom',
+                                duration: 1000
+                            });
 
-                        setTimeout(function(){
-                            that.$router.push({path:'/per_cen'});
-                        },1000);
-                    } else {
+                            setTimeout(function(){
+                                that.$router.push({path:'/per_cen'});
+                            },1000);
+                        } else {
+                            Toast({
+                                message: '保存失败: ' + result.message,
+                                position: 'bottom'
+                            });
+                        }
+                    },(res)=>{
+                        Indicator.close();
                         Toast({
-                            message: '保存失败: ' + result.message,
+                            message: '保存失败! 请稍候再试',
                             position: 'bottom'
                         });
-                    }
-                },(res)=>{
-                    Indicator.close();
-                    Toast({
-                        message: '保存失败! 请稍候再试',
-                        position: 'bottom'
                     });
-                });
+                }else{
+                    Toast({
+                        message: '身份证输入不合法',
+                        position: 'bottom',
+                        duration: 1000
+                    });
+                    this.code = "";
+                    return  false;
+                }
             },
             chang_phone(){
                 this.$router.push({path:'/chang_phone'});
@@ -381,7 +396,10 @@
                         this.imgList = data1;
                         this.fmList = data2;
                         this.il = this.imgList.length;
-                        this.fm = this.fmList.length;
+                        this.fl = this.fmList.length;
+                        this.statu = data.status2;
+
+                        console.log(this.statu);
                     }else{
                         Toast({
                             message: result.message,

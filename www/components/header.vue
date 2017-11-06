@@ -34,11 +34,11 @@
       <!--左侧登录div-->
       <div class="main-nav-wrapper sidenav" style="height: 628px;">
         <div class="user-box clearfix">
-          <div class="mb20 headback" style="border: 1px solid rgb(0,0,205);height: 4rem;">
-            <div>
-              <img style="margin: .6rem auto .6rem !important;" class="portrait" src="../resources/images/por_icon.png" alt="">
+          <div class="mb20 headback" style="height: 4rem;">
+            <div style="padding-top:.6rem;padding-left: 1.6rem;">
+              <img style="margin:0rem !important;" class="portrait" src="../resources/images/por_icon.png" alt="">
             </div>
-            <div class="tc" style="margin-top: -0.5rem;">{{username}}</div>
+            <div class="tc" style="margin-top: 0rem;">{{username}}</div>
           </div>
           <div class="ys_function tc">
             <!--<router-link :to="{path:'/list2'}" id="first_list_link">精选房源</router-link>-->
