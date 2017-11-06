@@ -242,12 +242,10 @@
                 }
             },
             qdxz2(){
-                alert($("#cyry").val());
                 console.log(this.slots);
                 console.log(this.qdid);
                 for(var i=0;i<this.slots.length;i++){
                     if(this.qdid == this.slots[i].id){
-                        alert(222);
                         this.project = this.slots[i].xmname;
                         this.bindcomp = this.slots[i].gsname;
                     }

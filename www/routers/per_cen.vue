@@ -6,41 +6,46 @@
     .headcen{background-color: white;width: 1.5rem;height:1.5rem;border-radius:50%;}
     .headers{width:1.7rem;height:2rem;margin: auto;margin-top: .5rem;margin-bottom: .2rem;}
     .headname{width: .8rem;margin: auto;}
+    .headb{background: url("../resources/images/per_cen/per_cenba.png") no-repeat;background-size: 100% 100%;}
+    .perli{width: 50%;float: left;height: 3rem;background-color:rgb(238,238,238) !important;}
+    .perbott{height: 2.55rem;margin-top: 6rem;}
 </style>
 <template>
-    <div class="all_elements" style="background-color: rgb(255, 255 ,255);">
+    <div class="all_elements" style="background-color:rgb(238,238,238);">
         <div class="build_top">
-            <div class="headt">
+            <div class="headt headb" style="height: 4rem;">
                 <div class="headers">
-                    <div class="headcen"><!--<img src="../resources/images/list/del-icon.png">--></div>
+                    <div class="headcen"><img src="../resources/images/per_cen/headtx.png"></div>
                     <div class="headname" v-text="name"></div>
                 </div>
-            </div>
-            <ul class="ys_item_ul mb60">
-                <li class="clearfix" v-if="wsxx == 1">
+                <div class="clearfix" v-if="wsxx == 1">
                     <span class="ys_tit" style="width: 2.8rem !important;">您的个人信息还未完善</span>
                     <a href="" style="width: 2.25rem !important;">立即完善</a>
-                </li>
-                <!--<li class="clearfix" v-if="wsxx == 2">
+                </div>
+                <!--<div class="clearfix" v-if="wsxx == 2">
                     <span class="ys_tit" style="width: 4rem !important;">您的实名认证已通过！</span>
-                </li>-->
-                <li class="clearfix" @click="per_information">
-                    <span class="ys_tit"><a href="javascript:;"><img src="../resources/images/icons/icon.jpg"></a></span>
+                </div>-->
+            </div>
+            <ul class="ys_item_ul mb60" style="">
+                <li class="clearfix perli" @click="per_information" style="border-right: 1px solid #dbdadf;">
+                    <span class="ys_tit"><a href="javascript:;"><img src="../resources/images/per_cen/per_infor.png"></a></span>
                     <div class="ys_item_con fl">个人信息</div>
                 </li>
-                <li class="clearfix" @click="my_collection">
-                    <span class="ys_tit"><a href="javascript:;"><img src="../resources/images/icons/icon.jpg"></a></span>
-                    <div class="ys_item_con fl">我的收藏</div>
-                </li>
-                <li class="clearfix" @click="my_reser">
-                    <span class="ys_tit"><a href="javascript:;"><img src="../resources/images/icons/icon.jpg"></a></span>
-                    <div class="ys_item_con fl">我的预约</div>
-                </li>
-                <li class="clearfix" @click="modify_pwd">
-                    <span @click="modify_pwd" class="ys_tit"><a href="javascript:;"><img src="../resources/images/icons/icon.jpg"></a></span>
+                <li class="clearfix perli" @click="modify_pwd">
+                    <span @click="modify_pwd" class="ys_tit"><a href="javascript:;"><img src="../resources/images/per_cen/mod_pwd.png"></a></span>
                     <div class="ys_item_con fl">修改密码</div>
                 </li>
+                <li class="clearfix perli" @click="my_collection" style="border-right: 1px solid #dbdadf;">
+                    <span class="ys_tit"><a href="javascript:;"><img src="../resources/images/per_cen/my_col.png"></a></span>
+                    <div class="ys_item_con fl">我的收藏</div>
+                </li>
+                <li class="clearfix perli" @click="my_reser">
+                    <span class="ys_tit"><a href="javascript:;"><img src="../resources/images/per_cen/my_reset.png"></a></span>
+                    <div class="ys_item_con fl">我的预约</div>
+                </li>
             </ul>
+            <div class="perbott">222
+            </div>
         </div>
     </div>
 </template>
