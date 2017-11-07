@@ -62,13 +62,13 @@
                 <li class="clearfix">
                     <span class="ys_tit" style="width: 1.5rem !important;">渠道公司</span>
                     <div class="ys_item_con fl">
-                        <!--<input type="text" value="" v-model="bindcomp" placeholder="绑定公司">-->
-                        <select v-model='qdid' @change="qdxz2" placeholder="请选择渠道">
+                        <input type="text" value="" v-model="bindcomp" placeholder="绑定公司">
+                        <!--<select v-model='qdid' @change="qdxz2" placeholder="请选择渠道">
                             <option value="0"> 请选择渠道</option>
                             <option v-for="option in slots" v-bind:value="option.id">
                                 {{ option.gsname}}
                             </option>
-                        </select>
+                        </select>-->
                     </div>
                 </li>
                 <!--<li class="clearfix">
@@ -99,7 +99,7 @@
                 <li class="clearfix">
                     <span class="ys_tit" style="width: 1.5rem !important;">所属项目</span>
                     <div class="ys_item_con fl">
-                        <input type="text" value="" readonly v-model="project" placeholder="所属项目">
+                        <input type="text" value="" v-model="project" placeholder="所属项目">
                     </div>
                 </li>
             </ul>
@@ -373,7 +373,10 @@
                                                 position: 'bottom',
                                                 duration: 1000
                                             });
+                                            const msg = {"user": name,"time":(new Date).getMilliseconds()};
                                             localStorage.setItem('usernx', JSON.stringify(this.name));
+                                            localStorage.setItem('loginnx', JSON.stringify(msg));
+                                            localStorage.setItem('cooknx', JSON.stringify(sjsd));
                                             setTimeout(function(){
                                                 _this.$router.push({path:'/index'});
                                             },1000);

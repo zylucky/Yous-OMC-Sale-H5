@@ -24,15 +24,29 @@
             margin-bottom: .3rem;
         }
     }
+    .mpzm{
+        background: url("../resources/images/per_cen/per_inform/mpzm.png") no-repeat;
+        background-size: 100% 100%;
+        width: 5.7rem;
+        height: 3rem;
+        margin-left: 0.4rem;
+    }
+    .mpbm{
+        background: url("../resources/images/per_cen/per_inform/mpbm.png") no-repeat;
+        background-size: 100% 100%;
+        width: 5.7rem;
+        height: 3rem;
+        margin-left: 0.4rem;
+    }
 </style>
 <template>
     <div class="all_elements">
         <div class="build_top">
             <ul class="ys_item_ul mb60">
-                <li class="clearfix">
+                <li class="clearfix" style="margin-top: .2rem;">
                     <span class="ys_tit" style="width: 1.7rem !important;">姓名</span>
                     <div class="ys_item_con fl">
-                        <input type="text" value="" readonly v-model="name" placeholder="请输入真实姓名">
+                        <input type="text" value="" v-model="name" placeholder="请输入真实姓名">
                     </div>
                 </li>
                 <li class="clearfix">
@@ -45,13 +59,13 @@
                 <li class="clearfix">
                     <span class="ys_tit" style="width: 1.7rem !important;">渠道公司</span>
                     <div class="ys_item_con fl">
-                        <!--<input type="text" value="" v-model="bindcomp" placeholder="绑定公司">-->
-                        <select v-model='qdid' @change="qdxz2" placeholder="请选择渠道">
+                        <input type="text" value="" v-model="bindcomp" placeholder="绑定公司">
+                        <!--<select v-model='qdid' @change="qdxz2" placeholder="请选择渠道">
                             <option value="0"> 请选择渠道</option>
                             <option v-for="option in slots" v-bind:value="option.id">
                                 {{ option.gsname}}
                             </option>
-                        </select>
+                        </select>-->
                     </div>
 
                    <!-- <asp:DropDownList ID="ddlCountry" runat="server" data-placeholder="Choose a Country..."
@@ -61,10 +75,10 @@
                 <li class="clearfix">
                     <span class="ys_tit" style="width: 1.7rem !important;">所属项目</span>
                     <div class="ys_item_con fl">
-                        <input type="text" value="" readonly v-model="project" placeholder="所属项目">
+                        <input type="text" value="" v-model="project" placeholder="所属项目">
                     </div>
                 </li>
-                <li class="clearfix">
+                <li class="clearfix" style="margin-top: .2rem;">
                     <span class="ys_tit" style="width: 1.7rem !important;">身份证号</span>
                     <div class="ys_item_con fl" v-if="statu == 0">
                         <input type="text" value=""  @blur="lose_card" v-model="code" placeholder="身份账号">
@@ -76,23 +90,43 @@
             </ul>
             <div class="all_elements">
                 <div class="build_top">
-                    <div class="common_title">名片</div>
-                    <div class="image_wrap clearfix mb140">
-                        <div v-if="il < 1" class="upload_btn mr10 fl">
-                            <input @change='add_img1' id="file_add" tag="lp" type="file" multiple>
+                    <div class="common_title">名片上传</div>
+                    <div class="common_title">名片正面</div>
+                    <div class="image_wrap clearfix mb140" style="min-height: 4.5rem !important;">
+                        <div v-if="il < 1" class="mr10 fl">
+                            <!--<input @change='add_img1' id="file_add" tag="lp" type="file" multiple>-->
+                            <div class="mpzm" style="padding-top: 0.7rem;">
+                                <div style="border-radius:50%;width: 1.5rem;height: 1.5rem;background-color:rgb(115,185,254);opacity:0.7;margin-left: 2rem;padding-top: 0.3rem;">
+                                    <div class="upload_btn" style="width: 1rem;margin-left: 0.25rem;">
+                                        <input @change='add_img1' id="file_add" tag="lp" type="file" multiple>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="img_demo fl pr" v-for='(item,index) in imgList' v-if="item.isdelete==0">
-                            <img class="upload_demo_img" :src="item.id==='xxx'? item.url : $prefix + '/' + item.url" alt="" />
+                            <img style="width: 5.7rem;height: 3rem;margin-left: 0.4rem;" class="upload_demo_img" :src="item.id==='xxx'? item.url : $prefix + '/' + item.url" alt="" />
                             <i class="delete_icon" tag="lp" @click='delete_img(index, item.id, $event)'></i>
                         </div>
                     </div>
                     <!--<div class="common_title">楼盘封面图</div>-->
-                    <div class="image_wrap clearfix mb140">
-                        <div v-if="fl < 1" class="upload_btn mr10 fl">
-                            <input @change='add_img2' id="file_add" tag="fm" type="file">
+                    <div class="image_wrap clearfix mb140" style="min-height: 4.5rem !important;">
+                        <div v-if="fl < 1" class="mr10 fl">
+                            <!--<input @change='add_img2' id="file_add" tag="fm" type="file">-->
+                            <div class="mpbm"style="padding-top: 0.7rem;">
+                                <div style="border-radius:50%;width: 1.5rem;height: 1.5rem;background-color:rgb(115,185,254);opacity:0.7;margin-left: 2rem;padding-top: 0.3rem;">
+                                    <div class="upload_btn" style="width: 1rem;margin-left: 0.25rem;">
+                                        <input @change='add_img2' id="file_add" tag="fm" type="file" multiple>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--<div class="mpbm" style="padding-top: 0.7rem;">
+                                <div style="border-radius:50%;width: 1.5rem;height: 1.5rem;background-color:rgb(115,185,254);opacity:0.7;margin-left: 2rem;">
+                                    <img style="width: 1rem;margin-left: 0.2rem;margin-top: 0.3rem;" src="../resources/images/per_cen/per_inform/xj.png" alt="" />
+                                </div>
+                            </div>-->
                         </div>
                         <div class="img_demo fl pr" v-for='(item,index) in fmList' v-if="item.isdelete==0">
-                            <img class="upload_demo_img" :src="item.id==='xxx'? item.url : $prefix + '/' + item.url" alt="" />
+                            <img style="width: 5.7rem;height: 3rem;margin-left: 0.4rem;" class="upload_demo_img" :src="item.id==='xxx'? item.url : $prefix + '/' + item.url" alt="" />
                             <i class="delete_icon" tag="fm" @click='delete_img(index, item.id, $event)'></i>
                         </div>
                     </div>
@@ -285,6 +319,7 @@
                 ).then((res)=>{
                     var result = JSON.parse(res.bodyText);
                     if (result.success) {
+
                         cb && cb(result.data);
                     }
                     else{
@@ -302,8 +337,7 @@
                     return {"id": item.id, "isdelete": item.isdelete, "url": item.url};
                 });
                 var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
-                if(reg.test(this.code))
-                {
+                if(this.code == ""){
                     Indicator.open({
                         text: '保存中...',
                         spinnerType: 'fading-circle'
@@ -315,6 +349,8 @@
                         Indicator.close();
                         var result = JSON.parse(res.bodyText);
                         if (result.success) {
+                            const namee = this.name;
+                            localStorage.setItem('usernx', JSON.stringify(namee));
                             Toast({
                                 message: '保存成功',
                                 position: 'bottom',
@@ -338,14 +374,52 @@
                         });
                     });
                 }else{
-                    Toast({
-                        message: '身份证输入不合法',
-                        position: 'bottom',
-                        duration: 1000
-                    });
-                    this.code = "";
-                    return  false;
+                    if(reg.test(this.code))
+                    {
+                        Indicator.open({
+                            text: '保存中...',
+                            spinnerType: 'fading-circle'
+                        });
+
+                        this.$http.post(
+                            this.$api + "/yhcms/web/qduser/updateUser.do",
+                            {"parameters":{"gsid":this.qdid,"gsname":this.bindcomp,"xmname":this.project,"cookie":user22.sjs,"name":this.name,"phone":this.phone,"card":this.code,"mptp1":fp,"mptp2":fm},"foreEndType":2,"code":"2"}).then((res)=>{
+                            Indicator.close();
+                            var result = JSON.parse(res.bodyText);
+                            if (result.success) {
+                                Toast({
+                                    message: '保存成功',
+                                    position: 'bottom',
+                                    duration: 1000
+                                });
+
+                                setTimeout(function(){
+                                    that.$router.push({path:'/per_cen'});
+                                },1000);
+                            } else {
+                                Toast({
+                                    message: '保存失败: ' + result.message,
+                                    position: 'bottom'
+                                });
+                            }
+                        },(res)=>{
+                            Indicator.close();
+                            Toast({
+                                message: '保存失败! 请稍候再试',
+                                position: 'bottom'
+                            });
+                        });
+                    }else{
+                        Toast({
+                            message: '身份证输入不合法',
+                            position: 'bottom',
+                            duration: 1000
+                        });
+                        this.code = "";
+                        return  false;
+                    }
                 }
+
             },
             chang_phone(){
                 this.$router.push({path:'/chang_phone'});

@@ -99,7 +99,7 @@
                                         duration: 1000
                                     });
                                     setTimeout(function(){
-                                        _this.$router.push({path:'/index'});
+                                        _this.$router.push({path:'/per_cen'});
                                     },1000);
                                 } else {
                                     Toast({

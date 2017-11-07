@@ -4,23 +4,30 @@
     .tsbq{width:100% !important}
     .headt{width: 100%;background-color: rgb(220,220,220);border: 1px solid rgb(220,220,220);border-bottom: 1px solid rgb(255, 255 ,255); }
     .headcen{background-color: white;width: 1.5rem;height:1.5rem;border-radius:50%;}
-    .headers{width:1.7rem;height:2rem;margin: auto;margin-top: .5rem;margin-bottom: .2rem;}
-    .headname{width: .8rem;margin: auto;}
+    .headers{width:3.7rem;height:2rem;margin: auto;margin-top: .5rem;margin-bottom: .2rem;margin-left: auto;}
+    .headname{margin: auto;}
     .headb{background: url("../resources/images/per_cen/per_cenba.png") no-repeat;background-size: 100% 100%;}
-    .perli{width: 50%;float: left;height: 3rem;background-color:rgb(238,238,238) !important;}
+    .perli{width: 50%;float: left;height: 3rem;background-color:rgb(238,238,238) !important;padding-top: 0.6rem;padding-left: 1.35rem !important;img{width: 1.2rem;}}
     .perbott{height: 2.55rem;margin-top: 6rem;}
 </style>
 <template>
     <div class="all_elements" style="background-color:rgb(238,238,238);">
         <div class="build_top">
-            <div class="headt headb" style="height: 4rem;">
-                <div class="headers">
-                    <div class="headcen"><img src="../resources/images/per_cen/headtx.png"></div>
-                    <div class="headname" v-text="name"></div>
+            <div class="headt headb" style="height: 4rem;padding-top: 0.4rem;">
+                <div class="headers" style="">
+                    <div class="" style="float: left;"><img style="width: 1.8rem;" src="../resources/images/per_cen/headtx.png"></div>
+                    <div style="margin-top: 0.5rem;margin-left: 2.1rem;padding-top: 0.4rem;">
+                        <div class="headname" v-text="name" style="font-size: 0.36rem;margin-left: 0.2rem;color: white;"></div>
+                        <div class="">
+                            <img v-if="status == 0" style="width: 1.1rem;margin-top: 0.1rem;" src="../resources/images/per_cen/per_renzh3.png">
+                            <img v-if="status == 1" style="width: 1.1rem;margin-top: 0.1rem;" src="../resources/images/per_cen/per_renzh1.png">
+                            <img v-if="status == 2" style="width: 1.1rem;margin-top: 0.1rem;" src="../resources/images/per_cen/per_renzh2.png">
+                        </div>
+                    </div>
                 </div>
-                <div class="clearfix" v-if="wsxx == 1">
+                <div class="clearfix" v-if="wsxx == 1" style="padding-left: 1.7rem;">
                     <span class="ys_tit" style="width: 2.8rem !important;">您的个人信息还未完善</span>
-                    <a href="" style="width: 2.25rem !important;">立即完善</a>
+                    <a href="javascript:;" @click="per_information" style="width: 2.25rem !important;color: rgb(31,71,239);">立即完善</a>
                 </div>
                 <!--<div class="clearfix" v-if="wsxx == 2">
                     <span class="ys_tit" style="width: 4rem !important;">您的实名认证已通过！</span>
@@ -39,12 +46,18 @@
                     <span class="ys_tit"><a href="javascript:;"><img src="../resources/images/per_cen/my_col.png"></a></span>
                     <div class="ys_item_con fl">我的收藏</div>
                 </li>
-                <li class="clearfix perli" @click="my_reser">
+                <!--<li class="clearfix perli" @click="my_reser">
+                    <span class="ys_tit"><a href="javascript:;"><img src="../resources/images/per_cen/my_reset.png"></a></span>
+                    <div class="ys_item_con fl">我的预约</div>
+                </li>-->
+                <li class="clearfix perli">
                     <span class="ys_tit"><a href="javascript:;"><img src="../resources/images/per_cen/my_reset.png"></a></span>
                     <div class="ys_item_con fl">我的预约</div>
                 </li>
             </ul>
-            <div class="perbott">222
+            <div class="perbott">
+                <div style=""><img style="width: 44%;height: 1.7rem;margin-left: 0.2rem;margin-top: 0.5rem;float: left;" src="../resources/images/per_cen/per_pop.png"></div>
+                <div style="margin-left: 4.2rem !important;width:3.3rem;padding-top: 0.6rem;line-height: 0.5rem;color: rgb(168,168,168);font-size: 0.32rem;">我们的程序员正在挑灯夜战努力建设中...........更多功能，敬请期待！</div>
             </div>
         </div>
     </div>
@@ -68,7 +81,7 @@
         data () {
             return {
                 wsxx:1,//完善信息的状态
-                "name": "姓名", //
+                "name": "", //
                 "topic": "", //楼盘名称
                 "address": "", //地址
                 "tsbq": [], //特色标签
@@ -87,6 +100,7 @@
                 "tsbq_all":[],
                 "ryzt":"",//人员状态的权限
                 "qxzt":"",//权限状态码
+                status:"",
             }
         },
         computed:{
@@ -219,6 +233,8 @@
                         const data = JSON.parse(res.bodyText).data.qduser;
                         const data1 = JSON.parse(res.bodyText).data.mppic1;
                         const data2 = JSON.parse(res.bodyText).data.mppic2;
+                        this.status = data.status2;
+                        this.name = data.name;
                         if(data1.length != 0 && data2.length != 0 && data.gsname != "" && data.xmname != "" && data.card != ""){
                             this.wsxx = 11;
                         }else{

@@ -36,35 +36,35 @@
         <div class="user-box clearfix">
           <div class="mb20 headback" style="height: 4rem;">
             <div style="padding-top:.6rem;padding-left: 1.6rem;">
-              <img style="margin:0rem !important;" class="portrait" src="../resources/images/left_list/headback_head.png" alt="">
+              <img style="margin:0rem !important;" id="headimg" class="portrait" src="../resources/images/left_list/headback_head.png" alt="">
             </div>
             <div class="tc" style="margin-top: 0.2rem;font-size:0.4rem">{{username}}</div>
           </div>
           <div class="ys_function tc" style="background-color: rgb(255,255,255);margin-top: -0.4rem;">
             <!--<router-link :to="{path:'/list2'}" id="first_list_link">精选房源</router-link>-->
-            <div style="height: 1rem;margin-left: 0.8rem;border-bottom: 1px solid rgb(20,104,167);border-collapse:collapse;">
+            <div style="height: 1rem;margin-left: 0.4rem;border-bottom: 1px solid rgb(167,196,223);border-collapse:collapse;">
               <span style=""><img style="float: left;width: 0.5rem;height: 0.48rem;margin-top: 0.25rem;" src="../resources/images/left_list/house.png"></span>
               <a href="javascript:;" style="color: black !important;width: 2rem;font-size: 0.38rem;" @click="house">精选房源</a>
             </div>
-            <div style="height: 1rem;margin-left: 0.8rem;border-bottom: 1px solid rgb(20,104,167);">
+            <div style="height: 1rem;margin-left: 0.4rem;border-bottom: 1px solid rgb(167,196,223);">
               <span style=""><img style="float: left;width: 0.5rem;height: 0.48rem;margin-top: 0.25rem;" src="../resources/images/left_list/select.png"></span>
               <a href="javascript:;" style="color: black !important;width: 2rem;font-size: 0.38rem;" @click="select">今日销控</a>
             </div>
-            <div style="border-bottom: 1px solid rgb(20,104,167);">
-              <div style="height: 1rem;margin-left: 0.8rem;">
+            <div style="border-bottom: 1px solid rgb(167,196,223);">
+              <div style="height: 1rem;margin-left: 0.4rem;">
                 <span style=""><img style="float: left;width: 0.5rem;height: 0.48rem;margin-top: 0.25rem;" src="../resources/images/left_list/list.png"></span>
                 <a href="javascript:;" style="color: black !important;width: 2rem;font-size: 0.38rem;" @click="list">楼盘列表</a>
               </div>
             </div>
           </div>
-          <div style="background-color:rgb(255,255,255);border-bottom: 1px solid rgb(20,104,167);border-top: 1px solid rgb(20,104,167);height: 1rem;margin-top: 0.3rem;">
-            <div style="margin-left: 0.8rem;" class="tc ys_function">
+          <div style="background-color:rgb(255,255,255);border-bottom: 1px solid rgb(167,196,223);height: 1rem;margin-top: 0.3rem;">
+            <div style="margin-left: 0.4rem;" class="tc ys_function">
               <span style=""><img style="float: left;width: 0.5rem;height: 0.48rem;margin-top: 0.25rem;" src="../resources/images/left_list/per_cen.png"></span>
               <a href="javascript:;" style="color: black !important;width: 2rem;font-size: 0.38rem;" @click="percent">个人中心</a>
             </div>
           </div>
         </div>
-        <a href="javascript:;" class="log_out_btn" style="bottom:.1rem;width: 4rem;" @click="login_out()">退出登录</a>
+        <a href="javascript:;" class="log_out_btn" style="position: relative;bottom:-2rem;width: 4rem;" @click="login_out()">退出登录</a>
       </div>
     </mt-popup>
   </div>
@@ -81,6 +81,7 @@
           para: {
               "search_keywork": "",
           },
+          head:"",
       };
     },
     methods: {
@@ -212,6 +213,12 @@
       $('#first_list_link').click(function(){
           $("#zhezhao").remove();
       });
+      //获取微信的头像
+      let head1 = JSON.parse(localStorage.getItem('nxhead'));
+      if(head1 != ""){
+          console.log(head1);
+          $('#headimg').attr('src',head1);
+      }
     }
   };
 </script>
