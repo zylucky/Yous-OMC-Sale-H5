@@ -50,16 +50,18 @@
     .cell > dd{float: left;margin-right: .3rem;margin-bottom: .06rem;}
     .tagClass{font-size: 0.5em !important;}
     .zc{background-color:#ef104e !important;color:#FFF !important;font-size: 0.5em !important;}
+    .sousuo{background: url("../resources/images/my_colle/my_colle.png") no-repeat;background-size: 100% 100%;width: 100%;height: 1rem;margin-top: -1rem;}
 </style>
 <template>
-    <div>
+    <div class="sousuo">
         <!--header-->
         <!--<section id="header">
             <header1></header1>
         </section>-->
-        <a href="javascript:;" class="detail-search" style="position: fixed;left: 0; top: 0;">
+        <a href="javascript:;" class="detail-search" style="position: fixed;left: 0; top: 0;border-radius: .1rem !important;">
             <input type="text" id="keyword" placeholder="请输入楼盘关键字搜索" v-model.trim="para.search_keywork" maxlength="50"
                    @focus="changeRou">
+            <span @click="checkshow"><img style="margin-left: 5.2rem;margin-top: -1.3rem;width: 0.6rem;" src="../resources/images/my_colle/my_xiezi.png"></span>
         </a>
         <section>
                 <!--筛选结果start-->
@@ -67,9 +69,9 @@
                     v-infinite-scroll="loadMore"
                     infinite-scroll-disabled="loading"
                     infinite-scroll-distance="100"
-                    infinite-scroll-immediate-check="checked" style="margin-top: 1rem;">
+                    infinite-scroll-immediate-check="checked" style="margin-top: 1rem;padding-top: 1.2rem;">
 
-                <li class="ys_listcon pv15" v-for="item in resultData">
+                <li style="background:white;" class="ys_listcon pv15" v-for="item in resultData">
                     <div v-if="item.sid == 1">
                     <router-link :to="{path:'order',query:{house_id:item.fyid}}" class="supply_box" style="border-bottom: 0px !important;border-bottom: 0px !important;width: 90% !important;float: right;">
                         <div class="supply_price">
@@ -97,7 +99,7 @@
                         </dl>
                     </router-link>
                     <span style="position: relative;top: 0.8rem;float: left;">
-                        <input class="ss" type="checkbox" name="checkdel" :value="item.id" style="-webkit-appearance:checkbox !important;width: 0.3rem;height: 0.5rem;">
+                        <input v-show="checkss" class="ss" type="checkbox" name="checkdel" :value="item.id" style="-webkit-appearance:checkbox !important;width: 0.3rem;height: 0.5rem;">
                         <!--<input v-else checked="checked" type="checkbox" name="checkdel2" :value="item.id" style="-webkit-appearance:checkbox !important;width: 0.3rem;height: 0.5rem;">-->
                     </span>
                     </div>
@@ -131,7 +133,7 @@
                             </dl>
                         </router-link>
                         <span style="position: relative;top: 0.8rem;float: left;">
-                            <input class="ss" type="checkbox" name="checkdel" :value="item.id" style="-webkit-appearance:checkbox !important;width: 0.3rem;height: 0.5rem;">
+                            <input v-show="checkss" class="ss" type="checkbox" name="checkdel" :value="item.id" style="-webkit-appearance:checkbox !important;width: 0.3rem;height: 0.5rem;">
                             <!--<input type="checkbox" name="checkdel" v-model="item.id" :value="item.id" style="-webkit-appearance:checkbox !important;width: 0.3rem;height: 0.5rem;">-->
                             <!--<input v-else type="checkbox" checked="checked" style="-webkit-appearance:checkbox !important;width: 0.3rem;height: 0.5rem;">-->
                            <!-- <img src="../resources/images/icons/checkbox_img 1.png" style="border: 1px solid red;">-->
@@ -143,9 +145,12 @@
             <p v-if="loading" class="page-infinite-loading">
                 <mt-spinner type="fading-circle"></mt-spinner>
             </p>
-            <div style="width:100%;height:0.6rem;background-color:#DCDCDC;position: fixed;bottom: 0px;z-index: 13;">
-                <span style="float: left;background-color:#FFFFFF;"><input @click="quanxuan" id="checkbox-id" type="checkbox" style="-webkit-appearance:checkbox !important;">全选</span>
-                <span @click="deleteshan" style="float: right;"><a href="javascript:;">删除</a></span>
+            <div v-show="checkss" style="width:100%;height:0.9rem;margin-top: 0.4rem;background-color:#DCDCDC;position: fixed;bottom: 0px;z-index: 13;">
+                <span style="float: left;margin-top: 0.35rem;margin-left: 0.2rem;"><input @click="quanxuan" id="checkbox-id" type="checkbox" style="-webkit-appearance:checkbox !important;"><span style="font-size:0.32rem;">全选</span></span>
+                <div style="float: right;margin-top: 0.3rem;margin-right: 0.4rem;">
+                    <span style=""><img style="width: 0.4rem;" src="../resources/images/my_colle/delet.png"></span>
+                    <span @click="deleteshan"><a style="font-size:0.3rem;" href="javascript:;">删除</a></span>
+                </div>
             </div>
             <div class="mask" id="maskEl" @click="closeFilter"
                  :class="{show:this.currentFilterTab=='district'||this.currentFilterTab=='features'}">
@@ -201,6 +206,7 @@
                 loading: false,
                 noMore: false,
                 checked: false,
+                checkss:false,
                 para: {
                     "search_keywork": "",
                     "district": "",
@@ -259,6 +265,13 @@
             }
         },
         methods: {
+            checkshow(){
+                if(this.checkss){
+                    this.checkss = false;
+                }else{
+                    this.checkss = true;
+                }
+            },
             init(){
                 axios.defaults.baseURL = this.$api;
                 axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';

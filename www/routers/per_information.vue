@@ -88,10 +88,10 @@
                     </div>
                 </li>
             </ul>
-            <div class="all_elements">
+            <div class="all_elements" style="margin-top: -1rem;overflow-x: inherit !important;">
                 <div class="build_top">
-                    <div class="common_title">名片上传</div>
-                    <div class="common_title">名片正面</div>
+                    <div class="common_title" style="background-color: white;border-bottom: 0px solid #dbdadf;">名片上传</div>
+                    <div class="common_title" style="background-color: white;border-bottom: 0px solid #dbdadf;padding-left: 3.2rem;">名片正面</div>
                     <div class="image_wrap clearfix mb140" style="min-height: 4.5rem !important;">
                         <div v-if="il < 1" class="mr10 fl">
                             <!--<input @change='add_img1' id="file_add" tag="lp" type="file" multiple>-->
@@ -109,6 +109,7 @@
                         </div>
                     </div>
                     <!--<div class="common_title">楼盘封面图</div>-->
+                    <div class="common_title" style="background-color: white;border-bottom: 0px solid #dbdadf;padding-left: 3.2rem;margin-top: -1rem;">名片背面</div>
                     <div class="image_wrap clearfix mb140" style="min-height: 4.5rem !important;">
                         <div v-if="fl < 1" class="mr10 fl">
                             <!--<input @change='add_img2' id="file_add" tag="fm" type="file">-->
@@ -130,10 +131,10 @@
                             <i class="delete_icon" tag="fm" @click='delete_img(index, item.id, $event)'></i>
                         </div>
                     </div>
-                    <div>
+                    <!--<div>
                         <span style="width: 7.5rem;clear: both;margin-left: 0.2rem;"><img src="../resources/images/icons/icon.jpg"></span>
                         <span style="float: right;width: 6rem;margin-right: 0.3rem;">名片禁止使用Photoshop等修图软件造价，一经发现，将取消合作！</span>
-                    </div>
+                    </div>-->
                 </div>
                 <a href="javascript:;" style="clear: both;margin-top: 0.8rem;" class="ys_default_btn mb80" @click.stop.prevent="saveToserver">保存</a>
             </div>
