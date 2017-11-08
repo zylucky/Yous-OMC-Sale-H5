@@ -25,7 +25,7 @@
         },
         mounted(){
             this.GetQueryString("code");
-            alert(this.GetQueryString("code"));
+            /*alert(this.GetQueryString("code"));*/
         },
         created: function () {
             /*console.log("created=================",this.para.curr_page);*/

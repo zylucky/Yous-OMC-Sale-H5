@@ -19,7 +19,7 @@ Vue.use(MintUI);
 Vue.prototype.$api = "http://116.62.68.26:8080" //api地址116的地址ip
 //Vue.prototype.$api = "http://192.168.137.54:8081" //api地址
 /*Vue.prototype.$api = "http://wx.urskongjian.com:8080" //api地址*/
-//Vue.prototype.$api = "http://omc.urskongjian.com" //api地址可以随意改
+//Vue.prototype.$api = "http://omc.urskongjian.com" //api地址线上
 //Vue.prototype.$api = "http://192.168.0.222:8080" //api地址
 //Vue.prototype.$api = "http://yhcms.tunnel.qydev.com" //api地址本地
 Vue.prototype.$prefix = "http://116.62.68.26:81" //图片前缀222
@@ -206,7 +206,7 @@ var router = new VueRouter({
 
 
 router.beforeEach((to, from, next) => {
-    /*document.title = to.meta.title || '';
+    document.title = to.meta.title || '';
 
     // 统计代码
     if (from.name) {
@@ -247,7 +247,7 @@ router.beforeEach((to, from, next) => {
               var data = JSON.parse(res);
               if (data.success) {
                   if(data.subscribe){
-                  if (data.subscribe == 1 || data.subscribe == 3 ) {*/
+                  if (data.subscribe == 1 || data.subscribe == 3 ) {
                         if(to.path=='/register'||to.path=='/forgot_pwd'||to.path.indexOf('/reset_pwd')!=-1){
                             next();
                         }else{
@@ -259,9 +259,9 @@ router.beforeEach((to, from, next) => {
                             }else  if (user && to.path == '/login') {
                                 next();
                             }
-                            /*if (!user && to.path != '/login') {
+                            if (!user && to.path != '/login') {
                              next({path: '/login'});
-                             }*/
+                             }
                             else{
                                 if(user!=null) {
                                     const time = user.time == null ? 0 : user.time, now = (new Date).getMilliseconds(), delta = now - time;
@@ -270,9 +270,9 @@ router.beforeEach((to, from, next) => {
                                     } else {
                                         const user22 = JSON.parse(localStorage.getItem('cooknx'));
                                         if(user22 != null){
-                                            /*//存微信的头像
+                                            //存微信的头像
                                             const head = data.headimgurl;
-                                            localStorage.setItem('nxhead', JSON.stringify(head));*/
+                                            localStorage.setItem('nxhead', JSON.stringify(head));
                                             next();
                                         }else{
                                             next({path: '/login'});
@@ -301,7 +301,7 @@ router.beforeEach((to, from, next) => {
                                 }
                             }
                         }
-    /*next();
+                        next();
                     } else {
                         confirm("您还没有关注我们的公众号，请先关注我们的公众号！");
                         window.location.href="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI0NjY4ODM5OQ==&scene=123&from=singlemessage#wechat_redirect"; 
@@ -327,8 +327,64 @@ router.beforeEach((to, from, next) => {
             });
         }
 
-    }*/
+    }
 });
+
+
+
+/*router.beforeEach((to, from, next) => {
+    if(to.path=='/register'||to.path=='/forgot_pwd'||to.path.indexOf('/reset_pwd')!=-1){
+        next();
+    }else{
+        const user = JSON.parse(localStorage.getItem('loginnx'));
+        if (!user && to.path != '/login') {
+            next({ path: '/login' });
+        }else  if (!user && to.path == '/login') {
+            next();
+        }else  if (user && to.path == '/login') {
+            next();
+        }
+        if (!user && to.path != '/login') {
+            next({path: '/login'});
+        }
+        else{
+            if(user!=null) {
+                const time = user.time == null ? 0 : user.time, now = (new Date).getMilliseconds(), delta = now - time;
+                if (delta > 86400 * 3) {
+                    next({path: '/login'});
+                } else {
+                    const user22 = JSON.parse(localStorage.getItem('cooknx'));
+                    if(user22 != null){
+                    }else{
+                        next({path: '/login'});
+                    }
+                    $.post("http://116.62.68.26:8080/yhcms/web/qduser/getQdLogin.do", {
+                            "foreEndType": 2,
+                            "code": "300000045",
+                            "cookie": user22.sjs,
+                        },
+                        function (data) {
+                            next();
+                            if (data.success) {
+                            } else {
+                                if (data.userzt == 2) {
+                                    next({path: '/login'});
+                                } else {
+                                    next({path: '/login'});
+                                }
+                            }
+                            //alert(data); // John
+                        }, "json");
+                }
+            }else{
+                next({path: '/login'});
+                //next();
+            }
+        }
+    }
+});*/
+
+
 new Vue({
     el: '#app',
     router: router,

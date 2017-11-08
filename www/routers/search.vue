@@ -250,8 +250,9 @@
           {name:"银河soho"},
         ],
         hotArray:[
-          {name:"望京soho"},
-          {name:"盈科中心"}
+          {name:"建外SOHO"},
+          {name:"住邦2000"},
+          {name:"万达广场"}
         ],
         resultData: [],
         r: ""

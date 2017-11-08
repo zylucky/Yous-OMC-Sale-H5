@@ -20,8 +20,8 @@
                     <input style="width: 53% !important;" type="number"  value="" v-model.trim="phone" placeholder="请输入手机号">
                     <span id="example">
                         <span v-if="sendMsgDisabled == 2"><a href="javascript:;">{{time+'秒后获取'}}</a></span>
-                        <span v-if="!sendMsgDisabled"><a href="javascript:;" @click="send">获取验证码</a></span>
-                        <span v-if="sendMsgDisabled == 3"><a href="javascript:;" @click="send">重新获取验证码</a></span>
+                        <span v-if="!sendMsgDisabled"><a href="javascript:;" style="background-color: rgb(123,198,249);border:1px solid rgb(123,198,249);color: white;padding:0.05rem;" @click="send">获取验证码</a></span>
+                        <span v-if="sendMsgDisabled == 3"><a href="javascript:;" style="background-color: rgb(123,198,249);border:1px solid rgb(123,198,249);color: white;padding:0.05rem;" @click="send">重新获取验证码</a></span>
                     </span>
         </div>
 

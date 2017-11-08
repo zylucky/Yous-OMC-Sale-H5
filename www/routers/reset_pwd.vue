@@ -17,7 +17,7 @@
                 <li class="clearfix pr">
                     <span class="ys_tit w224"><i>*</i> 新密码：</span>
                     <div class="ys_item_con fl">
-                        <input class="npwd" type="password" value="" v-model.trim="npwd" placeholder="请设置密码">
+                        <input class="npwd" @blur="lose_pwd" onkeyup="this.value=this.value.replace(/^ +| +$/g,'')" type="password" value="" v-model.trim="npwd" placeholder="请设置密码">
                     </div>
                 </li>
                 <li class="clearfix pr">
@@ -50,12 +50,38 @@
             }
         },
         methods: {
+            lose_pwd(){
+                if(this.npwd == null){
+                    Toast({
+                        message: '密码不能为空!',
+                        position: 'bottom',
+                        duration: 1000
+                    });
+                    return false;
+                }
+                this.yzpwd();
+            },
+            //密码的验证
+            yzpwd(){
+                var reg = /^.{6,15}$/;
+                if (!reg.test(this.npwd)) {
+                    Toast({
+                        message: '密码长度为6~15位,请重新输入！',
+                        position: 'bottom',
+                        duration: 1000
+                    });
+                    this.npwd = null;
+                    return false;
+                }
+            },
             saveAreaMsg(){
                 this.phone = this.$route.params.phone;
                 if(this.npwd != null && this.anpwd != null ){
                     if(this.npwd == this.anpwd){
                         const _this = this;
                         //获取当前的cookie--------
+                        const sjsd = {"sjs":(new Date)};
+                        localStorage.setItem('cooknx', JSON.stringify(sjsd));
                         const user22 = JSON.parse(localStorage.getItem('cooknx'));
                         const sha11 = crypto.createHash('sha1'), md51 = crypto.createHash('md5');
                         sha11.update(this.npwd);

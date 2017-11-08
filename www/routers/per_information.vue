@@ -51,10 +51,10 @@
                 </li>
                 <li class="clearfix">
                     <span class="ys_tit" style="width: 1.7rem !important;">手机号</span>
-                    <div class="ys_item_con fl" style="width: 4rem !important;">
+                    <div class="ys_item_con fl" style="width: 3.5rem !important;">
                         <input type="text" value="" readonly v-model="phone" placeholder="请输入手机号">
                     </div>
-                    <span class=""><a href="javascript:;" @click="chang_phone">更换手机号</a></span>
+                    <span class=""><a style="background-color: rgb(123,198,249);border:1px solid rgb(123,198,249);color: white;padding:0.05rem;" href="javascript:;" @click="chang_phone">更换手机号</a></span>
                 </li>
                 <li class="clearfix">
                     <span class="ys_tit" style="width: 1.7rem !important;">渠道公司</span>
@@ -80,12 +80,12 @@
                 </li>
                 <li class="clearfix" style="margin-top: .2rem;">
                     <span class="ys_tit" style="width: 1.7rem !important;">身份证号</span>
-                    <div class="ys_item_con fl" v-if="statu == 0">
-                        <input type="text" value=""  @blur="lose_card" v-model="code" placeholder="身份账号">
+                    <div class="ys_item_con fl">
+                        <input type="text" value="" v-model="code" placeholder="身份账号">
                     </div>
-                    <div class="ys_item_con fl" v-else>
-                        <input type="text" value="" readonly v-model="code" placeholder="身份账号">
-                    </div>
+                    <!--<div class="ys_item_con fl">
+                        <input type="text" value="" v-model="code" placeholder="身份账号">
+                    </div>-->
                 </li>
             </ul>
             <div class="all_elements" style="margin-top: -1rem;overflow-x: inherit !important;">
@@ -169,7 +169,6 @@
             qdxz2(){
                 for(var i=0;i<this.slots.length;i++){
                     if(this.qdid == this.slots[i].id){
-                        alert(222);
                         this.project = this.slots[i].xmname;
                         this.bindcomp = this.slots[i].gsname;
                     }
@@ -337,13 +336,12 @@
                 let fm = this.fmList.map((item, idx)=>{
                     return {"id": item.id, "isdelete": item.isdelete, "url": item.url};
                 });
-                var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+                var reg = /(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}$)/;
                 if(this.code == ""){
                     Indicator.open({
                         text: '保存中...',
                         spinnerType: 'fading-circle'
                     });
-
                     this.$http.post(
                         this.$api + "/yhcms/web/qduser/updateUser.do",
                         {"parameters":{"gsid":this.qdid,"gsname":this.bindcomp,"xmname":this.project,"cookie":user22.sjs,"name":this.name,"phone":this.phone,"card":this.code,"mptp1":fp,"mptp2":fm},"foreEndType":2,"code":"2"}).then((res)=>{
@@ -416,8 +414,7 @@
                             position: 'bottom',
                             duration: 1000
                         });
-                        this.code = "";
-                        return  false;
+                        return false;
                     }
                 }
 
@@ -473,8 +470,7 @@
                         this.il = this.imgList.length;
                         this.fl = this.fmList.length;
                         this.statu = data.status2;
-
-                        console.log(this.statu);
+                        IF
                     }else{
                         Toast({
                             message: result.message,

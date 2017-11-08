@@ -15,7 +15,7 @@
         <div class="build_top">
             <div class="headt headb" style="height: 4rem;padding-top: 0.4rem;">
                 <div class="headers" style="">
-                    <div class="" style="float: left;"><img style="width: 1.8rem;" src="../resources/images/per_cen/headtx.png"></div>
+                    <div class="" style="float: left;"><img id="headimg" style="width: 1.8rem;height: 1.8rem;" src="../resources/images/per_cen/headtx.png"></div>
                     <div style="margin-top: 0.5rem;margin-left: 2.1rem;padding-top: 0.4rem;">
                         <div class="headname" v-text="name" style="font-size: 0.36rem;margin-left: 0.2rem;color: white;"></div>
                         <div class="">
@@ -328,6 +328,13 @@
         mounted(){
             this.getInitData();
             $('title').html('个人中心');
+            //获取微信的头像
+            let head1 = JSON.parse(localStorage.getItem('nxhead'));
+            if(head1 != ""){
+                console.log(head1);
+                $('#headimg').attr('src',head1);
+                $('#headimg').css('border-radius','50%');
+            }
         },
     }
 </script>
