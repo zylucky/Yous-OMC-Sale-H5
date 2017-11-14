@@ -150,22 +150,77 @@
         }, 150);
       },
       house(){
-          $("#zhezhao").remove();
-          $('html').removeAttr("style");
-          $("body").removeAttr("style");
-          this.$router.push({path:'/house'});
+          if(window.location.href == "http://omc.urskongjian.com/wanx/#/house"){
+              $('.sidenav').animate({
+                  left: '-100%'
+              }, 150, function () {
+                  $('.sidenav').hide();
+              });
+              $("#section").animate({
+                  left: '0'
+              }, 150);
+              $(".section").animate({
+                  left: '0'
+              }, 150);
+              this.popupVisible = false;
+              $("#zhezhao").remove();
+              $('html').removeAttr("style");
+              $("body").removeAttr("style");
+          }else{
+              $("#zhezhao").remove();
+              $('html').removeAttr("style");
+              $("body").removeAttr("style");
+              this.$router.push({path:'/house'});
+          }
+
       },
       select(){
-          $("#zhezhao").remove();
-          $('html').removeAttr("style");
-          $("body").removeAttr("style");
-          this.$router.push({path:'/select'});
+          if(window.location.href == "http://omc.urskongjian.com/wanx/#/select"){
+              $('.sidenav').animate({
+                  left: '-100%'
+              }, 150, function () {
+                  $('.sidenav').hide();
+              });
+              $("#section").animate({
+                  left: '0'
+              }, 150);
+              $(".section").animate({
+                  left: '0'
+              }, 150);
+              this.popupVisible = false;
+              $("#zhezhao").remove();
+              $('html').removeAttr("style");
+              $("body").removeAttr("style");
+          }else{
+              $("#zhezhao").remove();
+              $('html').removeAttr("style");
+              $("body").removeAttr("style");
+              this.$router.push({path:'/select'});
+          }
       },
       list(){
-        $("#zhezhao").remove();
-        $('html').removeAttr("style");
-        $("body").removeAttr("style");
-        this.$router.push({path:'/'});
+        if(window.location.href == "http://omc.urskongjian.com/wanx/#/list" || window.location.href == "http://omc.urskongjian.com/wanx/#/"){
+            $('.sidenav').animate({
+                left: '-100%'
+            }, 150, function () {
+                $('.sidenav').hide();
+            });
+            $("#section").animate({
+                left: '0'
+            }, 150);
+            $(".section").animate({
+                left: '0'
+            }, 150);
+            this.popupVisible = false;
+            $("#zhezhao").remove();
+            $('html').removeAttr("style");
+            $("body").removeAttr("style");
+        }else{
+            $("#zhezhao").remove();
+            $('html').removeAttr("style");
+            $("body").removeAttr("style");
+            this.$router.push({path:'/'});
+        }
       },
       percent(){
         $("#zhezhao").remove();

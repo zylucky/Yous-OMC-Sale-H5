@@ -681,12 +681,16 @@
                         this_.noMore = true;
                     }
                     if (this_.resultData.length <= 0) {
+                        alert(222);
+                        //this.$router.push({path:'/my_nocollection'});
+                        this.tupshow = false;
                         Toast({
                             message: '抱歉,暂无符合条件的房源!',
                             position: 'middle',
                             duration: 1000
                         });
                     } else if (this_.resultData.length > 0 && result.data.data.length == 0) {
+                        this.tupshow = true;
                         Toast({
                             message: '已经获得当前条件的所有房源!',
                             position: 'middle',
@@ -696,6 +700,8 @@
                 };
                 let errorCb = function (result) {
                     Indicator.close();
+                    alert(111);
+                    this.tupshow = false;
                     Toast({
                         message: '抱歉,暂无符合条件的房源!',
                         position: 'middle',
@@ -715,7 +721,7 @@
                     .then(function (response) {
                         if (typeof successcb === "function") {
                             successcb(response)
-                            /*if(result.length == 0){
+                           /* if(result.length == 0){
                                 this.tupshow = false; alert(this.tupshow);
                             }else{
                                 this.tupshow = true; alert(this.tupshow);

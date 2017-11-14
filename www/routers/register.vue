@@ -12,6 +12,15 @@
     .select2-container .select2-selection--multiple{
         height:auto;
     }
+    .mint-cell-wrapper{
+        font-size: 14px !important;
+    }
+</style>
+<style>
+    .mint-cell-wrapper{
+        font-size: 0.285rem;margin-left: -0.2rem;
+    }
+    .mint-field-core{margin-left: -0.5rem;font-size: 0.285rem;}
 </style>
 <template>
     <div class="all_elements">
@@ -40,13 +49,6 @@
                     <div class="ys_item_con fl" style="width: 3.5rem !important;">
                         <input type="number" value="" v-model.trim="phone" placeholder="请输入手机号">
                     </div>
-                    <!--<span class="">
-                        <span v-if="code == 1"><a href="javascript:;" @click="getverificode">获取验证码</a></span>
-                        <span v-if="code == 2"><a href="javascript:;" @click="getverificode">59s</a></span>
-                        <span v-if="code == 3"><a href="javascript:;" @click="getverificode">重新获取</a></span>
-                        <span v-if="sendMsgDisabled">{{time+'秒后获取'}}</span>
-                        <span v-if="!sendMsgDisabled">send</span>
-                    </span>-->
                     <span id="example">
                         <span v-if="sendMsgDisabled == 2"><a href="javascript:;">{{time+'秒后获取'}}</a></span>
                         <span v-if="!sendMsgDisabled"><a href="javascript:;" style="background-color: rgb(123,198,249);border:1px solid rgb(123,198,249);color: white;padding:0.05rem;" @click="send">获取验证码</a></span>
@@ -60,46 +62,22 @@
                     </div>
                 </li>
                 <li class="clearfix">
-                    <span class="ys_tit" style="width: 1.5rem !important;">渠道公司</span>
-                    <div class="ys_item_con fl">
-                        <input type="text" value="" v-model="bindcomp" placeholder="绑定公司">
-                        <!--<select v-model='qdid' @change="qdxz2" placeholder="请选择渠道">
-                            <option value="0"> 请选择渠道</option>
-                            <option v-for="option in slots" v-bind:value="option.id">
-                                {{ option.gsname}}
-                            </option>
-                        </select>-->
+                    <div class="ys_item_con fl" style="width: 7.7rem !important;">
+                        <mt-field label="渠道公司" placeholder="" v-model="company"></mt-field>
+                        <mt-cell
+                                v-show="companyShow"
+                                v-for="item in companyList"
+                                :title="item.gsname"
+                                :key="item.id"
+                                @click.native="fuzhi0(item)">
+                        </mt-cell>
                     </div>
                 </li>
-                <!--<li class="clearfix">
-                    <span class="ys_tit" style="width: 1.5rem !important;">渠道公司</span>
-                    <div class="ys_item_con fl">
-                        <select v-model='qdid' @change="qdxz2" placeholder="请选择渠道" class="js-example-basic-multiple" id="cyry" style="width: 200px">
-                            <option value="0"> 请选择渠道</option>
-                            <option v-for="option in slots" value="option.id">
-                                {{ option.gsname}}
-                            </option>
-                        </select>
-                    </div>
-                </li>-->
-
-
-
-                <!--<li class="clearfix">
-                    <span class="ys_tit" style="width: 1.5rem !important;">渠道公司</span>
-                    <div class="ys_item_con fl">
-                        &lt;!&ndash;<input type="text" value="" v-model="bindcomp" placeholder="绑定公司">&ndash;&gt;
-                        <select v-model='qdid' @change="qdxz2(qdid)" placeholder="请选择渠道"  class="js-example-basic-multiple" id="cyry" multiple="multiple" style="width: 500px">
-                            <option v-for="option in slots" v-bind:value="option.id">
-                                {{ option.gsname}}
-                            </option>
-                        </select>
-                    </div>
-                </li>-->
                 <li class="clearfix">
                     <span class="ys_tit" style="width: 1.5rem !important;">所属项目</span>
                     <div class="ys_item_con fl">
-                        <input type="text" value="" v-model="project" placeholder="所属项目">
+                        <input v-if="projectjy" type="text" @blur="ssxm" value="" v-model="project" placeholder="所属项目">
+                        <input v-else type="text" value="" readonly v-model="project" placeholder="所属项目">
                     </div>
                 </li>
             </ul>
@@ -133,18 +111,88 @@
                 "bindcomp": "", //渠道公司
                 bindcompid:null,//渠道公司的id
                 qdid:"",
-                slots:[],
                 "project": "", //所属项目
                 code:1,
                 djverificode:1,
                 time: 60, // 发送验证码倒计时
-                sendMsgDisabled: false
+                sendMsgDisabled: false,
+                companyShow:false,
+                companyList:[],
+                company:'',
+                companyId:'',
+                projectjy:false,
             }
         },
         computed:{
 
         },
+        watch:{
+            company(){
+                /*if(this.company!=""&&!this.companyId){
+                    this.$http.post('http://116.62.68.26:8080/yhcms/web/qduser/getQdCompany.do',{
+                        "companyName":this.company
+                    }).then((res)=>{
+                        this.companyList = JSON.parse(res.data).data;
+                        this.companyShow = true;
+                    });this.$api + "/yhcms/web/qduser/getQdCompany.do"
+                }*/
+                if(this.company!=""&&!this.companyId) {
+                    this.$http.post(this.$api + "/yhcms/web/qduser/getQdCompany.do", {
+                        "companyName": this.company
+                    }).then((res) => {
+                        this.companyList = JSON.parse(res.data).data;
+                        if(this.companyList.length == 0){
+                            this.projectjy = true;
+                            this.project = "";
+                        }else{
+                            this.projectjy = false;
+                        }
+                        this.companyShow = true;
+                    });
+                }else{
+                    this.companyId="";
+                }
+                console.log(this.companyId);
+            },
+        },
         methods: {
+            ssxm(){
+                if(this.project != ""){
+                    const url = this.$api + "/yhcms/web/qduser/addCompany.do";
+                    this.$http.post(url, {"gsname":this.company,"xmname":this.project}).then((res)=>{
+                        Indicator.close();
+                        var result = JSON.parse(res.bodyText);
+                        if(result.success){
+
+                        }else{
+                            Toast({
+                                message: '添加渠道公司失败: ' + result.message,
+                                position: 'bottom'
+                            });
+                        }
+                    }, (res)=>{
+                        Indicator.close();
+                    });
+                }else{
+                    Toast({
+                        message: '所属项目不能为空！',
+                        position: 'bottom'
+                    });
+                }
+                },
+            //模糊搜索
+            hello(){
+                //console.log(this.search)
+                const arr = {title:this.search,id:1};
+                this.resultmh.push(arr);
+            },
+            fuzhi0(item){
+                this.companyShow = false;
+                this.companyId = item.id;
+                this.company=item.gsname;
+                this.project = item.xmname;
+                this.bindcompid = this.companyId;
+            },
             //生成验证码
             send() {
                 this.djverificode = 2;
@@ -364,7 +412,7 @@
                                     const pwd = sha1.digest('hex');
                                     md5.update(pwd);
                                     const password = md5.digest("hex");
-                                    this.$http.post(url, {"parameters":{"cookie":user22.sjs,"name":this.name,"phone":this.phone,"pass":password,"gsid":this.bindcompid,"gsname":this.bindcomp,"xmname":this.project},"foreEndType":2,"code":"1"}).then((res)=>{
+                                    this.$http.post(url, {"parameters":{"cookie":user22.sjs,"name":this.name,"phone":this.phone,"pass":password,"gsid":this.bindcompid,"gsname":this.company,"xmname":this.project},"foreEndType":2,"code":"1"}).then((res)=>{
                                         Indicator.close();
                                         var result = JSON.parse(res.bodyText);
                                         if(result.success){

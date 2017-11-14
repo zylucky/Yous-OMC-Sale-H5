@@ -138,72 +138,15 @@ var router = new VueRouter({
             component: require('./routers/my_collection.vue')
         },
         {
+            path: '/my_nocollection',//我的收藏页面没有收藏房源数据的时候
+            component: require('./routers/my_nocollection.vue')
+        },
+        {
             path: '/test',
             component: require('./routers/test.vue')
         }
     ]
 });
-
-
-/*router.beforeEach((to, from, next) => {
-    FollowInfo().then((res)=>{
-     const subscribed = res.data.subscribe;
-     if(subscribed == 1 || subscribed == 3 ){
-         alert(111);
-     next();
-     }
-     else{
-         alert(222);
-     window.location.href = "https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI0NjY4ODM5OQ==#wechat_redirect";
-     }//weixin://contacts/profile/MzI0NjY4ODM5OQ==gh_50335f5dc144
-     }).catch((err)=>{
-     // 出错了
-     window.location.href = "https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI0NjY4ODM5OQ==#wechat_redirect";
-     //next();
-     });
-    //next();
-});*/
-/*router.beforeEach((to, from, next) => {
-    /!*$.post(api, {},
-        function (data) {
-            if (data.subscribe == 1 || data.subscribe == 3 ) {
-                next();
-            } else {
-                window.location.href = "https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI0NjY4ODM5OQ==#wechat_redirect";
-            }
-            //alert(data); // John
-        }, "json").catch((err)=>{
-        // 出错了
-        window.location.href = "https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI0NjY4ODM5OQ==#wechat_redirect";
-        //next();
-    });*!/
-
-    /!*$.get(api,
-        {
-        },
-        {
-            headers:{
-                "Access-Control-Allow-Origin":"*",
-                "Access-Control-Allow-Headers":"Origin, X-Requested-With, Content-Type, Accept",
-                "Access-Control-Allow-Methods":"GET, PUT, DELETE, POST, OPTIONS"
-
-            },
-            emulateJSON: true
-        }
-    ).then((data) => {
-        alert("aa2");
-        if (data.subscribe == 1 || data.subscribe == 3 ) {
-            next();
-        } else {
-            alert("aa3");
-            window.location.href = "https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI0NjY4ODM5OQ==#wechat_redirect";
-        }
-    }).catch(function(response) {
-        console.log(response)
-    });*!/
-});*/
-
-
 
 router.beforeEach((to, from, next) => {
     document.title = to.meta.title || '';
@@ -226,8 +169,7 @@ router.beforeEach((to, from, next) => {
       var ul1=url1+"/"+url2;
       var ul=encodeURIComponent(ul1);
       window.location = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx109df14878717ecb&redirect_uri="+ul+"&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect";
-    }
-    else{
+    }else{
           var name="code";
           var wxcode=null;
           var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
@@ -246,28 +188,41 @@ router.beforeEach((to, from, next) => {
           ).then(function (res) {
               var data = JSON.parse(res);
               if (data.success) {
+                  alert(1111);
                   if(data.subscribe){
+                      alert(222);
                   if (data.subscribe == 1 || data.subscribe == 3 ) {
+                      alert(333);
                         if(to.path=='/register'||to.path=='/forgot_pwd'||to.path.indexOf('/reset_pwd')!=-1){
+                            alert(444);
                             next();
                         }else{
+                            alert(555);
                             const user = JSON.parse(localStorage.getItem('loginnx'));
                             if (!user && to.path != '/login') {
+                                alert(666);
                                 next({ path: '/login' });
                             }else  if (!user && to.path == '/login') {
+                                alert(777);
                                 next();
                             }else  if (user && to.path == '/login') {
+                                alert(888);
                                 next();
                             }
                             if (!user && to.path != '/login') {
+                                alert(9999);
                              next({path: '/login'});
                              }
                             else{
+                                alert(101010);
                                 if(user!=null) {
+                                    alert(121212);
                                     const time = user.time == null ? 0 : user.time, now = (new Date).getMilliseconds(), delta = now - time;
                                     if (delta > 86400 * 3) {
+                                        alert(131313);
                                         next({path: '/login'});
                                     } else {
+                                        alert(141414);
                                         const user22 = JSON.parse(localStorage.getItem('cooknx'));
                                         if(user22 != null){
                                             //存微信的头像
@@ -283,12 +238,17 @@ router.beforeEach((to, from, next) => {
                                                 "cookie": user22.sjs,
                                             },
                                             function (data) {
+                                                alert(151515);
                                                 next();
                                                 if (data.success) {
+                                                    alert(161616);
                                                 } else {
+                                                    alert(17171717);
                                                     if (data.userzt == 2) {
+                                                        alert(181818);
                                                         next({path: '/login'});
                                                     } else {
+                                                        alert(1919191919);
                                                         next({path: '/login'});
                                                     }
                                                 }
@@ -296,6 +256,7 @@ router.beforeEach((to, from, next) => {
                                             }, "json");
                                     }
                                 }else{
+                                    alert(202020202);
                                     next({path: '/login'});
                                     //next();
                                 }
@@ -304,7 +265,7 @@ router.beforeEach((to, from, next) => {
                         next();
                     } else {
                         confirm("您还没有关注我们的公众号，请先关注我们的公众号！");
-                        window.location.href="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI0NjY4ODM5OQ==&scene=123&from=singlemessage#wechat_redirect"; 
+                        window.location.href="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI0NjY4ODM5OQ==&scene=123&from=singlemessage#wechat_redirect";
                         //window.location.href = "https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI0NjY4ODM5OQ==#wechat_redirect";
                     }
                 }else{

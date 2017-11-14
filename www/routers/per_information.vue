@@ -39,6 +39,14 @@
         margin-left: 0.4rem;
     }
 </style>
+<style>
+    .mint-cell-wrapper{
+        font-size: 0.285rem;margin-left: -0.2rem;
+    }
+    .mint-field-core{margin-left: -0.3rem;font-size: 0.26rem;}
+
+
+</style>
 <template>
     <div class="all_elements">
         <div class="build_top">
@@ -57,9 +65,15 @@
                     <span class=""><a style="background-color: rgb(123,198,249);border:1px solid rgb(123,198,249);color: white;padding:0.05rem;" href="javascript:;" @click="chang_phone">更换手机号</a></span>
                 </li>
                 <li class="clearfix">
-                    <span class="ys_tit" style="width: 1.7rem !important;">渠道公司</span>
-                    <div class="ys_item_con fl">
-                        <input type="text" value="" v-model="bindcomp" placeholder="绑定公司">
+                    <div class="ys_item_con fl" style="width: 6rem !important;">
+                        <mt-field label="渠道公司" placeholder="" v-model="company"></mt-field>
+                        <mt-cell
+                                v-show="companyShow"
+                                v-for="item in companyList"
+                                :title="item.gsname"
+                                :key="item.id"
+                                @click.native="fuzhi0(item)">
+                        </mt-cell>
                         <!--<select v-model='qdid' @change="qdxz2" placeholder="请选择渠道">
                             <option value="0"> 请选择渠道</option>
                             <option v-for="option in slots" v-bind:value="option.id">
@@ -75,7 +89,8 @@
                 <li class="clearfix">
                     <span class="ys_tit" style="width: 1.7rem !important;">所属项目</span>
                     <div class="ys_item_con fl">
-                        <input type="text" value="" v-model="project" placeholder="所属项目">
+                        <input v-if="projectjy" type="text" @blur="ssxm" value="" v-model="project" placeholder="所属项目">
+                        <input v-else type="text" value="" readonly v-model="project" placeholder="所属项目">
                     </div>
                 </li>
                 <li class="clearfix" style="margin-top: .2rem;">
@@ -149,8 +164,6 @@
     export default {
         data(){
             return{
-                qdid:"",
-                slots:[],
                 name: "",
                 phone: "",
                 bindcomp: "",
@@ -163,9 +176,53 @@
                 upload: 0,
                 uploaded: 0,
                 statu:0,
+                companyShow:false,
+                companyList:[],
+                company:'',
+                companyId:'',
+                projectjy:false,
+                bindcompid:'',
             }
         },
+        watch:{
+            company(){
+                /*if(this.company!=""&&!this.companyId){
+                 this.$http.post('http://116.62.68.26:8080/yhcms/web/qduser/getQdCompany.do',{
+                 "companyName":this.company
+                 }).then((res)=>{
+                 this.companyList = JSON.parse(res.data).data;
+                 this.companyShow = true;
+                 });
+                 }*/
+                if(this.company!=""&&!this.companyId) {
+                    this.$http.post(this.$api + "/yhcms/web/qduser/getQdCompany.do", {
+                        "companyName": this.company
+                    }).then((res) => {
+                        this.companyList = JSON.parse(res.data).data;
+                        if(this.companyList.length == 0){
+                            this.projectjy = true;
+                            this.project = "";
+                        }else{
+                            this.projectjy = false;
+                        }
+                        this.companyShow = true;
+                    });
+                }else{
+                    this.companyId="";
+                }
+                console.log(this.companyId);
+            },
+        },
         methods:{
+            //模糊搜索
+            fuzhi0(item){
+                this.companyShow = false;
+                this.companyId = item.id;
+                this.company=item.gsname;
+                this.project = item.xmname;
+                console.log(this.companyId);
+                this.bindcompid = this.companyId;
+            },
             qdxz2(){
                 for(var i=0;i<this.slots.length;i++){
                     if(this.qdid == this.slots[i].id){
@@ -174,6 +231,30 @@
                     }
                 }
 
+            },
+            ssxm(){
+                if(this.project != ""){
+                    const url = this.$api + "/yhcms/web/qduser/addCompany.do";
+                    this.$http.post(url, {"gsname":this.company,"xmname":this.project}).then((res)=>{
+                        Indicator.close();
+                        var result = JSON.parse(res.bodyText);
+                        if(result.success){
+
+                        }else{
+                            Toast({
+                                message: '添加渠道公司失败: ' + result.message,
+                                position: 'bottom'
+                            });
+                        }
+                    }, (res)=>{
+                        Indicator.close();
+                    });
+                }else{
+                    Toast({
+                        message: '所属项目不能为空！',
+                        position: 'bottom'
+                    });
+                }
             },
             //正则身份证号的验证
             yzcard(){
@@ -344,7 +425,7 @@
                     });
                     this.$http.post(
                         this.$api + "/yhcms/web/qduser/updateUser.do",
-                        {"parameters":{"gsid":this.qdid,"gsname":this.bindcomp,"xmname":this.project,"cookie":user22.sjs,"name":this.name,"phone":this.phone,"card":this.code,"mptp1":fp,"mptp2":fm},"foreEndType":2,"code":"2"}).then((res)=>{
+                        {"parameters":{"gsid":this.bindcompid,"gsname":this.company,"xmname":this.project,"cookie":user22.sjs,"name":this.name,"phone":this.phone,"card":this.code,"mptp1":fp,"mptp2":fm},"foreEndType":2,"code":"2"}).then((res)=>{
                         Indicator.close();
                         var result = JSON.parse(res.bodyText);
                         if (result.success) {
@@ -382,7 +463,7 @@
 
                         this.$http.post(
                             this.$api + "/yhcms/web/qduser/updateUser.do",
-                            {"parameters":{"gsid":this.qdid,"gsname":this.bindcomp,"xmname":this.project,"cookie":user22.sjs,"name":this.name,"phone":this.phone,"card":this.code,"mptp1":fp,"mptp2":fm},"foreEndType":2,"code":"2"}).then((res)=>{
+                            {"parameters":{"gsid":this.bindcompid,"gsname":this.company,"xmname":this.project,"cookie":user22.sjs,"name":this.name,"phone":this.phone,"card":this.code,"mptp1":fp,"mptp2":fm},"foreEndType":2,"code":"2"}).then((res)=>{
                             Indicator.close();
                             var result = JSON.parse(res.bodyText);
                             if (result.success) {
@@ -436,11 +517,12 @@
             },*/
             getInitData(){
                 this.$http.post(
-                    this.$api + "/yhcms/web/qduser/getQdCompany.do"
-                ).then((res)=> {
+                    this.$api + "/yhcms/web/qduser/getQdCompany.do",{
+                    "companyName": this.company
+                }).then((res)=> {
                     Indicator.close();
                     const qdData=JSON.parse(res.bodyText).data;
-                    this.slots = qdData;
+                    this.companyList = qdData;
                 }, (res)=>{
                     Indicator.close();
                 });
@@ -461,8 +543,9 @@
                         const data2 = JSON.parse(res.bodyText).data.mppic2;
                         this.name = data.name;
                         this.phone = data.phone;
-                        this.qdid = data.gsid;
-                        this.bindcomp = data.gsname;
+                        this.bindcompid = data.gsid;
+                        this.company = data.gsname;
+                        this.companyId = this.bindcompid;
                         this.project = data.xmname;
                         this.code = data.card;
                         this.imgList = data1;
@@ -470,7 +553,6 @@
                         this.il = this.imgList.length;
                         this.fl = this.fmList.length;
                         this.statu = data.status2;
-                        IF
                     }else{
                         Toast({
                             message: result.message,
