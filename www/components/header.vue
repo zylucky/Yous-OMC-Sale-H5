@@ -150,7 +150,7 @@
         }, 150);
       },
       house(){
-          if(window.location.href == "http://omc.urskongjian.com/wanx/#/house"){
+          if(window.location.href.indexOf("house") != -1){
               $('.sidenav').animate({
                   left: '-100%'
               }, 150, function () {
@@ -175,7 +175,7 @@
 
       },
       select(){
-          if(window.location.href == "http://omc.urskongjian.com/wanx/#/select"){
+          if(window.location.href.indexOf("select") != -1){
               $('.sidenav').animate({
                   left: '-100%'
               }, 150, function () {
@@ -199,7 +199,7 @@
           }
       },
       list(){
-        if(window.location.href == "http://omc.urskongjian.com/wanx/#/list" || window.location.href == "http://omc.urskongjian.com/wanx/#/"){
+        if(window.location.href.indexOf("list") != -1 || window.location.href.indexOf("index") != -1 || window.location.href.lastIndexOf("/") != -1){
             $('.sidenav').animate({
                 left: '-100%'
             }, 150, function () {

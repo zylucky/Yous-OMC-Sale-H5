@@ -341,44 +341,44 @@
           var result = JSON.parse(res.bodyText);
           Indicator.close();
           if (result.success) {
-            if (result.data) {
+            if (result.data1) {
 
-              $('title').html(result.data.building_name);
+              $('title').html(result.data1.building_name);
 
-              _this.district = result.data.district == null ? '区域' : result.data.district; //区域
-              const business = !result.data.business ? '' : '-' + result.data.business; //商圈
-              _this.desp = !result.data.desp ? "": result.data.desp;
-              _this.total = result.data.kzfyS || 100;
-              _this.total_items = result.data.kzfyS == null ? '暂无数据' : result.data.kzfyS;
+              _this.district = result.data1.district == null ? '区域' : result.data1.district; //区域
+              const business = !result.data1.business ? '' : '-' + result.data1.business; //商圈
+              _this.desp = !result.data1.desp ? "": result.data1.desp;
+              _this.total = result.data1.kzfyS || 100;
+              _this.total_items = result.data1.kzfyS == null ? '暂无数据' : result.data1.kzfyS;
 
               let district = _this.district  + business;
-              district = !district ? result.data.address : '【' + district + '】' + result.data.address;
+              district = !district ? result.data1.address : '【' + district + '】' + result.data1.address;
               _this.address = district;
-              _this.price = result.data.price == null ? '暂无数据' : result.data.price;
-              _this.positionData = result.data.longitude + ',' + result.data.latitude;
+              _this.price = result.data1.price == null ? '暂无数据' : result.data1.price;
+              _this.positionData = result.data1.longitude + ',' + result.data1.latitude;
               _this.bMap(_this.positionData);
 
-              _this.building_images = result.data.building_images.split(";");
+              _this.building_images = result.data1.building_images.split(";");
 
               //物业信息
-              _this.wygs = result.data.wygs || '暂无数据'; //物业公司
-              if(result.data.wyf == 0){
+              _this.wygs = result.data1.wygs || '暂无数据'; //物业公司
+              if(result.data1.wyf == 0){
                   _this.wyf = '已包含';
               }else{
-                  _this.wyf = !result.data.wyf ? '暂无数据' : result.data.wyf + '元/㎡/月'; //物业费
+                  _this.wyf = !result.data1.wyf ? '暂无数据' : result.data1.wyf + '元/㎡/月'; //物业费
               }
-              _this.kprq = result.data.kprq || '暂无数据'; // 建成年代
-              _this.tcwsl = result.data.tcwsl || '暂无数据';
-              _this.tcf = !result.data.tcf ? '暂无数据' : result.data.tcf + '元/月';
-              _this.wlgs = result.data.wlgs || '暂无数据';
-              if(result.data.gnf == 0){
+              _this.kprq = result.data1.kprq || '暂无数据'; // 建成年代
+              _this.tcwsl = result.data1.tcwsl || '暂无数据';
+              _this.tcf = !result.data1.tcf ? '暂无数据' : result.data1.tcf + '元/月';
+              _this.wlgs = result.data1.wlgs || '暂无数据';
+              if(result.data1.gnf == 0){
                   _this.gnf = '已包含';
               }else{
-                  _this.gnf = !result.data.gnf ? '暂无数据' : result.data.gnf + '元/㎡/季';
+                  _this.gnf = !result.data1.gnf ? '暂无数据' : result.data1.gnf + '元/㎡/季';
               }
-              _this.fybh = !result.data.fybh || '';
-              _this.zc = result.data.zc || '暂无数据';
-              _this.chqxz = result.data.chqxz.split('、').map((p)=>{return this.property[p]});
+              _this.fybh = !result.data1.fybh || '';
+              _this.zc = result.data1.zc || '暂无数据';
+              _this.chqxz = result.data1.chqxz.split('、').map((p)=>{return this.property[p]});
 
               /*
               setTimeout(function(){_this.getPoi("餐厅", "restaurant");},1000);

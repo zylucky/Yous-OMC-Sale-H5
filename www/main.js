@@ -16,10 +16,10 @@ Vue.use(VueResource);
 Vue.use(MintUI);
 
 //Vue.prototype.$api = "http://yhcms.tunnel.qydev.com" //api地址本地
-Vue.prototype.$api = "http://116.62.68.26:8080" //api地址116的地址ip
+//Vue.prototype.$api = "http://116.62.68.26:8080" //api地址116的地址ip
 //Vue.prototype.$api = "http://192.168.137.54:8081" //api地址
 /*Vue.prototype.$api = "http://wx.urskongjian.com:8080" //api地址*/
-//Vue.prototype.$api = "http://omc.urskongjian.com" //api地址线上
+Vue.prototype.$api = "http://omc.urskongjian.com" //api地址线上
 //Vue.prototype.$api = "http://192.168.0.222:8080" //api地址
 //Vue.prototype.$api = "http://yhcms.tunnel.qydev.com" //api地址本地
 Vue.prototype.$prefix = "http://116.62.68.26:81" //图片前缀222
@@ -188,41 +188,25 @@ router.beforeEach((to, from, next) => {
           ).then(function (res) {
               var data = JSON.parse(res);
               if (data.success) {
-                  alert(1111);
                   if(data.subscribe){
-                      alert(222);
                   if (data.subscribe == 1 || data.subscribe == 3 ) {
-                      alert(333);
                         if(to.path=='/register'||to.path=='/forgot_pwd'||to.path.indexOf('/reset_pwd')!=-1){
-                            alert(444);
                             next();
                         }else{
-                            alert(555);
                             const user = JSON.parse(localStorage.getItem('loginnx'));
                             if (!user && to.path != '/login') {
-                                alert(666);
                                 next({ path: '/login' });
                             }else  if (!user && to.path == '/login') {
-                                alert(777);
                                 next();
                             }else  if (user && to.path == '/login') {
-                                alert(888);
                                 next();
                             }
-                            if (!user && to.path != '/login') {
-                                alert(9999);
-                             next({path: '/login'});
-                             }
                             else{
-                                alert(101010);
                                 if(user!=null) {
-                                    alert(121212);
                                     const time = user.time == null ? 0 : user.time, now = (new Date).getMilliseconds(), delta = now - time;
                                     if (delta > 86400 * 3) {
-                                        alert(131313);
                                         next({path: '/login'});
                                     } else {
-                                        alert(141414);
                                         const user22 = JSON.parse(localStorage.getItem('cooknx'));
                                         if(user22 != null){
                                             //存微信的头像
@@ -232,23 +216,18 @@ router.beforeEach((to, from, next) => {
                                         }else{
                                             next({path: '/login'});
                                         }
-                                        $.post("http://116.62.68.26:8080/yhcms/web/qduser/getQdLogin.do", {
+                                        $.post("http://omc.urskongjian.com/yhcms/web/qduser/getQdLogin.do", {
                                                 "foreEndType": 2,
                                                 "code": "300000045",
                                                 "cookie": user22.sjs,
                                             },
                                             function (data) {
-                                                alert(151515);
                                                 next();
                                                 if (data.success) {
-                                                    alert(161616);
                                                 } else {
-                                                    alert(17171717);
                                                     if (data.userzt == 2) {
-                                                        alert(181818);
                                                         next({path: '/login'});
                                                     } else {
-                                                        alert(1919191919);
                                                         next({path: '/login'});
                                                     }
                                                 }
@@ -256,7 +235,6 @@ router.beforeEach((to, from, next) => {
                                             }, "json");
                                     }
                                 }else{
-                                    alert(202020202);
                                     next({path: '/login'});
                                     //next();
                                 }
@@ -304,11 +282,7 @@ router.beforeEach((to, from, next) => {
             next();
         }else  if (user && to.path == '/login') {
             next();
-        }
-        if (!user && to.path != '/login') {
-            next({path: '/login'});
-        }
-        else{
+        }else{
             if(user!=null) {
                 const time = user.time == null ? 0 : user.time, now = (new Date).getMilliseconds(), delta = now - time;
                 if (delta > 86400 * 3) {
