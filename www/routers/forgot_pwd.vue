@@ -14,7 +14,7 @@
     <div class="all_elements">
         <div class="build_top">
             <ul class="ys_item_ul mb60">
-                <li class="clearfix pr">
+                <li class="clearfix pr" style="margin-top: 0.2rem;">
                     <span class="ys_tit w224"><i>*</i> 手机号：</span>
                     <div class="ys_item_con fl"">
                     <input style="width: 53% !important;" type="number"  value="" v-model.trim="phone" placeholder="请输入手机号">

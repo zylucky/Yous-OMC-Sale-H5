@@ -14,7 +14,7 @@
     <div class="all_elements">
         <div class="build_top">
             <ul class="ys_item_ul mb60">
-                <li class="clearfix pr">
+                <li class="clearfix pr" style="margin-top: 0.2rem;">
                     <span class="ys_tit w224"><i>*</i> 新密码：</span>
                     <div class="ys_item_con fl">
                         <input class="npwd" @blur="lose_pwd" onkeyup="this.value=this.value.replace(/^ +| +$/g,'')" type="password" value="" v-model.trim="npwd" placeholder="请设置密码">

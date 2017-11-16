@@ -166,6 +166,7 @@
               $("#zhezhao").remove();
               $('html').removeAttr("style");
               $("body").removeAttr("style");
+              this.$router.push({path:'/house'});
           }else{
               $("#zhezhao").remove();
               $('html').removeAttr("style");
@@ -191,6 +192,7 @@
               $("#zhezhao").remove();
               $('html').removeAttr("style");
               $("body").removeAttr("style");
+              this.$router.push({path:'/select'});
           }else{
               $("#zhezhao").remove();
               $('html').removeAttr("style");
@@ -215,6 +217,7 @@
             $("#zhezhao").remove();
             $('html').removeAttr("style");
             $("body").removeAttr("style");
+            this.$router.push({path:'/'});
         }else{
             $("#zhezhao").remove();
             $('html').removeAttr("style");

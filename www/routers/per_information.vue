@@ -38,13 +38,15 @@
         height: 3rem;
         margin-left: 0.4rem;
     }
+
 </style>
 <style>
     .mint-cell-wrapper{
-        font-size: 0.285rem;margin-left: -0.2rem;
+        font-size: 0.32rem;margin-left: -0.2rem;
+        background-image: linear-gradient(180deg, #d9d9d9, #d9d9d9 0%, transparent 0%);
+        background-size:0% 0px;
     }
-    .mint-field-core{margin-left: -0.3rem;font-size: 0.26rem;}
-
+    .mint-field-core{margin-left: -0.3rem;font-size: 0.32rem;}
 
 </style>
 <template>
@@ -96,7 +98,7 @@
                 <li class="clearfix" style="margin-top: .2rem;">
                     <span class="ys_tit" style="width: 1.7rem !important;">身份证号</span>
                     <div class="ys_item_con fl">
-                        <input type="text" value="" v-model="code" placeholder="身份账号">
+                        <input type="text" value="" v-model="code" placeholder="身份证号">
                     </div>
                     <!--<div class="ys_item_con fl">
                         <input type="text" value="" v-model="code" placeholder="身份账号">

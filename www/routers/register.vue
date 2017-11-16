@@ -15,27 +15,31 @@
     .mint-cell-wrapper{
         font-size: 14px !important;
     }
+    /*.clearfix{line-height: 1 !important;}
+    .ys_tit{padding-top: 0.2rem;}*/
 </style>
 <style>
     .mint-cell-wrapper{
-        font-size: 0.285rem;margin-left: -0.2rem;
+        font-size: 0.32rem;margin-left: -0.2rem;
+        background-image: linear-gradient(180deg, #d9d9d9, #d9d9d9 0%, transparent 0%);
+        background-size:0% 0px;
     }
-    .mint-field-core{margin-left: -0.5rem;font-size: 0.285rem;}
+    .mint-field-core{margin-left: -0.5rem;font-size: 0.32rem;}
 </style>
 <template>
     <div class="all_elements">
         <div class="build_top">
             <ul class="ys_item_ul mb60">
-                <li class="clearfix">
+                <li class="clearfix" style="margin-top: 0.2rem;">
                     <span class="ys_tit" style="width: 1.5rem !important;"><i>*</i>姓名</span>
                     <div class="ys_item_con fl">
-                        <input type="text" value="" v-model.trim="name" onkeyup="this.value=this.value.replace(/^ +| +$/g,'')" placeholder="请输入真实姓名">
+                        <input type="text" value="" v-model.trim="name"  placeholder="请输入真实姓名">
                     </div>
                 </li>
                 <li class="clearfix">
                     <span class="ys_tit" style="width: 1.5rem !important;"><i>*</i>密码</span>
                     <div class="ys_item_con fl">
-                        <input type="password" value="" @blur="lose_pwd" v-model="pwd" onkeyup="this.value=this.value.replace(/^ +| +$/g,'')" placeholder="请设置密码">
+                        <input type="password" value="" @blur="lose_pwd" v-model="pwd" placeholder="请设置密码">
                     </div>
                 </li>
                 <li class="clearfix">
@@ -62,8 +66,9 @@
                     </div>
                 </li>
                 <li class="clearfix">
-                    <div class="ys_item_con fl" style="width: 7.7rem !important;">
-                        <mt-field label="渠道公司" placeholder="" v-model="company"></mt-field>
+                    <div class="ys_item_con fl" style="width: 7rem !important;">
+                        <span class="ys_tit" style="width: 1.5rem !important;">渠道公司</span>
+                        <input label="渠道公司" placeholder="请输入渠道公司" v-model="company">
                         <mt-cell
                                 v-show="companyShow"
                                 v-for="item in companyList"
@@ -81,7 +86,7 @@
                     </div>
                 </li>
             </ul>
-            <a href="javascript:;" class="ys_default_btn mb80" @click="register">注册</a>
+            <a href="javascript:;" class="ys_default_btn mb80" @click="register">注册并登录</a>
         </div>
     </div>
 </template>
