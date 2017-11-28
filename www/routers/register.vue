@@ -86,7 +86,8 @@
                     </div>
                 </li>
             </ul>
-            <a href="javascript:;" class="ys_default_btn mb80" @click="register">注册并登录</a>
+            <a v-if="registerqd == 2" href="javascript:;" style="background-image:url();background-color: silver;" class="ys_default_btn mb80">注册并登录</a>
+            <a v-else href="javascript:;" class="ys_default_btn mb80" @click="register">注册并登录</a>
         </div>
     </div>
 </template>
@@ -126,6 +127,7 @@
                 company:'',
                 companyId:'',
                 projectjy:false,
+                registerqd:1,
             }
         },
         computed:{
@@ -407,6 +409,7 @@
                             var result = JSON.parse(res.bodyText);
                             if(result.success){
                                 if(this.name != null && this.phone != null && this.verificode != null && this.pwd != null && this.apwd != null){
+
                                     const sjsd = {"sjs":(new Date)};
                                     localStorage.setItem('cooknx', JSON.stringify(sjsd));
                                     const _this = this, user22 = JSON.parse(localStorage.getItem('cooknx'));
@@ -417,6 +420,7 @@
                                     const pwd = sha1.digest('hex');
                                     md5.update(pwd);
                                     const password = md5.digest("hex");
+                                    this.registerqd = 2;
                                     this.$http.post(url, {"parameters":{"cookie":user22.sjs,"name":this.name,"phone":this.phone,"pass":password,"gsid":this.bindcompid,"gsname":this.company,"xmname":this.project},"foreEndType":2,"code":"1"}).then((res)=>{
                                         Indicator.close();
                                         var result = JSON.parse(res.bodyText);

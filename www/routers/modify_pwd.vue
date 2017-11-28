@@ -113,6 +113,8 @@
                             md51.update(npwd1);
                             const ypwd = md5.digest("hex");
                             const npwd = md51.digest("hex");
+                            const msg = {"user": name,"time":(new Date).getMilliseconds()};
+                            localStorage.setItem('loginnx', JSON.stringify(msg));
                             this.$http.post(
                                 this.$api + "/yhcms/web/qduser/updatePassUser.do",
                                 {

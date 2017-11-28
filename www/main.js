@@ -17,12 +17,12 @@ Vue.use(MintUI);
 
 //Vue.prototype.$api = "http://yhcms.tunnel.qydev.com" //api地址本地
 Vue.prototype.$api = "http://116.62.68.26:8080" //api地址116的地址ip
+//Vue.prototype.$api = "http://omc.urskongjian.com" //api地址线上
 //Vue.prototype.$api = "http://192.168.137.54:8081" //api地址
 /*Vue.prototype.$api = "http://wx.urskongjian.com:8080" //api地址*/
-//Vue.prototype.$api = "http://omc.urskongjian.com" //api地址线上
 //Vue.prototype.$api = "http://192.168.0.222:8080" //api地址
 //Vue.prototype.$api = "http://yhcms.tunnel.qydev.com" //api地址本地
-Vue.prototype.$prefix = "http://116.62.68.26:81" //图片前缀222
+//Vue.prototype.$prefix = "http://116.62.68.26:81" //图片前缀222
 /*Vue.prototype.$export = "http://wx.urskongjian.com:8080" //*/
 //Vue.prototype.$export = "http://omc.urskongjian.com" //可以随意改
 
@@ -34,7 +34,8 @@ const FollowInfo = () => { return $.post(api, {})};
 
 
 
-Vue.prototype.$prefix = "http://116.62.68.26:81" //图片前缀
+//Vue.prototype.$prefix = "http://116.62.68.26:81" //图片前缀
+Vue.prototype.$prefix = "http://47.92.145.21:81" //图片前缀
 
 // 测试环境
 
@@ -148,7 +149,7 @@ var router = new VueRouter({
     ]
 });
 
-/*router.beforeEach((to, from, next) => {
+router.beforeEach((to, from, next) => {
     document.title = to.meta.title || '';
 
     // 统计代码
@@ -204,7 +205,7 @@ var router = new VueRouter({
                             else{
                                 if(user!=null) {
                                     const time = user.time == null ? 0 : user.time, now = (new Date).getMilliseconds(), delta = now - time;
-                                    if (delta > 86400 * 3) {
+                                    if (delta > 86400 * 30) {
                                         next({path: '/login'});
                                     } else {
                                         const user22 = JSON.parse(localStorage.getItem('cooknx'));
@@ -216,7 +217,7 @@ var router = new VueRouter({
                                         }else{
                                             next({path: '/login'});
                                         }
-                                        $.post("http://omc.urskongjian.com/yhcms/web/qduser/getQdLogin.do", {
+                                        $.post("http://116.62.68.26:8080/yhcms/web/qduser/getQdLogin.do", {
                                                 "foreEndType": 2,
                                                 "code": "300000045",
                                                 "cookie": user22.sjs,
@@ -250,7 +251,7 @@ var router = new VueRouter({
                     next();
                 }
 
-                } 
+                }
 
                 else {
                     Toast({
@@ -267,11 +268,11 @@ var router = new VueRouter({
         }
 
     }
-});*/
+});
 
 
 
-router.beforeEach((to, from, next) => {
+/*router.beforeEach((to, from, next) => {
     if(to.path=='/register'||to.path=='/forgot_pwd'||to.path.indexOf('/reset_pwd')!=-1){
         next();
     }else{
@@ -317,7 +318,7 @@ router.beforeEach((to, from, next) => {
             }
         }
     }
-});
+});*/
 
 
 new Vue({

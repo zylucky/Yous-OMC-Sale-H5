@@ -272,7 +272,7 @@
         axios.defaults.baseURL = this.$api;
         axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
         const r = this.$route.query.r;
-        this.r = !r ? "" : r; 
+        this.r = !r ? "" : r;
       },
       clearHistoty:function(){
            this.historyArray = [];

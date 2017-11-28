@@ -57,10 +57,10 @@
     <section id="header">
       <header1></header1>
     </section>
-    <!--<a href="javascript:;" class="detail-search" style="position: fixed;left: 0; top: 0">
+    <a href="javascript:;" class="detail-search" style="position: fixed;left: 0; top: 0;border-radius: 0.1rem;">
       <input type="text" id="keyword" placeholder="请输入楼盘关键字搜索" v-model.trim="para.search_keywork" maxlength="50"
              @focus="changeRou">
-    </a>-->
+    </a>
     <section class="section"
              :class="{'in-filter':this.currentFilterTab=='district'||this.currentFilterTab=='price'||this.currentFilterTab=='area'||this.currentFilterTab=='features'}">
       <div class="option">
@@ -250,10 +250,11 @@
                     <dd v-else class="supply_house">{{item.topic}}&nbsp;&nbsp;{{item.zdh}} - {{item.fybh}}</dd>
                     <dd class="supply_color ellipsis">{{item.district}}</dd>
                     <dd>
-                      <dl class="cell clearfix">
+                      <dl class="cell clearfix" style="width: 5rem;">
                         <dd>{{item.housing_area === '0.0' ? '': item.housing_area}}㎡</dd>
                         <dd v-if="item.lc">{{item.lc}}层</dd>
                         <dd v-if="item.decoration_level" class="tagClass zc" style="font-size: 0.22rem !important;padding: 0.03rem;">{{item.decoration_level}}</dd>
+                        <dd v-if="item.djbsh" class="tagClass zc" style="font-size: 0.22rem !important;padding: 0.03rem;">{{item.djbsh}}</dd>
                       </dl>
                     </dd>
                   </dl>
@@ -758,6 +759,12 @@
           this_.loading = false;
 
           this_.resultData = this_.resultData.concat(result.data.data);
+          console.log(this_.resultData);
+          for(var i=0;i<this_.resultData.length;i++){
+              if(this_.resultData[i].djbsh == 1){
+                  this_.resultData[i].djbsh = "定";
+              }
+          }
           if (result.data.data.length < this_.para.items_perpage) {
             this_.noMore = true;
           }

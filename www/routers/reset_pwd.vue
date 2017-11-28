@@ -81,7 +81,9 @@
                         const _this = this;
                         //获取当前的cookie--------
                         const sjsd = {"sjs":(new Date)};
+                        const msg = {"user": name,"time":(new Date).getMilliseconds()};
                         localStorage.setItem('cooknx', JSON.stringify(sjsd));
+                        localStorage.setItem('loginnx', JSON.stringify(msg));
                         const user22 = JSON.parse(localStorage.getItem('cooknx'));
                         const sha11 = crypto.createHash('sha1'), md51 = crypto.createHash('md5');
                         sha11.update(this.npwd);
