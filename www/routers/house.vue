@@ -246,13 +246,13 @@
                 </dt>
                 <dd class="supply_msg_box">
                   <dl>
-                    <dd v-if="item.zdh.indexOf('独栋') > -1" class="supply_house">{{item.topic}}&nbsp;&nbsp;{{item.fybh}}</dd>
-                    <dd v-else class="supply_house">{{item.topic}}&nbsp;&nbsp;{{item.zdh}} - {{item.fybh}}</dd>
+                    <dd v-if="item.zdh.indexOf('独栋') > -1" class="supply_house">{{item.topic}}&nbsp;&nbsp;<label v-if="item.decoration_level == '预租房'">即将上线</label><label v-else>{{item.fybh}}</label></dd>
+                    <dd v-else class="supply_house">{{item.topic}}&nbsp;&nbsp;<label v-if="item.decoration_level == '预租房'">即将上线</label><label v-else>{{item.zdh}} - {{item.fybh}}</label></dd>
                     <dd class="supply_color ellipsis">{{item.district}}</dd>
                     <dd>
                       <dl class="cell clearfix" style="width: 5rem;">
                         <dd>{{item.housing_area === '0.0' ? '': item.housing_area}}㎡</dd>
-                        <dd v-if="item.lc">{{item.lc}}层</dd>
+                        <dd v-if="item.decoration_level == '预租房'"></dd><dd v-else-if="item.lc">{{item.lc}}层</dd>
                         <dd v-if="item.decoration_level" class="tagClass zc" style="font-size: 0.22rem !important;padding: 0.03rem;">{{item.decoration_level}}</dd>
                         <dd v-if="item.djbsh" class="tagClass zc" style="font-size: 0.22rem !important;padding: 0.03rem;">{{item.djbsh}}</dd>
                       </dl>

@@ -110,6 +110,7 @@
                     <li class="price-sub" :class="{act:this.positionType=='l'}" @click="positionType='l';curTab=''">
                       <a href="javascript:void(0);" style="color: #302F35;">地铁</a>
                     </li>
+                    <!--第二级的数据-->
                     <div id="position_filter" class="warpper2 box-flex1 bg-white" :class="{choose:this.curTab=='a'||this.curTab=='l'||this.curTab=='y'}">
                       <ul class="price-ul cut-height" :class="{show:this.positionType=='a'}">
                         <li data-type="positionA" @click="where='不限';subBuesiness=[];searchChoose('','','不限', $event)"><a href="javascript:;">不限</a></li>
@@ -130,7 +131,7 @@
                           <a href="javascript:;">{{item.fdname}}</a></li>
                       </ul>
                     </div>
-
+                    <!--第三级的数据-->
                     <div id="third-tab" class="warpper2 box-flex1 bg-white" :class="{show:this.curTab!=''&&this.thirdpart!=''}">
                       <ul class="price-ul cut-height" :class="{show:this.positionType=='a'}">
                         <li v-for="item in subBuesiness" data-type="positionA"

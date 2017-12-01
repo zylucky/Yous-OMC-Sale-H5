@@ -250,8 +250,8 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
                 <span>{{item.topic}}</span>
               </div>
               <div class="cell">
-                <span v-if="item.zdh.indexOf('独栋') > -1">{{item.fybh}}</span>
-                <span v-else>{{item.zdh}} - {{item.fybh}}</span>
+                <span v-if="item.zdh.indexOf('独栋') > -1"><label v-if="item.decoration_level == '预租房'">即将上线</label><label v-else>{{item.fybh}}</label></span>
+                <span v-else><label v-if="item.decoration_level == '预租房'">即将上线</label><label v-else>{{item.zdh}} - {{item.fybh}}</label></span>
               </div>
               <div class="cell">
                 <span>{{item.housing_area==='0.0'?'':item.housing_area}}</span>

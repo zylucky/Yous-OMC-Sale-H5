@@ -138,8 +138,8 @@
                   <!--<span >{{item.fybh}}</span>
                   <span v-else>{{item.zdh}} - {{item.fybh}}</span>-->
                   <span>
-                    <i v-if="item1.zdh.indexOf('独栋')> -1">{{item1.fybh}}</i>
-                    <i v-else>{{item1.zdh}} - {{item1.fybh}}</i>
+                    <i v-if="item1.zdh.indexOf('独栋')> -1"><label v-if="item1.fjzt == '预租房'">即将上线</label><label v-else>{{item1.fybh}}</label></i>
+                    <i v-else><label v-if="item1.fjzt == '预租房'">即将上线</label><label v-else>{{item1.zdh}} - {{item1.fybh}}</label></i>
                   </span>
                   <span style="border:0px solid red;height:.5rem;"></span>
                   <span style="width: 5rem;">
