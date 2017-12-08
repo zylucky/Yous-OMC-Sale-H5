@@ -244,7 +244,7 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
           v-infinite-scroll="loadMore"
           infinite-scroll-disabled="loading"
           infinite-scroll-distance="100"
-          infinite-scroll-immediate-check="checked" class="clearfix" style="height: 55em;">
+          infinite-scroll-immediate-check="checked" class="clearfix" style="height: 55em;" id="zhezcly">
           <li @click.stop.prevent="makeSelect" :rel="item.id" class="ys_listcon pv15 clearfix" :class="{'linked': select.indexOf(item.id) > -1}" v-for="item in resultData">
               <div class="cell" :class="{'new': item.bsh==1}">
                 <span>{{item.topic}}</span>
@@ -321,6 +321,7 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
         loading: false,
         noMore: false,
         checked: false,
+        status:'',
         select: [],
         para: {
           "search_keywork": "",
@@ -342,10 +343,25 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
       }
     },
     mounted(){
+      if(localStorage.getItem("fhdata2")){
+          this.resultData = localStorage.getItem("fhdata2");
+          var topsl = localStorage.getItem("topsj2");
+          //$("body,html").scrollTop(topsl);
+          $('body,html').animate({scrollTop:topsl},2);//设置距离上面顶部的距离
+          //$("document").scrollTop(topsl);
+          this.resultData = JSON.parse(this.resultData);
+          localStorage.removeItem("fhdata2");
+          localStorage.removeItem("topsj2");
+          this.getFilters();
+          this.para.curr_page = localStorage.getItem("page2");
+          this.para.curr_page = parseInt(this.para.curr_page);
+          localStorage.removeItem("page2");
+      }else{
+          this.init();
+      }
       $("body").removeAttr("style");
       $("html").removeAttr("style");
-      this.init();
-
+      $('title').html("今日销控");
       //下滑时，条件tab固定
       $(window).scroll(function () {
         if ($(window).scrollTop() > 0) {
@@ -388,6 +404,13 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
       }
     },
     methods: {
+      jiyishuj(){
+          localStorage.setItem('fhdata2', JSON.stringify(this.resultData));
+          this.para.curr_page = parseInt(this.para.curr_page);
+          localStorage.setItem('topsj2', JSON.stringify($(window).scrollTop()));
+          localStorage.setItem('page2', JSON.stringify(this.para.curr_page));
+      },
+
       init(){
         axios.defaults.baseURL = this.$api; 
         axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
@@ -395,7 +418,7 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
           this.para.search_keywork = this.$route['query']['keyword'];
         }
 
-        $('title').html("今日销控");
+
         //
         let select = JSON.parse(sessionStorage.getItem("select") || "[]");
         select = select || [];
@@ -463,6 +486,7 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
           }
       },
       makeSelect(e){
+          this.jiyishuj();
           const target = $(e.target).closest("li"), rel = target.attr("rel"), that = this;
           let select = JSON.parse(sessionStorage.getItem("select") || "[]");
           select = select || [];
@@ -783,12 +807,13 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
       resetGetData: function () {
         this.noMore = false;
         this.loading = false;
-
+          $("#zhezhaoc").remove();
         this.para.curr_page = 1;
         this.resultData = [];
         this.getData();
       },
       getData(){
+
         const paraObj = {
           "parameters": {
             "search_keywork": this.para.search_keywork,
@@ -814,6 +839,7 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
         let successCb = function (result) {
           Indicator.close();
           this_.loading = false;
+            $("#zhezhaoc").remove();
           const data = result.data.data;
           this_.resultData = this_.resultData.concat(data);
           if (data.length < this_.para.items_perpage) {
@@ -865,6 +891,21 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
       loadMore(){
         if (!this.loading && !this.noMore) {
           this.loading = true;
+            var wwd = $(window).width();
+            var wgd = $('#zhezcly').height() + 120;
+            $("body").prepend('<div id="zhezhaoc"></div>');
+            $("#zhezhaoc").css({
+                width: "" + wwd + "px",
+                height: "" + wgd + "px",
+                "background-color": "#000",
+                "z-index": "1200",
+                opacity: "0.5",
+                position: "absolute",
+                top: "0px",
+                left: "0px",
+                "overflow":"hidden",
+            });
+          this.para.curr_page = parseInt(this.para.curr_page);
           this.para.curr_page += 1;
           this.getData();
         }

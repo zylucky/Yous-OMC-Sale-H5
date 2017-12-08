@@ -50,6 +50,7 @@
 .cell > dd{float: left;margin-right: .3rem;margin-bottom: .06rem;}
   .tagClass{font-size: 0.5em !important;}
   .zc{background-color:#ef104e !important;color:#FFF !important;font-size: 0.5em !important;}
+  .dj{ background: url("../resources/images/house/dj.png") no-repeat;background-size: 100% 100%;background-color: white !important;}
 </style>
 <template>
   <div>
@@ -233,9 +234,9 @@
           v-infinite-scroll="loadMore"
           infinite-scroll-disabled="loading"
           infinite-scroll-distance="100"
-          infinite-scroll-immediate-check="checked">
+          infinite-scroll-immediate-check="checked" id="zhezcly">
           <li class="ys_listcon pv15" v-for="item in resultData">
-            <router-link :to="{path:'order',query:{house_id:item.id}}" class="supply_box">
+            <router-link :to="{path:'order',query:{house_id:item.id}}" @click.native="jiyishuj" class="supply_box">
               <div class="supply_price">
                 <span>{{item.daily_price === '0.0' ? '' : item.daily_price}}</span> 元/㎡·天
               </div>
@@ -254,7 +255,7 @@
                         <dd>{{item.housing_area === '0.0' ? '': item.housing_area}}㎡</dd>
                         <dd v-if="item.decoration_level == '预租房'"></dd><dd v-else-if="item.lc">{{item.lc}}层</dd>
                         <dd v-if="item.decoration_level" class="tagClass zc" style="font-size: 0.22rem !important;padding: 0.03rem;">{{item.decoration_level}}</dd>
-                        <dd v-if="item.djbsh" class="tagClass zc" style="font-size: 0.22rem !important;padding: 0.03rem;">{{item.djbsh}}</dd>
+                        <dd v-if="item.djbsh" class="tagClass zc dj" style="font-size: 0.22rem !important;padding: 0.03rem;">{{item.djbsh}}</dd>
                       </dl>
                     </dd>
                   </dl>
@@ -320,6 +321,7 @@
         loading: false,
         noMore: false,
         checked: false,
+        status:'',
         para: {
           "search_keywork": "",
           "district": "",
@@ -336,14 +338,50 @@
           "curr_page": 1,
           "items_perpage": 10,
         },
-        resultData: []
+        resultData: [],
+        resultData1: []
       }
     },
     mounted(){
+      if(localStorage.getItem("fhdata1")){
+          this.resultData = localStorage.getItem("fhdata1");
+          this.para.district = localStorage.getItem("xzqv");
+          this.para.business = localStorage.getItem("sq");
+          this.para.district1 = localStorage.getItem("ywqv");
+          this.para.business1 = localStorage.getItem("fq");
+          this.para.line_id = localStorage.getItem("xl");
+          this.para.station_id = localStorage.getItem("zd");
+          this.para.area = localStorage.getItem("mj");
+          this.para.price_dj = localStorage.getItem("jg");
+          this.para.chqxz = localStorage.getItem("chqxz");
+          this.priceFilter  = localStorage.getItem("px");
+          var topsl = localStorage.getItem("topsj1");
+          //$("body,html").scrollTop(topsl);
+          $('body,html').animate({scrollTop:topsl},2);//设置距离上面顶部的距离
+          //$("document").scrollTop(topsl);
+          this.resultData = JSON.parse(this.resultData);
+          localStorage.removeItem("fhdata1");
+          localStorage.removeItem("topsj1");
+          this.getFilters();
+          this.para.curr_page = localStorage.getItem("page1");
+          this.para.curr_page = parseInt(this.para.curr_page);
+          localStorage.removeItem("page1");
+          localStorage.removeItem("xzqv");
+          localStorage.removeItem("sq");
+          localStorage.removeItem("ywqv");
+          localStorage.removeItem("fq");
+          localStorage.removeItem("xl");
+          localStorage.removeItem("zd");
+          localStorage.removeItem("mj");
+          localStorage.removeItem("jg");
+          localStorage.removeItem("chqxz");
+          localStorage.removeItem("px");
+      }else{
+          this.init();
+      }
       $("body").removeAttr("style");
       $("html").removeAttr("style");
-      this.init();
-
+      $('title').html('房源列表');
       //下滑时，条件tab固定
       $(window).scroll(function () {
         if ($(window).scrollTop() > 0) {
@@ -378,13 +416,40 @@
       }
     },
     methods: {
+      jiyishuj(){
+          for(var i=0;i<this.resultData.length;i++){
+              if(this.resultData[i].bsh != ''){
+                  this.resultData1[i] = this.resultData[i]
+              }
+          }
+          localStorage.setItem('fhdata1', JSON.stringify(this.resultData1));
+          localStorage.setItem('topsj1', JSON.stringify($(window).scrollTop()));
+          localStorage.setItem('page1', JSON.stringify(this.para.curr_page));
+          localStorage.setItem('xzqv', JSON.stringify(this.para.district));
+          localStorage.setItem('sq', JSON.stringify(this.para.business));
+          localStorage.setItem('ywqv', JSON.stringify(this.para.district1));
+          localStorage.setItem('fq', JSON.stringify(this.para.business1));
+          localStorage.setItem('xl', JSON.stringify(this.para.line_id));
+          localStorage.setItem('zd', JSON.stringify(this.para.station_id));
+          localStorage.setItem('mj', JSON.stringify(this.para.area));
+          localStorage.setItem('jg', JSON.stringify(this.para.price_dj));
+          localStorage.setItem('chqxz', JSON.stringify(this.para.chqxz));
+          if(this.priceFilter != ''){
+              localStorage.setItem('px', JSON.stringify(this.priceFilter));
+          }else if(this.areaFilter != ''){
+              localStorage.setItem('px', JSON.stringify(this.areaFilter));
+          }else{
+              localStorage.setItem('px', JSON.stringify("D"));
+          }
+
+      },
+
       init(){
         axios.defaults.baseURL = this.$api; 
         axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
         if(this.$route['query']['keyword']){
           this.para.search_keywork = this.$route['query']['keyword'];
         }
-        $('title').html('房源列表');
         this.resetGetData();
         this.getFilters();
       },
@@ -718,7 +783,7 @@
       resetGetData: function () {
         this.noMore = false;
         this.loading = false;
-
+        $("#zhezhaoc").remove();
         this.para.curr_page = 1;
         this.resultData = [];
 
@@ -734,39 +799,40 @@
         const paraObj = {
           "parameters": {
             "search_keywork": this.para.search_keywork,
-            "district": this.para.district,
-            "business": this.para.business,
-            "district1": this.para.district1,
-            "business1": this.para.business1,
-            "line_id": this.para.line_id,
-            "station_id": this.para.station_id,
-            "area": this.para.area,
-            "price_dj": this.para.price_dj,
+            "district": this.para.district,//行政区域
+            "business": this.para.business,//商圈
+            "district1": this.para.district1,//业务区域
+            "business1": this.para.business1,//分区
+            "line_id": this.para.line_id,//线路
+            "station_id": this.para.station_id,//站点
+            "area": this.para.area,//面积
+            "price_dj": this.para.price_dj,//价格
             "label": this.para.label,
-            "chqxz": this.para.chqxz,
-            "orderby": this.priceFilter || this.areaFilter || "D",
-            "curr_page": this.para.curr_page,
-            "items_perpage": 10
+            "chqxz": this.para.chqxz,//产权性质
+            "orderby": this.priceFilter || this.areaFilter || "D",//按什么排序
+            "curr_page": this.para.curr_page,//当前的页数
+            "items_perpage": 10//每次传递的几天数据
           },
           "foreEndType": 2,
           "code": "30000001"
         }, this_ = this;
-
-
         this.currentFilterTab = 'nth';
         let successCb = function (result) {
           Indicator.close();
           this_.loading = false;
+          $("#zhezhaoc").remove();
+          if(result.data.data.length == 0){
 
-          this_.resultData = this_.resultData.concat(result.data.data);
-          console.log(this_.resultData);
+          }else{
+              this_.resultData = this_.resultData.concat(result.data.data);
+          }
           for(var i=0;i<this_.resultData.length;i++){
               if(this_.resultData[i].djbsh == 1){
-                  this_.resultData[i].djbsh = "定";
+                  this_.resultData[i].djbsh = "定金";
               }
           }
           if (result.data.data.length < this_.para.items_perpage) {
-            this_.noMore = true;
+            this_.noMore = false;
           }
           if (this_.resultData.length <= 0) {
             Toast({
@@ -814,7 +880,22 @@
       loadMore(){
         if (!this.loading && !this.noMore) {
           this.loading = true;
-          this.para.curr_page += 1;
+          var wwd = $(window).width();
+          var wgd = $('#zhezcly').height() + 120;
+          $("body").prepend('<div id="zhezhaoc"></div>');
+          $("#zhezhaoc").css({
+              width: "" + wwd + "px",
+              height: "" + wgd + "px",
+              "background-color": "#FFFFFF",
+              "z-index": "1200",
+              opacity: "0",
+              position: "absolute",
+              top: "0px",
+              left: "0px",
+              "overflow":"hidden",
+          });
+          this.para.curr_page = parseInt(this.para.curr_page);
+          this.para.curr_page += parseInt(1);
           this.getData();
         }
       }

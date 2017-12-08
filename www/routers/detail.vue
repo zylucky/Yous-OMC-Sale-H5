@@ -532,7 +532,7 @@
     },
     mounted(){
       var _this = this;
-
+      $(window).scrollTop(0);
       this.building_id = this.$route.query.building_id;
 
       Indicator.open({

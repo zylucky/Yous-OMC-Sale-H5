@@ -47,6 +47,8 @@
 .zc{background-color:#ef104e !important;color:#FFF !important;font-size: 0.5em !important;}
 .highlight a{color:#476CBA !important}
 .tagClass{font-size: 0.5em !important;}
+.zhezhaoc{
+  border:1px solid red;background-color: #ooo !important; opacity:0.5 !important;}
 </style>
 <template>
   <div>
@@ -231,9 +233,9 @@
           v-infinite-scroll="loadMore"
           infinite-scroll-disabled="loading"
           infinite-scroll-distance="100"
-          infinite-scroll-immediate-check="checked">
+          infinite-scroll-immediate-check="checked" id="zhezcly">
           <li class="ys_listcon pv15" v-for="item in resultData">
-            <router-link :to="{path:'/detail',query:{building_id:item.id}}" class="supply_box">
+            <router-link :to="{path:'/detail',query:{building_id:item.id}}" @click.native="jiyishuj" class="supply_box">
               <div class="supply_price">
                 <span>{{item.price}}</span> 元/㎡·天
                 <i v-if="item.lpkzfy > 1" style="display: block">{{item.min_areas}} - {{item.max_areas}}㎡</i>
@@ -317,6 +319,7 @@
         loading: false,
         noMore: false,
         checked: false,
+        status:'',
         para: {
           "search_keywork": "",
           "district": "",
@@ -337,6 +340,20 @@
       }
     },
     mounted(){
+        if(localStorage.getItem("fhdata")){
+            this.resultData = localStorage.getItem("fhdata");
+            var topsl = localStorage.getItem("topsj");
+            $('body,html').animate({scrollTop:topsl},2);//设置距离上面顶部的距离
+            this.resultData = JSON.parse(this.resultData);
+            localStorage.removeItem("fhdata");
+            localStorage.removeItem("topsj");
+            this.getFilters();
+            this.para.curr_page = localStorage.getItem("page");
+            this.para.curr_page = parseInt(this.para.curr_page);
+            localStorage.removeItem("page");
+        }else{
+            this.init();
+        }
         //var wxcode = this.GetQueryString("code");
         /*if(wxcode == null){
             window.location = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx109df14878717ecb&redirect_uri=http%3A%2F%2Fomc.urskongjian.com%2Fwanx%2F%23%2Flist&response_type=code&scope=snsapi_base&state=123#wechat_redirect";
@@ -401,7 +418,7 @@
       $("body").removeAttr("style");
       $("html").removeAttr("style");
       /*console.log("mounted=================",this.para.curr_page);*/
-      this.init();
+      $('title').html('楼盘列表');
 
       //下滑时，条件tab固定
       $(window).scroll(function () {
@@ -411,7 +428,6 @@
             top: '.88rem',
             left: 0
           });
-
           $('#pos_block').show();
 
         } else {
@@ -420,7 +436,7 @@
             top: 0,
             left: 0
           });
-          $('#pos_block').hide();
+            $('#pos_block').hide();
         }
       });
     },
@@ -437,6 +453,12 @@
       }
     },
     methods: {
+      jiyishuj(){
+          localStorage.setItem('fhdata', JSON.stringify(this.resultData));
+          localStorage.setItem('topsj', JSON.stringify($(window).scrollTop()));
+          localStorage.setItem('page', JSON.stringify(this.para.curr_page));
+      },
+
       init(){
         axios.defaults.baseURL = this.$api; 
         axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
@@ -446,8 +468,6 @@
 
         this.resetGetData();
         this.getFilters();
-
-        $('title').html('楼盘列表');
       },
       selectTag(e){
         const target = $(e.target), val = target.attr("value"), t = target.attr("target"), which = t ==="price" ? "priceTag" : "areaTag";
@@ -829,7 +849,8 @@
         let successCb = function (result) {
           Indicator.close();
           this_.loading = false;
-          this_.resultData = this_.resultData.concat(result.data.data.buildings);
+            $("#zhezhaoc").remove();
+            this_.resultData = this_.resultData.concat(result.data.data.buildings);
           if (result.data.data < this_.para.items_perpage) {
             this_.noMore = true;
           }
@@ -850,6 +871,7 @@
         let errorCb = function (result) {
           Indicator.close();
           this_.loading = false;
+          $("#zhezhaoc").remove();
           Toast({
             message: '抱歉,暂无符合条件的房源!',
             position: 'middle',
@@ -881,6 +903,21 @@
           /*console.log("loadMore1=================",this.para.curr_page);*/
         if (!this.loading && !this.noMore) {
           this.loading = true;
+          var wwd = $(window).width();
+          var wgd = $('#zhezcly').height() + 120;
+          $("body").prepend('<div id="zhezhaoc"></div>');
+          $("#zhezhaoc").css({
+              width: "" + wwd + "px",
+              height: "" + wgd + "px",
+              "background-color": "#000",
+              "z-index": "1200",
+              opacity: "0.5",
+              position: "absolute",
+              top: "0px",
+              left: "0px",
+              "overflow":"hidden",
+          });
+          this.para.curr_page = parseInt(this.para.curr_page);
           this.para.curr_page += 1;
             /*console.log("loadMore2=================",this.para.curr_page);*/
           this.getData();
