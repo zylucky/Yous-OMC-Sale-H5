@@ -346,6 +346,16 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
       if(localStorage.getItem("fhdata2")){
           this.resultData = localStorage.getItem("fhdata2");
           var topsl = localStorage.getItem("topsj2");
+          this.para.district = localStorage.getItem("xzqv").replace("\"","").replace("\"","");
+          this.para.business = localStorage.getItem("sq").replace("\"","").replace("\"","");
+          this.para.district1 = localStorage.getItem("ywqv").replace("\"","").replace("\"","");
+          this.para.business1 = localStorage.getItem("fq").replace("\"","").replace("\"","");
+          this.para.line_id = localStorage.getItem("xl").replace("\"","").replace("\"","");
+          this.para.station_id = localStorage.getItem("zd").replace("\"","").replace("\"","");
+          this.para.area = localStorage.getItem("mj").replace("\"","").replace("\"","");
+          this.para.price_dj = localStorage.getItem("jg").replace("\"","").replace("\"","");
+          this.para.chqxz = localStorage.getItem("chqxz").replace("\"","").replace("\"","");
+          this.priceFilter  = localStorage.getItem("px").replace("\"","").replace("\"","");
           //$("body,html").scrollTop(topsl);
           $('body,html').animate({scrollTop:topsl},2);//设置距离上面顶部的距离
           //$("document").scrollTop(topsl);
@@ -356,6 +366,16 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
           this.para.curr_page = localStorage.getItem("page2");
           this.para.curr_page = parseInt(this.para.curr_page);
           localStorage.removeItem("page2");
+          localStorage.removeItem("xzqv");
+          localStorage.removeItem("sq");
+          localStorage.removeItem("ywqv");
+          localStorage.removeItem("fq");
+          localStorage.removeItem("xl");
+          localStorage.removeItem("zd");
+          localStorage.removeItem("mj");
+          localStorage.removeItem("jg");
+          localStorage.removeItem("chqxz");
+          localStorage.removeItem("px");
       }else{
           this.init();
       }
@@ -409,6 +429,22 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
           this.para.curr_page = parseInt(this.para.curr_page);
           localStorage.setItem('topsj2', JSON.stringify($(window).scrollTop()));
           localStorage.setItem('page2', JSON.stringify(this.para.curr_page));
+          localStorage.setItem('xzqv', JSON.stringify(this.para.district));
+          localStorage.setItem('sq', JSON.stringify(this.para.business));
+          localStorage.setItem('ywqv', JSON.stringify(this.para.district1));
+          localStorage.setItem('fq', JSON.stringify(this.para.business1));
+          localStorage.setItem('xl', JSON.stringify(this.para.line_id));
+          localStorage.setItem('zd', JSON.stringify(this.para.station_id));
+          localStorage.setItem('mj', JSON.stringify(this.para.area));
+          localStorage.setItem('jg', JSON.stringify(this.para.price_dj));
+          localStorage.setItem('chqxz', JSON.stringify(this.para.chqxz));
+          if(this.priceFilter != ''){
+              localStorage.setItem('px', JSON.stringify(this.priceFilter));
+          }else if(this.areaFilter != ''){
+              localStorage.setItem('px', JSON.stringify(this.areaFilter));
+          }else{
+              localStorage.setItem('px', JSON.stringify("D"));
+          }
       },
 
       init(){
@@ -897,9 +933,9 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
             $("#zhezhaoc").css({
                 width: "" + wwd + "px",
                 height: "" + wgd + "px",
-                "background-color": "#000",
+                "background-color": "#FFFFFF",
                 "z-index": "1200",
-                opacity: "0.5",
+                opacity: "0",
                 position: "absolute",
                 top: "0px",
                 left: "0px",

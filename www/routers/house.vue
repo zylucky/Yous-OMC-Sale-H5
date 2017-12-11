@@ -307,7 +307,8 @@
         areaArray:["-1", "<100", "100-299", "300-499", "500-599", "1000-1499", ">1500"],
         priceArray:["-1", "<3", "3-4.9", "5-7.9", "8-9.9", "10-14.9", ">=15"],
         featureArray: [],
-        chqxz: ["写字楼","公寓","商务楼","住宅","商业","酒店","综合","别墅","商业综合体","酒店式公寓"],
+        //chqxz: ["写字楼","公寓","商务楼","住宅","商业","酒店","综合","别墅","商业综合体","酒店式公寓"],
+        chqxz: ["写字楼","公寓","商务楼","商业"],
         priceTag: "",
         areaTag: "",
         xzTag: [],
@@ -345,16 +346,40 @@
     mounted(){
       if(localStorage.getItem("fhdata1")){
           this.resultData = localStorage.getItem("fhdata1");
-          this.para.district = localStorage.getItem("xzqv");
-          this.para.business = localStorage.getItem("sq");
-          this.para.district1 = localStorage.getItem("ywqv");
-          this.para.business1 = localStorage.getItem("fq");
-          this.para.line_id = localStorage.getItem("xl");
-          this.para.station_id = localStorage.getItem("zd");
-          this.para.area = localStorage.getItem("mj");
-          this.para.price_dj = localStorage.getItem("jg");
-          this.para.chqxz = localStorage.getItem("chqxz");
-          this.priceFilter  = localStorage.getItem("px");
+          this.para.district = localStorage.getItem("xzqv").replace("\"","").replace("\"","");
+          this.para.business = localStorage.getItem("sq").replace("\"","").replace("\"","");
+          this.para.district1 = localStorage.getItem("ywqv").replace("\"","").replace("\"","");
+          this.para.business1 = localStorage.getItem("fq").replace("\"","").replace("\"","");
+          this.para.line_id = localStorage.getItem("xl").replace("\"","").replace("\"","");
+          this.para.station_id = localStorage.getItem("zd").replace("\"","").replace("\"","");
+          /*if(this.para.district == '' && this.para.business == '' && this.para.district1 == '' && this.para.business1 == '' && this.para.line_id == '' && this.para.station_id == ''){
+              alert(5555);
+
+          }else{
+              alert(6666);
+              this.searchArea();
+              this.searchChoose();
+          }*/
+          this.para.area = localStorage.getItem("mj").replace("\"","").replace("\"","");
+          this.para.price_dj = localStorage.getItem("jg").replace("\"","").replace("\"","");
+          this.para.chqxz = localStorage.getItem("chqxz").replace("\"","").replace("\"","");
+          this.priceFilter  = localStorage.getItem("px").replace("\"","").replace("\"","");
+          var li = JSON.parse(localStorage.getItem("li"));
+          var txt = localStorage.getItem("txt");
+          /*alert(1111);
+           alert(li);
+           console.log(li);*/
+          alert(7777);
+          console.log(this.districtArray+"aaaa");
+          if(li != ""){
+              for(var i=0;i<this.districtArray.length;i++){
+                  if(code == this.districtArray[i].id){
+                      $(li).addClass("hilight").siblings().removeClass("hilight");
+                      this.where = txt;
+                  }
+              }
+              //this.searchAreafh(this.para.business,li);
+          }
           var topsl = localStorage.getItem("topsj1");
           //$("body,html").scrollTop(topsl);
           $('body,html').animate({scrollTop:topsl},2);//设置距离上面顶部的距离
@@ -376,6 +401,8 @@
           localStorage.removeItem("jg");
           localStorage.removeItem("chqxz");
           localStorage.removeItem("px");
+          localStorage.removeItem("li");
+          localStorage.removeItem("txt");
       }else{
           this.init();
       }
@@ -441,7 +468,6 @@
           }else{
               localStorage.setItem('px', JSON.stringify("D"));
           }
-
       },
 
       init(){
@@ -554,11 +580,10 @@
            text: '',
            spinnerType: 'fading-circle'
         });
-
         const li = $(e.target).closest("li"), txt = $(li).find("a").text();
         li.addClass("hilight").siblings().removeClass("hilight");
         this.where = txt;
-
+        alert(111);
         var paraObj = {"parameters":{"district":code},"foreEndType":2,"code":"300000010"}, this_ = this;
         axios.post('/yhcms/web/lpjbxx/getLpXzqyFq.do', paraObj)
           .then(function (response) {
@@ -575,11 +600,14 @@
            text: '',
            spinnerType: 'fading-circle'
         });
-
         const li = $(e.target).closest("li"), txt = $(li).find("a").text();
+        alert(li);
+        console.log(li);
         li.addClass("hilight").siblings().removeClass("hilight");
         this.where = txt;
-
+          alert(2222);
+        localStorage.setItem('li', JSON.stringify(li));
+        localStorage.setItem('txt', JSON.stringify(txt));
         var paraObj = {"parameters":{"district":code},"foreEndType":2,"code":"300000012"}, this_ = this;
         axios.post('/yhcms/web/lpjbxx/getLpYwqyFq.do', paraObj)
           .then(function (response) {
@@ -589,6 +617,28 @@
             Indicator.close();
         });
       },
+      searchAreafh:function(code){
+
+          /*this.curTab = "y";
+          this.thirdpart = "sq";
+          Indicator.open({
+              text: '',
+              spinnerType: 'fading-circle'
+          });
+
+          const li = $(e.target).closest("li"), txt = $(li).find("a").text();
+          li.addClass("hilight").siblings().removeClass("hilight");
+          this.where = txt;
+          alert(2222);
+          var paraObj = {"parameters":{"district":code},"foreEndType":2,"code":"300000012"}, this_ = this;
+          axios.post('/yhcms/web/lpjbxx/getLpYwqyFq.do', paraObj)
+              .then(function (response) {
+                  Indicator.close();
+                  this_.otherBusiness = [{"id":code,"fdname":"不限"}].concat(response.data.data.ywfq);
+              }).catch(function (error) {
+              Indicator.close();
+          });*/
+      },
       searchStation:function(line,e){
         this.curTab = "l";
         this.thirdpart = "dt";
@@ -596,11 +646,10 @@
            text: '',
            spinnerType: 'fading-circle'
         });
-
         const li = $(e.target).closest("li"), txt = $(li).find("a").text();
         li.addClass("hilight").siblings().removeClass("hilight");
         this.where = txt;
-
+          alert(3333);
         var paraObj = {"parameters":{"line_id":line},"foreEndType":2,"code":"30000008"}, this_ = this;
         axios.post('/yhcms/web/lpjbxx/getLpSubwaystation.do', paraObj)
           .then(function (response) {
@@ -630,7 +679,6 @@
       setAreaFilter(e){
           const li = $(e.target).closest("li");
           $(li).addClass("hilight").toggleClass("active-filter");
-
           if(this.areaFilter === '' || this.areaFilter === 'A2'){
               this.areaFilter = 'A1';
           }
@@ -658,7 +706,7 @@
       searchChoose: function (code, val, value, e) {
         const li = $(e.target).closest('li');
         li.addClass("hilight").siblings().removeClass("hilight");
-
+          alert(44444);
         switch (li.attr('data-type')) {
           case 'positionA':
             //行政区域
@@ -749,6 +797,7 @@
             Indicator.close()
             const data = JSON.parse(res.bodyText).data;
             that.districtArray = data.ywqy;
+            console.log(that.districtArray);
           }, (res)=>{
             Indicator.close()
           });

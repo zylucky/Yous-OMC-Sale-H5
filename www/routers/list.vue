@@ -345,12 +345,30 @@
             var topsl = localStorage.getItem("topsj");
             $('body,html').animate({scrollTop:topsl},2);//设置距离上面顶部的距离
             this.resultData = JSON.parse(this.resultData);
+            this.para.district = localStorage.getItem("xzqv").replace("\"","").replace("\"","");
+            this.para.business = localStorage.getItem("sq").replace("\"","").replace("\"","");
+            this.para.district1 = localStorage.getItem("ywqv").replace("\"","").replace("\"","");
+            this.para.business1 = localStorage.getItem("fq").replace("\"","").replace("\"","");
+            this.para.line_id = localStorage.getItem("xl").replace("\"","").replace("\"","");
+            this.para.station_id = localStorage.getItem("zd").replace("\"","").replace("\"","");
+            this.para.area = localStorage.getItem("mj").replace("\"","").replace("\"","");
+            this.para.price_dj = localStorage.getItem("jg").replace("\"","").replace("\"","");
+            this.priceFilter  = localStorage.getItem("px").replace("\"","").replace("\"","");
             localStorage.removeItem("fhdata");
             localStorage.removeItem("topsj");
             this.getFilters();
             this.para.curr_page = localStorage.getItem("page");
             this.para.curr_page = parseInt(this.para.curr_page);
             localStorage.removeItem("page");
+            localStorage.removeItem("xzqv");
+            localStorage.removeItem("sq");
+            localStorage.removeItem("ywqv");
+            localStorage.removeItem("fq");
+            localStorage.removeItem("xl");
+            localStorage.removeItem("zd");
+            localStorage.removeItem("mj");
+            localStorage.removeItem("jg");
+            localStorage.removeItem("px");
         }else{
             this.init();
         }
@@ -457,6 +475,21 @@
           localStorage.setItem('fhdata', JSON.stringify(this.resultData));
           localStorage.setItem('topsj', JSON.stringify($(window).scrollTop()));
           localStorage.setItem('page', JSON.stringify(this.para.curr_page));
+          localStorage.setItem('xzqv', JSON.stringify(this.para.district));
+          localStorage.setItem('sq', JSON.stringify(this.para.business));
+          localStorage.setItem('ywqv', JSON.stringify(this.para.district1));
+          localStorage.setItem('fq', JSON.stringify(this.para.business1));
+          localStorage.setItem('xl', JSON.stringify(this.para.line_id));
+          localStorage.setItem('zd', JSON.stringify(this.para.station_id));
+          localStorage.setItem('mj', JSON.stringify(this.para.area));
+          localStorage.setItem('jg', JSON.stringify(this.para.price_dj));
+          if(this.priceFilter != ''){
+              localStorage.setItem('px', JSON.stringify(this.priceFilter));
+          }else if(this.areaFilter != ''){
+              localStorage.setItem('px', JSON.stringify(this.areaFilter));
+          }else{
+              localStorage.setItem('px', JSON.stringify("D"));
+          }
       },
 
       init(){
@@ -860,7 +893,7 @@
               position: 'middle',
               duration: 3000
             });
-          } else if (this_.resultData.length > 0 && result.data.data.length == 0) {
+          } else if (this_.resultData.length > 0 && result.data.data.buildings.length == 0) {
             Toast({
               message: '已经获得当前条件的所有楼盘!',
               position: 'middle',
@@ -909,9 +942,9 @@
           $("#zhezhaoc").css({
               width: "" + wwd + "px",
               height: "" + wgd + "px",
-              "background-color": "#000",
+              "background-color": "#FFFFFF",
               "z-index": "1200",
-              opacity: "0.5",
+              opacity: "0",
               position: "absolute",
               top: "0px",
               left: "0px",
