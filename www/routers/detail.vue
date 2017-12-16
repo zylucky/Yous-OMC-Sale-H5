@@ -105,7 +105,8 @@
         <div id="houseScroll">
           <div class="size_wrap">
             <div class="size_box clearfix">
-              <div v-for="(item,index) in area_arr" v-if="index == 0"
+              <!--数组中的前2条数据在这个if中显示，其他的数据在else中显示-->
+              <div v-for="(item,index) in area_arr" v-if="index < 2"
                    :id="item.code"
                    :class="{active:areaActive == index}"
                    @click="sel_area_list($event)"
@@ -113,7 +114,7 @@
               </div>
 
               <template v-else>
-                <div v-if="index == area_arr.length-1"
+                <div v-if="index == area_arr.length-2"
                      :class="{active:areaActive == index}"
                      class="last"
                      @click="sel_area_list($event)"
@@ -253,7 +254,7 @@
         area: "", //区域
         price_dj: "", // 单价
         price_zj: "", //总价
-
+        yzfy:1,
         curr_page: 1, 
         wygs: '',//物业公司
         wyf: '',//物业费
@@ -300,9 +301,15 @@
             _this.area_arr = result.data;
             var all_area = {
               code: "area_all",
-              name: "全部"
+              name: "现租房"
             };
+            var all_area1 = {
+                code: "area_all1",
+                name: "预租房"
+            };
+            _this.area_arr.unshift(all_area1);
             _this.area_arr.unshift(all_area);
+            console.log(_this.area_arr);
             $('.size_box').width(_this.area_arr.length * 2.3 + 'rem');
 
           } else {
@@ -421,7 +428,7 @@
         });
         this.$http.post(
           this.$api + "/yhcms/web/lpjbxx/getZdLpxq.do",
-          {"parameters":{"building_id":this.building_id,"curr_page":this.curr_page,"items_perpage":"5","area":this.area},"foreEndType":2,"code":"30000002"}
+          {"parameters":{"building_id":this.building_id,"curr_page":this.curr_page,"items_perpage":"5","area":this.area,"real":this.yzfy},"foreEndType":2,"code":"30000002"}
         ).then(function (res) {
           var result = JSON.parse(res.bodyText);
           Indicator.close();
@@ -464,8 +471,9 @@
 
         this.area = "";
         var min = 0, max = 0, sort_two_single = 1;
-        if ($(e.target).html() == '全部') {
+        if ($(e.target).html() == '现租房') {
           this.area = "";
+          this.yzfy = 1;
         } /*else if ($(e.target).hasClass('last')) {
           this.area = [];
             console.log(this.area);
@@ -474,7 +482,10 @@
           this.area.push(min);
           this.area.push(max);
             console.log(this.area);
-        }*/else {
+        }*/else if($(e.target).html() == '预租房'){
+          this.area = "";
+          this.yzfy = 0;
+        }else{
           this.area = "";
           var area_fw = $(e.target).html()/*.split('-')*/;
          /* min = Math.floor(area_fw[0]);*/

@@ -912,7 +912,7 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
       },
 
       gRemoteData(paraobj, successcb, errorcb){
-        axios.post('/yhcms/web/lpjbxx/getWxLbFyxx.do', paraobj)
+        axios.post('/yhcms/web/lpjbxx/getWxLbFyxx1.do', paraobj)
           .then(function (response) {
             if (typeof successcb === "function") {
               successcb(response)

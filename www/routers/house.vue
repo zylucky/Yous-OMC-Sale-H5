@@ -1,3 +1,4 @@
+<script src="../../../omcxsxxlr/www/main.js"></script>
 <style scoped lang="less">
   @import "../resources/css/website/list.less";
   .page-infinite-loading {
@@ -48,9 +49,15 @@
 .supply_msg_box dd.supply_house{margin-top:0 !important}
 .hilight a{color:#476CBA !important}
 .cell > dd{float: left;margin-right: .3rem;margin-bottom: .06rem;}
-  .tagClass{font-size: 0.5em !important;}
-  .zc{background-color:#ef104e !important;color:#FFF !important;font-size: 0.5em !important;}
-  .dj{ background: url("../resources/images/house/dj.png") no-repeat;background-size: 100% 100%;background-color: white !important;}
+.tagClass{font-size: 0.5em !important;}
+.zc{background-color:#ef104e !important;color:#FFF !important;font-size: 0.5em !important;}
+.dj{ background: url("../resources/images/house/dj.png") no-repeat;background-size: 100% 100%;background-color: white !important;}
+.fuc{width: 1rem;height: 1rem;-moz-border-radius: 50px;-webkit-border-radius: 50px;border-radius: 50px;background-color: rgb(255,101,0);margin: auto;display: flex;justify-content: center;align-items: center;}
+.wacfc{width:1.3rem;height:1.3rem;-moz-border-radius: 50px;-webkit-border-radius: 50px;border-radius: 50px;position: fixed;bottom:2rem;right:0.2rem;background-color: rgb(255,191,142);
+  display: flex;//是将布局变为弹性布局
+  align-items: center;//垂直居中
+  justify-content: center;//水平居中
+}
 </style>
 <template>
   <div>
@@ -98,6 +105,17 @@
                 </li>
               </ul>
             </section>
+
+            <div class="wacfc" v-if="xzfystatus == ''" @click="yzfydj">
+              <div class="fuc">
+                <div style="color: white;">预租<br/>房源</div>
+              </div>
+            </div>
+            <div class="wacfc" v-else @click="yzfydj">
+              <div class="fuc">
+                <div style="color: white;">精选<br/>房源</div>
+              </div>
+            </div>
             <!--筛选条件标题结束-->
 
             <!--筛选条件内容start-->
@@ -117,19 +135,19 @@
                     <div id="position_filter" class="warpper2 box-flex1 bg-white" :class="{choose:this.curTab=='a'||this.curTab=='l'||this.curTab=='y'}">
                       <ul class="price-ul cut-height" :class="{show:this.positionType=='a'}">
                         <li data-type="positionA" @click="where='不限';subBuesiness=[];searchChoose('','','不限', $event)"><a href="javascript:;">不限</a></li>
-                        <li v-for="item in govDistrictArray" data-type="positionA"
+                        <li v-for="item in govDistrictArray" data-type="positionA" :class="{hilight:item.fdcode==his.ercode}"
                             @click="searchSubArea(item.fdcode, $event)">
                           <a href="javascript:;">{{item.fdname}}</a></li>
                       </ul>
                       <ul class="price-ul cut-height" :class="{show:this.positionType=='y'}">
                         <li data-type="positionY" @click="where='不限';otherBusiness=[];searchChoose('','','不限', $event)"><a href="javascript:;">不限</a></li>
-                        <li v-for="item in districtArray" data-type="positionY"
+                        <li v-for="item in districtArray" data-type="positionY" :class="{hilight:item.id==his.ercode}"
                             @click="searchArea(item.id, $event)">
                           <a href="javascript:;">{{item.fdname}}</a></li>
                       </ul>
                       <ul class="price-ul cut-height" :class="{show:this.positionType=='l'}">
                         <li data-type="positionL" @click="where='不限';stationArray=[];searchChoose('','','不限', $event)"><a href="javascript:;">不限</a></li>
-                        <li v-for="item in lineArray" data-type="positionL"
+                        <li v-for="item in lineArray" data-type="positionL" :class="{hilight:item.id==his.ercode}"
                             @click="searchStation(item.id, $event)">
                           <a href="javascript:;">{{item.fdname}}</a></li>
                       </ul>
@@ -137,17 +155,17 @@
 
                     <div id="third-tab" class="warpper2 box-flex1 bg-white" :class="{show:this.curTab!=''&&this.thirdpart!=''}">
                       <ul class="price-ul cut-height" :class="{show:this.positionType=='a'}">
-                        <li v-for="item in subBuesiness" data-type="positionA"
+                        <li v-for="item in subBuesiness" data-type="positionA" :class="{hilight:item.fdcode==his.sancode}"
                             @click="searchChoose(item.fdcode,'',item.fdname, $event)">
                           <a href="javascript:;">{{item.fdname}}</a></li>
                       </ul>
                       <ul class="price-ul cut-height" :class="{show:this.positionType=='y'}">
-                        <li v-for="item in otherBusiness" data-type="positionY"
+                        <li v-for="item in otherBusiness" data-type="positionY" :class="{hilight:item.id==his.sancode}"
                             @click="searchChoose(item.id,'',item.fdname, $event)">
                           <a href="javascript:;">{{item.fdname}}</a></li>
                       </ul>
                       <ul class="price-ul cut-height" :class="{show:this.curTab!=''&&this.thirdpart=='dt'}">
-                        <li v-for="item in stationArray" data-type="positionL"
+                        <li v-for="item in stationArray" data-type="positionL" :class="{hilight:item.id==his.sancode}"
                             @click="searchChoose(item.id,'',item.fdname, $event)">
                           <a href="javascript:;">{{item.fdname}}</a></li>
                       </ul>
@@ -296,6 +314,10 @@
     },
     data () {
       return {
+        hist:{},
+        his:'',
+        er:'',
+        xzfystatus:'',
         districtArray: [],
         govDistrictArray: [],
         lineArray:[],
@@ -364,21 +386,19 @@
           this.para.price_dj = localStorage.getItem("jg").replace("\"","").replace("\"","");
           this.para.chqxz = localStorage.getItem("chqxz").replace("\"","").replace("\"","");
           this.priceFilter  = localStorage.getItem("px").replace("\"","").replace("\"","");
-          var li = JSON.parse(localStorage.getItem("li"));
-          var txt = localStorage.getItem("txt");
-          /*alert(1111);
-           alert(li);
-           console.log(li);*/
-          alert(7777);
-          console.log(this.districtArray+"aaaa");
-          if(li != ""){
-              for(var i=0;i<this.districtArray.length;i++){
-                  if(code == this.districtArray[i].id){
-                      $(li).addClass("hilight").siblings().removeClass("hilight");
-                      this.where = txt;
-                  }
+          if(localStorage.getItem("hist")){
+              this.his = JSON.parse(localStorage.getItem("hist"));
+              this.positionType = this.his.yicode;
+              this.thirdpart = this.his.sicoole;
+              this.curTab = this.his.wucoole;
+              if(this.positionType == "a"){
+                  this.searchSubAreafh(this.his.ercode);
+              }else if(this.positionType == "y"){
+                  this.searchAreafh(this.his.ercode);
+              }else{
+                  this.searchStationfh(this.his.ercode);
               }
-              //this.searchAreafh(this.para.business,li);
+              localStorage.removeItem("hist");
           }
           var topsl = localStorage.getItem("topsj1");
           //$("body,html").scrollTop(topsl);
@@ -401,8 +421,7 @@
           localStorage.removeItem("jg");
           localStorage.removeItem("chqxz");
           localStorage.removeItem("px");
-          localStorage.removeItem("li");
-          localStorage.removeItem("txt");
+
       }else{
           this.init();
       }
@@ -478,6 +497,17 @@
         }
         this.resetGetData();
         this.getFilters();
+      },
+      yzfydj(){
+          if(this.xzfystatus == ""){
+              this.resultData = [];
+              this.xzfystatus = 1;
+              this.getData();
+          }else{
+              this.xzfystatus = "";
+              this.resultData = [];
+              this.getData();
+          }
       },
       selectTag(e){
         const target = $(e.target), val = target.attr("value"), t = target.attr("target"), which = t ==="price" ? "priceTag" : "areaTag";
@@ -582,8 +612,10 @@
         });
         const li = $(e.target).closest("li"), txt = $(li).find("a").text();
         li.addClass("hilight").siblings().removeClass("hilight");
+        this.hist.ercode = code;
+        this.er = code;
         this.where = txt;
-        alert(111);
+        this.hist.txt = txt;
         var paraObj = {"parameters":{"district":code},"foreEndType":2,"code":"300000010"}, this_ = this;
         axios.post('/yhcms/web/lpjbxx/getLpXzqyFq.do', paraObj)
           .then(function (response) {
@@ -593,6 +625,19 @@
             Indicator.close();
         });
       },
+      searchSubAreafh:function(code){
+          this.er = code;
+          this.where = this.his.txt;
+          $('h2.district-h').html(this.where);
+          var paraObj = {"parameters":{"district":code},"foreEndType":2,"code":"300000010"}, this_ = this;
+          axios.post('/yhcms/web/lpjbxx/getLpXzqyFq.do', paraObj)
+              .then(function (response) {
+                  Indicator.close();
+                  this_.subBuesiness = [{"fdcode":code,"fdname":"不限"}].concat(response.data.data.xzfq);
+              }).catch(function (error) {
+              Indicator.close();
+          });
+      },
       searchArea:function(code,e){
         this.curTab = "y";
         this.thirdpart = "sq";
@@ -601,13 +646,12 @@
            spinnerType: 'fading-circle'
         });
         const li = $(e.target).closest("li"), txt = $(li).find("a").text();
-        alert(li);
-        console.log(li);
+        console.log(li+'li的输出');
         li.addClass("hilight").siblings().removeClass("hilight");
         this.where = txt;
-          alert(2222);
-        localStorage.setItem('li', JSON.stringify(li));
-        localStorage.setItem('txt', JSON.stringify(txt));
+        this.hist.ercode = code;
+        this.er = code;
+        this.hist.txt = txt;
         var paraObj = {"parameters":{"district":code},"foreEndType":2,"code":"300000012"}, this_ = this;
         axios.post('/yhcms/web/lpjbxx/getLpYwqyFq.do', paraObj)
           .then(function (response) {
@@ -618,18 +662,9 @@
         });
       },
       searchAreafh:function(code){
-
-          /*this.curTab = "y";
-          this.thirdpart = "sq";
-          Indicator.open({
-              text: '',
-              spinnerType: 'fading-circle'
-          });
-
-          const li = $(e.target).closest("li"), txt = $(li).find("a").text();
-          li.addClass("hilight").siblings().removeClass("hilight");
-          this.where = txt;
-          alert(2222);
+          this.er = code;
+          this.where = this.his.txt;
+          $('h2.district-h').html(this.where);
           var paraObj = {"parameters":{"district":code},"foreEndType":2,"code":"300000012"}, this_ = this;
           axios.post('/yhcms/web/lpjbxx/getLpYwqyFq.do', paraObj)
               .then(function (response) {
@@ -637,7 +672,7 @@
                   this_.otherBusiness = [{"id":code,"fdname":"不限"}].concat(response.data.data.ywfq);
               }).catch(function (error) {
               Indicator.close();
-          });*/
+          });
       },
       searchStation:function(line,e){
         this.curTab = "l";
@@ -648,8 +683,14 @@
         });
         const li = $(e.target).closest("li"), txt = $(li).find("a").text();
         li.addClass("hilight").siblings().removeClass("hilight");
+        this.hist.ercode = line;
+        this.er = line;
         this.where = txt;
-          alert(3333);
+        if(txt != "不限"){
+            this.hist.txt = txt;
+        }else{
+            this.hist.txt = "不限";
+        }
         var paraObj = {"parameters":{"line_id":line},"foreEndType":2,"code":"30000008"}, this_ = this;
         axios.post('/yhcms/web/lpjbxx/getLpSubwaystation.do', paraObj)
           .then(function (response) {
@@ -658,6 +699,19 @@
           }).catch(function (error) {
             Indicator.close();
         });
+      },
+      searchStationfh:function(line){
+          this.er = line;
+          this.where = this.his.txt;
+          $('h2.district-h').html(this.where);
+          var paraObj = {"parameters":{"line_id":line},"foreEndType":2,"code":"30000008"}, this_ = this;
+          axios.post('/yhcms/web/lpjbxx/getLpSubwaystation.do', paraObj)
+              .then(function (response) {
+                  Indicator.close();
+                  this_.stationArray = [{"id":line,"fdname":"不限"}].concat(response.data.data.subway_station);
+              }).catch(function (error) {
+              Indicator.close();
+          });
       },
       setPriceFilter(e){
           const li = $(e.target).closest("li");
@@ -705,8 +759,18 @@
       },
       searchChoose: function (code, val, value, e) {
         const li = $(e.target).closest('li');
+        if(value == "不限"){
+
+        }else{
+            this.hist.txt = value;
+        }
         li.addClass("hilight").siblings().removeClass("hilight");
-          alert(44444);
+        this.hist.ercode = this.er;
+        this.hist.sancode = code;
+        this.hist.sicoole = this.thirdpart;
+        this.hist.wucoole = this.curTab;
+        this.hist.yicode = this.positionType;
+        localStorage.setItem('hist', JSON.stringify(this.hist));
         switch (li.attr('data-type')) {
           case 'positionA':
             //行政区域
@@ -914,16 +978,30 @@
       },
 
       gRemoteData(paraobj, successcb, errorcb){
-        axios.post("/yhcms/web/lpjbxx/getWxLbFyxx.do", paraobj)
-          .then(function (response) {
-            if (typeof successcb === "function") {
-              successcb(response)
-            }
-          }).catch(function (error) {
-          if (typeof errorcb === "function") {
-            errorcb(error)
+          if(this.xzfystatus == ""){
+              axios.post("/yhcms/web/lpjbxx/getWxLbFyxx1.do", paraobj)
+                  .then(function (response) {
+                      if (typeof successcb === "function") {
+                          successcb(response)
+                      }
+                  }).catch(function (error) {
+                  if (typeof errorcb === "function") {
+                      errorcb(error)
+                  }
+              });
+          }else{
+              axios.post("/yhcms/web/lpjbxx/getWxLbFyxx.do", paraobj)
+                  .then(function (response) {
+                      if (typeof successcb === "function") {
+                          successcb(response)
+                      }
+                  }).catch(function (error) {
+                  if (typeof errorcb === "function") {
+                      errorcb(error)
+                  }
+              });
           }
-        });
+
       },
 
       loadMore(){
