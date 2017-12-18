@@ -16,8 +16,8 @@ Vue.use(VueResource);
 Vue.use(MintUI);
 
 //Vue.prototype.$api = "http://yhcms.tunnel.qydev.com" //api地址本地
-//Vue.prototype.$api = "http://116.62.68.26:8080" //api地址116的地址ip
-Vue.prototype.$api = "http://omc.urskongjian.com" //api地址线上
+Vue.prototype.$api = "http://116.62.68.26:8080" //api地址116的地址ip
+//Vue.prototype.$api = "http://omc.urskongjian.com" //api地址线上
 //Vue.prototype.$api = "http://192.168.137.54:8081" //api地址
 /*Vue.prototype.$api = "http://wx.urskongjian.com:8080" //api地址*/
 //Vue.prototype.$api = "http://192.168.0.222:8080" //api地址
@@ -153,6 +153,7 @@ var router = new VueRouter({
     ]
 });
 
+/*
 router.beforeEach((to, from, next) => {
     document.title = to.meta.title || '';
 
@@ -173,14 +174,9 @@ router.beforeEach((to, from, next) => {
       var url1=url.substring(0,index1-1),url2=url.substring(index2);
       var ul1=url1+"/"+url2;
       var ul=encodeURIComponent(ul1);
-        const user22 = JSON.parse(localStorage.getItem('cooknx'));
-        $.post("http://omc.urskongjian.com/yhcms/web/qduser/getQdLogin.do", {
-                "foreEndType": 2,
-                "code": "300000045",
-                "cookie": user22.sjs,
-            },
+        $.post("http://omc.urskongjian.com/yhcms/web/jcsj/getChqxz.do",
             function (data) {
-                window.location = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx109df14878717ecb&redirect_uri="+ul+"&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect";
+                window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx109df14878717ecb&redirect_uri="+ul+"&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect";
             }, "json").catch(function (error) {
             window.location.href = "http://omc.urskongjian.com/error/uphtm.html";
         });
@@ -193,17 +189,12 @@ router.beforeEach((to, from, next) => {
               {wxcode= r[2];
 
               }
-               if(wxcode == null){
+        if(wxcode == null){
          var charString=window.location.href;
          var tt=encodeURIComponent(charString);
-                   const user22 = JSON.parse(localStorage.getItem('cooknx'));
-                   $.post("http://omc.urskongjian.com/yhcms/web/qduser/getQdLogin.do", {
-                           "foreEndType": 2,
-                           "code": "300000045",
-                           "cookie": user22.sjs,
-                       },
+                   $.post("http://omc.urskongjian.com/yhcms/web/jcsj/getChqxz.do",
                        function (data) {
-                           window.location = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx109df14878717ecb&redirect_uri="+tt+"&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect";
+                           window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx109df14878717ecb&redirect_uri="+tt+"&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect";
                            //alert(data); // John
                        }, "json").catch(function (error) {
                        window.location.href = "http://omc.urskongjian.com/error/uphtm.html";
@@ -219,7 +210,7 @@ router.beforeEach((to, from, next) => {
                         if(to.path=='/register'||to.path=='/forgot_pwd'||to.path.indexOf('/reset_pwd')!=-1){
                             next();
                         }else{
-                            const user = JSON.parse(localStorage.getItem('loginnx'));
+                            const user = JSON.parse(localStorage.getItem('cooknx'));
                             if (!user && to.path != '/login') {
                                 next({ path: '/login' });
                             }else  if (!user && to.path == '/login') {
@@ -291,10 +282,10 @@ router.beforeEach((to, from, next) => {
 
     }
 });
+*/
 
 
 
-/*
 router.beforeEach((to, from, next) => {
     if(to.path=='/register'||to.path=='/forgot_pwd'||to.path.indexOf('/reset_pwd')!=-1){
         next();
@@ -342,7 +333,6 @@ router.beforeEach((to, from, next) => {
         }
     }
 });
-*/
 
 
 new Vue({

@@ -84,13 +84,13 @@
                     <i class="filt-arrow"></i>
                   </a>
                 </li>
-                <li data-role="filterItem" data-type="price">
+                <li data-role="filterItem" data-type="price" id="jgtjian">
                   <a href="javascript:void(0);" @click="setPriceFilter">
                     <h2 class="ellipsis price-h">价格</h2>
                     <i class="filt-arrow"></i>
                   </a>
                 </li>
-                <li data-role="filterItem" data-type="area">
+                <li data-role="filterItem" data-type="area" id="mjtjian">
                   <a href="javascript:void(0);" @click="setAreaFilter">
                     <h2 class="ellipsis area-h">面积</h2>
                     <i class="filt-arrow"></i>
@@ -182,7 +182,7 @@
                     </li>
                     <li class="clearfix bg_gray">
                       <div class="ys_item_con fl">
-                        <span v-for="a in areaArray" class="ys_tag" :class="{'active':areaTag===a}" :value="a" target="area" @click="selectTag($event)">{{a !== "-1" ? a + "㎡" : "不限"}}</span>
+                        <span v-for="a in areaArray" class="ys_tag" :class="{'active':areaTag===a}" :style="a==areasta?'background-color:#16abdc;color:#fff':''" :value="a" target="area" @click="selectTag($event)">{{a !== "-1" ? a + "㎡" : "不限"}}</span>
                       </div>
                       <div class="ys_item_con fl">
                         <div class="price-bot">
@@ -200,7 +200,7 @@
                     </li>
                     <li class="clearfix bg_gray">
                       <div class="ys_item_con fl">
-                        <span v-for="a in priceArray" class="ys_tag" :class="{'active':priceTag===a}" target="price" :value="a" @click="selectTag($event)">{{a !== "-1" ? a + "元" : "不限"}}</span>
+                        <span v-for="a in priceArray" class="ys_tag" :class="{'active':priceTag===a || a.index==para.price_dj}" :style="a==areasta?'background-color:#16abdc;color:#fff':''" target="price" :value="a" @click="selectTag($event)">{{a !== "-1" ? a + "元" : "不限"}}</span>
                       </div>
                       <div class="ys_item_con fl">
                         <div class="price-bot">
@@ -219,7 +219,7 @@
                     </li>
                     <li class="clearfix bg_gray">
                       <div class="ys_item_con fl">
-                        <span v-for="a in chqxz" class="ys_tag" :class="{'active':xzTag.indexOf(a) > -1}" :id="a" @click="pickTag($event)">{{a}}</span>
+                        <span v-for="a in chqxz" class="ys_tag" :class="{'active':xzTag.indexOf(a) > -1}" :style="xztagasta.indexOf(a) > -1?'background-color:#16abdc;color:#fff':''" :id="a" @click="pickTag($event)">{{a}}</span>
                       </div>
                     </li>
                   </ul>
@@ -336,6 +336,7 @@
         xzTag: [],
         priceRange: ["", ""],
         areaRange: ["", ""],
+        xztagasta:[],
         curTab:'',
         thirdpart:'',
         currentFilterTab: 'nth',
@@ -344,6 +345,7 @@
         loading: false,
         noMore: false,
         checked: false,
+        areasta:'',
         status:'',
         para: {
           "search_keywork": "",
@@ -383,9 +385,32 @@
               this.searchChoose();
           }*/
           this.para.area = localStorage.getItem("mj").replace("\"","").replace("\"","");
+
+
+
+
+
+          if(localStorage.getItem("areasta")){
+              /*对于缓存的判断时要考虑他的双重引号*/
+              this.areasta = JSON.parse(localStorage.getItem("areasta"));
+              localStorage.removeItem("areasta");
+          }
+
+
+
+
+
           this.para.price_dj = localStorage.getItem("jg").replace("\"","").replace("\"","");
           this.para.chqxz = localStorage.getItem("chqxz").replace("\"","").replace("\"","");
           this.priceFilter  = localStorage.getItem("px").replace("\"","").replace("\"","");
+
+
+
+
+
+
+
+          this.xzfystatus = localStorage.getItem("xzfystatus").replace("\"","").replace("\"","");
           if(localStorage.getItem("hist")){
               this.his = JSON.parse(localStorage.getItem("hist"));
               this.positionType = this.his.yicode;
@@ -400,6 +425,36 @@
               }
               localStorage.removeItem("hist");
           }
+          if(localStorage.getItem("jgtjian")){
+              if(localStorage.getItem("jgtjian") == 1){
+                  this.setPriceFilterfh();
+              }
+              if(localStorage.getItem("jgtjian") == 2){
+                  this.setAreaFilterfh();
+              }
+              localStorage.removeItem("jgtjian");
+          }
+          if(localStorage.getItem("xztagasta")){
+
+              this.xztagasta = localStorage.getItem("xztagasta").replace("\"","").replace("\"","");
+              localStorage.removeItem("xztagasta");
+          }
+        /*取出缓存中的数组*/
+        if(localStorage.getItem("areaRange")){
+            this.areaRange  = JSON.parse(localStorage.getItem("areaRange"));
+            localStorage.removeItem("areaRange");
+        }
+        if(localStorage.getItem("priceRange")){
+            this.priceRange  = JSON.parse(localStorage.getItem("priceRange"));
+            localStorage.removeItem("priceRange");
+        }
+
+
+
+
+
+
+
           var topsl = localStorage.getItem("topsj1");
           //$("body,html").scrollTop(topsl);
           $('body,html').animate({scrollTop:topsl},2);//设置距离上面顶部的距离
@@ -421,7 +476,6 @@
           localStorage.removeItem("jg");
           localStorage.removeItem("chqxz");
           localStorage.removeItem("px");
-
       }else{
           this.init();
       }
@@ -479,6 +533,7 @@
           localStorage.setItem('zd', JSON.stringify(this.para.station_id));
           localStorage.setItem('mj', JSON.stringify(this.para.area));
           localStorage.setItem('jg', JSON.stringify(this.para.price_dj));
+          localStorage.setItem('xzfystatus', JSON.stringify(this.xzfystatus));
           localStorage.setItem('chqxz', JSON.stringify(this.para.chqxz));
           if(this.priceFilter != ''){
               localStorage.setItem('px', JSON.stringify(this.priceFilter));
@@ -511,6 +566,7 @@
       },
       selectTag(e){
         const target = $(e.target), val = target.attr("value"), t = target.attr("target"), which = t ==="price" ? "priceTag" : "areaTag";
+        localStorage.setItem('areasta', JSON.stringify(val));
         const range = t ==="price" ? "price_dj" : "area";
         let final = val === "-1" ? "" : val.replace("<","0-").replace(">","").replace("=","").split("-"); 
         if(val !== "-1" && final.length < 2){
@@ -553,6 +609,7 @@
           this.xzTag = [..._t];
           $(target).addClass('active');
         }
+        localStorage.setItem('xztagasta', JSON.stringify(this.xzTag));
         this.para.chqxz = this.xzTag.join("、");
       },
       filterFocus(e){
@@ -564,6 +621,9 @@
           else if(rel === "area"){
               $.each($("span[target='area']"), (idx, item)=>{$(item).removeClass("active");});
               this.para.area = "";
+          }
+          if(rel === "price"){
+
           }
       },
       setFilter(e){
@@ -598,7 +658,9 @@
             this.para.chqxz = "";
             return;
         }
-
+        /*向缓存中存入数组*/
+        localStorage.setItem('priceRange', JSON.stringify(this.priceRange));
+        localStorage.setItem('areaRange', JSON.stringify(this.areaRange));
         this.priceFilter = '';
         this.areaFilter = '';
         this.resetGetData();
@@ -646,7 +708,6 @@
            spinnerType: 'fading-circle'
         });
         const li = $(e.target).closest("li"), txt = $(li).find("a").text();
-        console.log(li+'li的输出');
         li.addClass("hilight").siblings().removeClass("hilight");
         this.where = txt;
         this.hist.ercode = code;
@@ -724,11 +785,17 @@
               this.priceFilter = 'P2';
           }
           this.areaFilter = '';
-
+          localStorage.setItem('jgtjian',1);
           const that = this;
           setTimeout(function(){
               that.resetGetData();
           }, 500);
+      },
+      setPriceFilterfh(){
+          $('#jgtjian').addClass("hilight");
+          if(this.priceFilter == 'P1'){
+              $('#jgtjian').addClass("active-filter");
+          }
       },
       setAreaFilter(e){
           const li = $(e.target).closest("li");
@@ -740,11 +807,17 @@
               this.areaFilter = 'A2';
           }
           this.priceFilter = '';
-
+          localStorage.setItem('jgtjian',2);
           const that = this;
           setTimeout(function(){
               that.resetGetData();
           }, 500);
+      },
+      setAreaFilterfh(){
+          $('#mjtjian').addClass("hilight");
+          if(this.priceFilter == 'A1'){
+              $('#mjtjian').addClass("active-filter");
+          }
       },
       getQueryString: function (key) {
         var t = new RegExp("(^|&)" + key + "=([^&]*)(&|$)", "i"),
@@ -861,7 +934,6 @@
             Indicator.close()
             const data = JSON.parse(res.bodyText).data;
             that.districtArray = data.ywqy;
-            console.log(that.districtArray);
           }, (res)=>{
             Indicator.close()
           });
@@ -892,6 +964,11 @@
         this.currentFilterTab = li.attr('data-type');
         $(li).siblings().removeClass("active-filter");
         $(li).siblings().removeClass("hilight");
+        if(this.currentFilterTab=='features' || this.currentFilterTab=='district'){
+            this.areaFilter = '';
+            this.priceFilter = '';
+            localStorage.removeItem("jgtjian");
+        }
       },
       resetGetData: function () {
         this.noMore = false;
