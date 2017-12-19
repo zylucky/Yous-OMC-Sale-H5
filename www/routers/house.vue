@@ -182,7 +182,7 @@
                     </li>
                     <li class="clearfix bg_gray">
                       <div class="ys_item_con fl">
-                        <span v-for="a in areaArray" class="ys_tag" :class="{'active':areaTag===a}" :style="a==areasta?'background-color:#16abdc;color:#fff':''" :value="a" target="area" @click="selectTag($event)">{{a !== "-1" ? a + "㎡" : "不限"}}</span>
+                        <span v-for="a in areaArray" class="ys_tag" :class="{'active':areaTag===a || a==areasta}" :value="a" target="area" @click="selectTag($event)">{{a !== "-1" ? a + "㎡" : "不限"}}</span>
                       </div>
                       <div class="ys_item_con fl">
                         <div class="price-bot">
@@ -200,7 +200,7 @@
                     </li>
                     <li class="clearfix bg_gray">
                       <div class="ys_item_con fl">
-                        <span v-for="a in priceArray" class="ys_tag" :class="{'active':priceTag===a || a.index==para.price_dj}" :style="a==areasta?'background-color:#16abdc;color:#fff':''" target="price" :value="a" @click="selectTag($event)">{{a !== "-1" ? a + "元" : "不限"}}</span>
+                        <span v-for="a in priceArray" class="ys_tag" :class="{'active':priceTag===a || a==price}" target="price" :value="a" @click="selectTag($event)">{{a !== "-1" ? a + "元" : "不限"}}</span>
                       </div>
                       <div class="ys_item_con fl">
                         <div class="price-bot">
@@ -219,7 +219,7 @@
                     </li>
                     <li class="clearfix bg_gray">
                       <div class="ys_item_con fl">
-                        <span v-for="a in chqxz" class="ys_tag" :class="{'active':xzTag.indexOf(a) > -1}" :style="xztagasta.indexOf(a) > -1?'background-color:#16abdc;color:#fff':''" :id="a" @click="pickTag($event)">{{a}}</span>
+                        <span v-for="a in chqxz" class="ys_tag" :class="{'active':xzTag.indexOf(a) > -1 || xztagasta.indexOf(a) > -1}" :id="a" @click="pickTag($event)">{{a}}</span>
                       </div>
                     </li>
                   </ul>
@@ -346,6 +346,7 @@
         noMore: false,
         checked: false,
         areasta:'',
+        price:'',
         status:'',
         para: {
           "search_keywork": "",
@@ -390,12 +391,16 @@
 
 
 
-          if(localStorage.getItem("areasta")){
+          if(localStorage.getItem("price")){
               /*对于缓存的判断时要考虑他的双重引号*/
-              this.areasta = JSON.parse(localStorage.getItem("areasta"));
-              localStorage.removeItem("areasta");
+              this.price = JSON.parse(localStorage.getItem("price"));
+              /*localStorage.removeItem("price");*/
           }
-
+          if(localStorage.getItem("areasta")){
+            /*对于缓存的判断时要考虑他的双重引号*/
+              this.areasta = JSON.parse(localStorage.getItem("areasta"));
+             /* localStorage.removeItem("areasta");*/
+          }
 
 
 
@@ -423,7 +428,7 @@
               }else{
                   this.searchStationfh(this.his.ercode);
               }
-              localStorage.removeItem("hist");
+              /*localStorage.removeItem("hist");*/
           }
           if(localStorage.getItem("jgtjian")){
               if(localStorage.getItem("jgtjian") == 1){
@@ -432,21 +437,21 @@
               if(localStorage.getItem("jgtjian") == 2){
                   this.setAreaFilterfh();
               }
-              localStorage.removeItem("jgtjian");
+              /*localStorage.removeItem("jgtjian");*/
           }
           if(localStorage.getItem("xztagasta")){
 
               this.xztagasta = localStorage.getItem("xztagasta").replace("\"","").replace("\"","");
-              localStorage.removeItem("xztagasta");
+              /*localStorage.removeItem("xztagasta");*/
           }
         /*取出缓存中的数组*/
         if(localStorage.getItem("areaRange")){
             this.areaRange  = JSON.parse(localStorage.getItem("areaRange"));
-            localStorage.removeItem("areaRange");
+            /*localStorage.removeItem("areaRange");*/
         }
         if(localStorage.getItem("priceRange")){
             this.priceRange  = JSON.parse(localStorage.getItem("priceRange"));
-            localStorage.removeItem("priceRange");
+           /* localStorage.removeItem("priceRange");*/
         }
 
 
@@ -477,6 +482,13 @@
           localStorage.removeItem("chqxz");
           localStorage.removeItem("px");
       }else{
+          localStorage.removeItem("price");
+          localStorage.removeItem("areasta");
+          localStorage.removeItem("hist");
+          localStorage.removeItem("jgtjian");
+          localStorage.removeItem("xztagasta");
+          localStorage.removeItem("areaRange");
+          localStorage.removeItem("priceRange");
           this.init();
       }
       $("body").removeAttr("style");
@@ -554,6 +566,7 @@
         this.getFilters();
       },
       yzfydj(){
+          this.para.curr_page = 1;
           if(this.xzfystatus == ""){
               this.resultData = [];
               this.xzfystatus = 1;
@@ -566,7 +579,14 @@
       },
       selectTag(e){
         const target = $(e.target), val = target.attr("value"), t = target.attr("target"), which = t ==="price" ? "priceTag" : "areaTag";
-        localStorage.setItem('areasta', JSON.stringify(val));
+        if(t == 'area'){
+            localStorage.setItem('areasta', JSON.stringify(val));
+        }else if(t == 'price'){
+            localStorage.setItem('price', JSON.stringify(val));
+        }else{
+            this.areasta = '';
+            this.price = '';
+        }
         const range = t ==="price" ? "price_dj" : "area";
         let final = val === "-1" ? "" : val.replace("<","0-").replace(">","").replace("=","").split("-"); 
         if(val !== "-1" && final.length < 2){

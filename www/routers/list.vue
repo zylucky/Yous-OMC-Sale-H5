@@ -165,7 +165,7 @@
                     </li>
                     <li class="clearfix bg_gray">
                       <div class="ys_item_con fl">
-                        <span v-for="a in areaArray" class="ys_tag" :class="{'active':areaTag===a}" :style="a==areasta?'background-color:#16abdc;color:#fff':''" :value="a" target="area" @click="selectTag($event)">{{a !== "-1" ? a + "㎡" : "不限"}}</span>
+                        <span v-for="a in areaArray" class="ys_tag" :class="{'active':areaTag===a || a==areasta}" :value="a" target="area" @click="selectTag($event)">{{a !== "-1" ? a + "㎡" : "不限"}}</span>
                       </div>
                       <div class="ys_item_con fl">
                         <div class="price-bot">
@@ -183,7 +183,7 @@
                     </li>
                     <li class="clearfix bg_gray">
                       <div class="ys_item_con fl">
-                        <span v-for="a in priceArray" class="ys_tag" :class="{'active':priceTag===a}" :style="a==areasta?'background-color:#16abdc;color:#fff':''" target="price" :value="a" @click="selectTag($event)">{{a !== "-1" ? a + "元" : "不限"}}</span>
+                        <span v-for="a in priceArray" class="ys_tag" :class="{'active':priceTag===a || a==price}" target="price" :value="a" @click="selectTag($event)">{{a !== "-1" ? a + "元" : "不限"}}</span>
                       </div>
                       <div class="ys_item_con fl">
                         <div class="price-bot">
@@ -202,7 +202,7 @@
                     </li>
                     <li class="clearfix bg_gray">
                       <div class="ys_item_con fl">
-                        <span v-for="a in featureArray" class="ys_tag" :class="{'active':tsTag.indexOf(a.id)>-1}" :style="xztagasta.indexOf(a.id) > -1?'background-color:#16abdc;color:#fff':''" :id="a.id" @click="pickTag($event)">{{a.topic}}</span>
+                        <span v-for="a in featureArray" class="ys_tag" :class="{'active':tsTag.indexOf(a.id)>-1 || xztagasta.indexOf(a.id) > -1}" :id="a.id" @click="pickTag($event)">{{a.topic}}</span>
                       </div>
                     </li>
                   </ul>
@@ -298,6 +298,7 @@
     data () {
       return {
         areasta:'',
+        price:'',
         hist:{},
         his:'',
         er:'',
@@ -366,13 +367,18 @@
 
 
 
-            if(localStorage.getItem("areasta")){
+            if(localStorage.getItem("areastalist")){
               /*对于缓存的判断时要考虑他的双重引号*/
-                this.areasta = JSON.parse(localStorage.getItem("areasta"));
-                localStorage.removeItem("areasta");
+                this.areasta = JSON.parse(localStorage.getItem("areastalist"));
+                /*localStorage.removeItem("areasta");*/
             }
-            if(localStorage.getItem("hist")){
-                this.his = JSON.parse(localStorage.getItem("hist"));
+            if(localStorage.getItem("pricelist")){
+              /*对于缓存的判断时要考虑他的双重引号*/
+                this.price = JSON.parse(localStorage.getItem("pricelist"));
+                /*localStorage.removeItem("price");*/
+            }
+            if(localStorage.getItem("histlist")){
+                this.his = JSON.parse(localStorage.getItem("histlist"));
                 this.positionType = this.his.yicode;
                 this.thirdpart = this.his.sicoole;
                 this.curTab = this.his.wucoole;
@@ -383,29 +389,29 @@
                 }else{
                     this.searchStationfh(this.his.ercode);
                 }
-                localStorage.removeItem("hist");
+                /*localStorage.removeItem("histlist");*/
             }
-            if(localStorage.getItem("jgtjian")){
-                if(localStorage.getItem("jgtjian") == 1){
+            if(localStorage.getItem("jgtjianlist")){
+                if(localStorage.getItem("jgtjianlist") == 1){
                     this.setPriceFilterfh();
                 }
-                if(localStorage.getItem("jgtjian") == 2){
+                if(localStorage.getItem("jgtjianlist") == 2){
                     this.setAreaFilterfh();
                 }
-                localStorage.removeItem("jgtjian");
+                /*localStorage.removeItem("jgtjianlist");*/
             }
-            if(localStorage.getItem("xztagasta")){
-                this.xztagasta = localStorage.getItem("xztagasta");
-                localStorage.removeItem("xztagasta");
+            if(localStorage.getItem("xztagastalist")){
+                this.xztagasta = localStorage.getItem("xztagastalist");
+                /*localStorage.removeItem("xztagastalist");*/
             }
           /*取出缓存中的数组*/
-            if(localStorage.getItem("areaRange")){
-                this.areaRange  = JSON.parse(localStorage.getItem("areaRange"));
-                localStorage.removeItem("areaRange");
+            if(localStorage.getItem("areaRangelist")){
+                this.areaRange  = JSON.parse(localStorage.getItem("areaRangelist"));
+                /*localStorage.removeItem("areaRangelist");*/
             }
-            if(localStorage.getItem("priceRange")){
-                this.priceRange  = JSON.parse(localStorage.getItem("priceRange"));
-                localStorage.removeItem("priceRange");
+            if(localStorage.getItem("priceRangelist")){
+                this.priceRange  = JSON.parse(localStorage.getItem("priceRangelist"));
+                /*localStorage.removeItem("priceRangelist");*/
             }
 
 
@@ -429,6 +435,13 @@
             localStorage.removeItem("jg");
             localStorage.removeItem("px");
         }else{
+            localStorage.removeItem("areastalist");
+            localStorage.removeItem("pricelist");
+            localStorage.removeItem("histlist");
+            localStorage.removeItem("jgtjianlist");
+            localStorage.removeItem("xztagastalist");
+            localStorage.removeItem("areaRangelist");
+            localStorage.removeItem("priceRangelist");
             this.init();
         }
         //var wxcode = this.GetQueryString("code");
@@ -568,7 +581,11 @@
       },
       selectTag(e){
         const target = $(e.target), val = target.attr("value"), t = target.attr("target"), which = t ==="price" ? "priceTag" : "areaTag";
-        localStorage.setItem('areasta', JSON.stringify(val));
+        if(t == 'area'){
+            localStorage.setItem('areastalist', JSON.stringify(val));
+        }else{
+            localStorage.setItem('pricelist', JSON.stringify(val));
+        }
         const range = t ==="price" ? "price_dj" : "area";
         let final = val === "-1" ? "" : val.replace("<","0-").replace(">","").replace("=","").split("-"); 
         if(val !== "-1" && final.length < 2){
@@ -610,7 +627,7 @@
           this.tsTag = [..._t];
           $(target).addClass('active');
         }
-        localStorage.setItem('xztagasta', JSON.stringify(this.tsTag));
+        localStorage.setItem('xztagastalist', JSON.stringify(this.tsTag));
         this.para.label = this.tsTag.join(",");
       },
       filterFocus(e){
@@ -655,8 +672,8 @@
             this.areaRange = ["", ""];
             return;
         }
-        localStorage.setItem('priceRange', JSON.stringify(this.priceRange));
-        localStorage.setItem('areaRange', JSON.stringify(this.areaRange));
+        localStorage.setItem('priceRangelist', JSON.stringify(this.priceRange));
+        localStorage.setItem('areaRangelist', JSON.stringify(this.areaRange));
         this.priceFilter = '';
         this.areaFilter = '';
         this.resetGetData();
@@ -800,14 +817,14 @@
               this.priceFilter = 'P2';
           }
           this.areaFilter = '';
-          localStorage.setItem('jgtjian',1);
+          localStorage.setItem('jgtjianlist',1);
           const that = this;
           setTimeout(function(){
               that.resetGetData();
           }, 500);
       },
       setPriceFilterfh(){
-          $('#jgtjian').addClass("highlight");
+          $('#jgtjian').addClass("highlight").toggleClass("active-filter");;
           if(this.priceFilter == 'P1'){
               $('#jgtjian').addClass("active-filter");
           }
@@ -822,7 +839,7 @@
               this.areaFilter = 'A2';
           }
           this.priceFilter = '';
-          localStorage.setItem('jgtjian',2);
+          localStorage.setItem('jgtjianlist',2);
           const that = this;
           setTimeout(function(){
               that.resetGetData();
@@ -858,7 +875,7 @@
         this.hist.sicoole = this.thirdpart;
         this.hist.wucoole = this.curTab;
         this.hist.yicode = this.positionType;
-        localStorage.setItem('hist', JSON.stringify(this.hist));
+        localStorage.setItem('histlist', JSON.stringify(this.hist));
         switch (li.attr('data-type')) {
           case 'positionA':
             //行政区域
@@ -983,7 +1000,7 @@
         if(this.currentFilterTab=='features' || this.currentFilterTab=='district'){
             this.areaFilter = '';
             this.priceFilter = '';
-            localStorage.removeItem("jgtjian");
+            localStorage.removeItem("jgtjianlist");
         }
       },
       resetGetData: function () {
