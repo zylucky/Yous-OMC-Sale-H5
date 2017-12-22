@@ -641,7 +641,7 @@
               this.para.area = "";
           }
       },
-      setFilter(e){
+        setFilter(e){
         const target = $(e.target), which = target.attr("rel");
         if(which==="confirm") {
             const aa = this.areaRange[0], ea = this.areaRange[1];
@@ -670,6 +670,9 @@
             this.tsTag = [];
             this.priceRange = ["", ""];
             this.areaRange = ["", ""];
+            this.xztagasta = [];
+            this.price = "";
+            this.areasta = "";
             return;
         }
         localStorage.setItem('priceRangelist', JSON.stringify(this.priceRange));

@@ -16,8 +16,8 @@ Vue.use(VueResource);
 Vue.use(MintUI);
 
 //Vue.prototype.$api = "http://yhcms.tunnel.qydev.com" //api地址本地
-Vue.prototype.$api = "http://116.62.68.26:8080" //api地址116的地址ip
-//Vue.prototype.$api = "http://omc.urskongjian.com" //api地址线上
+//Vue.prototype.$api = "http://116.62.68.26:8080" //api地址116的地址ip
+Vue.prototype.$api = "http://omc.urskongjian.com" //api地址线上
 //Vue.prototype.$api = "http://192.168.137.54:8081" //api地址
 /*Vue.prototype.$api = "http://wx.urskongjian.com:8080" //api地址*/
 //Vue.prototype.$api = "http://192.168.0.222:8080" //api地址
@@ -153,7 +153,6 @@ var router = new VueRouter({
     ]
 });
 
-/*
 router.beforeEach((to, from, next) => {
     document.title = to.meta.title || '';
 
@@ -210,7 +209,20 @@ router.beforeEach((to, from, next) => {
                         if(to.path=='/register'||to.path=='/forgot_pwd'||to.path.indexOf('/reset_pwd')!=-1){
                             next();
                         }else{
-                            const user = JSON.parse(localStorage.getItem('cooknx'));
+                            if(localStorage.getItem('cooknx')){
+                                //存微信的头像
+                                const head = data.headimgurl;
+                                localStorage.setItem('nxhead', JSON.stringify(head));
+                                next();
+                            }else{
+                                next();
+                            }
+
+
+
+
+
+                            /*const user = JSON.parse(localStorage.getItem('cooknx'));
                             if (!user && to.path != '/login') {
                                 next({ path: '/login' });
                             }else  if (!user && to.path == '/login') {
@@ -224,15 +236,7 @@ router.beforeEach((to, from, next) => {
                                     if (delta > 86400 * 30) {
                                         next({path: '/login'});
                                     } else {
-                                        const user22 = JSON.parse(localStorage.getItem('cooknx'));
-                                        if(user22 != null){
-                                            //存微信的头像
-                                            const head = data.headimgurl;
-                                            localStorage.setItem('nxhead', JSON.stringify(head));
-                                            next();
-                                        }else{
-                                            next({path: '/login'});
-                                        }
+
                                         $.post("http://omc.urskongjian.com/yhcms/web/qduser/getQdLogin.do", {
                                                 "foreEndType": 2,
                                                 "code": "300000045",
@@ -255,7 +259,11 @@ router.beforeEach((to, from, next) => {
                                     next({path: '/login'});
                                     //next();
                                 }
-                            }
+                            }*/
+
+
+
+
                         }
                         next();
                     } else {
@@ -282,15 +290,15 @@ router.beforeEach((to, from, next) => {
 
     }
 });
-*/
 
 
 
-router.beforeEach((to, from, next) => {
+/*router.beforeEach((to, from, next) => {
     if(to.path=='/register'||to.path=='/forgot_pwd'||to.path.indexOf('/reset_pwd')!=-1){
         next();
     }else{
-        const user = JSON.parse(localStorage.getItem('loginnx'));
+        next();
+        /!*const user = JSON.parse(localStorage.getItem('loginnx'));
         if (!user && to.path != '/login') {
             next({ path: '/login' });
         }else  if (!user && to.path == '/login') {
@@ -330,9 +338,10 @@ router.beforeEach((to, from, next) => {
                 next({path: '/login'});
                 //next();
             }
-        }
+        }*!/
+
     }
-});
+});*/
 
 
 new Vue({

@@ -163,6 +163,7 @@
     data () {
       return {
         large:false,
+        fyid:'',
         daily_price:0, //日价格
         monthly_price:0, //月价格
         room_area:0, //面积
@@ -206,47 +207,62 @@
           this.large = true;
       },
       coole(){
-          const user22 = JSON.parse(localStorage.getItem('cooknx'));
-          const _this = this, url1 = this.$api + "/yhcms/web/qduser/compareFy.do";
-          let that = this;
-          this.$http.post(url1, {"parameters":{"cookie":user22.sjs,"id":this.$route.query.house_id},"foreEndType":2,"code":"30000001"}).then((res)=>{
-              Indicator.close();
-              var result = JSON.parse(res.bodyText);
-              if(result.success){
-                  this.colle = 1;//还没有收藏这个房源
+          const user = JSON.parse(localStorage.getItem('loginnx'));
+          if (!user) {
+              /*next({ path: '/login' });*/
+              this.colle = 1;
+          }else{
+              if(user!=null) {
+                  const time = user.time == null ? 0 : user.time, now = (new Date).getMilliseconds(), delta = now - time;
+                  if (delta > 86400 * 3) {
+                      /*next({path: '/login'});*/
+                      this.colle = 1;
+                  } else {
+                      const user22 = JSON.parse(localStorage.getItem('cooknx'));
+                      if(user22 != null){
+                          const urlll = this.$api + "/yhcms/web/qduser/getQdLogin.do";
+                          this.$http.post(urlll, {
+                                  "foreEndType": 2,
+                                  "code": "300000045",
+                                  "cookie": user22.sjs,
+                              }).then((res)=>{
+                              Indicator.close();
+                              var result = JSON.parse(res.bodyText);
+                              if(result.success){
+                                  const _this = this, url1 = this.$api + "/yhcms/web/qduser/compareFy.do";
+                                  this.$http.post(url1, {"parameters":{"cookie":user22.sjs,"id":this.$route.query.house_id},"foreEndType":2,"code":"30000001"}).then((res)=>{
+                                      Indicator.close();
+                                      var result = JSON.parse(res.bodyText);
+                                      if(result.success){
+                                          this.colle = 1;//还没有收藏这个房源
+                                      }else{
+                                          this.colle = 2;
+                                      }
+                                  }, (res)=>{
+                                      Indicator.close();
+                                  });
+                              }else{
+
+                              }
+                          }, (res)=>{
+                              Indicator.close();
+                          });
+                      }else{
+                          /*next({path: '/login'});*/
+                          this.colle = 1;
+                      }
+                  }
               }else{
-                  this.colle = 2;
+                  /*next({path: '/login'});*/
+                  //next();
+                  this.colle = 1;
               }
-          }, (res)=>{
-              Indicator.close();
-          });
-
-
-
-
-
-/*
-          const user22 = JSON.parse(localStorage.getItem('cooknx'));
-
-          this.$http.post(url1,
-
-          ).then((res)=>{
-              Indicator.close();
-              alert(222);
-              var result = JSON.parse(res.bodyText);
-              if(result.success){
-                  this.colle = 1;//还没有收藏这个房源
-              }else{
-                  this.colle = 2;
-              }
-          }, (res)=>{
-              Indicator.close();
-          });*/
+          }
       },
       //获取某一办公楼详情
       getPerDetail(){
         var _this = this;
-
+        this.fyid = this.$route.query.house_id;
         this.$http.post(
           this.$api + "/yhcms/web/lpjbxx/getWxFyxx.do",
           {
@@ -331,27 +347,64 @@
           this.$router.push({path: '/reser_page?house_id=' + this.$route.query.house_id});
       },
       Collectionss(){
-          const user22 = JSON.parse(localStorage.getItem('cooknx'));
-          const url = this.$api + "/yhcms/web/collecthouse/saveCollect.do";
-          let that = this;
-          this.$http.post(url, {"parameters":{"id":this.$route.query.house_id,"cookie":user22.sjs},"foreEndType":2,"code":"16"}).then((res)=>{
-              Indicator.close();
-              var result = JSON.parse(res.bodyText);
-              if(result.success){
-                  this.colle = 2;
-                  Toast({
-                      message: '收藏房源成功！',
-                      position: 'bottom'
-                  });
+          const user = JSON.parse(localStorage.getItem('loginnx'));
+          if (!user) {
+              next({ path: '/login' });
+          }else{
+              if(user!=null) {
+                  const time = user.time == null ? 0 : user.time, now = (new Date).getMilliseconds(), delta = now - time;
+                  if (delta > 86400 * 3) {
+                      //next({path: '/login'});
+                      this.$router.push({path: '/login'});
+                  } else {
+                      const user22 = JSON.parse(localStorage.getItem('cooknx'));
+                      if(user22 != null){
+                          const urlll = this.$api + "/yhcms/web/qduser/getQdLogin.do";
+                          this.$http.post(urlll, {
+                                  "foreEndType": 2,
+                                  "code": "300000045",
+                                  "cookie": user22.sjs,
+                              }).then((res)=>{
+                              Indicator.close();
+                              var result = JSON.parse(res.bodyText);
+                              if(result.success){
+                                  const url = this.$api + "/yhcms/web/collecthouse/saveCollect.do";
+                                  let that = this;
+                                  this.$http.post(url, {"parameters":{"id":this.fyid,"cookie":user22.sjs},"foreEndType":2,"code":"16"}).then((res)=>{
+                                      Indicator.close();
+                                      var result = JSON.parse(res.bodyText);
+                                      if(result.success){
+                                          this.colle = 2;
+                                          Toast({
+                                              message: '收藏房源成功！',
+                                              position: 'bottom'
+                                          });
+                                      }else{
+                                          Toast({
+                                              message: result.message,
+                                              position: 'bottom'
+                                          });
+                                      }
+                                  }, (res)=>{
+                                      Indicator.close();
+                                  });
+                              }else{
+                                  alert(222222);
+                              }
+                          }, (res)=>{
+                              Indicator.close();
+                          });
+                      }else{
+                          this.$router.push({path: '/login'});
+                      }
+                  }
               }else{
-                  Toast({
-                      message: result.message,
-                      position: 'bottom'
-                  });
+                  //next({path: '/login'});
+                  this.$router.push({path: '/login'});
+                  //next();
               }
-          }, (res)=>{
-              Indicator.close();
-          });
+          }
+
       },
       Collectionss2(){
         const user22 = JSON.parse(localStorage.getItem('cooknx'));

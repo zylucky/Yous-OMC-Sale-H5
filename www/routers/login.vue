@@ -121,6 +121,7 @@
                 const sjsd = {"sjs":(new Date)};
                 localStorage.setItem('cooknx', JSON.stringify(sjsd));
                 let user22 = JSON.parse(localStorage.getItem('cooknx'));
+                console.log(user22.sjs);
                 md5.update(pwd);
                 const password = md5.digest("hex");
                 this.$http.post(
@@ -150,7 +151,8 @@
                         });
 
                         setTimeout(function(){
-                            _this.$router.push({path:'/index'});
+                            //_this.$router.push({path:'/index'});
+                            history.go(-1);
                         },1000);
 
                     } else {

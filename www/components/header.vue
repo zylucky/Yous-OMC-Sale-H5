@@ -251,6 +251,8 @@
                   $("body").removeAttr("style");
                   //$('html').css({'height': 'auto', 'overflow': 'auto'});
                   localStorage.removeItem('cooknx');
+                  localStorage.removeItem('usernx');
+                  localStorage.removeItem('nxhead');
                   this.$router.push({path:'/login'});
               }else{
                   Toast({
@@ -266,17 +268,32 @@
     },
     mounted: function () {
       var _this = this;
-      let user = JSON.parse(localStorage.getItem('usernx'));
-      this.username = user;
-      $('#first_list_link').click(function(){
-          $("#zhezhao").remove();
-      });
-      //获取微信的头像
-      let head1 = JSON.parse(localStorage.getItem('nxhead'));
-      if(head1 != ""){
-          console.log(head1);
-          $('#headimg').attr('src',head1);
+
+      if(localStorage.getItem('usernx')){
+          let user = JSON.parse(localStorage.getItem('usernx'));
+          this.username = user;
+          $('#first_list_link').click(function(){
+              $("#zhezhao").remove();
+          });
+      }else{
+          this.username = "马上登录";
+          $('#first_list_link').click(function(){
+              $("#zhezhao").remove();
+          });
       }
+      if(localStorage.getItem('nxhead')){
+          //获取微信的头像
+          let head1 = JSON.parse(localStorage.getItem('nxhead'));
+          if(head1 != ""){
+              console.log(head1);
+              $('#headimg').attr('src',head1);
+          }
+      }else{
+
+
+      }
+
+
     }
   };
 </script>

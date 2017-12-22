@@ -18,7 +18,7 @@
                     <div class="" style="float: left;"><img id="headimg" style="width: 1.8rem;height: 1.8rem;" src="../resources/images/per_cen/headtx.png"></div>
                     <div style="margin-top: 0.5rem;margin-left: 2.1rem;padding-top: 0.4rem;">
                         <div class="headname" v-text="name" style="font-size: 0.36rem;margin-left: 0.2rem;color: white;"></div>
-                        <div class="">
+                        <div class="" v-show="renzhang">
                             <img v-if="status == 0" style="width: 1.1rem;margin-top: 0.1rem;" src="../resources/images/per_cen/per_renzh3.png">
                             <img v-if="status == 1" style="width: 1.1rem;margin-top: 0.1rem;" src="../resources/images/per_cen/per_renzh1.png">
                             <img v-if="status == 2" style="width: 1.1rem;margin-top: 0.1rem;" src="../resources/images/per_cen/per_renzh2.png">
@@ -81,6 +81,7 @@
         data () {
             return {
                 wsxx:1,//完善信息的状态
+                renzhang:false,
                 "name": "", //
                 "topic": "", //楼盘名称
                 "address": "", //地址
@@ -108,13 +109,28 @@
         },
         methods: {
             modify_pwd(){
-                this.$router.push({path:'/modify_pwd'});
+                if(localStorage.getItem('cooknx')){
+                    this.$router.push({path:'/modify_pwd'});
+                }else{
+                    this.$router.push({path:'/login'});
+                }
+
             },
             per_information(){
-                this.$router.push({path:'/per_information'});
+                if(localStorage.getItem('cooknx')){
+                    this.$router.push({path:'/per_information'});
+                }else{
+                    this.$router.push({path:'/login'});
+                }
+
             },
             my_collection(){
-                this.$router.push({path:'/my_collection'});
+                if(localStorage.getItem('cooknx')){
+                    this.$router.push({path:'/my_collection'});
+                }else{
+                    this.$router.push({path:'/login'});
+                }
+
             },
             my_reser(){
                 this.$router.push({path:'/my_reser'});
@@ -224,26 +240,34 @@
                     spinnerType: 'fading-circle'
                 });*/
                 const user22 = JSON.parse(localStorage.getItem('cooknx'));
-                const url = this.$api + "/yhcms/web/qduser/getQdUser.do";
-                let that = this;
-                this.$http.post(url,{"cookie":user22.sjs,"foreEndType":2,"code":"3"}).then((res)=>{
-                    Indicator.close();
-                    const result = JSON.parse(res.bodyText);
-                    if(result.success){
-                        const data = JSON.parse(res.bodyText).data.qduser;
-                        const data1 = JSON.parse(res.bodyText).data.mppic1;
-                        const data2 = JSON.parse(res.bodyText).data.mppic2;
-                        this.status = data.status2;
-                        this.name = data.name;
-                        if(data1.length != 0 && data2.length != 0 && data.gsname != "" && data.xmname != "" && data.card != ""){
-                            this.wsxx = 11;
-                        }else{
-                            this.wsxx = 1;
+                if(localStorage.getItem('cooknx')){
+                    const url = this.$api + "/yhcms/web/qduser/getQdUser.do";
+                    let that = this;
+                    this.$http.post(url,{"cookie":user22.sjs,"foreEndType":2,"code":"3"}).then((res)=>{
+                        Indicator.close();
+                        const result = JSON.parse(res.bodyText);
+                        if(result.success){
+                            const data = JSON.parse(res.bodyText).data.qduser;
+                            const data1 = JSON.parse(res.bodyText).data.mppic1;
+                            const data2 = JSON.parse(res.bodyText).data.mppic2;
+                            this.status = data.status2;
+                            this.name = data.name;
+                            this.renzhang = true;
+                            if(data1.length != 0 && data2.length != 0 && data.gsname != "" && data.xmname != "" && data.card != ""){
+                                this.wsxx = 11;
+                            }else{
+                                this.wsxx = 1;
+                            }
                         }
-                    }
-                }, (res)=>{
-                    Indicator.close();
-                });
+                    }, (res)=>{
+                        Indicator.close();
+                    });
+                }else{
+                    this.wsxx = 11;
+                    this.name = "马上登录";
+                    $(".headname").css("margin-top","0.3rem");
+                }
+
             },
             fanhui(){
                 window.history.go(-1);
@@ -329,12 +353,15 @@
             this.getInitData();
             $('title').html('个人中心');
             //获取微信的头像
-            let head1 = JSON.parse(localStorage.getItem('nxhead'));
-            if(head1 != ""){
-                console.log(head1);
-                $('#headimg').attr('src',head1);
-                $('#headimg').css('border-radius','50%');
+            if(localStorage.getItem('nxhead')){
+                let head1 = JSON.parse(localStorage.getItem('nxhead'));
+                if(head1 != ""){
+                    console.log(head1);
+                    $('#headimg').attr('src',head1);
+                    $('#headimg').css('border-radius','50%');
+                }
             }
+
         },
     }
 </script>

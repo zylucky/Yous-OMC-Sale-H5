@@ -676,6 +676,9 @@
             this.para.price_dj = "";
             this.para.area = "";
             this.para.chqxz = "";
+            this.xztagasta = [];
+            this.price = "";
+            this.areasta = "";
             return;
         }
         /*向缓存中存入数组*/

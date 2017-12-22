@@ -665,6 +665,9 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
             this.para.price_dj = "";
             this.para.area = "";
             this.para.chqxz = "";
+            this.xztagasta = [];
+            this.price = "";
+            this.areasta = "";
             return;
         }
         localStorage.setItem('priceRangesele', JSON.stringify(this.priceRange));
