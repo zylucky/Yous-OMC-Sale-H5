@@ -24,10 +24,10 @@
       <label class="side_nav side-nav" @click.native="popupVisible= true"  v-on:click="showMenu">
         <img src="../resources/images/ys_more.png" width="20" alt="">
       </label>
-      <a href="javascript:;" class="detail-search" style="position: fixed;left: 0; top: 0">
+      <!--<a href="javascript:;" class="detail-search" style="position: fixed;left: 0; top: 0">
         <input type="text" id="keyword" placeholder="请输入关键字搜索" v-model="para.search_keywork" maxlength="50"
                @focus="changeRou">
-      </a>
+      </a>-->
       <router-view></router-view>
     </header>
     <mt-popup v-model="popupVisible" position="left" class="mint-popup-3" :modal="false">
@@ -38,7 +38,8 @@
             <div style="padding-top:.6rem;padding-left: 1.6rem;">
               <img style="margin:0rem !important;" id="headimg" class="portrait" src="../resources/images/left_list/headback_head.png" alt="">
             </div>
-            <div class="tc" style="margin-top: 0.2rem;font-size:0.4rem">{{username}}</div>
+            <div v-if="userif" class="tc" style="margin-top: 0.2rem;font-size:0.4rem">{{username}}</div>
+            <div v-else class="tc" style="margin-top: 0.2rem;font-size:0.4rem" @click="denglu"><a href="javascript:;">立即登录</a></div>
           </div>
           <div class="ys_function tc" style="background-color: rgb(255,255,255);margin-top: -0.4rem;">
             <!--<router-link :to="{path:'/list2'}" id="first_list_link">精选房源</router-link>-->
@@ -64,7 +65,7 @@
             </div>
           </div>
         </div>
-        <a href="javascript:;" class="log_out_btn" style="position: relative;bottom:-2rem;width: 4rem;" @click="login_out()">退出登录</a>
+        <a v-show="tuichu" href="javascript:;" class="log_out_btn" style="position: relative;bottom:-2rem;width: 4rem;" @click="login_out()">退出登录</a>
       </div>
     </mt-popup>
   </div>
@@ -77,7 +78,9 @@
     data() {
       return {
         popupVisible: false,
+          tuichu:false,
           username:"",
+          userif:false,
           para: {
               "search_keywork": "",
           },
@@ -85,12 +88,12 @@
       };
     },
     methods: {
-        init(){
-            this.para.search_keywork = this.$route.query.keyword;
-        },
-        changeRou: function () {
-            this.$router.push({path: '/search?rt=index'})
-        },
+      init(){
+          this.para.search_keywork = this.$route.query.keyword;
+      },
+      changeRou: function () {
+          this.$router.push({path: '/search?rt=index'})
+      },
       showMenu: function () {
         this.popupVisible = true;
         var wwd = $("#section").width();
@@ -173,6 +176,7 @@
               $("body").removeAttr("style");
               this.$router.push({path:'/house'});
           }
+          localStorage.removeItem("xzfystatus1");
 
       },
       select(){
@@ -199,6 +203,7 @@
               $("body").removeAttr("style");
               this.$router.push({path:'/select'});
           }
+          localStorage.removeItem("xzfystatus1");
       },
       list(){
         if(window.location.href.indexOf("list") != -1 || window.location.href.indexOf("index") != -1 || window.location.href.lastIndexOf("/") != -1){
@@ -224,11 +229,13 @@
             $("body").removeAttr("style");
             this.$router.push({path:'/'});
         }
+        localStorage.removeItem("xzfystatus1");
       },
       percent(){
         $("#zhezhao").remove();
         $('html').removeAttr("style");
         $("body").removeAttr("style");
+        localStorage.removeItem("xzfystatus1");
         this.$router.push({path:'/per_cen'});
       },
 
@@ -239,7 +246,6 @@
           this.$router.push({path:'/modify_pwd'});
       },
       login_out(){
-          $("#zhezhao").remove();
           const url = this.$api + "/yhcms/web/qduser/loginOut.do";
           const user22 = JSON.parse(localStorage.getItem('cooknx'));
           let that = this;
@@ -247,13 +253,30 @@
               Indicator.close();
               const data = JSON.parse(res.bodyText).success;
               if(data){
+                  //左侧啦导航栏隐藏
+                  $('.sidenav').animate({
+                      left: '-100%'
+                  }, 150, function () {
+                      $('.sidenav').hide();
+                  });
+                  $("#section").animate({
+                      left: '0'
+                  }, 150);
+                  $(".section").animate({
+                      left: '0'
+                  }, 150);
+                  this.popupVisible = false;
+                  $("#zhezhao").remove();
                   $('html').removeAttr("style");
                   $("body").removeAttr("style");
+
                   //$('html').css({'height': 'auto', 'overflow': 'auto'});
                   localStorage.removeItem('cooknx');
                   localStorage.removeItem('usernx');
                   localStorage.removeItem('nxhead');
-                  this.$router.push({path:'/login'});
+                  localStorage.removeItem("xzfystatus1");
+                  //this.$router.push({path:'/login'});
+                  location.reload();
               }else{
                   Toast({
                       message: '系统异常，请稍后再试!',
@@ -264,19 +287,30 @@
           }, (res)=>{
               Indicator.close();
           });
+      },
+      denglu(){
+          this.$router.push({path:'/login'});
+          //去掉遮罩层且删除html的style样式
+          $("#zhezhao").remove();
+          $('html').removeAttr("style");
+          $("body").removeAttr("style");
+          localStorage.removeItem("xzfystatus1");
       }
     },
     mounted: function () {
       var _this = this;
 
       if(localStorage.getItem('usernx')){
+          this.userif = true;
+          this.tuichu = true;
           let user = JSON.parse(localStorage.getItem('usernx'));
           this.username = user;
           $('#first_list_link').click(function(){
               $("#zhezhao").remove();
           });
       }else{
-          this.username = "马上登录";
+          this.userif = false;
+          this.tuichu = false;
           $('#first_list_link').click(function(){
               $("#zhezhao").remove();
           });

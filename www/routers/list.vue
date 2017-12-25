@@ -57,10 +57,10 @@
     <section id="header">
       <header1></header1>
     </section>
-    <!--<a href="javascript:;" class="detail-search" style="position: fixed;left: 0; top: 0">
+    <a href="javascript:;" class="detail-search" style="position: fixed;left: 0; top: 0;border-radius: .1rem;">
       <input type="text" id="keyword" placeholder="请输入楼盘关键字搜索" v-model.trim="para.search_keywork" maxlength="50"
              @focus="changeRou">
-    </a>-->
+    </a>
     <section class="section"
              :class="{'in-filter':this.currentFilterTab=='district'||this.currentFilterTab=='price'||this.currentFilterTab=='area'||this.currentFilterTab=='features'}">
       <div class="option">
@@ -474,7 +474,6 @@
                     window.location.href = "https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI0NjY4ODM5OQ==#wechat_redirect";
                 }
             }).catch(function(response) {
-                console.log(response)
             });*!/
 
 
@@ -692,7 +691,6 @@
             Indicator.close()
             const data = JSON.parse(res.bodyText).data;
             that.featureArray = data;
-            console.log(that.featureArray);
           }, (res)=>{
             Indicator.close()
           });
@@ -863,7 +861,8 @@
         this.currentFilterTab = 'nth';
       },
       changeRou: function () {
-        this.$router.push({path: '/filter'})
+          //vue中的get传值时逗号后面必须是query参数（其他的单词会报错，不能随便定义）
+        this.$router.push({path: '/filter', query: {keyword33:this.para.search_keywork}});
       },
       searchChoose: function (code, val, value, e) {
         const li = $(e.target).closest('li');

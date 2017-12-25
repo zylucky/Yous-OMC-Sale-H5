@@ -53,6 +53,7 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
 .export{position:fixed;right:0.4rem;top:.15rem;z-index:9999}
 .export img{width:.6rem;height:.6rem;cursor:pointer}
 .new{background: url('../resources/images/icons/new.jpg') no-repeat;background-size:26px 26px}
+.dingjin{background: url('../resources/images/icons/ding.jpg') no-repeat;background-size:26px 26px}
 .hilight a{color:#476CBA !important}
 </style>
 <template>
@@ -246,7 +247,10 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
           infinite-scroll-distance="100"
           infinite-scroll-immediate-check="checked" class="clearfix" style="height: 55em;" id="zhezcly">
           <li @click.stop.prevent="makeSelect" :rel="item.id" class="ys_listcon pv15 clearfix" :class="{'linked': select.indexOf(item.id) > -1}" v-for="item in resultData">
-              <div class="cell" :class="{'new': item.bsh==1}">
+              <div v-if="item.djbsh == 1" class="cell" :class="{'dingjin': item.djbsh==1}">
+                <span>{{item.topic}}</span>
+              </div>
+              <div v-else class="cell" :class="{'new': item.bsh==1}">
                 <span>{{item.topic}}</span>
               </div>
               <div class="cell">
@@ -296,6 +300,7 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
     },
     data () {
       return {
+        dingjin:true,
         areasta:'',
         price:'',
         hist:{},
@@ -843,7 +848,7 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
         this.currentFilterTab = 'nth';
       },
       changeRou: function () {
-        this.$router.push({path: '/filter?r=select'})
+        this.$router.push({path: '/filter?r=select', query: {keyword33:this.para.search_keywork}})
       },
       searchChoose: function (code, val, value, e) {
         const li = $(e.target).closest('li');

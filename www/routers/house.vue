@@ -369,6 +369,9 @@
       }
     },
     mounted(){
+      if(localStorage.getItem("xzfystatus1")){
+          this.xzfystatus = localStorage.getItem("xzfystatus1").replace("\"","").replace("\"","");
+      }
       if(localStorage.getItem("fhdata1")){
           this.resultData = localStorage.getItem("fhdata1");
           this.para.district = localStorage.getItem("xzqv").replace("\"","").replace("\"","");
@@ -576,6 +579,7 @@
               this.resultData = [];
               this.getData();
           }
+          localStorage.setItem('xzfystatus1', JSON.stringify(this.xzfystatus));
       },
       selectTag(e){
         const target = $(e.target), val = target.attr("value"), t = target.attr("target"), which = t ==="price" ? "priceTag" : "areaTag";
@@ -851,7 +855,7 @@
         this.currentFilterTab = 'nth';
       },
       changeRou: function () {
-        this.$router.push({path: '/filter?r=house'})
+        this.$router.push({path: '/filter?r=house', query: {keyword33:this.para.search_keywork}})
       },
       searchChoose: function (code, val, value, e) {
         const li = $(e.target).closest('li');

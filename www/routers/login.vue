@@ -114,14 +114,10 @@
                     MessageBox('提示', '请输入用户名和密码');
                     return;
                 }
-
                 const sha1 = crypto.createHash('sha1'), md5 = crypto.createHash('md5');
                 sha1.update(this.password);
                 const pwd = sha1.digest('hex');
-                const sjsd = {"sjs":(new Date)};
-                localStorage.setItem('cooknx', JSON.stringify(sjsd));
-                let user22 = JSON.parse(localStorage.getItem('cooknx'));
-                console.log(user22.sjs);
+                const time1 = Date.parse(new Date());
                 md5.update(pwd);
                 const password = md5.digest("hex");
                 this.$http.post(
@@ -131,7 +127,7 @@
                             "phone":this.username,
                             "upass":password
                         },
-                        "cookie":user22.sjs,
+                        "cookie":time1,
                         "foreEndType":2,
                         "code":"8"
                     }
@@ -139,6 +135,8 @@
                     Indicator.close();
                     var result = JSON.parse(res.bodyText);
                     if (result.success) {
+                        const sjsd = {"sjs":(time1)};
+                        localStorage.setItem('cooknx', JSON.stringify(sjsd));
                         const msg = {"user": name,"time":(new Date).getMilliseconds()};
                         localStorage.setItem('loginnx', JSON.stringify(msg));
                         localStorage.setItem('usernx', JSON.stringify(result.uname));

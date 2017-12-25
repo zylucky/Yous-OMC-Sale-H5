@@ -389,7 +389,7 @@
                                       Indicator.close();
                                   });
                               }else{
-                                  alert(222222);
+
                               }
                           }, (res)=>{
                               Indicator.close();

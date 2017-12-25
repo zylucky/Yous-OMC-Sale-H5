@@ -17,7 +17,8 @@
                 <div class="headers" style="">
                     <div class="" style="float: left;"><img id="headimg" style="width: 1.8rem;height: 1.8rem;" src="../resources/images/per_cen/headtx.png"></div>
                     <div style="margin-top: 0.5rem;margin-left: 2.1rem;padding-top: 0.4rem;">
-                        <div class="headname" v-text="name" style="font-size: 0.36rem;margin-left: 0.2rem;color: white;"></div>
+                        <div v-if="userif" class="headname" v-text="name" style="font-size: 0.36rem;margin-left: 0.2rem;color: white;"></div>
+                        <a v-else href="javascript:;"><div class="headname" v-text="name" @click="denglu" style="font-size: 0.36rem;margin-left: 0.2rem;color: white;"></div></a>
                         <div class="" v-show="renzhang">
                             <img v-if="status == 0" style="width: 1.1rem;margin-top: 0.1rem;" src="../resources/images/per_cen/per_renzh3.png">
                             <img v-if="status == 1" style="width: 1.1rem;margin-top: 0.1rem;" src="../resources/images/per_cen/per_renzh1.png">
@@ -82,6 +83,7 @@
             return {
                 wsxx:1,//完善信息的状态
                 renzhang:false,
+                userif:false,
                 "name": "", //
                 "topic": "", //楼盘名称
                 "address": "", //地址
@@ -108,6 +110,9 @@
 
         },
         methods: {
+            denglu(){
+                this.$router.push({path:'/login'});
+            },
             modify_pwd(){
                 if(localStorage.getItem('cooknx')){
                     this.$router.push({path:'/modify_pwd'});
@@ -252,6 +257,7 @@
                             const data2 = JSON.parse(res.bodyText).data.mppic2;
                             this.status = data.status2;
                             this.name = data.name;
+                            this.userif = true;
                             this.renzhang = true;
                             if(data1.length != 0 && data2.length != 0 && data.gsname != "" && data.xmname != "" && data.card != ""){
                                 this.wsxx = 11;
@@ -263,8 +269,9 @@
                         Indicator.close();
                     });
                 }else{
+                    this.userif = false;
                     this.wsxx = 11;
-                    this.name = "马上登录";
+                    this.name = "立即登录";
                     $(".headname").css("margin-top","0.3rem");
                 }
 

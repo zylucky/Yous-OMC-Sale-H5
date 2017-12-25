@@ -269,6 +269,9 @@
     },
     methods:{
       init(){
+          if(this.$route.query.keyword33){
+              this.search_keyword = this.$route.query.keyword33;
+          }
         axios.defaults.baseURL = this.$api;
         axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
         const r = this.$route.query.r;
@@ -283,13 +286,14 @@
            localStorage.setItem("historyData",JSON.stringify(this.hotArray));
       },
       toList:function(){
-        //this.$router.push({path: '/' + this.r});
-          history.go(-1);
+        this.$router.push({path: '/' + this.r});
+          //history.go(-1);
       },
       toList2:function(){
         if(this.search_keyword){
              this.changeHistory(this.search_keyword);
         }
+
         this.$router.push({path: '/' + this.r, query: {keyword: this.search_keyword}});
       },
       find:function(){
