@@ -91,6 +91,22 @@
 		}
 		p:last-child{margin-bottom: 0;}
   	}
+  	.pop{
+  		position: fixed;
+  		left: 0;
+  		right: 0;
+  		top: 0;
+  		bottom: 0;
+  		background: rgba(0,0,0,0.3);
+  	}
+  	.approve{
+  		width: 6.5rem;
+  		height: 5.75rem;
+  		margin: 2.38rem auto 0;
+  		border-radius: 0.08rem;
+  		background: #fff;
+  		overflow: hidden;
+  	}
 </style>
 
 <template>
@@ -105,7 +121,7 @@
 		<div class="list_box">
 			<!--未确认-->
 			<ul class="list" v-if="tabq=='0'">
-				<li v-for="item in pendData">
+				<li v-for="item in 2">
 					<p><span>{{item.loupan}}</span><i>2017-12-16</i></p>
 					<p>
 						<span>{{item.loudong}}-{{item.fanghao}}</span>
@@ -137,6 +153,14 @@
 					</p>
 				</li>
 			</ul>
+		</div>
+		<!-- 实名认证弹框 -->
+		<div class="pop">
+			<div class="approve">
+				<p><img src="../resources/images/smrz_icon.png" alt="" /></p>
+				<p>您还未实名认证，请先去认证！</p>
+				<p>去认证</p>
+			</div>
 		</div>
 	</div>
 </template>
