@@ -1,6 +1,6 @@
 <style scoped lang='less'>
-	@import "../resources/css/reset.css";
-  	@import "../resources/css/base.less";
+	@import "../../resources/css/reset.css";
+  	@import "../../resources/css/base.less";
   	.box{
   		position: absolute;
   		left: 0;
@@ -100,12 +100,51 @@
   		background: rgba(0,0,0,0.3);
   	}
   	.approve{
+  		position: relative;
+  		display: flex;
+  		align-items: center;
+  		flex-direction: column;
   		width: 6.5rem;
   		height: 5.75rem;
   		margin: 2.38rem auto 0;
+  		padding: 0.15rem 0;
   		border-radius: 0.08rem;
   		background: #fff;
   		overflow: hidden;
+  		.pic{
+  			width: 3rem;
+  			height: 3rem;
+  			img{width: 100%;height: auto;}
+  		}
+  		.tip{
+  			font-size: @font26;
+  			color: #323232;
+  			margin: 0.3rem 0 0.55rem 0;
+  		}
+  		.btn{
+  			width: 2.35rem;
+  			height: 0.7rem;
+  			line-height: 0.7rem;
+  			background: #3586f2;
+  			font-size: @font28;
+  			color: #fff;
+  			text-align: center;
+  			border-radius: 0.08rem;
+  		}
+  		.close{
+  			position: absolute;
+  			top: 0;
+  			right: 0;
+  			display: inline-block;
+  			width: 0.5rem;
+  			height: 0.5rem;
+  			border-bottom-left-radius: 80%;
+  			background:#d7d7d9;
+  			font-size: @font26;
+  			text-align: center;
+  			color: #898989;
+  			padding-left: 0.1rem;
+  		}
   	}
 </style>
 
@@ -121,7 +160,7 @@
 		<div class="list_box">
 			<!--未确认-->
 			<ul class="list" v-if="tabq=='0'">
-				<li v-for="item in 2">
+				<li v-for="item in pendData"  @click="pendclk">
 					<p><span>{{item.loupan}}</span><i>2017-12-16</i></p>
 					<p>
 						<span>{{item.loudong}}-{{item.fanghao}}</span>
@@ -138,7 +177,7 @@
 			</ul>
 			<!--已确认-->
 			<ul class="list" v-if="tabq=='1'">
-				<li v-for="item in passData">
+				<li v-for="item in passData" @click="passclk">
 					<p>{{item.loupan}}<i>2017-12-16</i></p>
 					<p>
 						<span>{{item.loudong}}-{{item.fanghao}}</span>
@@ -155,11 +194,12 @@
 			</ul>
 		</div>
 		<!-- 实名认证弹框 -->
-		<div class="pop">
+		<div class="pop" v-if="popshow">
 			<div class="approve">
-				<p><img src="../resources/images/smrz_icon.png" alt="" /></p>
-				<p>您还未实名认证，请先去认证！</p>
-				<p>去认证</p>
+				<p class="pic"><img src="../../resources/images/smrz_icon.png" alt="" /></p>
+				<p class="tip">您还未实名认证，请先去认证！</p>
+				<p class="btn" @click="goapprove">去认证</p>
+				<span class="close" @click="clos">X</span>
 			</div>
 		</div>
 	</div>
@@ -175,21 +215,25 @@ import axios from 'axios';
 				tabq:'0',
 				pendData:[],//未确认数据
 				passData:[],//已确认数据
+				popshow:false,//弹框状态
+				
 			}
 		},
 		created(){
-			 this.init();
-			 // this.init1();
+			this.init();
+			this.init1();
 		},
 		methods:{
 			init(){//待处理接口
-				const url = "http://192.168.1.40:8080/yhcms/web/qdyongjin/getQdYjForQvdao.do";
+				// const url = this.$api + "/yhcms/web/qdyongjin/getQdYjForQvdao.do";
+				const url = "http://192.168.1.44:8080/yhcms/web/qdyongjin/getQdYjForQvdao.do";
 				var cookxs = JSON.parse(localStorage.getItem('cooknx'));
 	            axios.post(url,{ 
 	            		"cookie":cookxs,
 	            		"zt":0
 	            }).then((res)=>{
-	            	// this.pendData = res.data.data;
+	            	this.pendData = res.data.data;
+	            	localStorage.setItem('qdlist',JSON.stringify(res.data.data));
 					Indicator.close();
 					console.log(res);
 	            }, (err)=>{
@@ -198,7 +242,7 @@ import axios from 'axios';
 			},
 			init1(){//已处理接口
 				// const url = this.$api + "/yhcms/web/qdyongjin/getQdYjForQvdao.do";
-				const url = "http://192.168.1.40:8080/yhcms/web/qdyongjin/getQdYjForQvdao.do";
+				const url = "http://192.168.1.44:8080/yhcms/web/qdyongjin/getQdYjForQvdao.do";
 				var cookxs = JSON.parse(localStorage.getItem('cooknx'));
 				console.log(cookxs);
 	            axios.post(url,{ 
@@ -213,9 +257,8 @@ import axios from 'axios';
 	               console.log(err);
 	            });
 			},
-
 			clk(cut){
-			console.log(cut)
+				console.log(cut)
 				Indicator.open({
 				  text: 'Loading...',
 				  spinnerType: 'fading-circle'
@@ -227,6 +270,21 @@ import axios from 'axios';
 				if(cut=='1'){
 					this.init1();//已处理数据
 				}
+			},
+			pendclk(){//未确认
+//				this.popshow = true;//实名认证弹框
+				this.$router.push({
+					path:'/channel',//跳转渠道佣金数据保存
+				})
+			},
+			passclk(){//已确认数据
+//				this.popshow = true;//实名认证弹框
+			},
+			goapprove(){//去认证
+				this.popshow = false;//实名认证弹框
+			},
+			clos(){//关闭
+				this.popshow = false;//实名认证弹框
 			}
 		}
 	}

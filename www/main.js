@@ -46,6 +46,25 @@ Vue.prototype.$prefix = "http://47.92.145.21:81" //图片前缀
 Vue.prototype.$export = "http://omc.urskongjian.com" //导出
 
 
+// 过滤器
+Vue.filter('splitK', function(num) {//千位分隔符 过滤器
+  var decimal = String(num).split('.')[1] || '';//小数部分
+  var tempArr = [];
+  var revNumArr = String(num).split('.')[0].split("").reverse();//倒序
+  for (var i in revNumArr){
+    tempArr.push(revNumArr[i]);
+    if((i+1)%3 === 0 && i != revNumArr.length-1){
+      tempArr.push(',');
+    }
+  }
+  var zs = tempArr.reverse().join('');//整数部分
+  return decimal?zs+'.'+decimal:zs+'.00';
+})
+Vue.filter('delkg', function(num){//银行卡四位空格分割
+  var str=String(num).replace(/(\d{4})/g,'$1 ').replace(/\s*$/,'');
+  return str;
+})
+
 
 //Vue.config.debug = true;// 开启debug模式
 Vue.config.debug = true;// 开启debug模式
@@ -150,10 +169,38 @@ var router = new VueRouter({
             path: '/test',
             component: require('./routers/test.vue')
         },
-        {
-            path: '/channel_list',
-            component: require('./routers/channel_list.vue')
-        }
+        {//渠道未确认
+          path: '/channel',
+          name: 'channel',
+          component: resolve => require(['./pages/channel/channel.vue'], resolve),
+          meta: {
+            title: '佣金信息'
+          }
+        },
+        {//渠道佣金记录列表
+          path: '/channel_list',
+          name: 'channel_list',
+          component: resolve => require(['./pages/channel/channel_list.vue'], resolve),
+          meta: {
+            title: '佣金管理'
+          }
+        },
+        {//新建收款账号
+          path: '/adduser',
+          name: 'adduser',
+          component: resolve => require(['./pages/channel/adduser.vue'], resolve),
+          meta: {
+            title: '新建收款账号'
+          }
+        },
+        {//收款账号管理
+          path: '/income_number',
+          name: 'income_number',
+          component: resolve => require(['./pages/channel/income_number.vue'], resolve),
+          meta: {
+            title: '收款账号管理'
+          }
+        },
     ]
 });
 
@@ -298,6 +345,13 @@ var router = new VueRouter({
 
 
 router.beforeEach((to, from, next) => {
+    // 根据路由变化去改变页面的title
+    if (to.meta.title) {
+      document.title = to.meta.title;
+    }else{
+      next();
+    }
+
     if(to.path=='/register'||to.path=='/forgot_pwd'||to.path.indexOf('/reset_pwd')!=-1){
         next();
     }else{
