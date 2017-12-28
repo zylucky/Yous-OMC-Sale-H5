@@ -281,24 +281,24 @@
 			<div class="new_box">
 				<h3>收款方信息</h3>
 				<div class="choose">
-					<p class="sel" v-if='true' @click="selnum2">
+					<p class="sel" v-if='!defaultData' @click="selnum2(defaultData)">
 						<span></span>
 						<span>选择收款账号</span>
 					</p>
 					<!--选择好收款账号显示的样式-->
-					<ul @click="selnum1" v-if="false">
+					<ul @click="selnum1(defaultData.id)" v-if="defaultData">
 						<li>
 							<span>户名：</span>
-							<span>李明</span>
+							<span>{{defaultData.huming}}</span>
 						</li>
 						<li>
 							<span>开户行：</span>
-							<span>中国人民银行建国路支行</span>
-							<i style="color: #3385f3; float: right;" @click="selnum">></i>
+							<span>{{defaultData.kaihuhang}}</span>
+							<i style="color: #3385f3; float: right;" @click="selnum(defaultData.id)">></i>
 						</li>
 						<li>
 							<span>银行账号：</span>
-							<span>15101258698</span>
+							<span>{{defaultData.zhanghao | delkg}}</span>
 						</li>
 					</ul>
 					
@@ -307,7 +307,7 @@
 			<div class="new_box">
 				<div class="bz">
 					<span>备注:</span>
-					<textarea  rows="6" cols="30" placeholder="请输入备注信息" v-model="bz"></textarea>
+					<textarea  rows="6" cols="35" placeholder="请输入备注信息" v-model="bz"></textarea>
 				</div>
 			</div>
 			<!--确认框-->
@@ -352,6 +352,7 @@
 <script>
 import axios from 'axios';
 import { Checklist } from 'mint-ui';
+import { Toast } from 'mint-ui';
 export default{
 	data(){
 		return{
@@ -366,11 +367,14 @@ export default{
 			qdlist:{},//渠道佣金列表数据
 			popshow:false,
 			qrfp:'',//发票确认
+			ids:'',//银行账户id
+			defaultData:{},//选择的银行账户数据
 		}
 	},
 	created(){
+		this.ids = this.$route.query.zhid;
 		this.qdlist = JSON.parse(localStorage.getItem('qdlist'))[0];
-		console.log(this.qdlist)
+		this.defaultzh();//获取用户默认账户
 	},
 	methods:{
 		fptt(){
@@ -387,61 +391,107 @@ export default{
 			console.log(this.qrfp);
 		},
 		save(){//保存提交
-			const url = "http://192.168.1.40:8080/yhcms/web/qdyongjin/saveQvDaoData.do";
+			const url = "http://192.168.1.44:8080/yhcms/web/qdyongjin/saveQvDaoData.do";
 			var cookxs = JSON.parse(localStorage.getItem('cooknx'));
-            axios.post(url,{ 
-            	"ccode":this.qdlist.ccode,
-        		"cookie":cookxs,
-				"fanghao":this.qdlist.fanghao
-				,"fanghaoid":this.qdlist.fanghaoid
-				,"hetongid":this.qdlist.hetongid
-				,"htbianhao":this.qdlist.htbianhao
-				,"id":this.qdlist.id
-				,"loudong":this.qdlist.loudong
-				,"loudongid":this.qdlist.loudongid
-				,"loupan":this.qdlist.loupan
-				,"loupanid":this.qdlist.loupanid
-				,"qdbeizhu":this.qdlist.qdbeizhu
-				,"taskZt":this.qdlist.taskZt
-				,"xiaoshou":this.qdlist.xiaoshou
-				,"xiaoshouid":this.qdlist.xiaoshouid
-				,"xsfpdanwei":this.qdlist.xsfpdanwei
-				,"xsfpdizhidianhua":this.qdlist.xsfpdizhidianhua
-				,"xsfpkaihuhang":this.qdlist.xsfpkaihuhang
-				,"xsfpleixing":this.qdlist.xsfpleixing
-				,"xsfpnashuiren":this.qdlist.xsfpnashuiren
-				,"xsjisuangongshi":this.qdlist.xsjisuangongshi
-				,"xsqvdao":this.qdlist.xsqvdao
-				,"xsqvdaoid":this.qdlist.xsqvdaoid
-				,"xsqvdaotel":this.qdlist.xsqvdaotel
-				,"xsyongjin":this.qdlist.xsyongjin
-				,"xsyongjinxinxi":this.qdlist.xsyongjinxinxi
-				,"qdbeizhu":this.bz
-				,"qdhuming":'李明'
-				,"qdkaihuhang":'中国人民银行建国路支行'
-				,"qdquerenfapiao":this.qrfp
-				,"qdzhanghao":'12345677654321'
-            }).then((res)=>{
-            	console.log(res);
+			if(!this.defaultData.id || this.qrfp!=true){
+				Toast({
+				  message: '请选择您的银行账号，并确认已开具发票',
+				  position: 'center',
+				  duration: 4000
+				});
+			}else{
+	            axios.post(url,{ 
+	            	"ccode":this.qdlist.ccode,
+	        		"cookie":cookxs,
+					"fanghao":this.qdlist.fanghao,
+					"fanghaoid":this.qdlist.fanghaoid,
+					"hetongid":this.qdlist.hetongid,
+					"htbianhao":this.qdlist.htbianhao,
+					"id":this.qdlist.id,
+					"loudong":this.qdlist.loudong,
+					"loudongid":this.qdlist.loudongid,
+					"loupan":this.qdlist.loupan,
+					"loupanid":this.qdlist.loupanid,
+					"qdbeizhu":this.qdlist.qdbeizhu,
+					"taskZt":this.qdlist.taskZt,
+					"xiaoshou":this.qdlist.xiaoshou,
+					"xiaoshouid":this.qdlist.xiaoshouid,
+					"xsfpdanwei":this.qdlist.xsfpdanwei,
+					"xsfpdizhidianhua":this.qdlist.xsfpdizhidianhua,
+					"xsfpkaihuhang":this.qdlist.xsfpkaihuhang,
+					"xsfpleixing":this.qdlist.xsfpleixing,
+					"xsfpnashuiren":this.qdlist.xsfpnashuiren,
+					"xsjisuangongshi":this.qdlist.xsjisuangongshi,
+					"xsqvdao":this.qdlist.xsqvdao,
+					"xsqvdaoid":this.qdlist.xsqvdaoid,
+					"xsqvdaotel":this.qdlist.xsqvdaotel,
+					"xsyongjin":this.qdlist.xsyongjin,
+					"xsyongjinxinxi":this.qdlist.xsyongjinxinxi,
+					"qdbeizhu":this.bz,
+					"qdhuming":this.defaultData.huming,
+					"qdkaihuhang":this.defaultData.kaihuhang,
+					"qdquerenfapiao":this.qrfp,
+					"qdzhanghao":this.defaultData.zhanghao
+	            }).then((res)=>{
+	            	console.log(res);
+	            }, (err)=>{
+	            	console.log(err);
+	            });
+	        }
+		},
+		selnum(id){//变更账户
+			this.$router.push({
+				path:'/income_number',//跳转到银行账户列表
+				query:{
+					"zhid":id//所传参数
+				}
+			})
+		},
+		selnum1(id){
+			this.$router.push({
+				path:'/income_number',//跳转到银行账户列表
+				query:{
+					"zhid":id//所传参数
+				}
+			})
+		},
+		selnum2(id){
+			this.$router.push({
+				path:'/income_number',//跳转到银行账户列表
+				query:{
+					"zhid":id//所传参数
+				}
+			})
+		},
+		//待联调====
+		defaultzh(){//获取默认账号
+			var cookxs = JSON.parse(localStorage.getItem('cooknx'));
+			const url = "http://192.168.1.40:8080/yhcms/web/qdyinhangzhanghao/getQdYHZHForQdid.do";
+//			const url = this.$api + "/yhcms/web/qdyinhangzhanghao/getQdYHZHForQdid.do";
+			axios.post(url,{ 
+				"cookie":cookxs,
+				qdid:this.qdlist.xsqvdaoid//通过渠道id获取渠道默认银行账号
+			 }).then((res)=>{
+			 	this.defaultData = res.data.data
+			 	this.hqzh();
             }, (err)=>{
             	console.log(err);
             });
 		},
-		selnum(){//变更账户
-			this.$router.push({
-				path:'/income_number'//跳转到银行账户列表
-			})
-		},
-		selnum1(){
-			this.$router.push({
-				path:'/income_number'//跳转到银行账户列表
-			})
-		},
-		selnum2(){
-			this.$router.push({
-				path:'/income_number'//跳转到银行账户列表
-			})
-		},
+		hqzh(){//根据id获取银行账号
+			const url = "http://192.168.1.40:8080/yhcms/web/qdyinhangzhanghao/getQdYHZHForid.do";
+//			const url = this.$api + "/yhcms/web/qdyinhangzhanghao/getQdYHZHForid.do";
+			axios.post(url,{ 
+				"id":this.$route.query.zhid//路由传递过来的银行账户id
+			 }).then((res)=>{
+			 	this.defaultData = res.data.data;
+            }, (err)=>{
+            	console.log(err);
+            });
+		}
+	},
+	mounted(){
+		this.hqzh();
 	}
 }
 </script>

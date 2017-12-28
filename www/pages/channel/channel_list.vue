@@ -226,7 +226,7 @@ import axios from 'axios';
 		methods:{
 			init(){//待处理接口
 				// const url = this.$api + "/yhcms/web/qdyongjin/getQdYjForQvdao.do";
-				const url = "http://192.168.1.44:8080/yhcms/web/qdyongjin/getQdYjForQvdao.do";
+				const url = "http://192.168.1.40:8080/yhcms/web/qdyongjin/getQdYjForQvdao.do";
 				var cookxs = JSON.parse(localStorage.getItem('cooknx'));
 	            axios.post(url,{ 
 	            		"cookie":cookxs,
@@ -242,7 +242,7 @@ import axios from 'axios';
 			},
 			init1(){//已处理接口
 				// const url = this.$api + "/yhcms/web/qdyongjin/getQdYjForQvdao.do";
-				const url = "http://192.168.1.44:8080/yhcms/web/qdyongjin/getQdYjForQvdao.do";
+				const url = "http://192.168.1.40:8080/yhcms/web/qdyongjin/getQdYjForQvdao.do";
 				var cookxs = JSON.parse(localStorage.getItem('cooknx'));
 				console.log(cookxs);
 	            axios.post(url,{ 
@@ -250,6 +250,7 @@ import axios from 'axios';
 	            		"zt":1
 	            }).then((res)=>{
 	            	this.passData = res.data.data;
+	            	localStorage.setItem('qdlist',JSON.stringify(res.data.data));
 					Indicator.close();
 	                console.log(this.passData);
 	            }, (err)=>{
@@ -279,6 +280,9 @@ import axios from 'axios';
 			},
 			passclk(){//已确认数据
 //				this.popshow = true;//实名认证弹框
+				this.$router.push({
+					path:'/channel',//跳转渠道佣金数据保存
+				})
 			},
 			goapprove(){//去认证
 				this.popshow = false;//实名认证弹框

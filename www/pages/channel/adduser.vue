@@ -102,7 +102,7 @@
 			</p>
 			<p>
 				<span><i>*</i>银行账号</span>
-				<input type="number" placeholder="请输入银行账号" v-model="usernumber" />
+				<input type="number" placeholder="请输入银行账号" v-model="usernumber"/>
 			</p>
 		</div>
 		<!--账号默认设置-->
@@ -136,7 +136,14 @@ export default{
 			usernumber:'',
 			value:'',//是否设置默认
 			value1:0,
+			id:'',//银行账户id
+			yhzh:'',//银行账户
 		}
+	},
+	created(){
+		this.id = this.$route.query.zhid;
+		this.yhzh = this.$route.query.yhzh;
+		console.log(this.yhzh)
 	},
 	methods:{
 		state(){
@@ -168,7 +175,15 @@ export default{
 			var cookxs = JSON.parse(localStorage.getItem('cooknx'));
 			console.log(cookxs)
 			const url = this.$api + "/yhcms/web/qdyinhangzhanghao/saveQvDaoData.do";
-			if(this.username != '' && this.bankplace != '' && this.usernumber != ''){
+			if(this.usernumber == this.yhzh){
+				Toast({
+				  message: '已存在该账户',
+				  position: 'center',
+				  duration: 3000
+				});
+				return;
+			}
+			if(this.username != '' && this.bankplace != '' && this.usernumber != '' && this.usernumber != this.yhzh){
 				axios.post(url,{
 					"cookie":cookxs,
 					"id":'',
@@ -180,6 +195,11 @@ export default{
 					"isfirst":this.value1,
 					"ctime":ctime
 	            }).then((res)=>{
+	            	Toast({
+					  message: '保存成功',
+					  position: 'center',
+					  duration: 1000
+					});
 					console.log(res);
 	            }, (err)=>{
 					console.log(err);
@@ -191,7 +211,24 @@ export default{
 				  duration: 3000
 				});
 			}
+		},
+		hqzh(){//根据id获取银行账号
+			const url = "http://192.168.1.40:8080/yhcms/web/qdyinhangzhanghao/getQdYHZHForid.do";
+//			const url = this.$api + "/yhcms/web/qdyinhangzhanghao/getQdYHZHForid.do";
+			axios.post(url,{ 
+				id:this.id//路由传递过来的银行账户id
+			 }).then((res)=>{
+			 	this.username = res.data.data.huming;
+			 	this.bankplace = res.data.data.kaihuhang;
+			 	this.usernumber = res.data.data.zhanghao;
+            }, (err)=>{
+            	console.log(err);
+            });
 		}
-	}
+	},
+	mounted(){
+		this.hqzh();
+	},
+	
 }
 </script>

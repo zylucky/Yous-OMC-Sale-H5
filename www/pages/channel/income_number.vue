@@ -10,17 +10,18 @@
   	}
   	.list li{
   		position: relative;
-  		/*border: 1px solid #000;*/
   		display: flex;
   		align-items: center;
   		width: 135%;
   		padding:0 0 0 0.45rem;
   		background: #ffffff;
   		margin-bottom: 0.2rem;
+  		/*margin-left: -2.5rem;*/
   		-webkit-transition:all 0.2s linear;
   		transition:all 0.2s linear;
   		-webkit-box-shadow:0px 1px 4px #D6D5DA;
   		box-shadow:0px 1px 4px #D6D5DA;
+  		text-transform: uppercase;
   		p span:nth-child(1){color: #969696;}
   		p span:nth-child(2){color: #323232;}
   	}
@@ -107,8 +108,8 @@
 	<div class="box">
 		<div class="list">
 			<ul>
-				<li v-for="item in listData">
-					<i class="check" v-if="false"></i>
+				<li v-for="item in listData" @click="tochanel(item.id)" class="item_list">
+					<i class="check" v-if="item.id == id"></i>
 					<div class="userleft">
 						<p>
 							<span>户名：</span>
@@ -125,9 +126,9 @@
 						</p>
 					</div>
 					<div class="userright">
-						<p class="bj" @click.stop='bjclick'></p>
-						<p class="mr" @click="setdefault(item.id)">设置默认</p>
-						<p class="del" @click="del(item.id)">删除</p>
+						<p class="bj" @click.stop='bjclick(item.id,item.zhanghao)'></p>
+						<p class="mr" @click.stop="setdefault(item.id)">设置默认</p>
+						<p class="del" @click.stop="del(item.id)">删除</p>
 					</div>
 				</li>
 			</ul>
@@ -140,75 +141,72 @@ import axios from 'axios';
 export default{
 	data(){
 		return{
-			listData:[{ 
-            "ctime" : '1513923247000', 
-            "gtime" : '1514183902000', 
-            "huming" : "彭昆", 
-            "id" : 1, 
-            "isdelete" : 0, 
-            "isfirst" : 0, 
-            "kaihuhang" : "工商银行", 
-            "memo" : "就开始地方", 
-            "qdid" : 1, 
-            "qdname" : "华亮", 
-            "zhanghao" : "62222029383948" 
-       		},{
-       		"ctime":'1513923247000',
-            "gtime" : '1514183902000', 
-            "huming" : "彭昆", 
-            "id" : 1, 
-            "isdelete" : 0, 
-            "isfirst" : 0, 
-            "kaihuhang" : "工商银行", 
-            "memo" : "就开始地方", 
-            "qdid" : 1, 
-            "qdname" : "华亮", 
-            "zhanghao" : "62222029383948" 
-       		}],//个人银行账户列表
-			
+			listData:[{},{}],//个人银行账户列表
+			id:'',//选择的银行卡
 		}
 	},
 	created(){
-//		this.init();
+		this.init();
+		this.id = this.$route.query.zhid;
 	},
 	methods:{
-		bjclick(){
-			alert(123)
+		bjclick(id,zh){
+			this.$router.push({
+				path:'/adduser',//跳转到渠道数据保存
+				query:{
+					"zhid":id,//所传参数
+					"yhzh":zh//银行账户
+				}
+			})
 		},
 		init(){//渠道银行账号列表
 			var cookxs = JSON.parse(localStorage.getItem('cooknx'));
-			const url = "http://127.0.0.1:8080/yhcms/web/qdyinhangzhanghao/getQdYHZHForQvdao.do";
+			const url = "http://192.168.1.40:8080/yhcms/web/qdyinhangzhanghao/getQdYHZHForQvdao.do";
 //			const url = this.$api + "/yhcms/web/qdyongjin/getLikeQd.do";
 			axios.post(url,{
 				"cookie":cookxs
             }).then((res)=>{
-				console.log(res);
+            	this.listData = res.data.data;
             }, (err)=>{
 				console.log(err);
             });
 		},
 		setdefault(id){//设置默认
-			console.log(id)
-			const url = this.$api + "/yhcms/web/qdyinhangzhanghao/setDefaultById.do";
+			var cookxs = JSON.parse(localStorage.getItem('cooknx'));
+			const url = "http://192.168.1.40:8080/yhcms/web/qdyinhangzhanghao/setDefaultById.do";
+//			const url = this.$api + "/yhcms/web/qdyinhangzhanghao/setDefaultById.do";
 			axios.post(url,{
+				"cookie":cookxs,
 				id:id
             }).then((res)=>{
-				console.log(res);
+            	location.reload();
             }, (err)=>{
 				console.log(err);
             });
 		},
 		del(id){//删除银行账户
 			console.log('asdsadsad')
-			const url = this.$api + '/yhcms/web/qdyinhangzhanghao/deleteYHZH.do';
+			var cookxs = JSON.parse(localStorage.getItem('cooknx'));
+			const url = "http://192.168.1.40:8080/yhcms/web/qdyinhangzhanghao/deleteYHZH.do";
+//			const url = this.$api + '/yhcms/web/qdyinhangzhanghao/deleteYHZH.do';
 			axios.post(url,{
+				"cookie":cookxs,
 				id:id
 			}).then((res)=>{
+				location.reload();
 				console.log(res);
 			},(err)=>{
 				console.log(err)
 			});
 		},
+		tochanel(id){
+			this.$router.push({
+				path:'/channel',//跳转到渠道数据保存
+				query:{
+					"zhid":id//所传参数
+				}
+			})
+		}
 	},
 	mounted(){
 		//侧滑菜单尺寸自动计算
@@ -233,8 +231,10 @@ export default{
 		 container[i].addEventListener('touchstart', function(event) {
 		  x = event.changedTouches[0].pageX;
 		  y = event.changedTouches[0].pageY;
+		  console.log(x)
 		  swipeX = true;
 		  swipeY = true ;
+		  console.log(x + 'x轴滑动')
 		  if(expansion){ //判断是否展开，如果展开则收起
 		   expansion.className = "";
 		  }  
@@ -263,6 +263,67 @@ export default{
 		  }  
 		 });
 		}
+
+
+
+		 // 获取所有行，对每一行设置监听  
+//      var lines = $(".item_list");  
+//      var len = lines.length;  
+//      var lastX,lastXForMobile;  
+//		// 用于记录被按下的对象  
+//      var pressedObj;  
+//      //定义一个用于存储滑动过的对象的数组  
+//      var pressedObj1=[];    
+//      var start;  // 用于记录按下的点  
+//      // 网页在移动端运行时的监听  
+//	    for (var i = 0; i < len; ++i) {  
+//	        lines[i].addEventListener('touchstart', function(e) {  
+//	            lastXForMobile = e.changedTouches[0].pageX;  
+//	            //记录手指触摸点的横坐标  
+//	            pressedObj = this;  
+//	            // 记录被按下的对象  
+//	  
+//	                        // 记录开始按下时的点  
+//	            var touches = event.touches[0];  
+//	            start = {  
+//	                x : touches.pageX, // 横坐标  
+//	                y : touches.pageY // 纵坐标  
+//	                        };  
+//	                    });  
+//	  
+//	                    lines[i].addEventListener('touchmove', function(e) {  
+//	            // 计算划动过程中x和y的变化量  
+//	                        var touches = event.touches[0];  
+//	                        delta = {  
+//	                            x : touches.pageX - start.x,  
+//	                            y : touches.pageY - start.y  
+//	                        };  
+//	  
+//	                        // 横向位移大于纵向位移，阻止纵向滚动  
+//	                        if (Math.abs(delta.x) > Math.abs(delta.y)) {  
+//	                            event.preventDefault();  
+//	                        }  
+//	                    });  
+//	  
+//	                    lines[i].addEventListener('touchend', function(e) {  
+//	            var diffX = e.changedTouches[0].pageX - lastXForMobile;  
+//	            if (diffX < -100) {  
+//	                for(var i = 0; i < pressedObj1.length; ++i){  
+//	                    $(pressedObj1[i]).animate({marginLeft:"0"}, 500);  
+//	                    //清空数组  
+//	                    if(i==(pressedObj1.length-1)){  
+//	                        pressedObj1=[];  
+//	                    }  
+//	                }  
+//	                $(pressedObj).animate({marginLeft : "-2.5rem"}, 500);// 左滑  
+//	                pressedObj1.push(this);   
+//	                //记录被滑的这个对象，已被下一次滑动删除这个对象的左移效果  
+//	            } else if (diffX > 100) {  
+//	                $(pressedObj).animate({marginLeft : "0"}, 500);// 右滑  
+//	            }  
+//	        });  
+//	    }
+
 	}
 }
 </script>
