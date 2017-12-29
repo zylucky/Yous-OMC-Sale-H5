@@ -17,8 +17,8 @@
   		background: #ffffff;
   		margin-bottom: 0.2rem;
   		/*margin-left: -2.5rem;*/
-  		-webkit-transition:all 0.2s linear;
-  		transition:all 0.2s linear;
+  		/*-webkit-transition:all 0.2s linear;*/
+  		/*transition:all 0.2s linear;*/
   		-webkit-box-shadow:0px 1px 4px #D6D5DA;
   		box-shadow:0px 1px 4px #D6D5DA;
   		text-transform: uppercase;
@@ -141,7 +141,7 @@ import axios from 'axios';
 export default{
 	data(){
 		return{
-			listData:[{},{}],//个人银行账户列表
+			listData:[],//个人银行账户列表
 			id:'',//选择的银行卡
 		}
 	},
@@ -209,120 +209,57 @@ export default{
 		}
 	},
 	mounted(){
-		//侧滑菜单尺寸自动计算
-		function resizeRoot(){//根节点HTML的字体大小初始化
-		 var deviceWidth = document.documentElement.clientWidth,
-		  num = 750,
-		  num1 = num / 100;
-		 if(deviceWidth > num){
-		  deviceWidth = num; 
-		 }
-		 document.documentElement.style.fontSize = deviceWidth / num1 + "px";
-		}
-		resizeRoot();
-		window.onresize = function(){//屏幕窗口大小发生改变时自动计算
-		 resizeRoot();
-		};
-		//侧滑菜单
-		var expansion = null; //是否存在展开的list
-		var container = document.querySelectorAll('.list li');
-		for(var i = 0; i < container.length; i++){ 
-		 var x, y, X, Y, swipeX, swipeY;
-		 container[i].addEventListener('touchstart', function(event) {
-		  x = event.changedTouches[0].pageX;
-		  y = event.changedTouches[0].pageY;
-		  console.log(x)
-		  swipeX = true;
-		  swipeY = true ;
-		  console.log(x + 'x轴滑动')
-		  if(expansion){ //判断是否展开，如果展开则收起
-		   expansion.className = "";
-		  }  
-		 });
-		 container[i].addEventListener('touchmove', function(event){
-		  X = event.changedTouches[0].pageX;
-		  Y = event.changedTouches[0].pageY;
-		  // 左右滑动
-		  if(swipeX && Math.abs(X - x) - Math.abs(Y - y) > 0){
-		   // 阻止事件冒泡
-		   event.stopPropagation();
-		   if(X - x > 10){ //右滑
-		    event.preventDefault();
-		    this.className = ""; //右滑收起
-		   }
-		   if(x - X > 10){ //左滑
-		    event.preventDefault();
-		    this.className = "swipeleft"; //左滑展开
-		    expansion = this;
-		   }
-		   swipeY = false;
-		  }
-		  // 上下滑动
-		  if(swipeY && Math.abs(X - x) - Math.abs(Y - y) < 0) {
-		   swipeX = false;
-		  }  
-		 });
-		}
-
-
-
-		 // 获取所有行，对每一行设置监听  
-//      var lines = $(".item_list");  
-//      var len = lines.length;  
-//      var lastX,lastXForMobile;  
-//		// 用于记录被按下的对象  
-//      var pressedObj;  
-//      //定义一个用于存储滑动过的对象的数组  
-//      var pressedObj1=[];    
-//      var start;  // 用于记录按下的点  
-//      // 网页在移动端运行时的监听  
-//	    for (var i = 0; i < len; ++i) {  
-//	        lines[i].addEventListener('touchstart', function(e) {  
-//	            lastXForMobile = e.changedTouches[0].pageX;  
-//	            //记录手指触摸点的横坐标  
-//	            pressedObj = this;  
-//	            // 记录被按下的对象  
-//	  
-//	                        // 记录开始按下时的点  
-//	            var touches = event.touches[0];  
-//	            start = {  
-//	                x : touches.pageX, // 横坐标  
-//	                y : touches.pageY // 纵坐标  
-//	                        };  
-//	                    });  
-//	  
-//	                    lines[i].addEventListener('touchmove', function(e) {  
-//	            // 计算划动过程中x和y的变化量  
-//	                        var touches = event.touches[0];  
-//	                        delta = {  
-//	                            x : touches.pageX - start.x,  
-//	                            y : touches.pageY - start.y  
-//	                        };  
-//	  
-//	                        // 横向位移大于纵向位移，阻止纵向滚动  
-//	                        if (Math.abs(delta.x) > Math.abs(delta.y)) {  
-//	                            event.preventDefault();  
-//	                        }  
-//	                    });  
-//	  
-//	                    lines[i].addEventListener('touchend', function(e) {  
-//	            var diffX = e.changedTouches[0].pageX - lastXForMobile;  
-//	            if (diffX < -100) {  
-//	                for(var i = 0; i < pressedObj1.length; ++i){  
-//	                    $(pressedObj1[i]).animate({marginLeft:"0"}, 500);  
-//	                    //清空数组  
-//	                    if(i==(pressedObj1.length-1)){  
-//	                        pressedObj1=[];  
-//	                    }  
-//	                }  
-//	                $(pressedObj).animate({marginLeft : "-2.5rem"}, 500);// 左滑  
-//	                pressedObj1.push(this);   
-//	                //记录被滑的这个对象，已被下一次滑动删除这个对象的左移效果  
-//	            } else if (diffX > 100) {  
-//	                $(pressedObj).animate({marginLeft : "0"}, 500);// 右滑  
-//	            }  
-//	        });  
-//	    }
+		setTimeout(()=>{//延时一秒为列表添加功能
+	        var lines = $(".item_list");// 获取所有行，对每一行设置监听  
+	        var len = lines.length;  
+	        var lastX,lastXForMobile;  
+	        var pressedObj;  // 用于记录被按下的对象  
+	        var pressedObj1=[];    //定义一个用于存储滑动过的对象的数组  
+	        var start;  // 用于记录按下的点  
+		    for (var i = 0; i < len; ++i) {  // 网页在移动端运行时的监听  
+		        lines[i].addEventListener('touchstart', function(e) {  
+		            lastXForMobile = e.changedTouches[0].pageX;  //记录手指触摸点的横坐标  
+		            pressedObj = this;   // 记录被按下的对象  
+		            var touches = event.touches[0];    // 记录开始按下时的点  
+		            start = {  
+		                x : touches.pageX, // 横坐标  
+		                y : touches.pageY // 纵坐标  
+		            };  
+		        });  
+		  
+                lines[i].addEventListener('touchmove', function(e) {  
+        			// 计算划动过程中x和y的变化量  
+                    var touches = event.touches[0];  
+                    var delta = {  
+                        x : touches.pageX - start.x,  
+                        y : touches.pageY - start.y  
+                    };  
+                    // 横向位移大于纵向位移，阻止纵向滚动  
+                    if (Math.abs(delta.x) > Math.abs(delta.y)) {  
+                        event.preventDefault();  
+                    }  
+                });  
+		  
+		        lines[i].addEventListener('touchend', function(e) {  
+		            var diffX = e.changedTouches[0].pageX - lastXForMobile;  
+		            if (diffX < -100) {  
+		                for(var i = 0; i < pressedObj1.length; ++i){  
+		                    $(pressedObj1[i]).animate({marginLeft:"0"}, 300);  
+		                    //清空数组  
+		                    if(i==(pressedObj1.length-1)){  
+		                        pressedObj1=[];  
+		                    }  
+		                }  
+		                $(pressedObj).animate({marginLeft : "-2.5rem"}, 300);// 左滑  
+		                pressedObj1.push($(this));   
+		                //记录被滑的这个对象，已被下一次滑动删除这个对象的左移效果  
+		            } else if (diffX > 100) {  
+		                $(pressedObj).animate({marginLeft : "0"}, 300);// 右滑  
+		            }  
+		        });  
+		    }
+		},1000)
+		
 
 	}
 }

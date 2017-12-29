@@ -220,6 +220,10 @@ import axios from 'axios';
 			}
 		},
 		created(){
+			Indicator.open({
+			  text: 'Loading...',
+			  spinnerType: 'fading-circle'
+			});
 			this.init();
 			this.init1();
 		},
@@ -259,7 +263,6 @@ import axios from 'axios';
 	            });
 			},
 			clk(cut){
-				console.log(cut)
 				Indicator.open({
 				  text: 'Loading...',
 				  spinnerType: 'fading-circle'

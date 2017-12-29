@@ -40,22 +40,22 @@
   				top: 50%;
   				margin-top: -0.015rem;
   				display:inline-block;
-  				width: 1.60rem;
+  				width: 1.55rem;
   				height: 0.03rem;
-  				background: #000;
+  				background: #969696;
   			}
   			.flow_l{
-  				left: -1.62rem;
+  				left: -1.55rem;
   			}
   			.flow_r{
-  				right: -1.62rem;
+  				right: -1.55rem;
   			}
   		}
   		li p:first-child{
   			width: 1rem;
   			height: 1rem;
   			line-height: 0.9rem;
-  			border: 3px solid #3586f2;
+  			border: 2px solid #969696;
   			border-radius: 50%;
   			box-sizing: border-box;
   			text-align: center;
@@ -234,7 +234,7 @@
 <template>
 	<div class="box">
 		<div class="box_b">
-			<div class="flow" v-show='false'>
+			<div class="flow" v-show='success'>
 				<ul>
 					<li>
 						<p>已确认</p>
@@ -281,12 +281,12 @@
 			<div class="new_box">
 				<h3>收款方信息</h3>
 				<div class="choose">
-					<p class="sel" v-if='!defaultData' @click="selnum2(defaultData)">
+					<p class="sel" v-if='defaultData.id==""' @click="selnum2(defaultData)">
 						<span></span>
 						<span>选择收款账号</span>
 					</p>
 					<!--选择好收款账号显示的样式-->
-					<ul @click="selnum1(defaultData.id)" v-if="defaultData">
+					<ul @click="selnum1(defaultData.id)" v-if="defaultData.id!=''">
 						<li>
 							<span>户名：</span>
 							<span>{{defaultData.huming}}</span>
@@ -312,12 +312,12 @@
 			</div>
 			<!--确认框-->
 			<div class="truebox">
-				<mt-checklist
+				<mt-checklist v-if='!success'
 				  v-model="value"
 				  :options="options" @change='selvalue'>
 				</mt-checklist>
 			</div>
-			<button class="btn btnactive" @click="save">提交</button>
+			<button v-if='!success' class="btn btnactive" @click="save">提交</button>
 			<!--抬头发票-->
 			<div class="fppop" v-if="popshow" @click="popshow=false">
 				<div class="new_box" style="background: #f0eff5;">
@@ -368,13 +368,24 @@ export default{
 			popshow:false,
 			qrfp:'',//发票确认
 			ids:'',//银行账户id
-			defaultData:{},//选择的银行账户数据
+			defaultData:{
+				id :'',
+			 	huming :'',
+				kaihuhang :'',
+				zhanghao:''
+			},//选择的银行账户数据
+			success:false,//渠道数据保存后显示审批状态
 		}
 	},
 	created(){
 		this.ids = this.$route.query.zhid;
 		this.qdlist = JSON.parse(localStorage.getItem('qdlist'))[0];
-		this.defaultzh();//获取用户默认账户
+		
+		if(this.$route.query.zhid){
+			this.hqzh();
+		}else{
+			this.defaultzh();//获取用户默认账户
+		}
 	},
 	methods:{
 		fptt(){
@@ -391,7 +402,7 @@ export default{
 			console.log(this.qrfp);
 		},
 		save(){//保存提交
-			const url = "http://192.168.1.44:8080/yhcms/web/qdyongjin/saveQvDaoData.do";
+			const url = "http://192.168.1.40:8080/yhcms/web/qdyongjin/saveQvDaoData.do";
 			var cookxs = JSON.parse(localStorage.getItem('cooknx'));
 			if(!this.defaultData.id || this.qrfp!=true){
 				Toast({
@@ -434,6 +445,7 @@ export default{
 					"qdzhanghao":this.defaultData.zhanghao
 	            }).then((res)=>{
 	            	console.log(res);
+	            	this.success = true;
 	            }, (err)=>{
 	            	console.log(err);
 	            });
@@ -463,7 +475,6 @@ export default{
 				}
 			})
 		},
-		//待联调====
 		defaultzh(){//获取默认账号
 			var cookxs = JSON.parse(localStorage.getItem('cooknx'));
 			const url = "http://192.168.1.40:8080/yhcms/web/qdyinhangzhanghao/getQdYHZHForQdid.do";
@@ -472,8 +483,14 @@ export default{
 				"cookie":cookxs,
 				qdid:this.qdlist.xsqvdaoid//通过渠道id获取渠道默认银行账号
 			 }).then((res)=>{
-			 	this.defaultData = res.data.data
-			 	this.hqzh();
+				if(res.data.data.id!='undefined'){
+				 	this.defaultData.id = res.data.data.id;
+				 	this.defaultData.huming = res.data.data.huming;
+					this.defaultData.kaihuhang = res.data.data.kaihuhang;
+					this.defaultData.zhanghao = res.data.data.zhanghao;
+				}else{
+					this.hqzh();
+				}
             }, (err)=>{
             	console.log(err);
             });
@@ -484,6 +501,7 @@ export default{
 			axios.post(url,{ 
 				"id":this.$route.query.zhid//路由传递过来的银行账户id
 			 }).then((res)=>{
+			 console.log(res)
 			 	this.defaultData = res.data.data;
             }, (err)=>{
             	console.log(err);
@@ -491,7 +509,7 @@ export default{
 		}
 	},
 	mounted(){
-		this.hqzh();
+		
 	}
 }
 </script>
