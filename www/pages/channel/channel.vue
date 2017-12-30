@@ -84,6 +84,7 @@
 		p:last-child{font-size: @font30;}
 	}
 	.new_box {
+		position: relative;
 		width: 7.06rem;
 		/*height:4.53rem;*/
 		margin: 0.25rem auto 0;
@@ -104,6 +105,17 @@
 			-webkit-box-shadow: 0px 0px 8px #D9D9D9;
 			box-shadow: 0px 0px 8px #D9D9D9;
 		}
+		/*.icon{
+			position: absolute;
+			top: 0.25rem;
+			right: 0.55rem;
+			display: block;
+			width: 1.45rem;
+			height: 1.45rem;
+			background: url(../../resources/images/commission/icon.png) no-repeat center;
+			background-size: cover;
+			animation: change 1s linear;
+		}*/
 		ul{padding:0.3rem 0.3rem 0.4rem 0.3rem;}
 		ul li{
 			color: #323232;
@@ -208,6 +220,21 @@
 		background: rgba(0,0,0,0.3);
 		padding-top: 2.15rem;
 	}
+	@keyframes change{
+		from {
+			width: 3.45rem;
+			height: 3.45rem;
+			top: 50%;
+			right: 50%;
+			margin-right: -0.725rem;
+		}
+		to {
+			width: 1.45rem;
+			height: 1.45rem;
+			top: 0.25rem;
+			right: 0.55rem;
+		}
+	}
 </style>
 <style>
 .mint-cell:last-child,.mint-cell-wrapper{
@@ -277,6 +304,7 @@
 						<i style="color: #3385f3; float: right;" @click="fptt">发票抬头</i>
 					</li>
 				</ul>
+				<span class="icon"></span>
 			</div>
 			<div class="new_box">
 				<h3>收款方信息</h3>

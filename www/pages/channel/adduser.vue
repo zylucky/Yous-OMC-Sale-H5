@@ -120,7 +120,7 @@
 				</li>
 			</ul>
 		</div>
-		<button class="btn btnactive" @click="save">保存并使用</button>
+		<button class="btn btnactive" @click="save">{{btntext}}</button>
 	</div>
 </template>
 
@@ -137,13 +137,17 @@ export default{
 			value:'',//是否设置默认
 			value1:0,
 			id:'',//银行账户id
-			yhzh:'',//银行账户
+			btntext:'',//按钮文字
+			zhData:{},//账户信息
 		}
 	},
 	created(){
 		this.id = this.$route.query.zhid;
-		this.yhzh = this.$route.query.yhzh;
-		console.log(this.yhzh)
+		if(this.$route.query.zhid){
+			this.btntext = '保存';
+		}else{
+			this.btntext = '保存并使用';
+		}
 	},
 	methods:{
 		state(){
@@ -175,20 +179,20 @@ export default{
 			var cookxs = JSON.parse(localStorage.getItem('cooknx'));
 			console.log(cookxs)
 			const url = this.$api + "/yhcms/web/qdyinhangzhanghao/saveQvDaoData.do";
-			if(this.usernumber == this.yhzh){
-				Toast({
-				  message: '已存在该账户',
-				  position: 'center',
-				  duration: 3000
-				});
-				return;
-			}
-			if(this.username != '' && this.bankplace != '' && this.usernumber != '' && this.usernumber != this.yhzh){
+//			if(this.usernumber == this.yhzh){
+//				Toast({
+//				  message: '已存在该账户',
+//				  position: 'center',
+//				  duration: 3000
+//				});
+//				return;
+//			}
+			if(this.username != '' && this.bankplace != '' && this.usernumber != ''){
 				axios.post(url,{
 					"cookie":cookxs,
-					"id":'',
-					"qdid":'',
-					"qdname":'',
+					"id":this.zhData.id,
+					"qdid":this.zhData.qdid,
+					"qdname":this.zhData.qdname,
 					"huming":this.username,
 					"kaihuhang":this.bankplace,
 					"zhanghao":this.usernumber,
@@ -200,6 +204,21 @@ export default{
 					  position: 'center',
 					  duration: 1000
 					});
+					if(res.data.success && !this.$route.query.zhid){
+						this.$router.push({
+							path:'/channel',//跳转到渠道数据保存
+							query:{
+								"zhid":res.data.data.id//所传参数
+							}
+						})
+					}else{
+						this.$router.push({
+							path:'/income_number',//跳转到账号列表
+							query:{
+								"zhid":res.data.data.id//所传参数
+							}
+						})
+					}
 					console.log(res);
 	            }, (err)=>{
 					console.log(err);
@@ -217,10 +236,14 @@ export default{
 //			const url = this.$api + "/yhcms/web/qdyinhangzhanghao/getQdYHZHForid.do";
 			axios.post(url,{ 
 				id:this.id//路由传递过来的银行账户id
-			 }).then((res)=>{
-			 	this.username = res.data.data.huming;
-			 	this.bankplace = res.data.data.kaihuhang;
-			 	this.usernumber = res.data.data.zhanghao;
+			}).then((res)=>{
+			 	if(res.data.success){
+					this.username = res.data.data.huming;
+					this.bankplace = res.data.data.kaihuhang;
+					this.usernumber = res.data.data.zhanghao;
+					this.zhData = res.data.data;
+					console.log(this.zhData)
+			 	}
             }, (err)=>{
             	console.log(err);
             });

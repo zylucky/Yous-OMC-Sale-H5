@@ -102,6 +102,62 @@
 		text-align: center;
 		margin-left: 0.3rem;
 	}
+	.btn {
+		display: block;
+		width: 5.5rem;
+		height: 0.75rem;
+		line-height: 0.75rem;
+		text-align: center;
+		margin: 0.5rem auto 1rem;
+		border: none;
+		background: #aaaaaa;
+		border-radius: 0.08rem;
+		color: #c8c8c8;
+		font-size: @font32;
+	}
+	/*按钮背景*/
+	.btnactive {
+		background: url(../../resources/images/commission/btn_bg.png) no-repeat center;
+		background-size: cover;
+		color: #fff;
+	}
+	.kong_box{
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		background: #fff;
+	}
+	.kong{
+		.icon{
+			width: 2.78rem;
+			height: 1.72rem;
+			margin:  1.9rem auto 0;
+			background: url(../../resources/images/commission/kong_icon.png) no-repeat center;
+			background-size: cover;
+		}
+		.add{
+			width: 2.65rem;
+			height: 0.73rem;
+			margin:  0 auto 0;
+			line-height: 0.73rem;
+			border-radius: 0.08rem;
+			background: #3586f2;
+			font-size: @font28;
+			color: #fff;
+			text-align: center;
+		}
+		.tip{
+			width: 2.65rem;
+			height: 0.95rem;
+			line-height: 0.95rem;
+			margin: 0 auto 0;
+			font-size: @font26;
+			color: #b2b2b2;
+			text-align: center;
+		}
+	}
 </style>
 
 <template>
@@ -133,6 +189,15 @@
 				</li>
 			</ul>
 		</div>
+		<button class="btn btnactive" @click="toadd" v-if="listData.length != 0">+新建收款账号</button>
+		<!--当列表为空白的时候显示的样式-->
+		<div class="kong_box" v-if="listData.length == 0">
+			<div class="kong">
+				<p class="icon"></p>
+				<p class="tip">暂无账号信息</p>
+				<p class="add" @click="toaddcard">立即添加</p>
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -155,7 +220,6 @@ export default{
 				path:'/adduser',//跳转到渠道数据保存
 				query:{
 					"zhid":id,//所传参数
-					"yhzh":zh//银行账户
 				}
 			})
 		},
@@ -205,6 +269,16 @@ export default{
 				query:{
 					"zhid":id//所传参数
 				}
+			})
+		},
+		toadd(){
+			this.$router.push({
+				path:'/adduser',//跳转到添加账户功能界面
+			})
+		},
+		toaddcard(){
+			this.$router.push({
+				path:'/adduser',//跳转到添加账户功能界面
 			})
 		}
 	},
