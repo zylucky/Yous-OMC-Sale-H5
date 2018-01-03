@@ -16,7 +16,8 @@ Vue.use(VueResource);
 Vue.use(MintUI);
 
 //Vue.prototype.$api = "http://yhcms.tunnel.qydev.com" //api地址本地
-Vue.prototype.$api = "http://116.62.68.26:8080" //api地址116的地址ip
+Vue.prototype.$api = "http://116.62.68.26:8080" ;//api地址116的地址ip
+Vue.prototype.$api = "http://192.168.1.45:8080";
 //Vue.prototype.$api = "http://omc.urskongjian.com" //api地址线上
 //Vue.prototype.$api = "http://192.168.137.54:8081" //api地址
 /*Vue.prototype.$api = "http://wx.urskongjian.com:8080" //api地址*/

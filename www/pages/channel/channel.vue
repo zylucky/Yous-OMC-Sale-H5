@@ -411,9 +411,8 @@ export default{
 	created(){
 		this.ids = this.$route.query.zhid;
 		this.passzt = this.$route.query.passzt;
-		this.qdlist = JSON.parse(localStorage.getItem('qdlist'))[0];
+		this.qdlist = JSON.parse(localStorage.getItem('qdlist'))[this.$route.query.idx];
 		this.bz = this.qdlist.qdbeizhu;//渠道备注
-		console.log(this.qdlist);
 		if(this.$route.query.zhid){
 			this.hqzh();
 		}else{
@@ -435,7 +434,7 @@ export default{
 			console.log(this.qrfp);
 		},
 		save(){//保存提交
-			const url = "http://192.168.1.40:8080/yhcms/web/qdyongjin/saveQvDaoData.do";
+			const url = this.$api + "/yhcms/web/qdyongjin/saveQvDaoData.do";
 			var cookxs = JSON.parse(localStorage.getItem('cooknx'));
 			if(!this.defaultData.id || this.qrfp!=true){
 				Toast({
@@ -447,6 +446,9 @@ export default{
 	            axios.post(url,{ 
 	            	"ccode":this.qdlist.ccode,
 	        		"cookie":cookxs,
+	        		"createdate":this.qdlist.createdate,
+	        		"taskJd":this.qdlist.taskJd,
+	        		"taskId":this.qdlist.taskId,
 					"fanghao":this.qdlist.fanghao,
 					"fanghaoid":this.qdlist.fanghaoid,
 					"hetongid":this.qdlist.hetongid,
@@ -516,8 +518,8 @@ export default{
 		},
 		defaultzh(){//获取默认账号
 			var cookxs = JSON.parse(localStorage.getItem('cooknx'));
-			const url = "http://192.168.1.40:8080/yhcms/web/qdyinhangzhanghao/getQdYHZHForQdid.do";
-//			const url = this.$api + "/yhcms/web/qdyinhangzhanghao/getQdYHZHForQdid.do";
+//			const url = "http://192.168.1.40:8080/yhcms/web/qdyinhangzhanghao/getQdYHZHForQdid.do";
+			const url = this.$api + "/yhcms/web/qdyinhangzhanghao/getQdYHZHForQdid.do";
 			axios.post(url,{ 
 				"cookie":cookxs,
 				qdid:this.qdlist.xsqvdaoid//通过渠道id获取渠道默认银行账号
@@ -535,8 +537,8 @@ export default{
             });
 		},
 		hqzh(){//根据id获取银行账号
-			const url = "http://192.168.1.40:8080/yhcms/web/qdyinhangzhanghao/getQdYHZHForid.do";
-//			const url = this.$api + "/yhcms/web/qdyinhangzhanghao/getQdYHZHForid.do";
+//			const url = "http://192.168.1.40:8080/yhcms/web/qdyinhangzhanghao/getQdYHZHForid.do";
+			const url = this.$api + "/yhcms/web/qdyinhangzhanghao/getQdYHZHForid.do";
 			axios.post(url,{ 
 				"id":this.$route.query.zhid//路由传递过来的银行账户id
 			 }).then((res)=>{

@@ -160,7 +160,7 @@
 		<div class="list_box">
 			<!--未确认-->
 			<ul class="list" v-if="tabq=='0'">
-				<li v-for="item in pendData"  @click="pendclk">
+				<li v-for="(item,index) in pendData"  @click="pendclk(index)">
 					<p><span>{{item.loupan}}</span><i>{{item.createdate | times}}</i></p>
 					<p>
 						<span>{{item.loudong}}-{{item.fanghao}}</span>
@@ -177,7 +177,7 @@
 			</ul>
 			<!--已确认-->
 			<ul class="list" v-if="tabq=='1'">
-				<li v-for="item in passData" @click="passclk">
+				<li v-for="(item,index) in passData" @click="passclk(index)">
 					<p>{{item.loupan}}<i>{{item.createdate | times}}</i></p>
 					<p>
 						<span>{{item.loudong}}-{{item.fanghao}}</span>
@@ -229,8 +229,8 @@ import axios from 'axios';
 		},
 		methods:{
 			init(){//待处理接口
-				// const url = this.$api + "/yhcms/web/qdyongjin/getQdYjForQvdao.do";
-				const url = "http://192.168.1.40:8080/yhcms/web/qdyongjin/getQdYjForQvdao.do";
+				 const url = this.$api + "/yhcms/web/qdyongjin/getQdYjForQvdao.do";
+//				const url = "http://192.168.1.40:8080/yhcms/web/qdyongjin/getQdYjForQvdao.do";
 				var cookxs = JSON.parse(localStorage.getItem('cooknx'));
 	            axios.post(url,{ 
 	            		"cookie":cookxs,
@@ -245,8 +245,8 @@ import axios from 'axios';
 	            });
 			},
 			init1(){//已处理接口
-				// const url = this.$api + "/yhcms/web/qdyongjin/getQdYjForQvdao.do";
-				const url = "http://192.168.1.40:8080/yhcms/web/qdyongjin/getQdYjForQvdao.do";
+				 const url = this.$api + "/yhcms/web/qdyongjin/getQdYjForQvdao.do";
+//				const url = "http://192.168.1.40:8080/yhcms/web/qdyongjin/getQdYjForQvdao.do";
 				var cookxs = JSON.parse(localStorage.getItem('cooknx'));
 				console.log(cookxs);
 	            axios.post(url,{ 
@@ -275,23 +275,25 @@ import axios from 'axios';
 					this.init1();//已处理数据
 				}
 			},
-			pendclk(){//未确认
+			pendclk(idx){//未确认
 //				this.popshow = true;//实名认证弹框
 				this.passzt = false;
 				this.$router.push({
 					path:'/channel',//跳转渠道佣金数据保存
 					query:{
-						"passzt":this.passzt//所传参数
+						"passzt":this.passzt,//所传参数
+						'idx':idx
 					}
 				})
 			},
-			passclk(){//已确认数据
+			passclk(idx){//已确认数据
 //				this.popshow = true;//实名认证弹框
 				this.passzt = true;
 				this.$router.push({
 					path:'/channel',//跳转渠道佣金数据保存
 					query:{
-						"passzt":this.passzt//所传参数
+						"passzt":this.passzt,//所传参数
+						'idx':idx
 					}
 				})
 			},
