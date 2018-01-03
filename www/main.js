@@ -26,6 +26,8 @@ Vue.prototype.$api = "http://116.62.68.26:8080" //api地址116的地址ip
 /*Vue.prototype.$export = "http://wx.urskongjian.com:8080" //*/
 //Vue.prototype.$export = "http://omc.urskongjian.com" //可以随意改
 
+// Vue.prototype.$api = "http://192.168.1.40:8080"//test ip address
+
 // 微信判断是否关注
 const api = "http://omc.urskongjian.com/yhcms/web/jcsj/userAuth.do";
 //const api = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx109df14878717ecb&redirect_uri=http%3A%2F%2Fomc.urskongjian.com%2Fyhcms%2Fweb%2Fjcsj%2FgetOpenid.do%3F&response_type=code&scope=snsapi_base&state=123&connect_redirect=1#wechat_redirect";
@@ -63,6 +65,18 @@ Vue.filter('splitK', function(num) {//千位分隔符 过滤器
 Vue.filter('delkg', function(num){//银行卡四位空格分割
   var str=String(num).replace(/(\d{4})/g,'$1 ').replace(/\s*$/,'');
   return str;
+})
+Vue.filter('times', function(s){//毫秒数转化日期
+  if(s==null || s==''){
+    return
+  }
+ var myDate = new Date(s);
+  var year = myDate.getFullYear();
+  var month = myDate.getMonth()+1;
+  var day = myDate.getDate();
+  if(month<10){month = '0' + month;}
+  if(day<10){day = '0' + day;}
+  return year+'-'+month+'-'+day;
 })
 
 

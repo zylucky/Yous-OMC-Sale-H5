@@ -135,7 +135,7 @@ export default{
 			bankplace:'',
 			usernumber:'',
 			value:'',//是否设置默认
-			value1:0,
+			value1:1,
 			id:'',//银行账户id
 			btntext:'',//按钮文字
 			zhData:{},//账户信息

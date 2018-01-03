@@ -164,7 +164,7 @@
 	<div class="box">
 		<div class="list">
 			<ul>
-				<li v-for="item in listData" @click="tochanel(item.id)" class="item_list">
+				<li v-for="(item,index) in listData" @click="tochanel(item.id)" class="item_list">
 					<i class="check" v-if="item.id == id"></i>
 					<div class="userleft">
 						<p>
@@ -182,16 +182,16 @@
 						</p>
 					</div>
 					<div class="userright">
-						<p class="bj" @click.stop='bjclick(item.id,item.zhanghao)'></p>
+						<p class="bj" @click.stop='bjclick(item.id)'></p>
 						<p class="mr" @click.stop="setdefault(item.id)">设置默认</p>
-						<p class="del" @click.stop="del(item.id)">删除</p>
+						<p class="del" @click.stop="del(item.id,index)">删除</p>
 					</div>
 				</li>
 			</ul>
 		</div>
 		<button class="btn btnactive" @click="toadd" v-if="listData.length != 0">+新建收款账号</button>
 		<!--当列表为空白的时候显示的样式-->
-		<div class="kong_box" v-if="listData.length == 0">
+		<div class="kong_box" v-if="listData.length == 0 && cardshow">
 			<div class="kong">
 				<p class="icon"></p>
 				<p class="tip">暂无账号信息</p>
@@ -208,6 +208,7 @@ export default{
 		return{
 			listData:[],//个人银行账户列表
 			id:'',//选择的银行卡
+			cardshow:false,//银行卡列表为空时的状态显示
 		}
 	},
 	created(){
@@ -215,7 +216,7 @@ export default{
 		this.id = this.$route.query.zhid;
 	},
 	methods:{
-		bjclick(id,zh){
+		bjclick(id){
 			this.$router.push({
 				path:'/adduser',//跳转到渠道数据保存
 				query:{
@@ -230,7 +231,12 @@ export default{
 			axios.post(url,{
 				"cookie":cookxs
             }).then((res)=>{
-            	this.listData = res.data.data;
+            	if(res.data.success){
+	            	this.listData = res.data.data;
+	            	if(this.listData.length == 0){
+						this.cardshow = true;
+					}
+            	}
             }, (err)=>{
 				console.log(err);
             });
@@ -242,14 +248,14 @@ export default{
 			axios.post(url,{
 				"cookie":cookxs,
 				id:id
-            }).then((res)=>{
+           }).then((res)=>{
             	location.reload();
             }, (err)=>{
 				console.log(err);
             });
 		},
-		del(id){//删除银行账户
-			console.log('asdsadsad')
+		del(id,idx){//删除银行账户
+			this.listData.splice(idx,1)
 			var cookxs = JSON.parse(localStorage.getItem('cooknx'));
 			const url = "http://192.168.1.40:8080/yhcms/web/qdyinhangzhanghao/deleteYHZH.do";
 //			const url = this.$api + '/yhcms/web/qdyinhangzhanghao/deleteYHZH.do';
@@ -257,7 +263,7 @@ export default{
 				"cookie":cookxs,
 				id:id
 			}).then((res)=>{
-				location.reload();
+//				location.reload();
 				console.log(res);
 			},(err)=>{
 				console.log(err)

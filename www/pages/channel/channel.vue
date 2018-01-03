@@ -34,6 +34,7 @@
   			display: flex;
 			flex-direction: column;
   			align-items: center;
+  			visibility:hidden;
   			p{margin-bottom: 0.1rem;position: relative;}
   			.flow_l,.flow_r{
   				position: absolute;
@@ -49,6 +50,8 @@
   			}
   			.flow_r{
   				right: -1.55rem;
+  				/*线性渐变*/
+  				/*background: -webkit-linear-gradient(left,blue,red);*/
   			}
   		}
   		li p:first-child{
@@ -261,18 +264,17 @@
 <template>
 	<div class="box">
 		<div class="box_b">
-			<div class="flow" v-show='success'>
+			<div class="flow" v-show='passzt'>
 				<ul>
-					<li>
-						<p>已确认</p>
+					<li class="betrue">
+						<p>已确认<span class="flow_r"></span></p>
 						<p>12/19 15:31</p>
 					</li>
-					<li>
-						<p><span class="flow_l"></span>审批中<span class="flow_r"></span></p>
+					<li class="ing" v-show='this.qdlist.taskZt != 1'>
+						<p>审批中<span class="flow_r"></span></p>
 						<p>12/19 15:31</p>
-						
 					</li>
-					<li>
+					<li class="suc">
 						<p>已完成</p>
 						<p>12/19 15:31</p>
 					</li>
@@ -340,12 +342,12 @@
 			</div>
 			<!--确认框-->
 			<div class="truebox">
-				<mt-checklist v-if='!success'
+				<mt-checklist v-if='!success && !passzt'
 				  v-model="value"
 				  :options="options" @change='selvalue'>
 				</mt-checklist>
 			</div>
-			<button v-if='!success' class="btn btnactive" @click="save">提交</button>
+			<button v-if='!success && !passzt' :class="qrfp?'btn btnactive':'btn'" @click="save">提交</button>
 			<!--抬头发票-->
 			<div class="fppop" v-if="popshow" @click="popshow=false">
 				<div class="new_box" style="background: #f0eff5;">
@@ -403,12 +405,15 @@ export default{
 				zhanghao:''
 			},//选择的银行账户数据
 			success:false,//渠道数据保存后显示审批状态
+			passzt:'',//状态（是否可以修改）
 		}
 	},
 	created(){
 		this.ids = this.$route.query.zhid;
+		this.passzt = this.$route.query.passzt;
 		this.qdlist = JSON.parse(localStorage.getItem('qdlist'))[0];
-		
+		this.bz = this.qdlist.qdbeizhu;//渠道备注
+		console.log(this.qdlist);
 		if(this.$route.query.zhid){
 			this.hqzh();
 		}else{
@@ -480,6 +485,9 @@ export default{
 	        }
 		},
 		selnum(id){//变更账户
+			if(this.passzt){
+				return
+			}
 			this.$router.push({
 				path:'/income_number',//跳转到银行账户列表
 				query:{
@@ -488,6 +496,9 @@ export default{
 			})
 		},
 		selnum1(id){
+			if(this.passzt){
+				return
+			}
 			this.$router.push({
 				path:'/income_number',//跳转到银行账户列表
 				query:{
@@ -537,7 +548,55 @@ export default{
 		}
 	},
 	mounted(){
-		
+		if(this.passzt){//禁用备注输入
+			$('.bz textarea').attr('disabled','disabled')
+		}
+		if(this.passzt && this.qdlist.taskZt=='2'){//已确认审核中样式
+			$('.flow li').css('visibility','inherit');
+			$('.betrue p:first-child').css({
+				"border":'2px solid #3586f2',
+				"color":'#3586f2'
+			});
+			$('.betrue .flow_r').css({
+				'background': '-webkit-linear-gradient(left,#3586f2,#ffab02)'
+			});
+			$('.ing p:first-child').css({
+				"border":'2px solid #ffab02',
+				"color":'#ffab02'
+			});
+		}
+		if(this.passzt && this.qdlist.taskZt=='3'){//审核完成样式
+			$('.flow li').css('visibility','inherit');
+			$('.suc p:first-child').css({
+				"border":'2px solid #0eac5f',
+				"color":'#0eac5f'
+			});
+			$('.ing .flow_r').css({
+				'background': '-webkit-linear-gradient(left,#ffab02,#0eac5f)'
+			});
+			$('.ing p:first-child').css({
+				"border":'2px solid #ffab02',
+				"color":'#ffab02'
+			});
+		}
+		if(this.passzt && this.qdlist.taskZt=='4'){//已驳回样式
+			$('.betrue').css('visibility','inherit');
+			$('.ing').css('visibility','inherit');
+			$('.ing p:first-child span').css('visibility','hidden');
+			
+			$('.ing p:first-child').css({
+				"border":'2px solid #ff7070',
+				"color":'#ff7070'
+			});
+			$('.ing p:first-child').text('已驳回');
+			$('.betrue .flow_r').css({
+				'background': '-webkit-linear-gradient(left,#3586f2,#ff7070)'
+			});
+			$('.betrue p:first-child').css({
+				"border":'2px solid #3586f2',
+				"color":'#3586f2'
+			});
+		}
 	}
 }
 </script>

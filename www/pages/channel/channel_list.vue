@@ -161,7 +161,7 @@
 			<!--未确认-->
 			<ul class="list" v-if="tabq=='0'">
 				<li v-for="item in pendData"  @click="pendclk">
-					<p><span>{{item.loupan}}</span><i>2017-12-16</i></p>
+					<p><span>{{item.loupan}}</span><i>{{item.createdate | times}}</i></p>
 					<p>
 						<span>{{item.loudong}}-{{item.fanghao}}</span>
 					</p>
@@ -178,7 +178,7 @@
 			<!--已确认-->
 			<ul class="list" v-if="tabq=='1'">
 				<li v-for="item in passData" @click="passclk">
-					<p>{{item.loupan}}<i>2017-12-16</i></p>
+					<p>{{item.loupan}}<i>{{item.createdate | times}}</i></p>
 					<p>
 						<span>{{item.loudong}}-{{item.fanghao}}</span>
 					</p>
@@ -216,7 +216,7 @@ import axios from 'axios';
 				pendData:[],//未确认数据
 				passData:[],//已确认数据
 				popshow:false,//弹框状态
-				
+				passzt:'',//已确认状态
 			}
 		},
 		created(){
@@ -277,14 +277,22 @@ import axios from 'axios';
 			},
 			pendclk(){//未确认
 //				this.popshow = true;//实名认证弹框
+				this.passzt = false;
 				this.$router.push({
 					path:'/channel',//跳转渠道佣金数据保存
+					query:{
+						"passzt":this.passzt//所传参数
+					}
 				})
 			},
 			passclk(){//已确认数据
 //				this.popshow = true;//实名认证弹框
+				this.passzt = true;
 				this.$router.push({
 					path:'/channel',//跳转渠道佣金数据保存
+					query:{
+						"passzt":this.passzt//所传参数
+					}
 				})
 			},
 			goapprove(){//去认证
