@@ -57,6 +57,12 @@
                 <a href="javascript:;" style="color: black !important;width: 2rem;font-size: 0.38rem;" @click="list">楼盘列表</a>
               </div>
             </div>
+            <div style="border-bottom: 1px solid rgb(167,196,223);">
+              <div style="height: 1rem;margin-left: 0.4rem;">
+                <span style=""><img style="float: left;width: 0.5rem;height: 0.48rem;margin-top: 0.25rem;" src="../resources/images/left_list/list.png"></span>
+                <a href="javascript:;" style="color: black !important;width: 2rem;font-size: 0.38rem;" @click="yjlist">佣金展示</a>
+              </div>
+            </div>
           </div>
           <div style="background-color:rgb(255,255,255);border-bottom: 1px solid rgb(167,196,223);height: 1rem;margin-top: 0.3rem;">
             <div style="margin-left: 0.4rem;" class="tc ys_function">
@@ -230,6 +236,12 @@
             this.$router.push({path:'/'});
         }
         localStorage.removeItem("xzfystatus1");
+      },
+      yjlist(){//渠道佣金列表
+      	$("#zhezhao").remove();
+        $('html').removeAttr("style");
+        $("body").removeAttr("style");
+      	this.$router.push({path:'/channel_list'});
       },
       percent(){
         $("#zhezhao").remove();
