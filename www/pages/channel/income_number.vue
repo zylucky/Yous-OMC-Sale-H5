@@ -243,8 +243,8 @@ export default{
 		},
 		setdefault(id){//设置默认
 			var cookxs = JSON.parse(localStorage.getItem('cooknx'));
-			const url = "http://192.168.1.40:8080/yhcms/web/qdyinhangzhanghao/setDefaultById.do";
-//			const url = this.$api + "/yhcms/web/qdyinhangzhanghao/setDefaultById.do";
+//			const url = "http://192.168.1.40:8080/yhcms/web/qdyinhangzhanghao/setDefaultById.do";
+			const url = this.$api + "/yhcms/web/qdyinhangzhanghao/setDefaultById.do";
 			axios.post(url,{
 				"cookie":cookxs,
 				id:id
@@ -257,8 +257,8 @@ export default{
 		del(id,idx){//删除银行账户
 			this.listData.splice(idx,1)
 			var cookxs = JSON.parse(localStorage.getItem('cooknx'));
-			const url = "http://192.168.1.40:8080/yhcms/web/qdyinhangzhanghao/deleteYHZH.do";
-//			const url = this.$api + '/yhcms/web/qdyinhangzhanghao/deleteYHZH.do';
+//			const url = "http://192.168.1.40:8080/yhcms/web/qdyinhangzhanghao/deleteYHZH.do";
+			const url = this.$api + '/yhcms/web/qdyinhangzhanghao/deleteYHZH.do';
 			axios.post(url,{
 				"cookie":cookxs,
 				id:id
