@@ -303,6 +303,9 @@ import axios from 'axios';
 			clos(){//关闭
 				this.popshow = false;//实名认证弹框
 			}
+		},
+		mounted(){
+			$('title').html('佣金展示');
 		}
 	}
 </script>
