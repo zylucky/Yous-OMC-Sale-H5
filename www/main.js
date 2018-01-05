@@ -179,45 +179,65 @@ var router = new VueRouter({
             path: '/test',
             component: require('./routers/test.vue')
         },
-      {//渠道未确认
-          path: '/channel',
-          name: 'channel',
-          component: resolve => require(['./pages/channel/channel.vue'], resolve),
-          meta: {
-            title: '佣金信息'
-          }
+      // {//渠道未确认
+      //     path: '/channel',
+      //     name: 'channel',
+      //     component: resolve => require(['./pages/channel/channel.vue'], resolve),
+      //     meta: {
+      //       title: '佣金信息'
+      //     }
+      //   },
+        {
+            path: '/channel',
+            component: require('./pages/channel/channel.vue')
         },
+        // {//渠道佣金记录列表
+        //   path: '/channel_list',
+        //   name: 'channel_list',
+        //   component: resolve => require(['./pages/channel/channel_list.vue'], resolve),
+        //   meta: {
+        //     title: '佣金管理'
+        //   }
+        // },
         {//渠道佣金记录列表
-          path: '/channel_list',
-          name: 'channel_list',
-          component: resolve => require(['./pages/channel/channel_list.vue'], resolve),
-          meta: {
-            title: '佣金管理'
-          }
+            path: '/channel_list',
+            component: require('./pages/channel/channel_list.vue')
         },
+        // {//新建收款账号
+        //   path: '/adduser',
+        //   name: 'adduser',
+        //   component: resolve => require(['./pages/channel/adduser.vue'], resolve),
+        //   meta: {
+        //     title: '新建收款账号'
+        //   }
+        // },
         {//新建收款账号
-          path: '/adduser',
-          name: 'adduser',
-          component: resolve => require(['./pages/channel/adduser.vue'], resolve),
-          meta: {
-            title: '新建收款账号'
-          }
+            path: '/adduser',
+            component: require('./pages/channel/adduser.vue')
         },
+        // {//收款账号管理
+        //   path: '/income_number',
+        //   name: 'income_number',
+        //   component: resolve => require(['./pages/channel/income_number.vue'], resolve),
+        //   meta: {
+        //     title: '收款账号管理'
+        //   }
+        // },
         {//收款账号管理
-          path: '/income_number',
-          name: 'income_number',
-          component: resolve => require(['./pages/channel/income_number.vue'], resolve),
-          meta: {
-            title: '收款账号管理'
-          }
+            path: '/income_number',
+            component: require('./pages/channel/income_number.vue')
         },
+        // {//渠道消息通知
+        //   path: '/news',
+        //   name: 'news',
+        //   component: resolve => require(['./pages/channel/news.vue'], resolve),
+        //   meta: {
+        //     title: '消息通知'
+        //   }
+        // },
         {//渠道消息通知
-          path: '/news',
-          name: 'news',
-          component: resolve => require(['./pages/channel/news.vue'], resolve),
-          meta: {
-            title: '消息通知'
-          }
+            path: '/news',
+            component: require('./pages/channel/news.vue')
         },
     ]
 });
@@ -369,11 +389,11 @@ var router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
     // 根据路由变化去改变页面的title
-    if (to.meta.title) {
-        document.title = to.meta.title;
-    }else{
-        next();
-    }
+    // if (to.meta.title) {
+    //     document.title = to.meta.title;
+    // }else{
+    //     next();
+    // }
     if(to.path=='/register'||to.path=='/forgot_pwd'||to.path.indexOf('/reset_pwd')!=-1){
         next();
     }else{
