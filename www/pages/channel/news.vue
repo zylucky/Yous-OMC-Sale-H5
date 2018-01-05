@@ -162,6 +162,7 @@ export default{
 			axios.get(url, {
 				
 			}).then((res)=>{
+				console.log('=============')
 				console.log(res)
             }, (err)=>{
 				console.log(err);
