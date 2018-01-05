@@ -388,12 +388,7 @@ var router = new VueRouter({
 
 
 router.beforeEach((to, from, next) => {
-    // 根据路由变化去改变页面的title
-    // if (to.meta.title) {
-    //     document.title = to.meta.title;
-    // }else{
-    //     next();
-    // }
+
     if(to.path=='/register'||to.path=='/forgot_pwd'||to.path.indexOf('/reset_pwd')!=-1){
         next();
     }else{
