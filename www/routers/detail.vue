@@ -24,7 +24,7 @@
     height: 100%;
     text-align: center;
     background-color: black;
-    display: block;
+      display: block;
     float: none;
     position: absolute;
     z-index:9999;

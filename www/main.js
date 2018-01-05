@@ -218,7 +218,7 @@ var router = new VueRouter({
           meta: {
             title: '消息通知'
           }
-        },
+        }
     ]
 });
 
