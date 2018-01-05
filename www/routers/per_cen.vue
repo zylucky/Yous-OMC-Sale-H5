@@ -7,7 +7,7 @@
     .headers{width:3.7rem;height:2rem;margin: auto;margin-top: .5rem;margin-bottom: .2rem;margin-left: auto;}
     .headname{margin: auto;}
     .headb{background: url("../resources/images/per_cen/per_cenba.png") no-repeat;background-size: 100% 100%;}
-    .perli{width: 50%;float: left;height: 3rem;background-color:rgb(238,238,238) !important;padding-top: 0.6rem;padding-left: 1.35rem !important;img{width: 1.2rem;}}
+    .perli{width: 50%;float: left;height: 3rem;background-color:rgb(238,238,238) !important;padding-top: 0.6rem;padding-left: 1.35rem !important;img{width: 1.2rem;}border-bottom: 1px solid rgb(219, 218, 223);}
     .perbott{height: 2.55rem;margin-top: 6rem;}
 </style>
 <template>
@@ -51,9 +51,9 @@
                     <span class="ys_tit"><a href="javascript:;"><img src="../resources/images/per_cen/my_reset.png"></a></span>
                     <div class="ys_item_con fl">我的预约</div>
                 </li>-->
-                <li class="clearfix perli">
-                    <span class="ys_tit"><a href="javascript:;"><img src="../resources/images/per_cen/my_reset.png"></a></span>
-                    <div class="ys_item_con fl">我的预约</div>
+                <li class="clearfix perli" @click="my_zhgl">
+                    <span class="ys_tit"><a href="javascript:;"><img src="../resources/images/per_cen/zhgl.png"></a></span>
+                    <div class="ys_item_con fl">账户管理</div>
                 </li>
             </ul>
             <div class="perbott">
@@ -136,6 +136,13 @@
                     this.$router.push({path:'/login'});
                 }
 
+            },
+            my_zhgl(){
+            	if(localStorage.getItem('cooknx')){
+                    this.$router.push({path:'/income_number'});
+                }else{
+                    this.$router.push({path:'/login'});
+                }
             },
             my_reser(){
                 this.$router.push({path:'/my_reser'});

@@ -16,6 +16,47 @@
       background-size: 100% 100%;
     }
   }
+  .news{
+  	position: relative;
+  	top: 50%;
+  	margin-top: -0.2rem;
+    display:block;
+    width:0.43rem;
+    height:0.4rem;
+    float:right;
+    margin-right:0.52rem;
+    /*border: 1px solid #fff;*/
+    img{
+    	width: 100%;
+    	vertical-align: inherit;
+    }
+    .newcount{
+			position: absolute;
+			top: -0.165rem;
+			right: -0.2rem;
+			width: 0.33rem;
+			height: 0.33rem;
+			background: url(../resources/images/news/point.png) no-repeat center;
+			background-size: cover;
+			line-height: 0.33rem;
+			i{
+				text-align: center;
+				color: #fff;
+				margin-left: -0.05rem;
+			}
+    }
+  }
+  .news:link{
+  	background: url(../resources/images/news/new_ion.png) no-repeat center;
+  	background-size: cover;
+  }
+  .news:active{
+  	background: url(../resources/images/news/new_ion1.png) no-repeat center;
+  	background-size: cover;
+  }
+  #header{
+  	line-height: inherit;
+  }
 </style>
 <template>
   <div header>
@@ -24,6 +65,10 @@
       <label class="side_nav side-nav" @click.native="popupVisible= true"  v-on:click="showMenu">
         <img src="../resources/images/ys_more.png" width="20" alt="">
       </label>
+      <a href="javascript:;" class="news" v-show="newshow" @click="tonews">
+      	<span class="newcount"><i style="display: inline-block;transform: scale(0.5);">10</i></span>
+      	<!--<img src="../resources/images/news/new_ion.png"/>-->
+      </a>
       <!--<a href="javascript:;" class="detail-search" style="position: fixed;left: 0; top: 0">
         <input type="text" id="keyword" placeholder="请输入关键字搜索" v-model="para.search_keywork" maxlength="50"
                @focus="changeRou">
@@ -91,7 +136,15 @@
               "search_keywork": "",
           },
           head:"",
+          newshow:true,
       };
+    },
+    created(){
+    	if(this.$route.query.news==false){
+    		this.newshow = this.$route.query.news;    		
+    	}else{
+    		this.newshow = true;
+    	}
     },
     methods: {
       init(){
@@ -175,12 +228,22 @@
               $("#zhezhao").remove();
               $('html').removeAttr("style");
               $("body").removeAttr("style");
-              this.$router.push({path:'/house'});
+              this.$router.push({
+                path:'/house',
+                query:{
+                  "news":true//所传参数
+                }
+              });
           }else{
               $("#zhezhao").remove();
               $('html').removeAttr("style");
               $("body").removeAttr("style");
-              this.$router.push({path:'/house'});
+              this.$router.push({
+                path:'/house',
+                query:{
+                  "news":true//所传参数
+                }
+              });
           }
           localStorage.removeItem("xzfystatus1");
 
@@ -202,12 +265,22 @@
               $("#zhezhao").remove();
               $('html').removeAttr("style");
               $("body").removeAttr("style");
-              this.$router.push({path:'/select'});
+              this.$router.push({
+                path:'/select',
+                query:{
+                  "news":false//所传参数
+                }
+              });
           }else{
               $("#zhezhao").remove();
               $('html').removeAttr("style");
               $("body").removeAttr("style");
-              this.$router.push({path:'/select'});
+              this.$router.push({
+                path:'/select',
+                query:{
+                  "news":false//所传参数
+                }
+              });
           }
           localStorage.removeItem("xzfystatus1");
       },
@@ -228,20 +301,40 @@
             $("#zhezhao").remove();
             $('html').removeAttr("style");
             $("body").removeAttr("style");
-            this.$router.push({path:'/'});
+            this.$router.push({
+              path:'/',
+              query:{
+                  "news":true//所传参数
+                }
+            });
         }else{
             $("#zhezhao").remove();
             $('html').removeAttr("style");
             $("body").removeAttr("style");
-            this.$router.push({path:'/'});
+            this.$router.push({
+              path:'/',
+              query:{
+                  "news":true//所传参数
+                }
+            });
         }
         localStorage.removeItem("xzfystatus1");
       },
       yjlist(){//渠道佣金列表
-      	$("#zhezhao").remove();
-        $('html').removeAttr("style");
-        $("body").removeAttr("style");
-      	this.$router.push({path:'/channel_list'});
+         if(localStorage.getItem('cooknx')){
+              $("#zhezhao").remove();
+              $('html').removeAttr("style");
+              $("body").removeAttr("style");
+              this.$router.push({path:'/channel_list'});
+          }else{
+              $("#zhezhao").remove();
+              $('html').removeAttr("style");
+              $("body").removeAttr("style");
+              this.$router.push({path:'/login'});
+              return;
+          }
+      	
+      	// this.$router.push({path:'/channel_list'});
       },
       percent(){
         $("#zhezhao").remove();
@@ -307,6 +400,19 @@
           $('html').removeAttr("style");
           $("body").removeAttr("style");
           localStorage.removeItem("xzfystatus1");
+      },
+      tonews(){
+      	if(localStorage.getItem('cooknx')){
+	      	this.$router.push({
+						path:'/news',//跳转到消息列表
+	//					query:{
+	//						"zhid":id//所传参数
+	//					}
+					})
+      	}else{
+      		this.$router.push({path:'/login'});
+          return;
+      	}
       }
     },
     mounted: function () {

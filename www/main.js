@@ -16,15 +16,14 @@ Vue.use(VueResource);
 Vue.use(MintUI);
 
 //Vue.prototype.$api = "http://yhcms.tunnel.qydev.com" //api地址本地
-//Vue.prototype.$api = "http://116.62.68.26:8080" //api地址116的地址ip
-Vue.prototype.$api = "http://omc.urskongjian.com" //api地址线上
+Vue.prototype.$api = "http://116.62.68.26:8080" //api地址116的地址ip
+// Vue.prototype.$api = "http://192.168.1.40:8080" //api地址116的地址ip
+// Vue.prototype.$api = "http://192.168.1.45:8080"//Mr.Cheng IP Address
+//Vue.prototype.$api = "http://omc.urskongjian.com" //api地址线上
 //Vue.prototype.$api = "http://192.168.137.54:8081" //api地址
 /*Vue.prototype.$api = "http://wx.urskongjian.com:8080" //api地址*/
 //Vue.prototype.$api = "http://192.168.0.222:8080" //api地址
 //Vue.prototype.$api = "http://yhcms.tunnel.qydev.com" //api地址本地
-//Vue.prototype.$prefix = "http://116.62.68.26:81" //图片前缀222
-/*Vue.prototype.$export = "http://wx.urskongjian.com:8080" //*/
-//Vue.prototype.$export = "http://omc.urskongjian.com" //可以随意改
 
 // 微信判断是否关注
 const api = "http://omc.urskongjian.com/yhcms/web/jcsj/userAuth.do";
@@ -34,8 +33,8 @@ const FollowInfo = () => { return $.post(api, {})};
 
 
 
-//Vue.prototype.$prefix = "http://116.62.68.26:81" //图片前缀
-Vue.prototype.$prefix = "http://47.92.145.21:81" //图片前缀
+Vue.prototype.$prefix = "http://116.62.68.26:81" //图片前缀
+//Vue.prototype.$prefix = "http://47.92.145.21:81" //图片前缀
 
 // 测试环境
 
@@ -212,6 +211,14 @@ var router = new VueRouter({
             title: '收款账号管理'
           }
         },
+        {//渠道消息通知
+          path: '/news',
+          name: 'news',
+          component: resolve => require(['./pages/channel/news.vue'], resolve),
+          meta: {
+            title: '消息通知'
+          }
+        }
     ]
 });
 
@@ -361,6 +368,12 @@ var router = new VueRouter({
 
 
 router.beforeEach((to, from, next) => {
+    // 根据路由变化去改变页面的title
+    if (to.meta.title) {
+        document.title = to.meta.title;
+    }else{
+        next();
+    }
     if(to.path=='/register'||to.path=='/forgot_pwd'||to.path.indexOf('/reset_pwd')!=-1){
         next();
     }else{
