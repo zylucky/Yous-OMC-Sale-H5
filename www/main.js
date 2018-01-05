@@ -224,6 +224,12 @@ var router = new VueRouter({
         //   }
         // },
         {//收款账号管理
+          path: '/income_number',
+          name: 'income_number',
+          component: resolve => require(['./pages/channel/income_number.vue'], resolve),
+          meta: {
+            title: '收款账号管理'
+          }
             path: '/income_number',
             component: require('./pages/channel/income_number.vue')
         },
