@@ -143,7 +143,7 @@ export default{
 	},
 	created(){
 		this.id = this.$route.query.zhid;
-		if(this.$route.query.zhid){
+		if(this.$route.query.zhid || location.search == ''){
 			this.btntext = '保存';
 		}else{
 			this.btntext = '保存并使用';
@@ -179,14 +179,7 @@ export default{
 			var cookxs = JSON.parse(localStorage.getItem('cooknx'));
 			console.log(cookxs)
 			const url = this.$api + "/yhcms/web/qdyinhangzhanghao/saveQvDaoData.do";
-//			if(this.usernumber == this.yhzh){
-//				Toast({
-//				  message: '已存在该账户',
-//				  position: 'center',
-//				  duration: 3000
-//				});
-//				return;
-//			}
+
 			if(this.username != '' && this.bankplace != '' && this.usernumber != ''){
 				axios.post(url,{
 					"cookie":cookxs,
@@ -204,20 +197,28 @@ export default{
 					  position: 'center',
 					  duration: 1000
 					});
-					if(res.data.success && !this.$route.query.zhid){
-						this.$router.push({
-							path:'/channel',//跳转到渠道数据保存
-							query:{
-								"zhid":res.data.data.id//所传参数
-							}
-						})
-					}else{
+					if(location.search == ''){
 						this.$router.push({
 							path:'/income_number',//跳转到账号列表
-							query:{
-								"zhid":res.data.data.id//所传参数
-							}
 						})
+					}else{
+						if(res.data.success && !this.$route.query.zhid){
+							this.$router.push({
+								path:'/channel',//跳转到渠道数据保存
+								query:{
+									"zhid":res.data.data.id,//所传参数
+									"qdid":this.$route.query.qdid
+								}
+							})
+						}else{
+							this.$router.push({
+								path:'/income_number',//跳转到账号列表
+								query:{
+									"zhid":res.data.data.id,//所传参数
+									"qdid":this.$route.query.qdid
+								}
+							})
+						}						
 					}
 					console.log(res);
 	            }, (err)=>{

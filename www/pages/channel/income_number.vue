@@ -29,12 +29,13 @@
   		position: relative;
   	}
   	.userleft{
-  		width: 5.8rem;
+  		width: 6.8rem;
   		p:last-child{margin-bottom: 0.3rem;}
   		p:first-child{margin-top: 0.3rem;}
   	}
   	.userright{
   		position: relative;
+  		left: -0.1rem;
   		z-index: 999;
   		display: flex;
   		align-items: center;
@@ -67,7 +68,7 @@
   		position: absolute;
   		top: 50%;
   		margin-top: -0.375rem;
-  		right: 0.05rem;
+  		right: 0.10rem;
   		content: "";
   		display: block;
   		height: 0.75rem;
@@ -221,6 +222,7 @@ export default{
 				path:'/adduser',//跳转到渠道数据保存
 				query:{
 					"zhid":id,//所传参数
+					"qdid":this.$route.query.qdid
 				}
 			})
 		},
@@ -270,21 +272,33 @@ export default{
 			});
 		},
 		tochanel(id){
-			this.$router.push({
-				path:'/channel',//跳转到渠道数据保存
-				query:{
-					"zhid":id//所传参数
-				}
-			})
+			if(location.search == ''){
+				return;
+			}else{
+				this.$router.push({
+					path:'/channel',//跳转到渠道数据保存
+					query:{
+						"zhid":id,//所传参数
+						"qdid":this.$route.query.qdid
+					}
+				})				
+			}
+
 		},
 		toadd(){
 			this.$router.push({
 				path:'/adduser',//跳转到添加账户功能界面
+				query:{
+					"qdid":this.$route.query.qdid
+				}
 			})
 		},
 		toaddcard(){
 			this.$router.push({
 				path:'/adduser',//跳转到添加账户功能界面
+				query:{
+					"qdid":this.$route.query.qdid
+				}
 			})
 		}
 	},
