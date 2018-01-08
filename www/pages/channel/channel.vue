@@ -189,8 +189,9 @@
 			textarea{
 				background: #fff;
 				border: none;
-				padding-top: 0.06rem;
+				/*padding-top: 0.06rem;*/
 				font-size: @font34;
+				width: 5.5rem;
 			}
 		}
 		
@@ -238,6 +239,9 @@
 			right: 0.55rem;
 		}
 	}
+	.truebox{
+		padding-left: 0.6rem;
+	}
 </style>
 <style>
 .mint-cell:last-child,.mint-cell-wrapper{
@@ -270,7 +274,7 @@
 						<p>已确认<span class="flow_r"></span></p>
 						<p>12/19 15:31</p>
 					</li>
-					<li class="ing" v-show='this.qdlist.taskZt != 1'>
+					<li class="ing" v-show='qdlist.taskZt != 1'>
 						<p>审批中<span class="flow_r"></span></p>
 						<p>12/19 15:31</p>
 					</li>
@@ -409,17 +413,29 @@ export default{
 		}
 	},
 	created(){
+//		console.log(localStorage.getItem('qdlist'))
 		this.ids = this.$route.query.zhid;
 		this.passzt = this.$route.query.passzt;
-		this.qdlist = JSON.parse(localStorage.getItem('qdlist'))[this.$route.query.idx];
-		this.bz = this.qdlist.qdbeizhu;//渠道备注
-		if(this.$route.query.zhid){
-			this.hqzh();
-		}else{
-			this.defaultzh();//获取用户默认账户
-		}
+//		this.qdlist = JSON.parse(localStorage.getItem('qdlist'))[this.$route.query.idx];
+//		console.log(this.qdlist);
+		this.qddetails();
 	},
 	methods:{
+		qddetails(){//获取渠道单个信息
+			const url = this.$api + "/yhcms/web/qdyongjin/getQdYjForid.do";
+			axios.post(url,{ 
+        		"id":this.$route.query.qdid,
+            }).then((res)=>{
+	            if(res.data.success){
+	            	this.qdlist = res.data.data;
+	            	console.log(this.qdlist);
+//	            	console.log(this.qdlist.taskZt);
+					this.qdflow();
+	            }
+            }, (err)=>{
+				console.log(err);
+            });
+		},
 		fptt(){
 			this.popshow = true;
 		},
@@ -458,7 +474,7 @@ export default{
 					"loudongid":this.qdlist.loudongid,
 					"loupan":this.qdlist.loupan,
 					"loupanid":this.qdlist.loupanid,
-					"qdbeizhu":this.qdlist.qdbeizhu,
+					"qdbeizhu":this.bz,
 					"taskZt":this.qdlist.taskZt,
 					"xiaoshou":this.qdlist.xiaoshou,
 					"xiaoshouid":this.qdlist.xiaoshouid,
@@ -473,14 +489,24 @@ export default{
 					"xsqvdaotel":this.qdlist.xsqvdaotel,
 					"xsyongjin":this.qdlist.xsyongjin,
 					"xsyongjinxinxi":this.qdlist.xsyongjinxinxi,
-					"qdbeizhu":this.bz,
 					"qdhuming":this.defaultData.huming,
 					"qdkaihuhang":this.defaultData.kaihuhang,
 					"qdquerenfapiao":this.qrfp,
 					"qdzhanghao":this.defaultData.zhanghao
 	            }).then((res)=>{
+	            	if(res.data.success){
+	            		Toast({
+							message: '提交成功',
+							position: 'center',
+							duration: 2000
+						});
+	            		this.success = true;
+						this.$router.push({
+							path:'/channel_list',//跳转到渠道佣金展示
+						})        		
+	            	}
 	            	console.log(res);
-	            	this.success = true;
+	            	
 	            }, (err)=>{
 	            	console.log(err);
 	            });
@@ -493,7 +519,8 @@ export default{
 			this.$router.push({
 				path:'/income_number',//跳转到银行账户列表
 				query:{
-					"zhid":id//所传参数
+					"zhid":id,//所传参数
+					"qdid":this.$route.query.qdid
 				}
 			})
 		},
@@ -504,7 +531,8 @@ export default{
 			this.$router.push({
 				path:'/income_number',//跳转到银行账户列表
 				query:{
-					"zhid":id//所传参数
+					"zhid":id,//所传参数
+					"qdid":this.$route.query.qdid
 				}
 			})
 		},
@@ -512,7 +540,8 @@ export default{
 			this.$router.push({
 				path:'/income_number',//跳转到银行账户列表
 				query:{
-					"zhid":id//所传参数
+					"zhid":id,//所传参数
+					"qdid":this.$route.query.qdid
 				}
 			})
 		},
@@ -524,7 +553,7 @@ export default{
 				"cookie":cookxs,
 				qdid:this.qdlist.xsqvdaoid//通过渠道id获取渠道默认银行账号
 			 }).then((res)=>{
-				if(res.data.data.id!='undefined'){
+				if(res.data.data.id!='undefined' || res.data.data.id!=''){
 				 	this.defaultData.id = res.data.data.id;
 				 	this.defaultData.huming = res.data.data.huming;
 					this.defaultData.kaihuhang = res.data.data.kaihuhang;
@@ -547,58 +576,73 @@ export default{
             }, (err)=>{
             	console.log(err);
             });
+		},
+		qdflow(){
+			//上方状态更新流程样式显示
+			if(this.passzt){//禁用备注输入
+				$('.bz textarea').attr('disabled','disabled')
+			}
+			if(this.passzt && this.qdlist.taskZt=='2'){//已确认审核中样式
+				$('.flow li').css('visibility','inherit');
+				$('.betrue p:first-child').css({
+					"border":'2px solid #3586f2',
+					"color":'#3586f2'
+				});
+				$('.betrue .flow_r').css({
+					'background': '-webkit-linear-gradient(left,#3586f2,#ffab02)'
+				});
+				$('.ing p:first-child').css({
+					"border":'2px solid #ffab02',
+					"color":'#ffab02'
+				});
+			}
+			if(this.passzt && this.qdlist.taskZt=='3'){//审核完成样式
+				$('.flow li').css('visibility','inherit');
+				$('.suc p:first-child').css({
+					"border":'2px solid #0eac5f',
+					"color":'#0eac5f'
+				});
+				$('.ing .flow_r').css({
+					'background': '-webkit-linear-gradient(left,#ffab02,#0eac5f)'
+				});
+				$('.ing p:first-child').css({
+					"border":'2px solid #ffab02',
+					"color":'#ffab02'
+				});
+			}
+			if(this.passzt && this.qdlist.taskZt=='4'){//已驳回样式
+				$('.betrue').css('visibility','inherit');
+				$('.ing').css('visibility','inherit');
+				$('.ing p:first-child span').css('visibility','hidden');
+				
+				$('.ing p:first-child').css({
+					"border":'2px solid #ff7070',
+					"color":'#ff7070'
+				});
+				$('.ing p:first-child').text('已驳回');
+				$('.betrue .flow_r').css({
+					'background': '-webkit-linear-gradient(left,#3586f2,#ff7070)'
+				});
+				$('.betrue p:first-child').css({
+					"border":'2px solid #3586f2',
+					"color":'#3586f2'
+				});
+			}
 		}
 	},
 	mounted(){
-		if(this.passzt){//禁用备注输入
-			$('.bz textarea').attr('disabled','disabled')
+		
+		if(this.$route.query.zhid){
+			this.hqzh();
+		}else{
+			this.defaultzh();//获取用户默认账户
 		}
-		if(this.passzt && this.qdlist.taskZt=='2'){//已确认审核中样式
-			$('.flow li').css('visibility','inherit');
-			$('.betrue p:first-child').css({
-				"border":'2px solid #3586f2',
-				"color":'#3586f2'
-			});
-			$('.betrue .flow_r').css({
-				'background': '-webkit-linear-gradient(left,#3586f2,#ffab02)'
-			});
-			$('.ing p:first-child').css({
-				"border":'2px solid #ffab02',
-				"color":'#ffab02'
-			});
+		if(this.qdlist.qdbeizhu){
+			this.bz = this.qdlist.qdbeizhu;//渠道备注
+			alert(this.bz)
 		}
-		if(this.passzt && this.qdlist.taskZt=='3'){//审核完成样式
-			$('.flow li').css('visibility','inherit');
-			$('.suc p:first-child').css({
-				"border":'2px solid #0eac5f',
-				"color":'#0eac5f'
-			});
-			$('.ing .flow_r').css({
-				'background': '-webkit-linear-gradient(left,#ffab02,#0eac5f)'
-			});
-			$('.ing p:first-child').css({
-				"border":'2px solid #ffab02',
-				"color":'#ffab02'
-			});
-		}
-		if(this.passzt && this.qdlist.taskZt=='4'){//已驳回样式
-			$('.betrue').css('visibility','inherit');
-			$('.ing').css('visibility','inherit');
-			$('.ing p:first-child span').css('visibility','hidden');
-			
-			$('.ing p:first-child').css({
-				"border":'2px solid #ff7070',
-				"color":'#ff7070'
-			});
-			$('.ing p:first-child').text('已驳回');
-			$('.betrue .flow_r').css({
-				'background': '-webkit-linear-gradient(left,#3586f2,#ff7070)'
-			});
-			$('.betrue p:first-child').css({
-				"border":'2px solid #3586f2',
-				"color":'#3586f2'
-			});
-		}
+		
+		
 	}
 }
 </script>

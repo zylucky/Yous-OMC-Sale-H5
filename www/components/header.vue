@@ -104,7 +104,7 @@
             </div>
             <div style="border-bottom: 1px solid rgb(167,196,223);">
               <div style="height: 1rem;margin-left: 0.4rem;">
-                <span style=""><img style="float: left;width: 0.5rem;height: 0.48rem;margin-top: 0.25rem;" src="../resources/images/left_list/list.png"></span>
+                <span style=""><img style="float: left;width: 0.38rem;height: 0.5rem;margin-top: 0.25rem;" src="../resources/images/left_list/price_list.png"></span>
                 <a href="javascript:;" style="color: black !important;width: 2rem;font-size: 0.38rem;" @click="yjlist">佣金展示</a>
               </div>
             </div>

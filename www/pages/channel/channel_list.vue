@@ -7,12 +7,15 @@
   		top: 0;
   		bottom: 0;
   		right: 0;
+  		background: #fff;
   	}
   	.header{
   		position: absolute;
   		top: 0;
   		width: 100%;
   		background: #fff;
+  		-webkit-box-shadow:0px 2px 3px #D6D6D6; 
+  		box-shadow:0px 2px 3px #D6D6D6;
   		.nav{
   			display: flex;
   			li{
@@ -146,6 +149,24 @@
   			padding-left: 0.1rem;
   		}
   	}
+  	.kong{
+  		display: flex;
+  		flex-direction: column;
+  		justify-content: center;
+  		align-items: center;
+  		margin-top: 1.62rem;
+  		.k_ion{
+  			width: 2.12rem;
+  			height: 1.55rem;
+  			img{width: 100%;}
+  		}
+  		.k_text{
+  			font-size: @font30;
+  			color: #999;
+  			text-align: center;
+  			margin-top: 0.46rem;
+  		}
+  	}
 </style>
 
 <template>
@@ -158,9 +179,23 @@
 		</div>
 		<!--列表-->
 		<div class="list_box">
+			<!--待确认-->
+			<div class="kong" v-if="pendData.length==0 && kshow">
+				<p class="k_ion">
+					<img src="../../resources/images/commission/k_icon.png" alt="" />
+				</p>
+				<p class="k_text">暂无未确认记录</p>
+			</div>
+			<!--已确认-->
+			<div class="kong" v-if="passData.length==0 && kshow1">
+				<p class="k_ion">
+					<img src="../../resources/images/commission/k_icon.png" alt="" />
+				</p>
+				<p class="k_text">暂无已确认记录</p>
+			</div>
 			<!--未确认-->
 			<ul class="list" v-if="tabq=='0'">
-				<li v-for="(item,index) in pendData"  @click="pendclk(index)">
+				<li v-for="(item,index) in pendData"  @click="pendclk(index,item.id)">
 					<p><span>{{item.loupan}}</span><i>{{item.createdate | times}}</i></p>
 					<p>
 						<span>{{item.loudong}}-{{item.fanghao}}</span>
@@ -168,7 +203,7 @@
 					<p style="color:#959595;">销售联系人：{{item.xiaoshou}}</p>
 					<p>
 						<i v-if="item.taskZt=='1'">已提交</i>
-						<i v-else-if="item.taskZt=='2'" style="color: #3684f3;">审核中</i>
+						<i v-else-if="item.taskZt=='2'" style="color: #3684f3;">未确认</i>
 						<i v-else-if="item.taskZt=='3'" style="color: #0fad60;">审核完成</i>
 						<i v-else-if="item.taskZt=='4'" style="color: #ff716f;">已驳回</i>
 						<i else></i>
@@ -177,7 +212,7 @@
 			</ul>
 			<!--已确认-->
 			<ul class="list" v-if="tabq=='1'">
-				<li v-for="(item,index) in passData" @click="passclk(index)">
+				<li v-for="(item,index) in passData" @click="passclk(index,item.id)">
 					<p>{{item.loupan}}<i>{{item.createdate | times}}</i></p>
 					<p>
 						<span>{{item.loudong}}-{{item.fanghao}}</span>
@@ -217,6 +252,8 @@ import axios from 'axios';
 				passData:[],//已确认数据
 				popshow:false,//弹框状态
 				passzt:'',//已确认状态
+				kshow:true,//未确认无数据下的状态
+				kshow1:false,//已确认无数据下的状态
 			}
 		},
 		created(){
@@ -236,8 +273,13 @@ import axios from 'axios';
 	            		"cookie":cookxs,
 	            		"zt":0
 	            }).then((res)=>{
-	            	this.pendData = res.data.data;
-	            	localStorage.setItem('qdlist',JSON.stringify(res.data.data));
+	            	if(res.data.success && res.data.data){
+	            		this.pendData = res.data.data;
+//	            		localStorage.setItem('qdlist',JSON.stringify(res.data.data));
+	            	}else{
+	            		this.pendData = [];
+	            	}
+//	            	this.pendData = res.data.data;
 					Indicator.close();
 					console.log(res);
 	            }, (err)=>{
@@ -253,8 +295,14 @@ import axios from 'axios';
 	            		"cookie":cookxs,
 	            		"zt":1
 	            }).then((res)=>{
-	            	this.passData = res.data.data;
-	            	localStorage.setItem('qdlist',JSON.stringify(res.data.data));
+	            	if(res.data.success && res.data.data){
+	            		this.passData = res.data.data;         		
+//	            		localStorage.setItem('qdlist',JSON.stringify(res.data.data));
+	            	}else{
+	            		this.passData = [];
+	            	}
+//	            	this.passData = res.data.data;
+//	            	localStorage.setItem('qdlist',JSON.stringify(res.data.data));
 					Indicator.close();
 	                console.log(this.passData);
 	            }, (err)=>{
@@ -269,31 +317,41 @@ import axios from 'axios';
 				});
 				this.tabq = cut;
 				if(cut=='0'){
-					this.init();//待处理数据
+					this.init();//未确认数据
+					if(this.pendData.length==0){						
+						this.kshow = true;
+					}else{
+						this.kshow = false;
+					}
+					this.kshow1 = false;
 				}
 				if(cut=='1'){
-					this.init1();//已处理数据
+					this.init1();//已确认数据
+					this.kshow1 = true;
+					this.kshow = false;
 				}
 			},
-			pendclk(idx){//未确认
+			pendclk(idx,qdid){//未确认
 //				this.popshow = true;//实名认证弹框
 				this.passzt = false;
 				this.$router.push({
 					path:'/channel',//跳转渠道佣金数据保存
 					query:{
 						"passzt":this.passzt,//所传参数
-						'idx':idx
+						"idx":idx,
+						"qdid":qdid
 					}
 				})
 			},
-			passclk(idx){//已确认数据
+			passclk(idx,qdid){//已确认数据
 //				this.popshow = true;//实名认证弹框
 				this.passzt = true;
 				this.$router.push({
 					path:'/channel',//跳转渠道佣金数据保存
 					query:{
 						"passzt":this.passzt,//所传参数
-						'idx':idx
+						"idx":idx,
+						"qdid":qdid
 					}
 				})
 			},
@@ -303,6 +361,9 @@ import axios from 'axios';
 			clos(){//关闭
 				this.popshow = false;//实名认证弹框
 			}
+		},
+		mounted(){
+			$('title').html('佣金展示');
 		}
 	}
 </script>
