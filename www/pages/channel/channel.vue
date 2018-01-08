@@ -351,7 +351,7 @@
 				  :options="options" @change='selvalue'>
 				</mt-checklist>
 			</div>
-			<button v-if='!success && !passzt' :class="qrfp?'btn btnactive':'btn'" @click="save">提交</button>
+			<button v-if='!success && !passzt' :class="qrfp && this.defaultData.id != ''?'btn btnactive':'btn'" @click="save">提交</button>
 			<!--抬头发票-->
 			<div class="fppop" v-if="popshow" @click="popshow=false">
 				<div class="new_box" style="background: #f0eff5;">
