@@ -42,7 +42,7 @@
   				top: 50%;
   				margin-top: -0.015rem;
   				display:inline-block;
-  				width: 1.55rem;
+  				width: 2rem;
   				height: 0.03rem;
   				background: #969696;
   			}
@@ -50,7 +50,7 @@
   				left: -1.55rem;
   			}
   			.flow_r{
-  				right: -1.55rem;
+  				right: -2rem;
   				/*线性渐变*/
   				/*background: -webkit-linear-gradient(left,blue,red);*/
   			}
@@ -63,6 +63,7 @@
   			border-radius: 50%;
   			box-sizing: border-box;
   			text-align: center;
+  			background: #fff;
   		}
   		.flow_tip{padding-left: 0.5rem;color: #3785f4;}
   	}
