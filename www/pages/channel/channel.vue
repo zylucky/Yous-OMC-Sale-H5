@@ -416,7 +416,7 @@ export default{
 //		console.log(localStorage.getItem('qdlist'))
 		this.ids = this.$route.query.zhid;
 		this.passzt = this.$route.query.passzt;
-		alert(this.passzt);
+//		alert(this.passzt);
 		this.qddetails();
 	},
 	methods:{
@@ -429,6 +429,7 @@ export default{
 	            	this.qdlist = res.data.data;
 	            	console.log(this.qdlist);
 //	            	console.log(this.qdlist.taskZt);
+					this.bz = this.qdlist.qdbeizhu;
 					this.qdflow();
 	            }
             }, (err)=>{
