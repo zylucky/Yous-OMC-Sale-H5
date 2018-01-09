@@ -333,7 +333,7 @@ import axios from 'axios';
 			},
 			pendclk(idx,qdid){//未确认
 //				this.popshow = true;//实名认证弹框
-				this.passzt = false;
+				this.passzt = 0;
 				this.$router.push({
 					path:'/channel',//跳转渠道佣金数据保存
 					query:{
@@ -345,7 +345,7 @@ import axios from 'axios';
 			},
 			passclk(idx,qdid){//已确认数据
 //				this.popshow = true;//实名认证弹框
-				this.passzt = true;
+				this.passzt = 1;
 				this.$router.push({
 					path:'/channel',//跳转渠道佣金数据保存
 					query:{

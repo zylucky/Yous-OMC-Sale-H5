@@ -206,23 +206,13 @@ export default{
 							path:'/income_number',//跳转到账号列表
 						})
 					}else{
-//						if(location.hash.indexOf('?') != -1){
-//							alert(123);
-//							this.$router.push({
-//								path:'/channel',//跳转到渠道数据保存
-//								query:{
-//									"zhid":res.data.data.id,//所传参数
-//									"qdid":this.$route.query.qdid
-//								}
-//							})
-//						}
 						if(res.data.success && !this.$route.query.zhid){
-							alert(234);
 							this.$router.push({
 								path:'/channel',//跳转到渠道数据保存
 								query:{
 									"zhid":res.data.data.id,//所传参数
-									"qdid":this.$route.query.qdid
+									"qdid":this.$route.query.qdid,
+									"passzt":this.$route.query.passzt
 								}
 							})
 						}else{
@@ -230,7 +220,8 @@ export default{
 								path:'/income_number',//跳转到账号列表
 								query:{
 									"zhid":res.data.data.id,//所传参数
-									"qdid":this.$route.query.qdid
+									"qdid":this.$route.query.qdid,
+									"passzt":this.$route.query.passzt
 								}
 							})
 						}						

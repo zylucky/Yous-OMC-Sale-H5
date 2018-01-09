@@ -26,6 +26,7 @@
   		font-size: @font24;
   		-webkit-box-shadow:0px 2px 4px #D8D7DC; 
   		box-shadow:0px 2px 4px #D8D7DC;
+  		/*display:none;*/  		
   		ul{
   			display: flex;
   			justify-content: space-around;
@@ -268,7 +269,7 @@
 <template>
 	<div class="box">
 		<div class="box_b">
-			<div class="flow" v-show='passzt'>
+			<div class="flow" v-show='passzt != 0'>
 				<ul>
 					<li class="betrue">
 						<p>已确认<span class="flow_r"></span></p>
@@ -346,12 +347,12 @@
 			</div>
 			<!--确认框-->
 			<div class="truebox">
-				<mt-checklist v-if='!success && !passzt'
+				<mt-checklist v-if='passzt == 0'
 				  v-model="value"
 				  :options="options" @change='selvalue'>
 				</mt-checklist>
 			</div>
-			<button v-if='!success && !passzt' :class="qrfp && this.defaultData.id != ''?'btn btnactive':'btn'" @click="save">提交</button>
+			<button v-if='passzt == 0' :class="qrfp && this.defaultData.id != ''?'btn btnactive':'btn'" @click="save">提交</button>
 			<!--抬头发票-->
 			<div class="fppop" v-if="popshow" @click="popshow=false">
 				<div class="new_box" style="background: #f0eff5;">
@@ -409,14 +410,11 @@ export default{
 				zhanghao:''
 			},//选择的银行账户数据
 			success:false,//渠道数据保存后显示审批状态
-			passzt:false,//状态（是否可以修改）
+			passzt:0,//状态（是否可以修改）
 		}
 	},
 	created(){
-//		console.log(localStorage.getItem('qdlist'))
 		this.ids = this.$route.query.zhid;
-		this.passzt = this.$route.query.passzt;
-//		alert(this.passzt);
 		this.qddetails();
 	},
 	methods:{
@@ -428,7 +426,6 @@ export default{
 	            if(res.data.success){
 	            	this.qdlist = res.data.data;
 	            	console.log(this.qdlist);
-//	            	console.log(this.qdlist.taskZt);
 					this.bz = this.qdlist.qdbeizhu;
 					this.qdflow();
 	            }
@@ -513,37 +510,46 @@ export default{
 	        }
 		},
 		selnum(id){//变更账户
-			if(this.passzt){
+			if(this.passzt == 1){
 				return
+			}else{
+				this.$router.push({
+					path:'/income_number',//跳转到银行账户列表
+					query:{
+						"zhid":id,//所传参数
+						"qdid":this.$route.query.qdid,
+						"passzt":this.$route.query.passzt
+					}
+				})				
 			}
-			this.$router.push({
-				path:'/income_number',//跳转到银行账户列表
-				query:{
-					"zhid":id,//所传参数
-					"qdid":this.$route.query.qdid
-				}
-			})
 		},
 		selnum1(id){
-			if(this.passzt){
+			if(this.passzt == 1){
 				return
+			}else{
+				this.$router.push({
+					path:'/income_number',//跳转到银行账户列表
+					query:{
+						"zhid":id,//所传参数
+						"qdid":this.$route.query.qdid,
+						"passzt":this.$route.query.passzt
+					}
+				})				
 			}
-			this.$router.push({
-				path:'/income_number',//跳转到银行账户列表
-				query:{
-					"zhid":id,//所传参数
-					"qdid":this.$route.query.qdid
-				}
-			})
 		},
 		selnum2(id){
-			this.$router.push({
-				path:'/income_number',//跳转到银行账户列表
-				query:{
-					"zhid":id,//所传参数
-					"qdid":this.$route.query.qdid
-				}
-			})
+			if(this.passzt == 1){
+				return
+			}else{
+				this.$router.push({
+					path:'/income_number',//跳转到银行账户列表
+					query:{
+						"zhid":id,//所传参数
+						"qdid":this.$route.query.qdid,
+						"passzt":this.$route.query.passzt
+					}
+				})
+			}
 		},
 		defaultzh(){//获取默认账号
 			var cookxs = JSON.parse(localStorage.getItem('cooknx'));
@@ -551,7 +557,7 @@ export default{
 			const url = this.$api + "/yhcms/web/qdyinhangzhanghao/getQdYHZHForQdid.do";
 			axios.post(url,{ 
 				"cookie":cookxs,
-				qdid:this.qdlist.xsqvdaoid//通过渠道id获取渠道默认银行账号
+				"qdid":this.qdlist.xsqvdaoid//通过渠道id获取渠道默认银行账号
 			 }).then((res)=>{
 				if(res.data.data.id!='undefined' || res.data.data.id!=''){
 				 	this.defaultData.id = res.data.data.id;
@@ -578,11 +584,12 @@ export default{
             });
 		},
 		qdflow(){
+			this.passzt = this.$route.query.passzt;
 			//上方状态更新流程样式显示
-			if(this.passzt){//禁用备注输入
+			if(this.passzt == 1){//禁用备注输入
 				$('.bz textarea').attr('disabled','disabled')
 			}
-			if(this.passzt && this.qdlist.taskZt=='2'){//已确认审核中样式
+			if(this.passzt == 1 && this.qdlist.taskZt=='2'){//已确认审核中样式
 				$('.flow li').css('visibility','inherit');
 				$('.betrue p:first-child').css({
 					"border":'2px solid #3586f2',
@@ -595,8 +602,9 @@ export default{
 					"border":'2px solid #ffab02',
 					"color":'#ffab02'
 				});
+				$('.flow_tip').html('您的佣金正在审批中，请耐心等待！').css('color','#ffab02');
 			}
-			if(this.passzt && this.qdlist.taskZt=='3'){//审核完成样式
+			if(this.passzt == 1 && this.qdlist.taskZt=='3'){//审核完成样式
 				$('.flow li').css('visibility','inherit');
 				$('.suc p:first-child').css({
 					"border":'2px solid #0eac5f',
@@ -609,8 +617,9 @@ export default{
 					"border":'2px solid #ffab02',
 					"color":'#ffab02'
 				});
+				$('.flow_tip').html('您的佣金已通过审批，已打入您的账户，请注意查收！').css('color','#0eac5f');
 			}
-			if(this.passzt && this.qdlist.taskZt=='4'){//已驳回样式
+			if(this.passzt == 1 && this.qdlist.taskZt=='4'){//已驳回样式
 				$('.betrue').css('visibility','inherit');
 				$('.ing').css('visibility','inherit');
 				$('.ing p:first-child span').css('visibility','hidden');
@@ -627,6 +636,7 @@ export default{
 					"border":'2px solid #3586f2',
 					"color":'#3586f2'
 				});
+				$('.flow_tip').html('抱歉，您的佣金信息已驳回，我们会为您重新提交！').css('color','#ff7070');
 			}
 		}
 	},
@@ -639,7 +649,6 @@ export default{
 		}
 		if(this.qdlist.qdbeizhu){
 			this.bz = this.qdlist.qdbeizhu;//渠道备注
-			alert(this.bz)
 		}
 		
 		

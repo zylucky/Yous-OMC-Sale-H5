@@ -222,7 +222,8 @@ export default{
 				path:'/adduser',//跳转到渠道数据保存
 				query:{
 					"zhid":id,//所传参数
-					"qdid":this.$route.query.qdid
+					"qdid":this.$route.query.qdid,
+					"passzt":this.$route.query.passzt
 				}
 			})
 		},
@@ -279,7 +280,8 @@ export default{
 					path:'/channel',//跳转到渠道数据保存
 					query:{
 						"zhid":id,//所传参数
-						"qdid":this.$route.query.qdid
+						"qdid":this.$route.query.qdid,
+						"passzt":this.$route.query.passzt
 					}
 				})				
 			}
@@ -289,7 +291,8 @@ export default{
 			this.$router.push({
 				path:'/adduser',//跳转到添加账户功能界面
 				query:{
-					"qdid":this.$route.query.qdid
+					"qdid":this.$route.query.qdid,
+					"passzt":this.$route.query.passzt
 				}
 			})
 		},
