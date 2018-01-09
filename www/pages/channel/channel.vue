@@ -409,15 +409,14 @@ export default{
 				zhanghao:''
 			},//选择的银行账户数据
 			success:false,//渠道数据保存后显示审批状态
-			passzt:'',//状态（是否可以修改）
+			passzt:false,//状态（是否可以修改）
 		}
 	},
 	created(){
 //		console.log(localStorage.getItem('qdlist'))
 		this.ids = this.$route.query.zhid;
 		this.passzt = this.$route.query.passzt;
-//		this.qdlist = JSON.parse(localStorage.getItem('qdlist'))[this.$route.query.idx];
-//		console.log(this.qdlist);
+		alert(this.passzt);
 		this.qddetails();
 	},
 	methods:{
