@@ -272,7 +272,7 @@ export default{
 			});
 		},
 		tochanel(id){
-			if(location.search == ''){
+			if(location.hash.indexOf('?') == -1){
 				return;
 			}else{
 				this.$router.push({

@@ -148,6 +148,9 @@ export default{
 		}else{
 			this.btntext = '保存并使用';
 		}
+		if(location.hash.indexOf('?') != -1){
+			this.btntext = '保存并使用';
+		}
 	},
 	methods:{
 		state(){
@@ -197,12 +200,24 @@ export default{
 					  position: 'center',
 					  duration: 1000
 					});
-					if(location.search == ''){
+
+					if(location.hash.indexOf('?') == -1){
 						this.$router.push({
 							path:'/income_number',//跳转到账号列表
 						})
 					}else{
+//						if(location.hash.indexOf('?') != -1){
+//							alert(123);
+//							this.$router.push({
+//								path:'/channel',//跳转到渠道数据保存
+//								query:{
+//									"zhid":res.data.data.id,//所传参数
+//									"qdid":this.$route.query.qdid
+//								}
+//							})
+//						}
 						if(res.data.success && !this.$route.query.zhid){
+							alert(234);
 							this.$router.push({
 								path:'/channel',//跳转到渠道数据保存
 								query:{

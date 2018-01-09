@@ -131,6 +131,7 @@ export default{
 	data(){
 		return{
 			userid:'',//用户id
+			newData:[],//消息通知数据
 		}
 	},
 	created(){
@@ -162,8 +163,12 @@ export default{
 			axios.get(url, {
 				
 			}).then((res)=>{
-				console.log('=============')
-				console.log(res)
+//				clearInterval(timer);//清楚定时器
+				if(res.data.success){
+					this.newDate = res.data.data;
+					console.log(this.newDate);
+//					var timer = setTimeout(this.takenews,2000);//定时查询
+				}				
             }, (err)=>{
 				console.log(err);
             });
