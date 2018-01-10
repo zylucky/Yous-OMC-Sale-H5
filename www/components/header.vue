@@ -36,13 +36,13 @@
 			right: -0.2rem;
 			width: 0.33rem;
 			height: 0.33rem;
+      text-align: center;
 			background: url(../resources/images/news/point.png) no-repeat center;
 			background-size: cover;
 			line-height: 0.33rem;
 			i{
 				text-align: center;
 				color: #fff;
-				margin-left: -0.05rem;
 			}
     }
   }
@@ -66,7 +66,7 @@
         <img src="../resources/images/ys_more.png" width="20" alt="">
       </label>
       <a href="javascript:;" class="news" v-show="newshow" @click="tonews">
-      	<span class="newcount"><i style="display: inline-block;transform: scale(0.5);">10</i></span>
+      	<span class="newcount" v-if='newData.length != 0'><i style="display: inline-block;transform: scale(0.5);">{{newData.length}}</i></span>
       	<!--<img src="../resources/images/news/new_ion.png"/>-->
       </a>
       <!--<a href="javascript:;" class="detail-search" style="position: fixed;left: 0; top: 0">
@@ -123,6 +123,7 @@
   <!--header end-->
 </template>
 <script type="text/babel">
+import axios from 'axios';
   import $ from 'jquery';
   import {Indicator} from 'mint-ui';
   export default {
@@ -137,6 +138,8 @@
           },
           head:"",
           newshow:true,
+          userid:'',//用户id
+          newData:[],//消息通知数据
       };
     },
     created(){
@@ -145,8 +148,44 @@
     	}else{
     		this.newshow = true;
     	}
+      this.takeid();
     },
     methods: {
+      takeid(){//获取用户id
+        var cookxs = JSON.parse(localStorage.getItem('cooknx'));
+        console.log(cookxs);
+  //      const url = "http://116.62.68.26:8080/yhcms/web/qdyongjin/getLoginInfo.do";
+        const url = this.$api + "/yhcms/web/qdyongjin/getLoginInfo.do";
+        axios.post(url,{
+          "cookie":cookxs,
+          "ptype":2
+             }).then((res)=>{
+                if(res.data.success){
+    //            console.log(res.data.data.userid)
+                  this.userid = res.data.data.userid
+                  this.takenews();
+                }else{
+                  return;
+                }
+              }, (err)=>{
+          console.log(err);
+              });
+      },
+      takenews(){//接收消息
+        const url = "http://erp.youshikongjian.com/receiveMessage/"+ this.userid + "/sys/qd";//消息接口地
+        axios.get(url, {
+          
+        }).then((res)=>{
+  //        clearInterval(timer);//清楚定时器
+          if(res.data.success){
+            this.newData = res.data.data;
+            console.log(this.newData);
+  //          var timer = setTimeout(this.takenews,2000);//定时查询
+          }       
+              }, (err)=>{
+          console.log(err);
+              });
+      },
       init(){
           this.para.search_keywork = this.$route.query.keyword;
       },

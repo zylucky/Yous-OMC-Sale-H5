@@ -279,6 +279,9 @@ import axios from 'axios';
 	            	}else{
 	            		this.pendData = [];
 	            	}
+	            	if(res.status == 200 && res.data.success == false){
+	            		this.popshow = true;//实名认证弹框
+	            	}
 //	            	this.pendData = res.data.data;
 					Indicator.close();
 					console.log(res);

@@ -229,8 +229,8 @@ export default{
 		},
 		init(){//渠道银行账号列表
 			var cookxs = JSON.parse(localStorage.getItem('cooknx'));
-			const url = "http://192.168.1.40:8080/yhcms/web/qdyinhangzhanghao/getQdYHZHForQvdao.do";
-//			const url = this.$api + "/yhcms/web/qdyongjin/getLikeQd.do";
+//			const url = "http://192.168.1.40:8080/yhcms/web/qdyinhangzhanghao/getQdYHZHForQvdao.do";
+			const url = this.$api + "/yhcms/web/qdyinhangzhanghao/getQdYHZHForQvdao.do";
 			axios.post(url,{
 				"cookie":cookxs
             }).then((res)=>{

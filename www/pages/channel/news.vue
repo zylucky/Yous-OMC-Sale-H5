@@ -75,49 +75,66 @@
 <template>
 	<div class="box">
 		<!--佣金确认消息状态-->
-		<div class="new_box">
+		<div class="new_box" v-for="(item,index) in newData" v-if="item.type==5">
 			<p class="newspic">
 				<img src="../../resources/images/news/1.png"/>
 			</p>
 			<p class="news_list">
-				<span class="time">12月5日  12:03</span>
+				<span class="time">{{item.updated_at | newtime}}</span>
 				<ul>
 					<li class="title" style="color: #0fad60;">佣金确认</li>
 					<li class="tip">您有一条佣金信息需确认，请知晓</li>
-					<li class="name">申请人：张三</li>
+					<li class="name">申请人：{{item.send_to_name}}</li>
 					<li>查看详情</li>
 				</ul>
 			</p>
 		</div>
 		<!--审批消息状态-->
-		<div class="new_box">
+		<div class="new_box" v-for="(item,index) in newData" v-if="item.type==8">
 			<p class="newspic">
 				<img src="../../resources/images/news/2.png"/>
 			</p>
 			<p class="news_list">
-				<span class="time">12月5日  12:03</span>
+				<span class="time">{{item.updated_at | newtime}}</span>
 				<ul>
 					<li class="title">审批</li>
 					<li class="tip">您的佣金已审批，请知晓</li>
-					<li class="name">申请人：李四</li>
+					<li class="name">申请人：{{item.send_to_name}}</li>
 					<li class="spzt">审批通过</li>
 					<li>查看详情</li>
 				</ul>
 			</p>
 		</div>
+		<!--审批消息驳回状态-->
+		<div class="new_box" v-for="(item,index) in newData" v-if="item.type==7">
+			<p class="newspic">
+				<img src="../../resources/images/news/2.png"/>
+			</p>
+			<p class="news_list">
+				<span class="time">{{item.updated_at | newtime}}</span>
+				<ul>
+					<li class="title">审批</li>
+					<li class="tip">您的佣金已审批，请知晓</li>
+					<li class="name">申请人：{{item.send_to_name}}</li>
+					<li class="spzt">审批被驳回</li>
+					<li>查看详情</li>
+				</ul>
+			</p>
+		</div>
 		<!--收款通知消息状态-->
-		<div class="new_box">
+		<div class="new_box" v-for="(item,index) in newData" v-if="item.type==6">
 			<p class="newspic">
 				<img src="../../resources/images/news/3.png"/>
 			</p>
 			<p class="news_list">
-				<span class="time">12月5日  12:03</span>
+				<span class="time">{{item.updated_at | newtime}}</span>
 				<ul>
 					<li class="title" style="color: #3486f2;">收款通知</li>
 					<li class="tip">您的佣金已付款，请注意查收</li>
-					<li class="name">申请人：张三</li>
-					<li class="price">佣金金额：￥2,568.00</li>
+					<li class="name">申请人：{{item.send_to_name}}</li>
+					<li class="price">佣金金额：￥{{item.yongjin}}</li>
 					<li class="huname" style="border: none;line-height: inherit;">收款户名：李明</li>
+					<li>查看详情</li>
 				</ul>
 			</p>
 		</div>
@@ -165,13 +182,23 @@ export default{
 			}).then((res)=>{
 //				clearInterval(timer);//清楚定时器
 				if(res.data.success){
-					this.newDate = res.data.data;
-					console.log(this.newDate);
+					this.newData = res.data.data;
+					console.log(this.newData);
 //					var timer = setTimeout(this.takenews,2000);//定时查询
 				}				
             }, (err)=>{
 				console.log(err);
             });
+		}
+	},
+	filters:{
+		newtime(t){
+			var time;
+			var time1 = t.split(' ')[0].split('-');//年份
+			var time2 = t.split(' ')[1].split(':');//时间
+			time1 = time1[1] + '月' + time1[2] + '日';
+			time2 = time2[0] + ':' + time2[1];
+			return time = time1 + " " + time2;
 		}
 	}
 }
