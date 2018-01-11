@@ -369,14 +369,22 @@
 						</li>
 					</ol>
 					
-					<ol>
+					<ol v-if="qdlist.xsfpdizhidianhua != ''">
+						<li>
+							<span>电话：</span>
+							<span>{{qdlist.xsfpdizhidianhua.split(' ')[1]}}</span>
+						</li>
 						<li>
 							<span>地址：</span>
-							<span>{{qdlist.xsfpdizhidianhua}}</span>
+							<span>{{qdlist.xsfpdizhidianhua.split(' ')[0]}}</span>
 						</li>
 						<li>
 							<span>开户行：</span>
-							<span>{{qdlist.xsfpkaihuhang}}</span>
+							<span>{{qdlist.xsfpkaihuhang.split(' ')[0]}}</span>
+						</li>
+						<li>
+							<span>银行账号：</span>
+							<span>{{qdlist.xsfpkaihuhang.split(' ')[1]}}</span>
 						</li>
 					</ol>
 				</div>
