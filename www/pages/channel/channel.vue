@@ -426,6 +426,12 @@ export default{
             }).then((res)=>{
 	            if(res.data.success){
 	            	this.qdlist = res.data.data;
+	            	if(res.data.data.qdhuming){
+	            		this.defaultData.huming = res.data.data.qdhuming;
+	            		this.defaultData.kaihuhang = res.data.data.qdkaihuhang;
+	            		this.defaultData.zhanghao = res.data.data.qdzhanghao;
+	            		console.log(this.defaultData)
+	            	}
 	            	console.log(this.qdlist);
 					this.bz = this.qdlist.qdbeizhu;
 					this.qdflow();
@@ -642,7 +648,6 @@ export default{
 		}
 	},
 	mounted(){
-		
 		if(this.$route.query.zhid){
 			this.hqzh();
 		}else{

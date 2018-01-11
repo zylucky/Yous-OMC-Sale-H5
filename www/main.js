@@ -18,7 +18,7 @@ Vue.use(MintUI);
 //Vue.prototype.$api = "http://yhcms.tunnel.qydev.com" //api地址本地
 Vue.prototype.$api = "http://116.62.68.26:8080" //api地址116的地址ip
 // Vue.prototype.$api = "http://192.168.1.40:8080" //api地址116的地址ip
-// Vue.prototype.$api = "http://192.168.1.45:8080"//Mr.Cheng IP Address
+// Vue.prototype.$api = "http://192.168.21.55:8080"//Mr.Cheng IP Address
 //Vue.prototype.$api = "http://omc.urskongjian.com" //api地址线上
 //Vue.prototype.$api = "http://192.168.137.54:8081" //api地址
 /*Vue.prototype.$api = "http://wx.urskongjian.com:8080" //api地址*/
@@ -179,70 +179,22 @@ var router = new VueRouter({
             path: '/test',
             component: require('./routers/test.vue')
         },
-      // {//渠道未确认
-      //     path: '/channel',
-      //     name: 'channel',
-      //     component: resolve => require(['./pages/channel/channel.vue'], resolve),
-      //     meta: {
-      //       title: '佣金信息'
-      //     }
-      //   },
         {
             path: '/channel',
             component: require('./pages/channel/channel.vue')
         },
-        // {//渠道佣金记录列表
-        //   path: '/channel_list',
-        //   name: 'channel_list',
-        //   component: resolve => require(['./pages/channel/channel_list.vue'], resolve),
-        //   meta: {
-        //     title: '佣金管理'
-        //   }
-        // },
         {//渠道佣金记录列表
             path: '/channel_list',
             component: require('./pages/channel/channel_list.vue')
         },
-        // {//新建收款账号
-        //   path: '/adduser',
-        //   name: 'adduser',
-        //   component: resolve => require(['./pages/channel/adduser.vue'], resolve),
-        //   meta: {
-        //     title: '新建收款账号'
-        //   }
-        // },
         {//新建收款账号
             path: '/adduser',
             component: require('./pages/channel/adduser.vue')
         },
-        // {//收款账号管理
-        //   path: '/income_number',
-        //   name: 'income_number',
-        //   component: resolve => require(['./pages/channel/income_number.vue'], resolve),
-        //   meta: {
-        //     title: '收款账号管理'
-        //   }
-        // },
-        // {//收款账号管理
-        //   path: '/income_number',
-        //   name: 'income_number',
-        //   component: resolve => require(['./pages/channel/income_number.vue'], resolve),
-        //   meta: {
-        //     title: '收款账号管理'
-        //   }
-        // },
         {
             path: '/income_number',
             component: require('./pages/channel/income_number.vue')
         },
-        // {//渠道消息通知
-        //   path: '/news',
-        //   name: 'news',
-        //   component: resolve => require(['./pages/channel/news.vue'], resolve),
-        //   meta: {
-        //     title: '消息通知'
-        //   }
-        // },
         {//渠道消息通知
             path: '/news',
             component: require('./pages/channel/news.vue')
