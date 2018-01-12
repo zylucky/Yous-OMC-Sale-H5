@@ -317,12 +317,12 @@
 			<div class="new_box">
 				<h3>收款方信息</h3>
 				<div class="choose">
-					<p class="sel" v-if='defaultData.id==""' @click="selnum2(defaultData)">
+					<p class="sel" v-if='defaultData.id=="" && passzt == 0' @click="selnum2(defaultData)">
 						<span></span>
 						<span>选择收款账号</span>
 					</p>
 					<!--选择好收款账号显示的样式-->
-					<ul @click="selnum1(defaultData.id)" v-if="defaultData.id!=''">
+					<ul @click="selnum1(defaultData.id)" v-if="defaultData.id!='' && passzt == 0">
 						<li>
 							<span>户名：</span>
 							<span>{{defaultData.huming}}</span>
@@ -335,6 +335,21 @@
 						<li>
 							<span>银行账号：</span>
 							<span>{{defaultData.zhanghao | delkg}}</span>
+						</li>
+					</ul>
+					<!--账户显示-->
+					<ul  v-if="passzt == 1 && qdlist.qdhuming">
+						<li>
+							<span>户名：</span>
+							<span>{{qdlist.qdhuming}}</span>
+						</li>
+						<li>
+							<span>开户行：</span>
+							<span>{{qdlist.qdkaihuhang}}</span>
+						</li>
+						<li>
+							<span>银行账号：</span>
+							<span>{{qdlist.qdzhanghao | delkg}}</span>
 						</li>
 					</ul>
 					
@@ -438,6 +453,7 @@ export default{
 	            		this.defaultData.huming = res.data.data.qdhuming;
 	            		this.defaultData.kaihuhang = res.data.data.qdkaihuhang;
 	            		this.defaultData.zhanghao = res.data.data.qdzhanghao;
+	            		console.log('======================')
 	            		console.log(this.defaultData)
 	            	}
 	            	console.log(this.qdlist);
