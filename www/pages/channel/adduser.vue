@@ -239,8 +239,8 @@ export default{
 			}
 		},
 		hqzh(){//根据id获取银行账号
-			const url = "http://192.168.1.40:8080/yhcms/web/qdyinhangzhanghao/getQdYHZHForid.do";
-//			const url = this.$api + "/yhcms/web/qdyinhangzhanghao/getQdYHZHForid.do";
+//			const url = "http://192.168.1.40:8080/yhcms/web/qdyinhangzhanghao/getQdYHZHForid.do";
+			const url = this.$api + "/yhcms/web/qdyinhangzhanghao/getQdYHZHForid.do";
 			axios.post(url,{ 
 				id:this.id//路由传递过来的银行账户id
 			}).then((res)=>{

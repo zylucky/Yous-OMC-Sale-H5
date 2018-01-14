@@ -219,7 +219,7 @@ export default{
 	methods:{
 		bjclick(id){
 			this.$router.push({
-				path:'/adduser',//跳转到渠道数据保存
+				path:'/adduser',//跳转到账户数据保存
 				query:{
 					"zhid":id,//所传参数
 					"qdid":this.$route.query.qdid,

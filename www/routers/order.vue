@@ -58,6 +58,7 @@
                   <img v-if="image" :src="$prefix + '/' + image" alt="">
                   <img v-else :src="$prefix + '/upload/2017-08-27/6404b4de960b81fc5403c870aefcea34.png'" alt="">
                 </a>
+                <div>123</div>
               </div>
             </div>
             <div class="banner-page">
