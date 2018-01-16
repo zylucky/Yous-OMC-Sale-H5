@@ -480,7 +480,6 @@
                                     position: 'bottom',
                                     duration: 1000
                                 });
-								
 								if(that.sm == 0){
 									setTimeout(function(){
 		                                that.$router.push({path:'/channel_list'});

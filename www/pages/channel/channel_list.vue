@@ -243,6 +243,7 @@
 <script>
 import { TabContainer, TabContainerItem } from 'mint-ui';
 import { Indicator } from 'mint-ui';
+import { Toast } from 'mint-ui';
 import axios from 'axios';
 	export default{
 		data(){
@@ -274,14 +275,14 @@ import axios from 'axios';
 	            		"cookie":cookxs,
 	            		"zt":0
 	            }).then((res)=>{
+	            	this.smcode = res.data.code;
 	            	if(res.data.success && res.data.data){
-	            		this.smcode = res.data.code;
 	            		this.pendData = res.data.data;
 //	            		localStorage.setItem('qdlist',JSON.stringify(res.data.data));
 	            	}else{
 	            		this.pendData = [];
 	            	}
-	            	if(res.status == 200 && this.pendData.length == 0){
+	            	if(res.status == 200 && this.pendData.length == 0 && this.smcode != 200){
 	            		this.popshow = true;//实名认证弹框
 	            	}
 //	            	this.pendData = res.data.data;
@@ -294,7 +295,6 @@ import axios from 'axios';
 				 const url = this.$api + "/yhcms/web/qdyongjin/getQdYjForQvdao.do";
 //				const url = "http://192.168.1.40:8080/yhcms/web/qdyongjin/getQdYjForQvdao.do";
 				var cookxs = JSON.parse(localStorage.getItem('cooknx'));
-				console.log(cookxs);
 	            axios.post(url,{ 
 	            		"cookie":cookxs,
 	            		"zt":1
@@ -335,8 +335,16 @@ import axios from 'axios';
 				}
 			},
 			pendclk(idx,qdid){//未确认
-				if(this.smcode == 100){
+				if(this.smcode == 0){
 					this.popshow = true;//实名认证弹框
+					return
+				}
+				if(this.smcode == 1){
+					Toast({
+						message: '正在等待验证通过，稍安勿躁！',
+						position: 'center',
+						duration: 2000
+					});
 					return
 				}
 				this.passzt = 0;
@@ -350,8 +358,16 @@ import axios from 'axios';
 				})
 			},
 			passclk(idx,qdid){//已确认数据
-				if(this.smcode == 100){
+				if(this.smcode == 0){
 					this.popshow = true;//实名认证弹框
+					return
+				}
+				if(this.smcode == 1){
+					Toast({
+						message: '正在等待验证通过，稍安勿躁！',
+						position: 'center',
+						duration: 2000
+					});
 					return
 				}
 				this.passzt = 1;
