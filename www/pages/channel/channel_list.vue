@@ -254,6 +254,7 @@ import axios from 'axios';
 				passzt:'',//已确认状态
 				kshow:true,//未确认无数据下的状态
 				kshow1:false,//已确认无数据下的状态
+				smcode:'',
 			}
 		},
 		created(){
@@ -274,17 +275,17 @@ import axios from 'axios';
 	            		"zt":0
 	            }).then((res)=>{
 	            	if(res.data.success && res.data.data){
+	            		this.smcode = res.data.code;
 	            		this.pendData = res.data.data;
 //	            		localStorage.setItem('qdlist',JSON.stringify(res.data.data));
 	            	}else{
 	            		this.pendData = [];
 	            	}
-	            	if(res.status == 200 && res.data.success == false){
+	            	if(res.status == 200 && this.pendData.length == 0){
 	            		this.popshow = true;//实名认证弹框
 	            	}
 //	            	this.pendData = res.data.data;
 					Indicator.close();
-					console.log(res);
 	            }, (err)=>{
 	            	Indicator.close();
 	            });
@@ -307,7 +308,6 @@ import axios from 'axios';
 //	            	this.passData = res.data.data;
 //	            	localStorage.setItem('qdlist',JSON.stringify(res.data.data));
 					Indicator.close();
-	                console.log(this.passData);
 	            }, (err)=>{
 	            	Indicator.close();
 	               console.log(err);
@@ -335,7 +335,10 @@ import axios from 'axios';
 				}
 			},
 			pendclk(idx,qdid){//未确认
-//				this.popshow = true;//实名认证弹框
+				if(this.smcode == 100){
+					this.popshow = true;//实名认证弹框
+					return
+				}
 				this.passzt = 0;
 				this.$router.push({
 					path:'/channel',//跳转渠道佣金数据保存
@@ -347,7 +350,10 @@ import axios from 'axios';
 				})
 			},
 			passclk(idx,qdid){//已确认数据
-//				this.popshow = true;//实名认证弹框
+				if(this.smcode == 100){
+					this.popshow = true;//实名认证弹框
+					return
+				}
 				this.passzt = 1;
 				this.$router.push({
 					path:'/channel',//跳转渠道佣金数据保存
@@ -360,6 +366,12 @@ import axios from 'axios';
 			},
 			goapprove(){//去认证
 				this.popshow = false;//实名认证弹框
+				this.$router.push({
+					path:'/per_information',//跳转渠道佣金数据保存
+					query:{
+						sm:0
+					}
+				})
 			},
 			clos(){//关闭
 				this.popshow = false;//实名认证弹框
