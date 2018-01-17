@@ -179,7 +179,7 @@ var router = new VueRouter({
             path: '/test',
             component: require('./routers/test.vue')
         },
-      // {//渠道未确认
+      // {//渠道未确认123456789
       //     path: '/channel',
       //     name: 'channel',
       //     component: resolve => require(['./pages/channel/channel.vue'], resolve),
