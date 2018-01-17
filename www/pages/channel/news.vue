@@ -231,11 +231,11 @@ export default{
 			axios.get(url, {
 				
 			}).then((res)=>{
-				clearInterval(timer);//清楚定时器
+//				clearInterval(timer);//清楚定时器
 				if(res.data.success){
 					this.newData = res.data.data;
 					console.log(this.newData);
-					var timer = setTimeout(this.takenews,2000);//定时查询
+//					var timer = setTimeout(this.takenews,2000);//定时查询
 				}				
             }, (err)=>{
 				console.log(err);
