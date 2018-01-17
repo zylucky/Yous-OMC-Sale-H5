@@ -10,6 +10,7 @@
   		overflow: auto;
   		padding-left: 0.22rem;
   		padding-top: 0.9rem;
+  		background: #fff;
   	}
   	.new_box{
   		display: flex;
@@ -70,27 +71,74 @@
   			border-top: 1px solid #e4e4e4;
   		}
   	}
+  	.kong{
+  		display: flex;
+  		flex-direction: column;
+  		justify-content: center;
+  		align-items: center;
+  		margin-top: 1.62rem;
+  		.k_ion{
+  			width: 1.75rem;
+  			height: 1.78rem;
+  			img{width: 100%;}
+  		}
+  		.k_text{
+  			font-size: @font30;
+  			color: #999;
+  			text-align: center;
+  			margin-top: 0.46rem;
+  		}
+  	}
 </style>
 
 <template>
 	<div class="box">
-		<!--佣金确认消息状态-->
-		<div class="new_box" v-for="(item,index) in newData" v-if="item.type==5">
-			<p class="newspic">
+		<!--消息为空-->
+		<div class="kong" v-if="newData.length == 0">
+			<p class="k_ion">
+				<img src="../../resources/images/news/new_icon.png" alt="" />
+			</p>
+			<p class="k_text">暂无消息</p>
+		</div>
+		
+		<div class="new_box" v-for="(item,index) in newData">
+			<p class="newspic" v-if="item.type==5">
 				<img src="../../resources/images/news/1.png"/>
 			</p>
+			<!--收款通知-->
+			<p class="newspic" v-if="item.type==6">
+				<img src="../../resources/images/news/3.png"/>
+			</p>
+			
+			
 			<p class="news_list">
 				<span class="time">{{item.updated_at | newtime}}</span>
-				<ul>
+				<!--佣金确认消息状态-->
+				<ul v-if="item.type==5">
 					<li class="title" style="color: #0fad60;">佣金确认</li>
-					<li class="tip">您有一条佣金信息需确认，请知晓</li>
-					<li class="name">申请人：{{item.send_to_name}}</li>
-					<li>查看详情</li>
+					<li class="tip">{{item.content}}</li>
+					<li class="name">申请人：{{item.send_from_name}}</li>
+					<li @click="tolink(item.id,item.sourcemid)">查看详情</li>
 				</ul>
+				<!--收款消息通知-->
+				<ul v-if="item.type==6">
+					<li class="title" style="color: #3486f2;">收款通知</li>
+					<li class="tip">{{item.content}}</li>
+					<li class="name">申请人：{{item.send_from_name}}</li>
+					<li class="price">佣金金额：￥{{item.yongjin}}</li>
+					<li class="huname" style="border: none;line-height: inherit;">{{item.yongjin}}</li>
+					<li @click="tolink3(item.id,item.sourcemid)">查看详情</li>
+				</ul>
+				
 			</p>
 		</div>
+		
+		
+		
+		
+		
 		<!--审批消息状态-->
-		<div class="new_box" v-for="(item,index) in newData" v-if="item.type==8">
+		<!--<div class="new_box" v-for="(item,index) in newData" v-if="item.type==8">
 			<p class="newspic">
 				<img src="../../resources/images/news/2.png"/>
 			</p>
@@ -98,15 +146,15 @@
 				<span class="time">{{item.updated_at | newtime}}</span>
 				<ul>
 					<li class="title">审批</li>
-					<li class="tip">您的佣金已审批，请知晓</li>
-					<li class="name">申请人：{{item.send_to_name}}</li>
+					<li class="tip">{{item.content}}</li>
+					<li class="name">申请人：{{item.send_from_name}}</li>
 					<li class="spzt">审批通过</li>
-					<li>查看详情</li>
+					<li @click="tolink1(item.id,item.sourcemid)">查看详情</li>
 				</ul>
 			</p>
-		</div>
+		</div>-->
 		<!--审批消息驳回状态-->
-		<div class="new_box" v-for="(item,index) in newData" v-if="item.type==7">
+		<!--<div class="new_box" v-for="(item,index) in newData" v-if="item.type==7">
 			<p class="newspic">
 				<img src="../../resources/images/news/2.png"/>
 			</p>
@@ -114,15 +162,18 @@
 				<span class="time">{{item.updated_at | newtime}}</span>
 				<ul>
 					<li class="title">审批</li>
-					<li class="tip">您的佣金已审批，请知晓</li>
-					<li class="name">申请人：{{item.send_to_name}}</li>
+					<li class="tip">{{item.content}}</li>
+					<li class="name">申请人：{{item.send_from_name}}</li>
 					<li class="spzt">审批被驳回</li>
-					<li>查看详情</li>
+					<li @click="tolink2(item.id,item.sourcemid)">查看详情</li>
 				</ul>
 			</p>
-		</div>
+		</div>-->
+		
+		
+		
 		<!--收款通知消息状态-->
-		<div class="new_box" v-for="(item,index) in newData" v-if="item.type==6">
+		<!--<div class="new_box" v-for="(item,index) in newData" v-if="item.type==6">
 			<p class="newspic">
 				<img src="../../resources/images/news/3.png"/>
 			</p>
@@ -130,14 +181,14 @@
 				<span class="time">{{item.updated_at | newtime}}</span>
 				<ul>
 					<li class="title" style="color: #3486f2;">收款通知</li>
-					<li class="tip">您的佣金已付款，请注意查收</li>
-					<li class="name">申请人：{{item.send_to_name}}</li>
+					<li class="tip">{{item.content}}</li>
+					<li class="name">申请人：{{item.send_from_name}}</li>
 					<li class="price">佣金金额：￥{{item.yongjin}}</li>
-					<li class="huname" style="border: none;line-height: inherit;">收款户名：李明</li>
-					<li>查看详情</li>
+					<li class="huname" style="border: none;line-height: inherit;">{{item.yongjin}}</li>
+					<li @click="tolink3(item.id,item.sourcemid)">查看详情</li>
 				</ul>
 			</p>
-		</div>
+		</div>-->
 		
 	</div>
 </template>
@@ -176,20 +227,64 @@ export default{
             });
 		},
 		takenews(){//接收消息
-			const url = "http://erp.youshikongjian.com/receiveMessage/"+ this.userid + "/sys/qd";//消息接口地
+			const url = "http://www.youshikongjian.com/receiveMessage/"+ this.userid + "/sys/qd";//消息接口地
 			axios.get(url, {
 				
 			}).then((res)=>{
-//				clearInterval(timer);//清楚定时器
+				clearInterval(timer);//清楚定时器
 				if(res.data.success){
 					this.newData = res.data.data;
 					console.log(this.newData);
-//					var timer = setTimeout(this.takenews,2000);//定时查询
+					var timer = setTimeout(this.takenews,2000);//定时查询
 				}				
             }, (err)=>{
 				console.log(err);
             });
-		}
+		},
+		tolink(id,sourcemid){//佣金待确认跳转
+			this.delnew(id);
+			this.$router.push({
+				path:'/channel',//跳转渠道佣金展示详情
+				query:{
+					"passzt":0,//所传参数
+					"qdid":sourcemid
+				}
+			})
+		},
+		tolink3(id,sourcemid){//收款通知跳转
+			this.delnew(id);
+			this.$router.push({
+				path:'/channel',//跳转渠道佣金数据保存
+				query:{
+					"passzt":1,//所传参数
+					"qdid":sourcemid
+				}
+			})
+		},
+		delnew(id){
+			const url = "http://www.youshikongjian.com/readMessage/"+ id;
+			axios.get(url, {
+				
+			}).then((res)=>{
+				if(res.data.success){
+					
+				}	
+				console.log(res)
+            }, (err)=>{
+				console.log(err);
+            });
+		},
+		
+		
+//		this.$router.push({
+//			path:'/channel',//跳转渠道佣金数据保存
+//			query:{
+//				"passzt":1,//所传参数
+//				"idx":0,
+//				"qdid":3
+//			}
+//		})
+		
 	},
 	filters:{
 		newtime(t){

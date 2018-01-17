@@ -40,6 +40,8 @@
 			background: url(../resources/images/news/point.png) no-repeat center;
 			background-size: cover;
 			line-height: 0.33rem;
+      display: flex;
+      justify-content: center;
 			i{
 				text-align: center;
 				color: #fff;
@@ -66,7 +68,7 @@
         <img src="../resources/images/ys_more.png" width="20" alt="">
       </label>
       <a href="javascript:;" class="news" v-show="newshow" @click="tonews">
-      	<span class="newcount" v-if='newData.length != 0'><i style="display: inline-block;transform: scale(0.5);">{{newData.length}}</i></span>
+      	<span class="newcount" v-if='newData.length != 0'><i style="display: inline-block;transform: scale(0.5);">{{status}}</i></span>
       	<!--<img src="../resources/images/news/new_ion.png"/>-->
       </a>
       <!--<a href="javascript:;" class="detail-search" style="position: fixed;left: 0; top: 0">
@@ -140,6 +142,7 @@ import axios from 'axios';
           newshow:true,
           userid:'',//用户id
           newData:[],//消息通知数据
+          status:0,
       };
     },
     created(){
@@ -172,14 +175,19 @@ import axios from 'axios';
               });
       },
       takenews(){//接收消息
-        const url = "http://erp.youshikongjian.com/receiveMessage/"+ this.userid + "/sys/qd";//消息接口地
+        const url = "http://www.youshikongjian.com/receiveMessage/"+ this.userid + "/sys/qd";//消息接口地
         axios.get(url, {
           
         }).then((res)=>{
   //        clearInterval(timer);//清楚定时器
           if(res.data.success){
             this.newData = res.data.data;
-            console.log(this.newData);
+            for(var i=0; i<this.newData.length; i++){
+              if(this.newData[i].status == 1){
+                this.status ++;
+              }
+            }
+            console.log(this.status);
   //          var timer = setTimeout(this.takenews,2000);//定时查询
           }       
               }, (err)=>{
