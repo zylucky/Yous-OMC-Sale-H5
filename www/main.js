@@ -179,7 +179,7 @@ var router = new VueRouter({
             path: '/test',
             component: require('./routers/test.vue')
         },
-        {//
+        {
             path: '/channel',
             component: require('./pages/channel/channel.vue'),
             meta: {
