@@ -118,7 +118,6 @@
                   <a href="javascript:;"><img style="width: 1.3rem;height: 1.3rem;" src="../resources/images/house/order/bofang.png"></a>
                 </div>
 
-
               </div>
             </div>
             <div class="banner-page">
