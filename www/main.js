@@ -181,23 +181,38 @@ var router = new VueRouter({
         },
         {
             path: '/channel',
-            component: require('./pages/channel/channel.vue')
+            component: require('./pages/channel/channel.vue'),
+            meta: {
+                title: '佣金展示'
+            }
         },
         {//渠道佣金记录列表
             path: '/channel_list',
-            component: require('./pages/channel/channel_list.vue')
+            component: require('./pages/channel/channel_list.vue'),
+            meta: {
+                title: '佣金展示'
+            }
         },
         {//新建收款账号
             path: '/adduser',
-            component: require('./pages/channel/adduser.vue')
+            component: require('./pages/channel/adduser.vue'),
+            meta: {
+                title: '新建收款账号'
+            }
         },
         {
             path: '/income_number',
-            component: require('./pages/channel/income_number.vue')
+            component: require('./pages/channel/income_number.vue'),
+            meta: {
+                title: '账户管理'
+            }
         },
         {//渠道消息通知
             path: '/news',
-            component: require('./pages/channel/news.vue')
+            component: require('./pages/channel/news.vue'),
+            meta: {
+                title: '消息通知'
+            }
         },
     ]
 });
@@ -348,6 +363,11 @@ var router = new VueRouter({
 
 
 router.beforeEach((to, from, next) => {
+    /* 路由发生变化修改页面title */
+    if (to.meta.title) {
+      document.title = to.meta.title;
+    }
+    next();
 
     if(to.path=='/register'||to.path=='/forgot_pwd'||to.path.indexOf('/reset_pwd')!=-1){
         next();
