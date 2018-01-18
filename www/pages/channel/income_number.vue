@@ -219,17 +219,18 @@ export default{
 	methods:{
 		bjclick(id){
 			this.$router.push({
-				path:'/adduser',//跳转到渠道数据保存
+				path:'/adduser',//跳转到账户数据保存
 				query:{
 					"zhid":id,//所传参数
-					"qdid":this.$route.query.qdid
+					"qdid":this.$route.query.qdid,
+					"passzt":this.$route.query.passzt
 				}
 			})
 		},
 		init(){//渠道银行账号列表
 			var cookxs = JSON.parse(localStorage.getItem('cooknx'));
-			const url = "http://192.168.1.40:8080/yhcms/web/qdyinhangzhanghao/getQdYHZHForQvdao.do";
-//			const url = this.$api + "/yhcms/web/qdyongjin/getLikeQd.do";
+//			const url = "http://192.168.1.40:8080/yhcms/web/qdyinhangzhanghao/getQdYHZHForQvdao.do";
+			const url = this.$api + "/yhcms/web/qdyinhangzhanghao/getQdYHZHForQvdao.do";
 			axios.post(url,{
 				"cookie":cookxs
             }).then((res)=>{
@@ -279,7 +280,8 @@ export default{
 					path:'/channel',//跳转到渠道数据保存
 					query:{
 						"zhid":id,//所传参数
-						"qdid":this.$route.query.qdid
+						"qdid":this.$route.query.qdid,
+						"passzt":this.$route.query.passzt
 					}
 				})				
 			}
@@ -289,7 +291,8 @@ export default{
 			this.$router.push({
 				path:'/adduser',//跳转到添加账户功能界面
 				query:{
-					"qdid":this.$route.query.qdid
+					"qdid":this.$route.query.qdid,
+					"passzt":this.$route.query.passzt
 				}
 			})
 		},

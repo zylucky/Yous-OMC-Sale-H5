@@ -184,7 +184,11 @@
                 companyId:'',
                 projectjy:false,
                 bindcompid:'',
+                sm:'',//佣金列表实名认证状态
             }
+        },
+        created(){
+        	this.sm = this.$route.query.sm;
         },
         watch:{
             company(){
@@ -438,10 +442,12 @@
                                 position: 'bottom',
                                 duration: 1000
                             });
-
-                            setTimeout(function(){
-                                that.$router.push({path:'/per_cen'});
-                            },1000);
+							
+							
+							setTimeout(function(){
+							    that.$router.push({path:'/per_cen'});
+							},1000);								
+							
                         } else {
                             Toast({
                                 message: '保存失败: ' + result.message,
@@ -474,10 +480,16 @@
                                     position: 'bottom',
                                     duration: 1000
                                 });
-
-                                setTimeout(function(){
-                                    that.$router.push({path:'/per_cen'});
-                                },1000);
+								if(that.sm == 0){
+									setTimeout(function(){
+		                                that.$router.push({path:'/channel_list'});
+		                            },1000);
+								}else{
+									setTimeout(function(){
+									    that.$router.push({path:'/per_cen'});
+									},1000);									
+								}
+									
                             } else {
                                 Toast({
                                     message: '保存失败: ' + result.message,
