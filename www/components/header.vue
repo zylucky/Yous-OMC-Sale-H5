@@ -68,7 +68,7 @@
         <img src="../resources/images/ys_more.png" width="20" alt="">
       </label>
       <a href="javascript:;" class="news" v-show="newshow" @click="tonews">
-      	<span class="newcount" v-if='newData.length != 0'><i style="display: inline-block;transform: scale(0.5);">{{status}}</i></span>
+      	<span class="newcount" v-if='newData.length != 0 && status != 0'><i style="display: inline-block;transform: scale(0.5);">{{status}}</i></span>
       	<!--<img src="../resources/images/news/new_ion.png"/>-->
       </a>
       <!--<a href="javascript:;" class="detail-search" style="position: fixed;left: 0; top: 0">

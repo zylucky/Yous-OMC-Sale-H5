@@ -89,6 +89,17 @@
   			margin-top: 0.46rem;
   		}
   	}
+  	.dian{
+  		position: absolute;
+  		right: 0.1rem;
+  		top: 50%;
+  		margin-top: -0.05rem;
+  		display: inline-block;
+  		width: 0.1rem;
+  		height: 0.1rem;
+  		border-radius: 50%;
+  		background: red;
+  	}
 </style>
 
 <template>
@@ -118,8 +129,10 @@
 					<li class="title" style="color: #0fad60;">佣金确认</li>
 					<li class="tip">{{item.content}}</li>
 					<li class="name">申请人：{{item.send_from_name}}</li>
-					<li @click="tolink(item.id,item.sourcemid)">查看详情</li>
+					<li @click="tolink(item.id,item.sourcemid,item.status)">查看详情<span class="dian" v-if="item.status != 2"></span></li>
+					
 				</ul>
+				<!--消息阅读状态-->
 				<!--收款消息通知-->
 				<ul v-if="item.type==6">
 					<li class="title" style="color: #3486f2;">收款通知</li>
@@ -127,7 +140,7 @@
 					<li class="name">申请人：{{item.send_from_name}}</li>
 					<li class="price">佣金金额：￥{{item.yongjin}}</li>
 					<li class="huname" style="border: none;line-height: inherit;">{{item.yongjin}}</li>
-					<li @click="tolink3(item.id,item.sourcemid)">查看详情</li>
+					<li @click="tolink1(item.id,item.sourcemid,item.status)">查看详情<span class="dian" v-if="item.status != 2"></span></li>
 				</ul>
 				
 			</p>
@@ -241,25 +254,45 @@ export default{
 				console.log(err);
             });
 		},
-		tolink(id,sourcemid){//佣金待确认跳转
+		tolink(id,sourcemid,status){//佣金待确认跳转
 			this.delnew(id);
-			this.$router.push({
-				path:'/channel',//跳转渠道佣金展示详情
-				query:{
-					"passzt":0,//所传参数
-					"qdid":sourcemid
-				}
-			})
+			if(status != 2){
+				this.$router.push({
+					path:'/channel',//跳转渠道佣金展示详情
+					query:{
+						"passzt":0,//所传参数
+						"qdid":sourcemid
+					}
+				})				
+			}else{
+				this.$router.push({
+					path:'/channel',//跳转渠道佣金展示详情
+					query:{
+						"passzt":1,//所传参数
+						"qdid":sourcemid
+					}
+				})
+			}
 		},
-		tolink3(id,sourcemid){//收款通知跳转
+		tolink1(id,sourcemid,status){//收款通知跳转
 			this.delnew(id);
-			this.$router.push({
-				path:'/channel',//跳转渠道佣金数据保存
-				query:{
-					"passzt":1,//所传参数
-					"qdid":sourcemid
-				}
-			})
+			if(status != 2){
+				this.$router.push({
+					path:'/channel',//跳转渠道佣金数据保存
+					query:{
+						"passzt":1,//所传参数
+						"qdid":sourcemid
+					}
+				})				
+			}else{
+				this.$router.push({
+					path:'/channel',//跳转渠道佣金数据保存
+					query:{
+						"passzt":1,//所传参数
+						"qdid":sourcemid
+					}
+				})
+			}
 		},
 		delnew(id){
 			const url = "http://www.youshikongjian.com/readMessage/"+ id;
