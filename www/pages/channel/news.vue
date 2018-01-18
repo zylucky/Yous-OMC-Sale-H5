@@ -139,7 +139,6 @@
 					<li class="tip">{{item.content}}</li>
 					<li class="name">申请人：{{item.send_from_name}}</li>
 					<li class="price">佣金金额：￥{{item.yongjin}}</li>
-					<li class="huname" style="border: none;line-height: inherit;">{{item.yongjin}}</li>
 					<li @click="tolink1(item.id,item.sourcemid,item.status)">查看详情<span class="dian" v-if="item.status != 2"></span></li>
 				</ul>
 				
