@@ -48,7 +48,7 @@
   			border-radius: 0.08rem;
   		}
   		li{
-  			height: 0.5rem;
+  			height: 0.5rem !important;
   			font-size: @font26;
   			/*line-height: 0.5rem;*/
   		}
@@ -59,6 +59,8 @@
   			font-size: @font30;
   			color: #feac00;
   			line-height: 0.5rem;
+  			background: none !important;
+  			padding-left: 0 !important;
   		}
   		.price,.huname,.name{
   			color: #969696;
