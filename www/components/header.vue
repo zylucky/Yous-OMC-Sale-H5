@@ -79,7 +79,7 @@
     </header>
     <mt-popup v-model="popupVisible" position="left" class="mint-popup-3" :modal="false">
       <!--左侧登录div-->
-      <div class="main-nav-wrapper sidenav" style="height: 628px;background-color: rgb(233,239,247) !important">
+      <div class="main-nav-wrapper sidenav" style="position:absolute;background-color: rgb(233,239,247) !important;width: 60%;">
         <div class="user-box clearfix">
           <div class="mb20 headback" style="height: 4rem;">
             <div style="padding-top:.6rem;padding-left: 1.6rem;">
@@ -88,37 +88,43 @@
             <div v-if="userif" class="tc" style="margin-top: 0.2rem;font-size:0.4rem">{{username}}</div>
             <div v-else class="tc" style="margin-top: 0.2rem;font-size:0.4rem" @click="denglu"><a href="javascript:;">立即登录</a></div>
           </div>
-          <div class="ys_function tc" style="background-color: rgb(255,255,255);margin-top: -0.4rem;">
-            <!--<router-link :to="{path:'/list2'}" id="first_list_link">精选房源</router-link>-->
-            <div style="height: 1rem;margin-left: 0.4rem;border-bottom: 1px solid rgb(167,196,223);border-collapse:collapse;">
-              <span style=""><img style="float: left;width: 0.5rem;height: 0.48rem;margin-top: 0.25rem;" src="../resources/images/left_list/house.png"></span>
-              <a href="javascript:;" style="color: black !important;width: 2rem;font-size: 0.38rem;" @click="house">精选房源</a>
-            </div>
-            <div style="height: 1rem;margin-left: 0.4rem;border-bottom: 1px solid rgb(167,196,223);">
-              <span style=""><img style="float: left;width: 0.5rem;height: 0.48rem;margin-top: 0.25rem;" src="../resources/images/left_list/select.png"></span>
-              <a href="javascript:;" style="color: black !important;width: 2rem;font-size: 0.38rem;" @click="select">今日销控</a>
-            </div>
-            <div style="border-bottom: 1px solid rgb(167,196,223);">
-              <div style="height: 1rem;margin-left: 0.4rem;">
-                <span style=""><img style="float: left;width: 0.5rem;height: 0.48rem;margin-top: 0.25rem;" src="../resources/images/left_list/list.png"></span>
-                <a href="javascript:;" style="color: black !important;width: 2rem;font-size: 0.38rem;" @click="list">楼盘列表</a>
+          <div style="height: 6rem;background-color: rgb(233,239,247);">
+            <div class="ys_function tc" style="background-color: rgb(255,255,255);margin-top: -0.4rem;">
+              <!--<router-link :to="{path:'/list2'}" id="first_list_link">精选房源</router-link>-->
+              <div style="height: 1rem;margin-left: 0.4rem;border-bottom: 1px solid rgb(167,196,223);border-collapse:collapse;">
+                <span style=""><img style="float: left;width: 0.5rem;height: 0.48rem;margin-top: 0.25rem;" src="../resources/images/left_list/house.png"></span>
+                <a href="javascript:;" style="color: black !important;width: 2rem;font-size: 0.38rem;" @click="house">精选房源</a>
               </div>
-            </div>
-            <div style="border-bottom: 1px solid rgb(167,196,223);">
-              <div style="height: 1rem;margin-left: 0.4rem;">
-                <span style=""><img style="float: left;width: 0.38rem;height: 0.5rem;margin-top: 0.25rem;" src="../resources/images/left_list/price_list.png"></span>
-                <a href="javascript:;" style="color: black !important;width: 2rem;font-size: 0.38rem;" @click="yjlist">佣金展示</a>
+              <div style="height: 1rem;margin-left: 0.4rem;border-bottom: 1px solid rgb(167,196,223);">
+                <span style=""><img style="float: left;width: 0.5rem;height: 0.48rem;margin-top: 0.25rem;" src="../resources/images/left_list/select.png"></span>
+                <a href="javascript:;" style="color: black !important;width: 2rem;font-size: 0.38rem;" @click="select">今日销控</a>
               </div>
+              <div style="border-bottom: 1px solid rgb(167,196,223);">
+                <div style="height: 1rem;margin-left: 0.4rem;">
+                  <span style=""><img style="float: left;width: 0.5rem;height: 0.48rem;margin-top: 0.25rem;" src="../resources/images/left_list/list.png"></span>
+                  <a href="javascript:;" style="color: black !important;width: 2rem;font-size: 0.38rem;" @click="list">楼盘列表</a>
+                </div>
+              </div>
+              <div style="border-bottom: 1px solid rgb(167,196,223);">
+                <div style="height: 1rem;margin-left: 0.4rem;">
+                  <span style=""><img style="float: left;width: 0.38rem;height: 0.5rem;margin-top: 0.25rem;" src="../resources/images/left_list/price_list.png"></span>
+                  <a href="javascript:;" style="color: black !important;width: 2rem;font-size: 0.38rem;" @click="yjlist">佣金展示</a>
+                </div>
+              </div>
+
+
             </div>
-          </div>
-          <div style="background-color:rgb(255,255,255);border-bottom: 1px solid rgb(167,196,223);height: 1rem;margin-top: 0.3rem;">
-            <div style="margin-left: 0.4rem;" class="tc ys_function">
-              <span style=""><img style="float: left;width: 0.5rem;height: 0.48rem;margin-top: 0.25rem;" src="../resources/images/left_list/per_cen.png"></span>
-              <a href="javascript:;" style="color: black !important;width: 2rem;font-size: 0.38rem;" @click="percent">个人中心</a>
+            <div style="background-color:rgb(255,255,255);border-bottom: 1px solid rgb(167,196,223);height: 1rem;margin-top: 0.3rem;">
+              <div style="margin-left: 0.4rem;" class="tc ys_function">
+                <span style=""><img style="float: left;width: 0.5rem;height: 0.48rem;margin-top: 0.25rem;" src="../resources/images/left_list/per_cen.png"></span>
+                <a href="javascript:;" style="color: black !important;width: 2rem;font-size: 0.38rem;" @click="percent">个人中心</a>
+              </div>
             </div>
           </div>
         </div>
-        <a v-show="tuichu" href="javascript:;" class="log_out_btn" style="position: relative;bottom:-2rem;width: 4rem;" @click="login_out()">退出登录</a>
+        <div style="position: relative;bottom: 0rem;left: -0.2rem;height: 2rem;" v-show="tuichu">
+          <a href="javascript:;" class="log_out_btn" style="width: 4rem;" @click="login_out()">退出登录</a>
+        </div>
       </div>
     </mt-popup>
   </div>
