@@ -274,6 +274,14 @@
                         <dd v-if="item.decoration_level == '预租房'"></dd><dd v-else-if="item.lc">{{item.lc}}层</dd>
                         <dd v-if="item.decoration_level" class="tagClass zc" style="font-size: 0.22rem !important;padding: 0.03rem;">{{item.decoration_level}}</dd>
                         <dd v-if="item.djbsh" class="tagClass zc dj" style="font-size: 0.22rem !important;padding: 0.03rem;">{{item.djbsh}}</dd>
+
+                        <dd v-if="item.topic == '嘉盛中心'" style="position: absolute;z-index: 12;left:0.05rem;width: 0.4rem;bottom:15px;"><img src="../resources/images/house/3d.png" width="100%" height="100%"></dd>
+                        <dd v-if="item.topic == '建外SOHO' && item.zdh == 2 && item.fybh == 705" style="position: absolute;z-index: 12;left:0.05rem;width: 0.4rem;bottom:15px;"><img src="../resources/images/house/3d.png" width="100%" height="100%"></dd>
+                        <dd v-if="item.topic == '天元港中心' && item.zdh == 'B' && item.fybh == 1805" style="position: absolute;z-index: 12;left:0.05rem;width: 0.4rem;bottom:15px;"><img src="../resources/images/house/3d.png" width="100%" height="100%"></dd>
+                        <dd v-if="item.topic == '建外SOHO' && item.zdh == 3 && item.fybh == 2103" style="position: absolute;z-index: 12;left:0.05rem;width: 0.4rem;bottom:15px;"><img src="../resources/images/house/3d.png" width="100%" height="100%"></dd>
+                        <dd v-if="item.topic == '建外SOHO' && item.zdh == 10 && item.fybh == 904" style="position: absolute;z-index: 12;left:0.05rem;width: 0.4rem;bottom:15px;"><img src="../resources/images/house/3d.png" width="100%" height="100%"></dd>
+                        <dd v-if="item.topic == '建外SOHO' && item.zdh == 12 && item.fybh == 2706" style="position: absolute;z-index: 12;left:0.05rem;width: 0.4rem;bottom:15px;"><img src="../resources/images/house/3d.png" width="100%" height="100%"></dd>
+
                       </dl>
                     </dd>
                   </dl>
