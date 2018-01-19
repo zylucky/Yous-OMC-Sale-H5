@@ -50,15 +50,37 @@
     <section id="section" class="pr section">
       <div class="detail-container">
         <!--banner-->
-        <div id="slideBox" class="slideBox">
+
+        <div v-if="sandStatus == 1" id="slideBox" class="slideBox">
           <div class="swiper-container">
-            <div class="swiper-wrapper">
-              <div class="swiper-slide" v-for="image in house_image">
+            <div class="swiper-wrapper" style="position: relative;">
+              <div class="swiper-slide" v-for="(image,index) in house_image">
                 <a href="javascript:;" @click="enlarge">
-                  <img v-if="image" :src="$prefix + '/' + image" alt="">
+                  <img v-if="image && index > 0" :src="$prefix + '/' + image" alt="">
+                  <img v-else-if="image && index == 0" :src="image" alt="">
                   <img v-else :src="$prefix + '/upload/2017-08-27/6404b4de960b81fc5403c870aefcea34.png'" alt="">
                 </a>
-                <div>123</div>
+
+                <!--3d图片第一张显示图标的判断-->
+                <div style="position: absolute;z-index: 13;bottom: 1.8rem;left: 3.1rem;" v-if="index==0 && topic == '嘉盛中心'" @click="sandlianj">
+                  <a href="javascript:;"><img style="width: 1.3rem;height: 1.3rem;" src="../resources/images/house/order/bofang.png"></a>
+                </div>
+                <div style="position: absolute;z-index: 13;bottom: 1.6rem;left: 3.1rem;" v-if="index==0 && topic == '建外SOHO' && zdh == 2 && fybh == 705" @click="jianwai">
+                  <a href="javascript:;"><img style="width: 1.3rem;height: 1.3rem;" src="../resources/images/house/order/bofang.png"></a>
+                </div>
+                <div style="position: absolute;z-index: 13;bottom: 1.6rem;left: 3.1rem;" v-if="index==0 && topic == '天元港中心' && zdh == 'B' && fybh == 1805" @click="tianyuan">
+                  <a href="javascript:;"><img style="width: 1.3rem;height: 1.3rem;" src="../resources/images/house/order/bofang.png"></a>
+                </div>
+                <div style="position: absolute;z-index: 13;bottom: 1.6rem;left: 3.1rem;" v-if="index==0 && topic == '建外SOHO' && zdh == 3 && fybh == 2103" @click="jianwai3">
+                  <a href="javascript:;"><img style="width: 1.3rem;height: 1.3rem;" src="../resources/images/house/order/bofang.png"></a>
+                </div>
+                <div style="position: absolute;z-index: 13;bottom: 1.6rem;left: 3.1rem;" v-if="index==0 && topic == '建外SOHO' && zdh == 10 && fybh == 904" @click="jianwai10">
+                  <a href="javascript:;"><img style="width: 1.3rem;height: 1.3rem;" src="../resources/images/house/order/bofang.png"></a>
+                </div>
+                <div style="position: absolute;z-index: 13;bottom: 1.6rem;left: 3.1rem;" v-if="index==0 && topic == '建外SOHO' && zdh == 12 && fybh == 2706" @click="jianwai12">
+                  <a href="javascript:;"><img style="width: 1.3rem;height: 1.3rem;" src="../resources/images/house/order/bofang.png"></a>
+                </div>
+
               </div>
             </div>
             <div class="banner-page">
@@ -66,6 +88,45 @@
             </div>
           </div>
         </div>
+
+        <div v-else id="slideBox" class="slideBox">
+          <div class="swiper-container">
+            <div class="swiper-wrapper" style="position: relative;">
+              <div class="swiper-slide" v-for="(image,index) in house_image">
+                <a href="javascript:;" @click="enlarge">
+                  <img v-if="image" :src="$prefix + '/' + image" alt="">
+                  <img v-else :src="$prefix + '/upload/2017-08-27/6404b4de960b81fc5403c870aefcea34.png'" alt="">
+                </a>
+
+                <!--3d图片第一张显示图标的判断-->
+                <div style="position: absolute;z-index: 13;bottom: 1.8rem;left: 3.1rem;" v-if="index==0 && topic == '嘉盛中心'" @click="sandlianj">
+                  <a href="javascript:;"><img style="width: 1.3rem;height: 1.3rem;" src="../resources/images/house/order/bofang.png"></a>
+                </div>
+                <div style="position: absolute;z-index: 13;bottom: 1.6rem;left: 3.1rem;" v-if="index==0 && topic == '建外SOHO' && zdh == 2 && fybh == 705" @click="jianwai">
+                  <a href="javascript:;"><img style="width: 1.3rem;height: 1.3rem;" src="../resources/images/house/order/bofang.png"></a>
+                </div>
+                <div style="position: absolute;z-index: 13;bottom: 1.6rem;left: 3.1rem;" v-if="index==0 && topic == '天元港中心' && zdh == 'B' && fybh == 1805" @click="tianyuan">
+                  <a href="javascript:;"><img style="width: 1.3rem;height: 1.3rem;" src="../resources/images/house/order/bofang.png"></a>
+                </div>
+                <div style="position: absolute;z-index: 13;bottom: 1.6rem;left: 3.1rem;" v-if="index==0 && topic == '建外SOHO' && zdh == 3 && fybh == 2103" @click="jianwai3">
+                  <a href="javascript:;"><img style="width: 1.3rem;height: 1.3rem;" src="../resources/images/house/order/bofang.png"></a>
+                </div>
+                <div style="position: absolute;z-index: 13;bottom: 1.6rem;left: 3.1rem;" v-if="index==0 && topic == '建外SOHO' && zdh == 10 && fybh == 904" @click="jianwai10">
+                  <a href="javascript:;"><img style="width: 1.3rem;height: 1.3rem;" src="../resources/images/house/order/bofang.png"></a>
+                </div>
+                <div style="position: absolute;z-index: 13;bottom: 1.6rem;left: 3.1rem;" v-if="index==0 && topic == '建外SOHO' && zdh == 12 && fybh == 2706" @click="jianwai12">
+                  <a href="javascript:;"><img style="width: 1.3rem;height: 1.3rem;" src="../resources/images/house/order/bofang.png"></a>
+                </div>
+
+              </div>
+            </div>
+            <div class="banner-page">
+              <span class="pageState"><span id="picIndex">1</span>/{{house_image.length}}</span>
+            </div>
+          </div>
+        </div>
+
+
       </div>
       <!--点击出现放大图片-->
       <div v-show="large" class="large">
@@ -94,6 +155,19 @@
         <span v-else-if="zdh == ''"><i v-text="fybh" style="color:black;font-weight: 900 !important;"></i></span>
         <span v-else><i v-text="zdh" style="color:black;font-weight: 900 !important;"></i> - <i v-text="fybh" style="color:black;font-weight: 900 !important;"></i></span>
       </div>
+
+      <div v-if="topic == '嘉盛中心'" style="position: absolute;z-index: 12;left:0.3rem;width: 0.45rem;top:4.2rem;"><a href="javascript:;"><img src="../resources/images/house/3d.png" width="100%" height="100%"></a></div>
+      <div @click="sandlianj" v-if="topic == '嘉盛中心'" style="position: absolute;right:0.3rem;top:4.9rem;z-index: 12;width: 1.8rem;"><a href="javascript:;"><img src="../resources/images/house/3dd.png" width="100%" height="100%"></a></div>
+      <div v-if="topic == '建外SOHO' && zdh == 2 && fybh == 705" style="position: absolute;z-index: 12;left:0.3rem;width: 0.45rem;top:4.2rem;"><a href="javascript:;"><img src="../resources/images/house/3d.png" width="100%" height="100%"></a></div>
+      <div @click="jianwai" v-if="topic == '建外SOHO' && zdh == 2 && fybh == 705" style="position: absolute;right:0.3rem;top:4.85rem;z-index: 12;width: 1.8rem;box-shadow: 1px 1px 3px #616161;border-radius:25px;"><a href="javascript:;"><img src="../resources/images/house/3dd.png" width="100%" height="100%"></a></div>
+      <div v-if="topic == '天元港中心' && zdh == 'B' && fybh == 1805" style="position: absolute;z-index: 12;left:0.3rem;width: 0.45rem;top:4.2rem;"><a href="javascript:;"><img src="../resources/images/house/3d.png" width="100%" height="100%"></a></div>
+      <div @click="tianyuan" v-if="topic == '天元港中心' && zdh == 'B' && fybh == ``" style="position: absolute;right:0.3rem;top:4.85rem;z-index: 12;width: 1.8rem;box-shadow: 1px 1px 3px #616161;border-radius:25px;"><a href="javascript:;"><img src="../resources/images/house/3dd.png" width="100%" height="100%"></a></div>
+      <div v-if="topic == '建外SOHO' && zdh == 3 && fybh == 2103" style="position: absolute;z-index: 12;left:0.3rem;width: 0.45rem;top:4.2rem;"><a href="javascript:;"><img src="../resources/images/house/3d.png" width="100%" height="100%"></a></div>
+      <div @click="jianwai3" v-if="topic == '建外SOHO' && zdh == 3 && fybh == 2103" style="position: absolute;right:0.3rem;top:4.85rem;z-index: 12;width: 1.8rem;box-shadow: 1px 1px 3px #616161;border-radius:25px;"><a href="javascript:;"><img src="../resources/images/house/3dd.png" width="100%" height="100%"></a></div>
+      <div v-if="topic == '建外SOHO' && zdh == 10 && fybh == 904" style="position: absolute;z-index: 12;left:0.3rem;width: 0.45rem;top:4.2rem;"><a href="javascript:;"><img src="../resources/images/house/3d.png" width="100%" height="100%"></a></div>
+      <div @click="jianwai10" v-if="topic == '建外SOHO' && zdh == 10 && fybh == 904" style="position: absolute;right:0.3rem;top:4.85rem;z-index: 12;width: 1.8rem;box-shadow: 1px 1px 3px #616161;border-radius:25px;"><a href="javascript:;"><img src="../resources/images/house/3dd.png" width="100%" height="100%"></a></div>
+      <div v-if="topic == '建外SOHO' && zdh == 12 && fybh == 2706" style="position: absolute;z-index: 12;left:0.3rem;width: 0.45rem;top:4.2rem;"><a href="javascript:;"><img src="../resources/images/house/3d.png" width="100%" height="100%"></a></div>
+      <div @click="jianwai12" v-if="topic == '建外SOHO' && zdh == 12 && fybh == 2706" style="position: absolute;right:0.3rem;top:4.85rem;z-index: 12;width: 1.8rem;box-shadow: 1px 1px 3px #616161;border-radius:25px;"><a href="javascript:;"><img src="../resources/images/house/3dd.png" width="100%" height="100%"></a></div>
 
       <div class="build_common_msg_wrap">
        <!-- <span><i v-text="monthly_price" style="color:#e01222"></i><i v-if="monthly_price != null" style="color:black">元/月</i></span>
@@ -171,9 +245,11 @@
         workstation:0, //工位
         floors:0, //总楼层
         locat_floor:0, //所在楼层
-        fjzt: "", 
+        fjzt: "",
 
+        house_image1:[],
         house_image: [],
+        sandStatus:2,
         name: "",
         phone: "",
         fjcg: "",
@@ -197,6 +273,24 @@
       }
     },
     methods: {
+      sandlianj(){
+          this.$router.push({path: '/iframee'});
+      },
+      jianwai(){
+          this.$router.push({path: '/jianwai'});
+      },
+      tianyuan(){
+          this.$router.push({path: '/tianyuan'});
+      },
+      jianwai3(){
+          this.$router.push({path: '/jianwai3'});
+      },
+      jianwai12(){
+          this.$router.push({path: '/jianwai12'});
+      },
+      jianwai10(){
+          this.$router.push({path: '/jianwai10'});
+      },
       cancel(){
           $("body").css({"overflow":"auto"});
           $("html").css({"overflow":"auto"});
@@ -208,15 +302,15 @@
           this.large = true;
       },
       coole(){
-          const user = JSON.parse(localStorage.getItem('loginnx'));
+          /*const user = JSON.parse(localStorage.getItem('loginnx'));
           if (!user) {
-              /*next({ path: '/login' });*/
+              /!*next({ path: '/login' });*!/
               this.colle = 1;
           }else{
               if(user!=null) {
                   const time = user.time == null ? 0 : user.time, now = (new Date).getMilliseconds(), delta = now - time;
                   if (delta > 86400 * 3) {
-                      /*next({path: '/login'});*/
+                      /!*next({path: '/login'});*!/
                       this.colle = 1;
                   } else {
                       const user22 = JSON.parse(localStorage.getItem('cooknx'));
@@ -229,7 +323,8 @@
                               }).then((res)=>{
                               Indicator.close();
                               var result = JSON.parse(res.bodyText);
-                              if(result.success){
+                              if(result.success){*/
+                                  const user22 = JSON.parse(localStorage.getItem('cooknx'));
                                   const _this = this, url1 = this.$api + "/yhcms/web/qduser/compareFy.do";
                                   this.$http.post(url1, {"parameters":{"cookie":user22.sjs,"id":this.$route.query.house_id},"foreEndType":2,"code":"30000001"}).then((res)=>{
                                       Indicator.close();
@@ -242,23 +337,23 @@
                                   }, (res)=>{
                                       Indicator.close();
                                   });
-                              }else{
+                              /*}else{
 
                               }
                           }, (res)=>{
                               Indicator.close();
                           });
                       }else{
-                          /*next({path: '/login'});*/
+                          /!*next({path: '/login'});*!/
                           this.colle = 1;
                       }
                   }
               }else{
-                  /*next({path: '/login'});*/
+                  /!*next({path: '/login'});*!/
                   //next();
                   this.colle = 1;
               }
-          }
+          }*/
       },
       //获取某一办公楼详情
       getPerDetail(){
@@ -307,7 +402,30 @@
               }
               _this.name = data.name || '暂无数据';
               _this.phone = data.phone || '暂无数据';
+
               _this.house_image = data.housing_icon.split(";");
+              _this.house_image1 = _this.house_image;
+              if(_this.topic == '建外SOHO' && _this.zdh == 2 && _this.fybh == 705){
+                  var a = _this.house_image.unshift('http://omc.urskongjian.com/wangfile/1.jpg');
+                  _this.sandStatus = 1;
+              }
+              if(_this.topic == '天元港中心' && _this.zdh == 'B' && _this.fybh == 1805){
+                  var a = _this.house_image.unshift('http://omc.urskongjian.com/wangfile/tianyuan.jpg');
+                  _this.sandStatus = 1;
+              }
+              if(_this.topic == '建外SOHO' && _this.zdh == 3 && _this.fybh == 2103){
+                  var a = _this.house_image.unshift('http://omc.urskongjian.com/wangfile/jianwai3.jpg');
+                  _this.sandStatus = 1;
+              }
+              if(_this.topic == '建外SOHO' && _this.zdh == 10 && _this.fybh == 904){
+                  var a = _this.house_image.unshift('http://omc.urskongjian.com/wangfile/jianwai10.jpg');
+                  _this.sandStatus = 1;
+              }
+              if(_this.topic == '建外SOHO' && _this.zdh == 12 && _this.fybh == 2706){
+                  var a = _this.house_image.unshift('http://omc.urskongjian.com/wangfile/jianwai12.jpg');
+                  _this.sandStatus = 1;
+              }
+
 
               const zc = data.zc || '暂无数据';
               _this.zc = zc === '0' ? '不可注册' : '可注册';
@@ -348,7 +466,7 @@
           this.$router.push({path: '/reser_page?house_id=' + this.$route.query.house_id});
       },
       Collectionss(){
-          const user = JSON.parse(localStorage.getItem('loginnx'));
+          /*const user = JSON.parse(localStorage.getItem('loginnx'));
           if (!user) {
               next({ path: '/login' });
           }else{
@@ -368,7 +486,8 @@
                               }).then((res)=>{
                               Indicator.close();
                               var result = JSON.parse(res.bodyText);
-                              if(result.success){
+                              if(result.success){*/
+                                  const user22 = JSON.parse(localStorage.getItem('cooknx'));
                                   const url = this.$api + "/yhcms/web/collecthouse/saveCollect.do";
                                   let that = this;
                                   this.$http.post(url, {"parameters":{"id":this.fyid,"cookie":user22.sjs},"foreEndType":2,"code":"16"}).then((res)=>{
@@ -389,7 +508,7 @@
                                   }, (res)=>{
                                       Indicator.close();
                                   });
-                              }else{
+                              /*}else{
 
                               }
                           }, (res)=>{
@@ -404,7 +523,7 @@
                   this.$router.push({path: '/login'});
                   //next();
               }
-          }
+          }*/
 
       },
       Collectionss2(){
