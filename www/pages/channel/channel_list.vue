@@ -309,12 +309,33 @@ import axios from 'axios';
 			}
 		},
 		created(){
-			Indicator.open({
-			  text: 'Loading...',
-			  spinnerType: 'fading-circle'
-			});
-			this.init();				
-			this.init1();								
+			if(this.$store.state.tabzt != ''){//tab切换状态
+				this.tabq = this.$store.state.tabzt;
+			}
+			if(this.$store.state.page1 != ''){//当前数据页
+				this.page1 = this.$store.state.page1;
+			}
+			if(this.$store.state.page != ''){//当前数据页
+				this.page = this.$store.state.page;
+			}
+			if(this.$store.state.datas != ''){//当前tab数据
+				this.pendData = this.$store.state.datas;
+			}else{		
+				Indicator.open({
+				  text: 'Loading...',
+				  spinnerType: 'fading-circle'
+				});
+				this.init();	
+			}
+			if(this.$store.state.datas1 != ''){//
+				this.passData = this.$store.state.datas1;
+			}else{
+				Indicator.open({
+				  text: 'Loading...',
+				  spinnerType: 'fading-circle'
+				});
+				this.init1();
+			}
 		},
 		methods:{
 			init(){//待处理接口
@@ -405,6 +426,9 @@ import axios from 'axios';
 				});
 				this.tabq = cut;
 				
+				this.$store.commit('sendObj',this.tabq);//当前tab状态存入state仓库
+				console.log(this.$store.state.tabzt);
+				
 				if(cut=='0'){
 					this.noMore = true;
 					this.dataqq1 = true;	
@@ -422,7 +446,6 @@ import axios from 'axios';
 					this.noMore = true;
 					this.dataqq = true;					
 					this.page = 1;//当前页
-//					alert(this.page)
 					this.init1();//已确认数据
 
 					this.kshow1 = true;
@@ -430,9 +453,6 @@ import axios from 'axios';
 				}
 			},
 			pendclk(idx,qdid){//未确认
-				this.$store.commit('saveData',this.pendData);//当前数据存入state仓库
-			  	this.$store.commit('savePage',this.page1);//当前页码存入state仓库
-			  	console.log(this.$store.state.page1);//未确认数据当前页
 				if(this.smcode == 0){
 					this.popshow = true;//实名认证弹框
 					return
@@ -456,9 +476,6 @@ import axios from 'axios';
 				})
 			},
 			passclk(idx,qdid){//已确认数据
-				this.$store.commit('saveData1',this.passData);//当前数据存入state仓库
-			  	this.$store.commit('savePage1',this.page);//当前页码存入state仓库
-			  	console.log(this.$store.state.page);//已确认数据当前页
 				if(this.smcode == 0){
 					this.popshow = true;//实名认证弹框
 					return
@@ -512,13 +529,25 @@ import axios from 'axios';
 			}
 		},
 		mounted(){
+			this.$store.commit('sendObj',this.tabq);//当前tab状态存入state仓库
+			
 			var _this = this;
-			if(_this.$store.state.data1 != ''){//滚动条位置存在则滚动到对应位置
-				$('.list_box').scrollTop(_this.$store.state.data1);
-				console.log(_this.$store.state.data1);
+			if(_this.$store.state.scollposion != ''){//滚动条位置存在则滚动到对应位置
+				$('.list_box').scrollTop(_this.$store.state.scollposion);
+				console.log(_this.$store.state.scollposion);
+			}else{
+				$('.list_box').scrollTop(0);
 			}
 			$('.list_box').scroll(function() {//记录滚动条位置
-			  _this.$store.commit('openRed',$('.list_box').scrollTop());//存入state仓库
+			  _this.$store.commit('openRed',$('.list_box').scrollTop());//将滚动条位置存入state仓库
+			  if(_this.tabq == '0'){//未确认数据
+			  	_this.$store.commit('saveData',_this.pendData);//当前数据存入state仓库
+			  	_this.$store.commit('savePage',_this.page1);//当前页码存入state仓库	
+			  }
+			  if(_this.tabq == '1'){//已确认数据
+			  	_this.$store.commit('saveData1',_this.passData);//当前数据存入state仓库
+			  	_this.$store.commit('savePage1',_this.page);//当前页码存入state仓库	
+			  }
 			});
 		}
 	}

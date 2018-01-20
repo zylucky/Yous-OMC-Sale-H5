@@ -374,6 +374,11 @@ import axios from 'axios';
         localStorage.removeItem("xzfystatus1");
       },
       yjlist(){//渠道佣金列表
+      	this.$store.state.tabzt = 0;//tab切换状态
+				this.$store.state.page1 = 1;//当前页
+				this.$store.state.page = 1;//当前页
+				this.$store.state.datas = '';//数据
+				this.$store.state.datas1 = '';//数据
       	 
          if(localStorage.getItem('cooknx')){
               $("#zhezhao").remove();

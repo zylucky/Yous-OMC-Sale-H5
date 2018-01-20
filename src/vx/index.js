@@ -4,8 +4,8 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 export default new Vuex.Store({
 	state : {
-		data1:'',//滚动条位置
-		data2:'',//tab切换状态
+		scollposion:'',//滚动条位置
+		tabzt:'',//tab切换状态
 		datas:'',//数据存储1
 		datas1:'',//数据存储2
 		datas2:'',//数据存储3
@@ -15,10 +15,10 @@ export default new Vuex.Store({
 	},
 	mutations:{
 		openRed(state,obj){//滚动条位置
-			state.data1 = obj;
+			state.scollposion = obj;
 		},
 		sendObj(state,obj){//tab状态
-			state.data2 = obj;
+			state.tabzt = obj;
 		},
 		saveData(state,obj){//数据1
 			state.datas = obj;
