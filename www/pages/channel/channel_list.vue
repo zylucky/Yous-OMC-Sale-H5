@@ -171,7 +171,7 @@
   	.jzgd{
   		display: flex;
   		justify-content: center;
-  		margin-top: 0.3rem;
+  		margin-top: 0.6rem;
   	}
 </style>
 
@@ -238,30 +238,6 @@
 					</div>
 				</ul>
 			</div>
-			<!--已确认-->
-			<!--<div v-if="tabq=='1'">
-				<ul class="list" v-infinite-scroll="loadMore"
-	  infinite-scroll-disabled="loading"
-	  infinite-scroll-distance="10" infinite-scroll-immediate-check="checked">
-					<li v-for="(item,index) in passData" @click="passclk(index,item.id)">
-						<p>{{item.loupan}}<i>{{item.createdate | times}}</i></p>
-						<p>
-							<span>{{item.loudong}}-{{item.fanghao}}</span>
-						</p>
-						<p style="color:#959595;">合同编号：{{item.htbianhao}}</p>
-						<p>
-							<i v-if="item.taskZt=='1'">已提交</i>
-							<i v-else-if="item.taskZt=='2'" style="color: #3684f3;">审核中</i>
-							<i v-else-if="item.taskZt=='3'" style="color: #0fad60;">审核完成</i>
-							<i v-else-if="item.taskZt=='4'" style="color: #ff716f;">已驳回</i>
-							<i else></i>
-						</p>
-					</li>
-					<div class="jzgd" v-if="jz">					
-						<mt-spinner type="fading-circle" :size="30"></mt-spinner>
-					</div>
-				</ul>
-			</div>-->
 		</div>
 		<!-- 实名认证弹框 -->
 		<div class="pop" v-if="popshow">
