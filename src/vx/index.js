@@ -12,6 +12,7 @@ export default new Vuex.Store({
 		page1:'',//当前页
 		page:'',//当前页
 		page2:'',//当前页
+		smcode:'',//实名认证弹框
 	},
 	mutations:{
 		openRed(state,obj){//滚动条位置
@@ -37,6 +38,9 @@ export default new Vuex.Store({
 		},
 		savePage2(state,obj){//当前页
 			state.page2 = obj;
+		},
+		setSmcode(state,obj){
+			state.smcode = obj;
 		}
 	}
 })

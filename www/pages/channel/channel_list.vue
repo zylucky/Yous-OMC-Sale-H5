@@ -325,6 +325,7 @@ import axios from 'axios';
 	            		"size":this.size
 	            }).then((res)=>{
 	            	this.smcode = res.data.code;
+	            	this.$store.commit('setSmcode',this.smcode);
 	            	if(res.data.data.length == 0){
 //	            		console.log(this.page1);
 	            		Toast({
@@ -506,7 +507,9 @@ import axios from 'axios';
 		},
 		mounted(){
 			this.$store.commit('sendObj',this.tabq);//当前tab状态存入state仓库
-			
+			if(this.$store.state.smcode != ''){
+				this.smcode = this.$store.state.smcode;
+			}
 			var _this = this;
 			if(_this.$store.state.scollposion != ''){//滚动条位置存在则滚动到对应位置
 				$('.list_box').scrollTop(_this.$store.state.scollposion);
