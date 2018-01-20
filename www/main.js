@@ -10,6 +10,7 @@ import VueRouter from 'vue-router';
 import VueResource from 'vue-resource';
 import {Toast} from 'mint-ui';
 import axios from 'axios';
+import store from '../src/vx'
 
 Vue.use(VueRouter);
 Vue.use(VueResource);
@@ -454,6 +455,7 @@ router.beforeEach((to, from, next) => {
 new Vue({
     el: '#app',
     router: router,
+    store,
     render: function (h) {
         return h(App)
     }

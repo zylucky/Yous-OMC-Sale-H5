@@ -186,14 +186,14 @@
 		<!--列表-->
 		<div class="list_box">
 			<!--待确认-->
-			<div class="kong" v-if="pendData.length==0 && kshow">
+			<div class="kong" v-if="pendData.length==0 && kshow && tabq=='0'">
 				<p class="k_ion">
 					<img src="../../resources/images/commission/k_icon.png" alt="" />
 				</p>
 				<p class="k_text">暂无未确认记录</p>
 			</div>
 			<!--已确认-->
-			<div class="kong" v-if="passData.length==0 && kshow1">
+			<div class="kong" v-if="passData.length==0 && kshow1 && tabq=='1'">
 				<p class="k_ion">
 					<img src="../../resources/images/commission/k_icon.png" alt="" />
 				</p>
@@ -313,8 +313,8 @@ import axios from 'axios';
 			  text: 'Loading...',
 			  spinnerType: 'fading-circle'
 			});
-			this.init();
-			this.init1();
+			this.init();				
+			this.init1();								
 		},
 		methods:{
 			init(){//待处理接口
@@ -329,6 +329,7 @@ import axios from 'axios';
 	            }).then((res)=>{
 	            	this.smcode = res.data.code;
 	            	if(res.data.data.length == 0){
+//	            		console.log(this.page1);
 	            		Toast({
 						  message: '人家，是有底线的呢！',
 						  position: 'bottom',
@@ -403,6 +404,7 @@ import axios from 'axios';
 				  spinnerType: 'fading-circle'
 				});
 				this.tabq = cut;
+				
 				if(cut=='0'){
 					this.noMore = true;
 					this.dataqq1 = true;	
@@ -428,6 +430,9 @@ import axios from 'axios';
 				}
 			},
 			pendclk(idx,qdid){//未确认
+				this.$store.commit('saveData',this.pendData);//当前数据存入state仓库
+			  	this.$store.commit('savePage',this.page1);//当前页码存入state仓库
+			  	console.log(this.$store.state.page1);//未确认数据当前页
 				if(this.smcode == 0){
 					this.popshow = true;//实名认证弹框
 					return
@@ -451,6 +456,9 @@ import axios from 'axios';
 				})
 			},
 			passclk(idx,qdid){//已确认数据
+				this.$store.commit('saveData1',this.passData);//当前数据存入state仓库
+			  	this.$store.commit('savePage1',this.page);//当前页码存入state仓库
+			  	console.log(this.$store.state.page);//已确认数据当前页
 				if(this.smcode == 0){
 					this.popshow = true;//实名认证弹框
 					return
@@ -486,10 +494,8 @@ import axios from 'axios';
 				this.popshow = false;//实名认证弹框
 			},
 			loadMore() {//未确认数据
-
 				if (!this.loading && !this.noMore) {
 				  this.loading = true;
-
 				  Indicator.open({
 				    text: 'Loading...',
 				    spinnerType: 'fading-circle'
@@ -502,10 +508,18 @@ import axios from 'axios';
 				  	this.init1();//未确认数据
 				  }
 				}
+				
 			}
 		},
 		mounted(){
-			$('title').html('佣金展示');
+			var _this = this;
+			if(_this.$store.state.data1 != ''){//滚动条位置存在则滚动到对应位置
+				$('.list_box').scrollTop(_this.$store.state.data1);
+				console.log(_this.$store.state.data1);
+			}
+			$('.list_box').scroll(function() {//记录滚动条位置
+			  _this.$store.commit('openRed',$('.list_box').scrollTop());//存入state仓库
+			});
 		}
 	}
 </script>

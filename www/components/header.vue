@@ -374,6 +374,7 @@ import axios from 'axios';
         localStorage.removeItem("xzfystatus1");
       },
       yjlist(){//渠道佣金列表
+      	 
          if(localStorage.getItem('cooknx')){
               $("#zhezhao").remove();
               $('html').removeAttr("style");
