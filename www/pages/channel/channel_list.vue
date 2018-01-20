@@ -397,7 +397,7 @@ import axios from 'axios';
 			},
 			clk(cut){
 				$('.list_box').scrollTop(0);
-
+				this.jz = true;//底部加载图标
 				Indicator.open({
 				  text: 'Loading...',
 				  spinnerType: 'fading-circle'
