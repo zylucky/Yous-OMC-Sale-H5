@@ -67,10 +67,11 @@
       <label class="side_nav side-nav" @click.native="popupVisible= true"  v-on:click="showMenu">
         <img src="../resources/images/ys_more.png" width="20" alt="">
       </label>
-      <a href="javascript:;" class="news" v-show="newshow" @click="tonews">
+      <!--消息通知-->
+      <!--<a href="javascript:;" class="news" v-show="newshow" @click="tonews">
       	<span class="newcount" v-if='newData.length != 0 && status != 0'><i style="display: inline-block;transform: scale(0.5);">{{status}}</i></span>
-      	<!--<img src="../resources/images/news/new_ion.png"/>-->
-      </a>
+      </a>-->
+      
       <!--<a href="javascript:;" class="detail-search" style="position: fixed;left: 0; top: 0">
         <input type="text" id="keyword" placeholder="请输入关键字搜索" v-model="para.search_keywork" maxlength="50"
                @focus="changeRou">
@@ -105,12 +106,12 @@
                   <a href="javascript:;" style="color: black !important;width: 2rem;font-size: 0.38rem;" @click="list">楼盘列表</a>
                 </div>
               </div>
-              <div style="border-bottom: 1px solid rgb(167,196,223);">
+              <!--<div style="border-bottom: 1px solid rgb(167,196,223);">
                 <div style="height: 1rem;margin-left: 0.4rem;">
                   <span style=""><img style="float: left;width: 0.38rem;height: 0.5rem;margin-top: 0.25rem;" src="../resources/images/left_list/price_list.png"></span>
                   <a href="javascript:;" style="color: black !important;width: 2rem;font-size: 0.38rem;" @click="yjlist">佣金展示</a>
                 </div>
-              </div>
+              </div>-->
 
 
             </div>
@@ -374,6 +375,12 @@ import axios from 'axios';
         localStorage.removeItem("xzfystatus1");
       },
       yjlist(){//渠道佣金列表
+      	this.$store.state.tabzt = 0;//tab切换状态
+				this.$store.state.page1 = 1;//当前页
+				this.$store.state.page = 1;//当前页
+				this.$store.state.datas = '';//数据
+				this.$store.state.datas1 = '';//数据
+      	 
          if(localStorage.getItem('cooknx')){
               $("#zhezhao").remove();
               $('html').removeAttr("style");
@@ -455,6 +462,7 @@ import axios from 'axios';
           localStorage.removeItem("xzfystatus1");
       },
       tonews(){
+      	
       	if(localStorage.getItem('cooknx')){
 	      	this.$router.push({
 						path:'/news',//跳转到消息列表
