@@ -7,7 +7,9 @@
 		right: 0;
 		bottom: 0;
 		top: 0;
-  		overflow: hidden;
+  		overflow-x: hidden;
+  		overflow-y: scroll;
+  		-webkit-overflow-scrolling: touch;
   	}
   	.box_b{
   		position: absolute;

@@ -56,7 +56,9 @@
   		right: 0;
   		top: 1rem;
   		bottom: 0;
-  		overflow: auto;
+  		overflow-x: hidden;
+  		overflow-y: scroll;
+  		-webkit-overflow-scrolling: touch;
   		ul{padding-bottom: 0.5rem;}
   	}
   	.list li{
