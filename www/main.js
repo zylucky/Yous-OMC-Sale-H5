@@ -16,7 +16,7 @@ Vue.use(VueRouter);
 Vue.use(VueResource);
 Vue.use(MintUI);
 
-//Vue.prototype.$api = "http://yhcms.tunnel.qydev.com" //api地址本地
+//Vue.prototype.$api = "http://yhcms.tunnel.qydev.com" //api地址本地11111
 Vue.prototype.$api = "http://116.62.68.26:8080" //api地址116的地址ip
 // Vue.prototype.$api = "http://192.168.1.40:8080" //api地址116的地址ip
 
