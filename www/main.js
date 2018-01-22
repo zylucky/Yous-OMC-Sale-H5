@@ -10,17 +10,20 @@ import VueRouter from 'vue-router';
 import VueResource from 'vue-resource';
 import {Toast} from 'mint-ui';
 import axios from 'axios';
+import store from '../src/vx'
 
 Vue.use(VueRouter);
 Vue.use(VueResource);
 Vue.use(MintUI);
 
-//Vue.prototype.$api = "http://yhcms.tunnel.qydev.com" //api地址本地1111112222222
-//Vue.prototype.$api = "http://116.62.68.26:8080" //api地址116的地址ip
+//Vue.prototype.$api = "http://yhcms.tunnel.qydev.com" //api地址本地
+// Vue.prototype.$api = "http://116.62.68.26:8080" //api地址116的地址ip
+
 // Vue.prototype.$api = "http://192.168.1.40:8080" //api地址116的地址ip
 
-// Vue.prototype.$api = "http://192.168.1.45:8080"//Mr.Cheng IP Address
+// Vue.prototype.$api = "http://192.168.1.45:8080"//
 Vue.prototype.$api = "http://omc.urskongjian.com" //api地址线上
+// Vue.prototype.$api = "http://192.168.21.55:8080" //Mr.Cheng IP Address
 
 //Vue.prototype.$api = "http://192.168.137.54:8081" //api地址
 /*Vue.prototype.$api = "http://wx.urskongjian.com:8080" //api地址*/
@@ -245,7 +248,7 @@ var router = new VueRouter({
     ]
 });
 
-/*router.beforeEach((to, from, next) => {
+router.beforeEach((to, from, next) => {
     document.title = to.meta.title || '';
 // 根据路由变化去改变页面的title
     if (to.meta.title) {
@@ -390,11 +393,12 @@ var router = new VueRouter({
             });
         }
     }
-});*/
+});
 
 
+/*
 router.beforeEach((to, from, next) => {
-    /* 路由发生变化修改页面title */
+    /!* 路由发生变化修改页面title *!/
     if (to.meta.title) {
       document.title = to.meta.title;
     }
@@ -448,11 +452,13 @@ router.beforeEach((to, from, next) => {
 
     }
 });
+*/
 
 
 new Vue({
     el: '#app',
     router: router,
+    store,
     render: function (h) {
         return h(App)
     }
