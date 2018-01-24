@@ -455,9 +455,9 @@ export default{
 	            		this.defaultData.huming = res.data.data.qdhuming;
 	            		this.defaultData.kaihuhang = res.data.data.qdkaihuhang;
 	            		this.defaultData.zhanghao = res.data.data.qdzhanghao;
-	            		console.log('======================')
 	            		console.log(this.defaultData)
 	            	}
+	            	console.log('======================')
 	            	console.log(this.qdlist);
 					this.bz = this.qdlist.qdbeizhu;
 					this.qdflow();

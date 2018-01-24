@@ -52,7 +52,7 @@
                     <div class="ys_item_con fl">我的预约</div>
                 </li>-->
                 <li class="clearfix perli" @click="my_zhgl">
-                    <span class="ys_tit"><a href="javascript:;"><img src="../resources/images/per_cen/my_reset.png"></a></span>
+                    <span class="ys_tit"><a href="javascript:;"><img src="../resources/images/per_cen/zhgl.png"></a></span>
                     <div class="ys_item_con fl">账户管理</div>
                 </li>
             </ul>
@@ -138,7 +138,6 @@
 
             },
             my_zhgl(){//帐户管理
-            	return;//注释功能带开放
             	if(localStorage.getItem('cooknx')){
                     this.$router.push({path:'/income_number'});
                 }else{
