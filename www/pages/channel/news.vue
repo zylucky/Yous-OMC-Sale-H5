@@ -222,7 +222,7 @@ export default{
 	methods:{
 		takeid(){//获取用户id
 			var cookxs = JSON.parse(localStorage.getItem('cooknx'));
-			console.log(cookxs);
+//			console.log(cookxs);
 //			const url = "http://116.62.68.26:8080/yhcms/web/qdyongjin/getLoginInfo.do";
 			const url = this.$api + "/yhcms/web/qdyongjin/getLoginInfo.do";
 			axios.post(url,{
@@ -248,7 +248,7 @@ export default{
 //				clearInterval(timer);//清楚定时器
 				if(res.data.success){
 					this.newData = res.data.data;
-					console.log(this.newData);
+//					console.log(this.newData);
 //					var timer = setTimeout(this.takenews,2000);//定时查询
 				}				
             }, (err)=>{

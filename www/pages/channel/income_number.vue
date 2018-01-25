@@ -267,7 +267,7 @@ export default{
 				id:id
 			}).then((res)=>{
 //				location.reload();
-				console.log(res);
+//				console.log(res);
 			},(err)=>{
 				console.log(err)
 			});

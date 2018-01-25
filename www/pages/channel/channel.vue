@@ -455,10 +455,10 @@ export default{
 	            		this.defaultData.huming = res.data.data.qdhuming;
 	            		this.defaultData.kaihuhang = res.data.data.qdkaihuhang;
 	            		this.defaultData.zhanghao = res.data.data.qdzhanghao;
-	            		console.log(this.defaultData)
+//	            		console.log(this.defaultData)
 	            	}
-	            	console.log('======================')
-	            	console.log(this.qdlist);
+//	            	console.log('======================')
+//	            	console.log(this.qdlist);
 					this.bz = this.qdlist.qdbeizhu;
 					this.qdflow();
 	            }
@@ -477,7 +477,7 @@ export default{
 				this.qrfp = false;
 				$('.mint-checkbox-label').css('color','#A9ACB1');
 			}
-			console.log(this.qrfp);
+//			console.log(this.qrfp);
 		},
 		save(){//保存提交
 			const url = this.$api + "/yhcms/web/qdyongjin/saveQvDaoData.do";
@@ -610,7 +610,7 @@ export default{
 			axios.post(url,{ 
 				"id":this.$route.query.zhid//路由传递过来的银行账户id
 			 }).then((res)=>{
-			 console.log(res)
+//			 console.log(res)
 			 	this.defaultData = res.data.data;
             }, (err)=>{
             	console.log(err);
