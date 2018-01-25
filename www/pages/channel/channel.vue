@@ -276,15 +276,15 @@
 				<ul>
 					<li class="betrue">
 						<p>已确认<span class="flow_r"></span></p>
-						<p>12/19 15:31</p>
+						<p style="visibility: hidden;">12/19 15:31</p>
 					</li>
 					<li class="ing" v-show='qdlist.taskZt != 1'>
 						<p>审批中<span class="flow_r"></span></p>
-						<p>12/19 15:31</p>
+						<p style="visibility: hidden;">12/19 15:31</p>
 					</li>
 					<li class="suc">
 						<p>已完成</p>
-						<p>12/19 15:31</p>
+						<p style="visibility: hidden;">12/19 15:31</p>
 					</li>
 				</ul>
 				<div class="flow_tip">我们正在为您提交佣金审批，请耐心等待！</div>
