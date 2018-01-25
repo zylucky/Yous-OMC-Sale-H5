@@ -158,6 +158,9 @@ import axios from 'axios';
     	}else{
     		this.newshow = true;
     	}
+    	if(location.hash.indexOf('/select') == 1){
+    		this.newshow = false;
+    	}
       this.takeid();
     },
     methods: {
