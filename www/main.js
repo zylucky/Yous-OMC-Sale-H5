@@ -22,7 +22,7 @@ Vue.use(MintUI);
 // Vue.prototype.$api = "http://192.168.1.40:8080" //api地址116的地址ip
 
 // Vue.prototype.$api = "http://192.168.1.45:8080"//
-Vue.prototype.$api = "http://omc.urskongjian.com" //api地址线上
+//Vue.prototype.$api = "http://omc.urskongjian.com" //api地址线上
 // Vue.prototype.$api = "http://192.168.21.55:8080" //Mr.Cheng IP Address
 
 //Vue.prototype.$api = "http://192.168.137.54:8081" //api地址
@@ -46,8 +46,8 @@ Vue.prototype.$prefix = "http://47.92.145.21:81" //图片前缀
 //Vue.prototype.$export = "http://192.168.0.222:8080" //图片前缀
 
 // 生产环境
-//Vue.prototype.$api = "http://omc.urskongjian.com" //api地址
-Vue.prototype.$export = "http://omc.urskongjian.com" //导出
+Vue.prototype.$api = "http://omc.urskongjian.com" //api地址
+//Vue.prototype.$export = "http://omc.urskongjian.com" //导出
 
 
 // 过滤器
@@ -451,8 +451,8 @@ router.beforeEach((to, from, next) => {
         }
 
     }
-});*/
-
+});
+*/
 
 
 new Vue({

@@ -268,6 +268,9 @@ export default{
 			}).then((res)=>{
 //				location.reload();
 //				console.log(res);
+				if(this.listData.length == 0){
+					location.reload();
+				}
 			},(err)=>{
 				console.log(err)
 			});
@@ -300,7 +303,8 @@ export default{
 			this.$router.push({
 				path:'/adduser',//跳转到添加账户功能界面
 				query:{
-					"qdid":this.$route.query.qdid
+					"qdid":this.$route.query.qdid,
+					"passzt":this.$route.query.passzt
 				}
 			})
 		}
