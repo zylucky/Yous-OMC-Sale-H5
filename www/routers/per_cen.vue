@@ -47,11 +47,11 @@
                     <span class="ys_tit"><a href="javascript:;"><img src="../resources/images/per_cen/my_col.png"></a></span>
                     <div class="ys_item_con fl">我的收藏</div>
                 </li>
-                <li class="clearfix perli" @click="my_reser">
+                <!--<li class="clearfix perli" @click="my_reser">
                     <span class="ys_tit"><a href="javascript:;"><img src="../resources/images/per_cen/my_reset.png"></a></span>
                     <div class="ys_item_con fl">我的预约</div>
-                </li>
-                <li class="clearfix perli" @click="my_zhgl" v-if="false">
+                </li>-->
+                <li class="clearfix perli" @click="my_zhgl">
                     <span class="ys_tit"><a href="javascript:;"><img src="../resources/images/per_cen/zhgl.png"></a></span>
                     <div class="ys_item_con fl">账户管理</div>
                 </li>
@@ -145,7 +145,7 @@
                 }
             },
             my_reser(){
-            	return;
+//          	return;
                 this.$router.push({path:'/my_reser'});
             },
 

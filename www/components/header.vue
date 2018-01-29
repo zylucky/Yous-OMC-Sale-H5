@@ -68,7 +68,7 @@
         <img src="../resources/images/ys_more.png" width="20" alt="">
       </label>
       <!--消息通知-->
-      <a href="javascript:;" class="news" v-show="newshow" @click="tonews" v-if="false">
+      <a href="javascript:;" class="news" v-show="newshow" @click="tonews">
       	<span class="newcount" v-if='newData.length != 0 && status != 0'><i style="display: inline-block;transform: scale(0.5);">{{status}}</i></span>
       </a>
       
@@ -106,7 +106,7 @@
                   <a href="javascript:;" style="color: black !important;width: 2rem;font-size: 0.38rem;" @click="list">楼盘列表</a>
                 </div>
               </div>
-              <div style="border-bottom: 1px solid rgb(167,196,223);" v-if="false">
+              <div style="border-bottom: 1px solid rgb(167,196,223);">
                 <div style="height: 1rem;margin-left: 0.4rem;">
                   <span style=""><img style="float: left;width: 0.38rem;height: 0.5rem;margin-top: 0.25rem;" src="../resources/images/left_list/price_list.png"></span>
                   <a href="javascript:;" style="color: black !important;width: 2rem;font-size: 0.38rem;" @click="yjlist">佣金展示</a>

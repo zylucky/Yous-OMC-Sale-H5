@@ -296,7 +296,7 @@ export default{
 			}
 		},
 		delnew(id){
-			const url = "http://www.youshikongjian.com/readMessage/"+ id;
+			const url = "http://erp.youshikongjian.com/readMessage/"+ id;
 			axios.get(url, {
 				
 			}).then((res)=>{
