@@ -297,7 +297,11 @@ import axios from 'axios';
 				this.page = this.$store.state.page;
 			}
 			if(this.$store.state.datas != ''){//当前tab数据
-				this.pendData = this.$store.state.datas;
+				if(this.$route.query.resault == 'success'){
+					window.location.reload();
+				}else{
+					this.pendData = this.$store.state.datas;					
+				}
 			}else{		
 				Indicator.open({
 				  text: 'Loading...',
@@ -306,7 +310,11 @@ import axios from 'axios';
 				this.init();	
 			}
 			if(this.$store.state.datas1 != ''){//
-				this.passData = this.$store.state.datas1;
+				if(this.$route.query.resault == 'success'){
+					window.location.reload();
+				}else{
+					this.passData = this.$store.state.datas1;					
+				}
 			}else{
 				Indicator.open({
 				  text: 'Loading...',

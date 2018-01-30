@@ -241,7 +241,8 @@ export default{
             });
 		},
 		takenews(){//接收消息
-			const url = "http://erp.youshikongjian.com/receiveMessage/"+ this.userid + "/sys/qd";//消息接口地
+//			const url = "http://erp.youshikongjian.com/receiveMessage/"+ this.userid + "/sys/qd";//消息接口地
+			const url = "http://www.youshikongjian.com/receiveMessage/"+ this.userid + "/sys/qd";//消息接口地
 			axios.get(url, {
 				
 			}).then((res)=>{
@@ -296,7 +297,8 @@ export default{
 			}
 		},
 		delnew(id){
-			const url = "http://erp.youshikongjian.com/readMessage/"+ id;
+//			const url = "http://erp.youshikongjian.com/readMessage/"+ id;
+			const url = "http://www.youshikongjian.com/readMessage/"+ id;
 			axios.get(url, {
 				
 			}).then((res)=>{

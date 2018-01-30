@@ -185,7 +185,8 @@ import axios from 'axios';
               });
       },
       takenews(){//接收消息
-        const url = "http://erp.youshikongjian.com/receiveMessage/"+ this.userid + "/sys/qd";//消息接口地
+//      const url = "http://erp.youshikongjian.com/receiveMessage/"+ this.userid + "/sys/qd";//消息接口地
+        const url = "http://www.youshikongjian.com/receiveMessage/"+ this.userid + "/sys/qd";//消息接口地
         axios.get(url, {
           
         }).then((res)=>{
@@ -193,7 +194,7 @@ import axios from 'axios';
           if(res.data.success){
             this.newData = res.data.data;
             for(var i=0; i<this.newData.length; i++){
-              if(this.newData[i].status == 1){
+              if(this.newData[i].status == 0){
                 this.status ++;
               }
             }

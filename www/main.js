@@ -17,7 +17,7 @@ Vue.use(VueResource);
 Vue.use(MintUI);
 
 //Vue.prototype.$api = "http://yhcms.tunnel.qydev.com" //api地址本地
-// Vue.prototype.$api = "http://116.62.68.26:8080" //api地址116的地址ip
+   Vue.prototype.$api = "http://116.62.68.26:8080" //api地址116的地址ip
 
 // Vue.prototype.$api = "http://192.168.1.40:8080" //api地址116的地址ip
 
@@ -38,15 +38,15 @@ const FollowInfo = () => { return $.post(api, {})};
 
 
 
-//Vue.prototype.$prefix = "http://116.62.68.26:81" //图片前缀
-Vue.prototype.$prefix = "http://47.92.145.21:81" //图片前缀
+Vue.prototype.$prefix = "http://116.62.68.26:81" //图片前缀
+//Vue.prototype.$prefix = "http://47.92.145.21:81" //图片前缀
 
 // 测试环境
 
 //Vue.prototype.$export = "http://192.168.0.222:8080" //图片前缀
 
 // 生产环境
-Vue.prototype.$api = "http://omc.urskongjian.com" //api地址
+//Vue.prototype.$api = "http://omc.urskongjian.com" //api地址
 //Vue.prototype.$export = "http://omc.urskongjian.com" //导出
 
 
@@ -248,7 +248,7 @@ var router = new VueRouter({
     ]
 });
 
-router.beforeEach((to, from, next) => {
+/*router.beforeEach((to, from, next) => {
     document.title = to.meta.title || '';
 // 根据路由变化去改变页面的title
     if (to.meta.title) {
@@ -393,11 +393,11 @@ router.beforeEach((to, from, next) => {
             });
         }
     }
-});
+});*/
 
 
 
-/*router.beforeEach((to, from, next) => {
+router.beforeEach((to, from, next) => {
     /!* 路由发生变化修改页面title *!/
     if (to.meta.title) {
       document.title = to.meta.title;
@@ -452,7 +452,7 @@ router.beforeEach((to, from, next) => {
 
     }
 });
-*/
+
 
 
 new Vue({

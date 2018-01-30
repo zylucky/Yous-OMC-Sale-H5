@@ -533,6 +533,7 @@ export default{
 	            		this.success = true;
 						this.$router.push({
 							path:'/channel_list',//跳转到渠道佣金展示
+							resault:'success'//提交成功后回到列表根据该字段刷新页面
 						})        		
 	            	}
 	            	console.log(res);
