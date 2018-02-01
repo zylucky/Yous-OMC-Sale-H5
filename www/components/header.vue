@@ -68,9 +68,9 @@
         <img src="../resources/images/ys_more.png" width="20" alt="">
       </label>
       <!--消息通知-->
-      <!--<a href="javascript:;" class="news" v-show="newshow" @click="tonews">
+      <a href="javascript:;" class="news" v-show="newshow" @click="tonews">
       	<span class="newcount" v-if='newData.length != 0 && status != 0'><i style="display: inline-block;transform: scale(0.5);">{{status}}</i></span>
-      </a>-->
+      </a>
       
       <!--<a href="javascript:;" class="detail-search" style="position: fixed;left: 0; top: 0">
         <input type="text" id="keyword" placeholder="请输入关键字搜索" v-model="para.search_keywork" maxlength="50"
@@ -106,12 +106,12 @@
                   <a href="javascript:;" style="color: black !important;width: 2rem;font-size: 0.38rem;" @click="list">楼盘列表</a>
                 </div>
               </div>
-              <!--<div style="border-bottom: 1px solid rgb(167,196,223);">
+              <div style="border-bottom: 1px solid rgb(167,196,223);">
                 <div style="height: 1rem;margin-left: 0.4rem;">
                   <span style=""><img style="float: left;width: 0.38rem;height: 0.5rem;margin-top: 0.25rem;" src="../resources/images/left_list/price_list.png"></span>
                   <a href="javascript:;" style="color: black !important;width: 2rem;font-size: 0.38rem;" @click="yjlist">佣金展示</a>
                 </div>
-              </div>-->
+              </div>
 
 
             </div>
@@ -158,6 +158,9 @@ import axios from 'axios';
     	}else{
     		this.newshow = true;
     	}
+    	if(location.hash.indexOf('/select') == 1){
+    		this.newshow = false;
+    	}
       this.takeid();
     },
     methods: {
@@ -182,7 +185,8 @@ import axios from 'axios';
               });
       },
       takenews(){//接收消息
-        const url = "http://www.youshikongjian.com/receiveMessage/"+ this.userid + "/sys/qd";//消息接口地
+        const url = "http://erp.youshikongjian.com/receiveMessage/"+ this.userid + "/sys/qd";//消息接口地
+//      const url = "http://beta.youshikongjian.com/receiveMessage/"+ this.userid + "/sys/qd";//消息接口地
         axios.get(url, {
           
         }).then((res)=>{
@@ -190,7 +194,7 @@ import axios from 'axios';
           if(res.data.success){
             this.newData = res.data.data;
             for(var i=0; i<this.newData.length; i++){
-              if(this.newData[i].status == 1){
+              if(this.newData[i].status == 0){
                 this.status ++;
               }
             }

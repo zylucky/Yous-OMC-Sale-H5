@@ -56,7 +56,9 @@
   		right: 0;
   		top: 1rem;
   		bottom: 0;
-  		overflow: auto;
+  		overflow-x: hidden;
+  		overflow-y: scroll;
+  		-webkit-overflow-scrolling: touch;
   		ul{padding-bottom: 0.5rem;}
   	}
   	.list li{
@@ -281,7 +283,7 @@ import axios from 'axios';
 				size:10,//每次请求条数
 				dataqq:false,//切换点击请求数据状态
 				dataqq1:false,//切换点击请求数据状态1
-				jz:true,//底部加载图标
+				jz:false,//底部加载图标
 			}
 		},
 		created(){
@@ -295,7 +297,11 @@ import axios from 'axios';
 				this.page = this.$store.state.page;
 			}
 			if(this.$store.state.datas != ''){//当前tab数据
-				this.pendData = this.$store.state.datas;
+				if(this.$route.query.resault == 'success'){
+					window.location.reload();
+				}else{
+					this.pendData = this.$store.state.datas;					
+				}
 			}else{		
 				Indicator.open({
 				  text: 'Loading...',
@@ -304,7 +310,11 @@ import axios from 'axios';
 				this.init();	
 			}
 			if(this.$store.state.datas1 != ''){//
-				this.passData = this.$store.state.datas1;
+				if(this.$route.query.resault == 'success'){
+					window.location.reload();
+				}else{
+					this.passData = this.$store.state.datas1;					
+				}
 			}else{
 				Indicator.open({
 				  text: 'Loading...',
@@ -336,6 +346,7 @@ import axios from 'axios';
 						this.jz = false;
 					}
 	            	if(res.data.success && res.data.data){
+	            		this.jz = false;
 	            		this.loading = false;
 	            		this.noMore = false;
 	            		if(this.dataqq1){
@@ -375,6 +386,7 @@ import axios from 'axios';
 						this.jz = false;
 					}
 	            	if(res.data.success && res.data.data){
+	            		this.jz = false;
 	            		this.loading = false;
 	            		this.noMore = false;
 	            		if(this.dataqq){
@@ -404,7 +416,7 @@ import axios from 'axios';
 				this.tabq = cut;
 				
 				this.$store.commit('sendObj',this.tabq);//当前tab状态存入state仓库
-				console.log(this.$store.state.tabzt);
+//				console.log(this.$store.state.tabzt);
 				
 				if(cut=='0'){
 					this.noMore = true;
@@ -490,6 +502,7 @@ import axios from 'axios';
 			loadMore() {//未确认数据
 				if (!this.loading && !this.noMore) {
 				  this.loading = true;
+				  this.jz = true;
 				  Indicator.open({
 				    text: 'Loading...',
 				    spinnerType: 'fading-circle'
@@ -513,7 +526,7 @@ import axios from 'axios';
 			var _this = this;
 			if(_this.$store.state.scollposion != ''){//滚动条位置存在则滚动到对应位置
 				$('.list_box').scrollTop(_this.$store.state.scollposion);
-				console.log(_this.$store.state.scollposion);
+//				console.log(_this.$store.state.scollposion);
 			}else{
 				$('.list_box').scrollTop(0);
 			}

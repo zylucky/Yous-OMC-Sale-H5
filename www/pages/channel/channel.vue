@@ -7,7 +7,9 @@
 		right: 0;
 		bottom: 0;
 		top: 0;
-  		overflow: hidden;
+  		overflow-x: hidden;
+  		overflow-y: scroll;
+  		-webkit-overflow-scrolling: touch;
   	}
   	.box_b{
   		position: absolute;
@@ -274,15 +276,15 @@
 				<ul>
 					<li class="betrue">
 						<p>已确认<span class="flow_r"></span></p>
-						<p>12/19 15:31</p>
+						<p style="visibility: hidden;">12/19 15:31</p>
 					</li>
 					<li class="ing" v-show='qdlist.taskZt != 1'>
 						<p>审批中<span class="flow_r"></span></p>
-						<p>12/19 15:31</p>
+						<p style="visibility: hidden;">12/19 15:31</p>
 					</li>
 					<li class="suc">
 						<p>已完成</p>
-						<p>12/19 15:31</p>
+						<p style="visibility: hidden;">12/19 15:31</p>
 					</li>
 				</ul>
 				<div class="flow_tip">我们正在为您提交佣金审批，请耐心等待！</div>
@@ -453,10 +455,10 @@ export default{
 	            		this.defaultData.huming = res.data.data.qdhuming;
 	            		this.defaultData.kaihuhang = res.data.data.qdkaihuhang;
 	            		this.defaultData.zhanghao = res.data.data.qdzhanghao;
-	            		console.log('======================')
-	            		console.log(this.defaultData)
+//	            		console.log(this.defaultData)
 	            	}
-	            	console.log(this.qdlist);
+//	            	console.log('======================')
+//	            	console.log(this.qdlist);
 					this.bz = this.qdlist.qdbeizhu;
 					this.qdflow();
 	            }
@@ -475,7 +477,7 @@ export default{
 				this.qrfp = false;
 				$('.mint-checkbox-label').css('color','#A9ACB1');
 			}
-			console.log(this.qrfp);
+//			console.log(this.qrfp);
 		},
 		save(){//保存提交
 			const url = this.$api + "/yhcms/web/qdyongjin/saveQvDaoData.do";
@@ -531,6 +533,7 @@ export default{
 	            		this.success = true;
 						this.$router.push({
 							path:'/channel_list',//跳转到渠道佣金展示
+							resault:'success'//提交成功后回到列表根据该字段刷新页面
 						})        		
 	            	}
 	            	console.log(res);
@@ -608,7 +611,7 @@ export default{
 			axios.post(url,{ 
 				"id":this.$route.query.zhid//路由传递过来的银行账户id
 			 }).then((res)=>{
-			 console.log(res)
+//			 console.log(res)
 			 	this.defaultData = res.data.data;
             }, (err)=>{
             	console.log(err);

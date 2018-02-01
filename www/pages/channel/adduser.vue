@@ -156,10 +156,10 @@ export default{
 		state(){
 			if(this.value==true){
 				this.value1 = 1;
-				console.log(this.value1);
+//				console.log(this.value1);
 			}else{
 				this.value1 = 0;
-				console.log(this.value1);
+//				console.log(this.value1);
 			}
 		},
 		times(){//获取当前系统日期
@@ -180,7 +180,7 @@ export default{
 		save(){//保存
 			var ctime = this.times();
 			var cookxs = JSON.parse(localStorage.getItem('cooknx'));
-			console.log(cookxs)
+//			console.log(cookxs)
 			const url = this.$api + "/yhcms/web/qdyinhangzhanghao/saveQvDaoData.do";
 
 			if(this.username != '' && this.bankplace != '' && this.usernumber != ''){
@@ -249,7 +249,7 @@ export default{
 					this.bankplace = res.data.data.kaihuhang;
 					this.usernumber = res.data.data.zhanghao;
 					this.zhData = res.data.data;
-					console.log(this.zhData)
+//					console.log(this.zhData)
 			 	}
             }, (err)=>{
             	console.log(err);
