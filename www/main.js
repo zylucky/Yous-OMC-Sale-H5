@@ -16,37 +16,29 @@ Vue.use(VueRouter);
 Vue.use(VueResource);
 Vue.use(MintUI);
 
-//Vue.prototype.$api = "http://yhcms.tunnel.qydev.com" //api地址本地
+//生产
+Vue.prototype.$api = "http://omc.urskongjian.com" //api地址
+Vue.prototype.$export = "http://omc.urskongjian.com" //导出
+Vue.prototype.$prefix = "http://47.92.145.21:81" //图片前缀
+
+//测试
 // Vue.prototype.$api = "http://116.62.68.26:8080" //api地址116的地址ip
-// Vue.prototype.$api = "http://192.168.1.40:8080" //api地址116的地址ip
+//Vue.prototype.$prefix = "http://116.62.68.26:81" //图片前缀
 
-// Vue.prototype.$api = "http://192.168.1.45:8080"//
-//Vue.prototype.$api = "http://omc.urskongjian.com" //api地址线上
-// Vue.prototype.$api = "http://192.168.21.55:8080" //Mr.Cheng IP Address
+//java后台本地地址
 
-//Vue.prototype.$api = "http://192.168.137.54:8081" //api地址
-/*Vue.prototype.$api = "http://wx.urskongjian.com:8080" //api地址*/
-//Vue.prototype.$api = "http://192.168.0.222:8080" //api地址
 //Vue.prototype.$api = "http://yhcms.tunnel.qydev.com" //api地址本地
+// Vue.prototype.$api = "http://192.168.21.55:8080" //Mr.Cheng IP Address
+//Vue.prototype.$api = "http://192.168.137.54:8081" //api地址
+
+/*Vue.prototype.$api = "http://wx.urskongjian.com:8080" //api地址*/
+
 
 // 微信判断是否关注
 const api = "http://omc.urskongjian.com/yhcms/web/jcsj/userAuth.do";
 //const api = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx109df14878717ecb&redirect_uri=http%3A%2F%2Fomc.urskongjian.com%2Fyhcms%2Fweb%2Fjcsj%2FgetOpenid.do%3F&response_type=code&scope=snsapi_base&state=123&connect_redirect=1#wechat_redirect";
 
 const FollowInfo = () => { return $.post(api, {})};
-
-
-
-//Vue.prototype.$prefix = "http://116.62.68.26:81" //图片前缀
-Vue.prototype.$prefix = "http://47.92.145.21:81" //图片前缀
-
-// 测试环境
-
-//Vue.prototype.$export = "http://192.168.0.222:8080" //图片前缀
-
-// 生产环境
-Vue.prototype.$api = "http://omc.urskongjian.com" //api地址
-Vue.prototype.$export = "http://omc.urskongjian.com" //导出
 
 
 // 过滤器
@@ -310,13 +302,14 @@ router.beforeEach((to, from, next) => {
                                 if(to.path=='/register'||to.path=='/forgot_pwd'||to.path.indexOf('/reset_pwd')!=-1){
                                     next();
                                 }else{
-                                    if(localStorage.getItem('cooknx')){
+                                    if(localStorage.getItem('nxhead')){
+                                        next();
+                                    }else{
                                         //存微信的头像
                                         const head = data.headimgurl;
                                         localStorage.setItem('nxhead', JSON.stringify(head));
                                         next();
-                                    }else{
-                                        next();
+
                                     }
 
 

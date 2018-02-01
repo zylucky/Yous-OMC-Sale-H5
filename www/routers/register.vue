@@ -421,7 +421,8 @@
                                     md5.update(pwd);
                                     const password = md5.digest("hex");
                                     this.registerqd = 2;
-                                    this.$http.post(url, {"parameters":{"cookie":user22.sjs,"name":this.name,"phone":this.phone,"pass":password,"gsid":this.bindcompid,"gsname":this.company,"xmname":this.project},"foreEndType":2,"code":"1"}).then((res)=>{
+                                    let head = JSON.parse(localStorage.getItem('nxhead'));
+                                    this.$http.post(url, {"parameters":{"cookie":user22.sjs,"img":head,"name":this.name,"phone":this.phone,"pass":password,"gsid":this.bindcompid,"gsname":this.company,"xmname":this.project},"foreEndType":2,"code":"1"}).then((res)=>{
                                         Indicator.close();
                                         var result = JSON.parse(res.bodyText);
                                         if(result.success){
