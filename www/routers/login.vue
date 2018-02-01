@@ -121,7 +121,7 @@
                 md5.update(pwd);
                 const password = md5.digest("hex");
                 let head = JSON.parse(localStorage.getItem('nxhead'));
-                alert(head);
+//              alert(head);
                 this.$http.post(
                     this.$api + "/yhcms/web/qduser/login.do",
                     {

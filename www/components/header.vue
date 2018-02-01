@@ -167,7 +167,7 @@ import axios from 'axios';
       takeid(){//获取用户id
         var cookxs = JSON.parse(localStorage.getItem('cooknx'));
         console.log(cookxs);
-  //      const url = "http://116.62.68.26:8080/yhcms/web/qdyongjin/getLoginInfo.do";
+//        const url = "http://116.62.68.26:8080/yhcms/web/qdyongjin/getLoginInfo.do";
         const url = this.$api + "/yhcms/web/qdyongjin/getLoginInfo.do";
         axios.post(url,{
           "cookie":cookxs,
