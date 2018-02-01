@@ -18,7 +18,6 @@ Vue.use(MintUI);
 
 //Vue.prototype.$api = "http://yhcms.tunnel.qydev.com" //api地址本地
 // Vue.prototype.$api = "http://116.62.68.26:8080" //api地址116的地址ip
-
 // Vue.prototype.$api = "http://192.168.1.40:8080" //api地址116的地址ip
 
 // Vue.prototype.$api = "http://192.168.1.45:8080"//
@@ -395,8 +394,6 @@ router.beforeEach((to, from, next) => {
     }
 });
 
-
-
 /*router.beforeEach((to, from, next) => {
     /!* 路由发生变化修改页面title *!/
     if (to.meta.title) {
@@ -426,7 +423,7 @@ router.beforeEach((to, from, next) => {
                     }else{
                         next({path: '/login'});
                     }
-                    $.post("http://116.62.68.26:8080/yhcms/web/qduser/getQdLogin.do", {
+                    $.post("http://omc.urskongjian.com/yhcms/web/qduser/getQdLogin.do", {
                             "foreEndType": 2,
                             "code": "300000045",
                             "cookie": user22.sjs,
@@ -452,8 +449,6 @@ router.beforeEach((to, from, next) => {
 
     }
 });*/
-
-
 
 new Vue({
     el: '#app',
