@@ -161,7 +161,7 @@
       <div v-if="topic == '建外SOHO' && zdh == 2 && fybh == 705" style="position: absolute;z-index: 12;left:0.3rem;width: 0.45rem;top:4.2rem;"><a href="javascript:;"><img src="../resources/images/house/3d.png" width="100%" height="100%"></a></div>
       <div @click="jianwai" v-if="topic == '建外SOHO' && zdh == 2 && fybh == 705" style="position: absolute;right:0.3rem;top:4.85rem;z-index: 12;width: 1.8rem;box-shadow: 1px 1px 3px #616161;border-radius:25px;"><a href="javascript:;"><img src="../resources/images/house/3dd.png" width="100%" height="100%"></a></div>
       <div v-if="topic == '天元港中心' && zdh == 'B' && fybh == 1805" style="position: absolute;z-index: 12;left:0.3rem;width: 0.45rem;top:4.2rem;"><a href="javascript:;"><img src="../resources/images/house/3d.png" width="100%" height="100%"></a></div>
-      <div @click="tianyuan" v-if="topic == '天元港中心' && zdh == 'B' && fybh == ``" style="position: absolute;right:0.3rem;top:4.85rem;z-index: 12;width: 1.8rem;box-shadow: 1px 1px 3px #616161;border-radius:25px;"><a href="javascript:;"><img src="../resources/images/house/3dd.png" width="100%" height="100%"></a></div>
+      <div @click="tianyuan" v-if="topic == '天元港中心' && zdh == 'B' && fybh == 1805" style="position: absolute;right:0.3rem;top:4.85rem;z-index: 12;width: 1.8rem;box-shadow: 1px 1px 3px #616161;border-radius:25px;"><a href="javascript:;"><img src="../resources/images/house/3dd.png" width="100%" height="100%"></a></div>
       <div v-if="topic == '建外SOHO' && zdh == 3 && fybh == 2103" style="position: absolute;z-index: 12;left:0.3rem;width: 0.45rem;top:4.2rem;"><a href="javascript:;"><img src="../resources/images/house/3d.png" width="100%" height="100%"></a></div>
       <div @click="jianwai3" v-if="topic == '建外SOHO' && zdh == 3 && fybh == 2103" style="position: absolute;right:0.3rem;top:4.85rem;z-index: 12;width: 1.8rem;box-shadow: 1px 1px 3px #616161;border-radius:25px;"><a href="javascript:;"><img src="../resources/images/house/3dd.png" width="100%" height="100%"></a></div>
       <div v-if="topic == '建外SOHO' && zdh == 10 && fybh == 904" style="position: absolute;z-index: 12;left:0.3rem;width: 0.45rem;top:4.2rem;"><a href="javascript:;"><img src="../resources/images/house/3d.png" width="100%" height="100%"></a></div>
@@ -246,6 +246,7 @@
         floors:0, //总楼层
         locat_floor:0, //所在楼层
         fjzt: "",
+        topic:'',
 
         house_image1:[],
         house_image: [],
@@ -357,6 +358,7 @@
       },
       //获取某一办公楼详情
       getPerDetail(){
+          alert(11111);
         var _this = this;
         this.fyid = this.$route.query.house_id;
         this.$http.post(
@@ -369,10 +371,10 @@
             "code": "30000004"
           }
         ).then(function (res) {
+            alert(22222);
           var result = JSON.parse(res.bodyText);
           Indicator.close();
           if (result.success) {
-
               const data = result.data[0];
               $('title').html(result.data[0].topic);
               _this.daily_price = !data.dj ? '暂无数据' : data.dj + '元/㎡/天';
@@ -405,6 +407,7 @@
 
               _this.house_image = data.housing_icon.split(";");
               _this.house_image1 = _this.house_image;
+              _this.topic = result.data[0].topic;
               if(_this.topic == '建外SOHO' && _this.zdh == 2 && _this.fybh == 705){
                   var a = _this.house_image.unshift('http://omc.urskongjian.com/wangfile/1.jpg');
                   _this.sandStatus = 1;
