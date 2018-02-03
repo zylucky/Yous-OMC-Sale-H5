@@ -358,7 +358,6 @@
       },
       //获取某一办公楼详情
       getPerDetail(){
-          alert(11111);
         var _this = this;
         this.fyid = this.$route.query.house_id;
         this.$http.post(
@@ -371,7 +370,6 @@
             "code": "30000004"
           }
         ).then(function (res) {
-            alert(22222);
           var result = JSON.parse(res.bodyText);
           Indicator.close();
           if (result.success) {
