@@ -380,15 +380,15 @@
       if(localStorage.getItem("xzfystatus1")){
           this.xzfystatus = localStorage.getItem("xzfystatus1").replace("\"","").replace("\"","");
       }
-      if(localStorage.getItem("fhdata1")){
-          this.resultData = localStorage.getItem("fhdata1");
-          this.para.district = localStorage.getItem("xzqv").replace("\"","").replace("\"","");
-          this.para.business = localStorage.getItem("sq").replace("\"","").replace("\"","");
-          this.para.district1 = localStorage.getItem("ywqv").replace("\"","").replace("\"","");
-          this.para.business1 = localStorage.getItem("fq").replace("\"","").replace("\"","");
-          this.para.line_id = localStorage.getItem("xl").replace("\"","").replace("\"","");
-          this.para.station_id = localStorage.getItem("zd").replace("\"","").replace("\"","");
-          /*if(this.para.district == '' && this.para.business == '' && this.para.district1 == '' && this.para.business1 == '' && this.para.line_id == '' && this.para.station_id == ''){
+      if(localStorage.getItem("fhdata1") && localStorage.getItem("xzqv")){
+              this.resultData = localStorage.getItem("fhdata1");
+              this.para.district = localStorage.getItem("xzqv").replace("\"", "").replace("\"", "");
+              this.para.business = localStorage.getItem("sq").replace("\"", "").replace("\"", "");
+              this.para.district1 = localStorage.getItem("ywqv").replace("\"", "").replace("\"", "");
+              this.para.business1 = localStorage.getItem("fq").replace("\"", "").replace("\"", "");
+              this.para.line_id = localStorage.getItem("xl").replace("\"", "").replace("\"", "");
+              this.para.station_id = localStorage.getItem("zd").replace("\"", "").replace("\"", "");
+            /*if(this.para.district == '' && this.para.business == '' && this.para.district1 == '' && this.para.business1 == '' && this.para.line_id == '' && this.para.station_id == ''){
               alert(5555);
 
           }else{
@@ -396,50 +396,41 @@
               this.searchArea();
               this.searchChoose();
           }*/
-          this.para.area = localStorage.getItem("mj").replace("\"","").replace("\"","");
+              this.para.area = localStorage.getItem("mj").replace("\"", "").replace("\"", "");
 
 
-
-
-
-          if(localStorage.getItem("price")){
-              /*对于缓存的判断时要考虑他的双重引号*/
-              this.price = JSON.parse(localStorage.getItem("price"));
-              /*localStorage.removeItem("price");*/
+              if(localStorage.getItem("price")){
+                /*对于缓存的判断时要考虑他的双重引号*/
+                  this.price = JSON.parse(localStorage.getItem("price"));
+                /*localStorage.removeItem("price");*/
           }
-          if(localStorage.getItem("areasta")){
-            /*对于缓存的判断时要考虑他的双重引号*/
-              this.areasta = JSON.parse(localStorage.getItem("areasta"));
-             /* localStorage.removeItem("areasta");*/
+              if(localStorage.getItem("areasta")){
+                /*对于缓存的判断时要考虑他的双重引号*/
+                  this.areasta = JSON.parse(localStorage.getItem("areasta"));
+                /* localStorage.removeItem("areasta");*/
           }
 
 
+              this.para.price_dj = localStorage.getItem("jg").replace("\"", "").replace("\"", "");
+              this.para.chqxz = localStorage.getItem("chqxz").replace("\"", "").replace("\"", "");
+              this.priceFilter  = localStorage.getItem("px").replace("\"", "").replace("\"", "");
 
 
-          this.para.price_dj = localStorage.getItem("jg").replace("\"","").replace("\"","");
-          this.para.chqxz = localStorage.getItem("chqxz").replace("\"","").replace("\"","");
-          this.priceFilter  = localStorage.getItem("px").replace("\"","").replace("\"","");
-
-
-
-
-
-
-
-          this.xzfystatus = localStorage.getItem("xzfystatus").replace("\"","").replace("\"","");
-          if(localStorage.getItem("hist")){
-              this.his = JSON.parse(localStorage.getItem("hist"));
-              this.positionType = this.his.yicode;
-              this.thirdpart = this.his.sicoole;
-              this.curTab = this.his.wucoole;
-              if(this.positionType == "a"){
-                  this.searchSubAreafh(this.his.ercode);
-              }else if(this.positionType == "y"){
+              this.xzfystatus = localStorage.getItem("xzfystatus").replace("\"", "").replace("\"", "");
+              if(localStorage.getItem("hist")){
+                  this.his = JSON.parse(localStorage.getItem("hist"));
+                  this.positionType = this.his.yicode;
+                  this.thirdpart = this.his.sicoole;
+                  this.curTab = this.his.wucoole;
+                  if(this.positionType == "a"){
+                      this.searchSubAreafh(this.his.ercode);
+              }
+                  else if(this.positionType == "y"){
                   this.searchAreafh(this.his.ercode);
               }else{
                   this.searchStationfh(this.his.ercode);
               }
-              /*localStorage.removeItem("hist");*/
+                /*localStorage.removeItem("hist");*/
           }
           if(localStorage.getItem("jgtjian")){
               if(localStorage.getItem("jgtjian") == 1){
@@ -458,7 +449,7 @@
         /*取出缓存中的数组*/
         if(localStorage.getItem("areaRange")){
             this.areaRange  = JSON.parse(localStorage.getItem("areaRange"));
-            /*localStorage.removeItem("areaRange");*/
+          /*localStorage.removeItem("areaRange");*/
         }
         if(localStorage.getItem("priceRange")){
             this.priceRange  = JSON.parse(localStorage.getItem("priceRange"));

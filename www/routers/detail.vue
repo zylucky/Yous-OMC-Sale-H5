@@ -203,10 +203,10 @@
         <div id="slideBox" class="slideBox">
           <div class="swiper-container">
             <div class="swiper-wrapper">
-              <div class="swiper-slide" v-for="image in building_images" style="transition-duration: 0ms !important;">
-                <a href="javascript:;" @click="enlarge">
+              <div class="swiper-slide" v-for="image in building_images">
+                <span @click="enlarge">
                   <img :src="$prefix + '/' + image" alt="">
-                </a>
+                </span>
               </div>
             </div>
             <!--<div class="banner-page">

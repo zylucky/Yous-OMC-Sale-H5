@@ -348,7 +348,7 @@
       }
     },
     mounted(){
-        if(localStorage.getItem("fhdata")){
+        if(localStorage.getItem("fhdata") && localStorage.getItem("xzqv")){
             this.resultData = localStorage.getItem("fhdata");
             var topsl = localStorage.getItem("topsj");
             $('body,html').animate({scrollTop:topsl},2);//设置距离上面顶部的距离

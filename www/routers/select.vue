@@ -354,7 +354,7 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
       }
     },
     mounted(){
-      if(localStorage.getItem("fhdata2")){
+      if(localStorage.getItem("fhdata2" && localStorage.getItem("xzqv"))){
           this.resultData = localStorage.getItem("fhdata2");
           var topsl = localStorage.getItem("topsj2");
           this.para.district = localStorage.getItem("xzqv").replace("\"","").replace("\"","");

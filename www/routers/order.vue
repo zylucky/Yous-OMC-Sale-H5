@@ -137,10 +137,10 @@
             <div class="swiper-container">
               <div class="swiper-wrapper">
                 <div class="swiper-slide" v-for="image in house_image">
-                  <a href="javascript:;">
+                  <span>
                     <img v-if="image" :src="$prefix + '/' + image" alt="">
                     <img v-else :src="$prefix + '/upload/2017-08-27/6404b4de960b81fc5403c870aefcea34.png'" alt="">
-                  </a>
+                  </span>
                 </div>
               </div>
               <!--<div class="banner-page">
