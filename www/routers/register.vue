@@ -147,7 +147,7 @@
                     this.$http.post(this.$api + "/yhcms/web/qduser/getQdCompany.do", {
                         "companyName": this.company
                     }).then((res) => {
-                        this.companyList = JSON.parse(res.data).data;
+                        this.companyList = JSON.parse(JSON.stringify(res.data)).data;
                         if(this.companyList.length == 0){
                             this.projectjy = true;
                             this.project = "";
