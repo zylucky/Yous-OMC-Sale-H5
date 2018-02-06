@@ -333,7 +333,7 @@
                         canvas.width = imgx.naturalWidth;
                         canvas.height = imgx.naturalHeight;
                         canvas.getContext("2d").drawImage(imgx, 0, 0);
-                        ret = canvas.toDataURL(type, .2);
+                        ret = canvas.toDataURL(type, .2);//图片压缩比例
 
                         const obj = {
                             id: "xxx",
@@ -582,6 +582,7 @@
             fanhui(){
                 window.history.go(-1);
             },
+        
         },
         mounted(){
             this.getInitData();
