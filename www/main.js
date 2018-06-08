@@ -240,6 +240,7 @@ var router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
+
     document.title = to.meta.title || '';
 // 根据路由变化去改变页面的title
     if (to.meta.title) {
@@ -256,6 +257,7 @@ router.beforeEach((to, from, next) => {
         _hmt.push(['_trackPageview'
             , '/#' + to.fullPath]);
     }
+
     if(window.location.href.indexOf('from') !=-1){
       var url=window.location.href;
       //分享的链接
@@ -312,7 +314,6 @@ router.beforeEach((to, from, next) => {
 
                                     }
 
-
                                     const user = JSON.parse(localStorage.getItem('cooknx'));
                                     if (!user && to.path != '/login') {
                                         next({ path: '/login' });
@@ -327,15 +328,14 @@ router.beforeEach((to, from, next) => {
                                             if (delta > 86400 * 30) {
                                                 next({path: '/login'});
                                             } else {
-
                                                 $.post("http://omc.urskongjian.com/yhcms/web/qduser/getQdLogin.do", {
                                                         "foreEndType": 2,
                                                         "code": "300000045",
-                                                        "cookie": user22.sjs,
+                                                        "cookie": user.sjs,
                                                     },
                                                     function (data) {
-                                                        next();
                                                         if (data.success) {
+                                                            next();
                                                         } else {
                                                             if (data.userzt == 2) {
                                                                 next({path: '/login'});

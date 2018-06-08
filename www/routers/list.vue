@@ -813,9 +813,11 @@
 
           if(this.priceFilter === '' || this.priceFilter === 'P2'){
               this.priceFilter = 'P1';
+              alert(111111+"P1");
           }
           else{
               this.priceFilter = 'P2';
+              alert(2222222+"P2");
           }
           this.areaFilter = '';
           localStorage.setItem('jgtjianlist',1);
@@ -835,9 +837,11 @@
           $(li).addClass("highlight").toggleClass("active-filter");
           if(this.areaFilter === '' || this.areaFilter === 'A2'){
               this.areaFilter = 'A1';
+              alert(11111+'A1');
           }
           else{
               this.areaFilter = 'A2';
+              alert(22222+'A2');
           }
           this.priceFilter = '';
           localStorage.setItem('jgtjianlist',2);
@@ -1019,6 +1023,7 @@
         Indicator.close();
       },
       getData(){
+          console.log(this.para.area);
         const paraObj = {
           "parameters": {
             "search_keywork": this.para.search_keywork,

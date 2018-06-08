@@ -62,7 +62,7 @@
                 </a>
 
                 <!--3d图片第一张显示图标的判断-->
-                <div style="position: absolute;z-index: 13;bottom: 1.8rem;left: 3.1rem;" v-if="index==0 && topic == '嘉盛中心'" @click="sandlianj">
+                <div style="position: absolute;z-index: 13;bottom: 1.8rem;left: 3.1rem;" v-if="index==0 && topic == '嘉盛中心' && zdh == '独栋' && fybh == 0506" @click="sandlianj">
                   <a href="javascript:;"><img style="width: 1.3rem;height: 1.3rem;" src="../resources/images/house/order/bofang.png"></a>
                 </div>
                 <div style="position: absolute;z-index: 13;bottom: 1.6rem;left: 3.1rem;" v-if="index==0 && topic == '建外SOHO' && zdh == 2 && fybh == 705" @click="jianwai">
@@ -99,7 +99,7 @@
                 </a>
 
                 <!--3d图片第一张显示图标的判断-->
-                <div style="position: absolute;z-index: 13;bottom: 1.8rem;left: 3.1rem;" v-if="index==0 && topic == '嘉盛中心'" @click="sandlianj">
+                <div style="position: absolute;z-index: 13;bottom: 1.8rem;left: 3.1rem;" v-if="index==0 && topic == '嘉盛中心' && zdh == '独栋' && fybh == 0506" @click="sandlianj">
                   <a href="javascript:;"><img style="width: 1.3rem;height: 1.3rem;" src="../resources/images/house/order/bofang.png"></a>
                 </div>
                 <div style="position: absolute;z-index: 13;bottom: 1.6rem;left: 3.1rem;" v-if="index==0 && topic == '建外SOHO' && zdh == 2 && fybh == 705" @click="jianwai">
@@ -156,8 +156,8 @@
         <span v-else><i v-text="zdh" style="color:black;font-weight: 900 !important;"></i> - <i v-text="fybh" style="color:black;font-weight: 900 !important;"></i></span>
       </div>
 
-      <div v-if="topic == '嘉盛中心'" style="position: absolute;z-index: 12;left:0.3rem;width: 0.45rem;top:4.2rem;"><a href="javascript:;"><img src="../resources/images/house/3d.png" width="100%" height="100%"></a></div>
-      <div @click="sandlianj" v-if="topic == '嘉盛中心'" style="position: absolute;right:0.3rem;top:4.9rem;z-index: 12;width: 1.8rem;"><a href="javascript:;"><img src="../resources/images/house/3dd.png" width="100%" height="100%"></a></div>
+      <div v-if="topic == '嘉盛中心' && zdh == '独栋' && fybh == 0506" style="position: absolute;z-index: 12;left:0.3rem;width: 0.45rem;top:4.2rem;"><a href="javascript:;"><img src="../resources/images/house/3d.png" width="100%" height="100%"></a></div>
+      <div @click="sandlianj" v-if="topic == '嘉盛中心' && zdh == '独栋' && fybh == 0506" style="position: absolute;right:0.3rem;top:4.9rem;z-index: 12;width: 1.8rem;"><a href="javascript:;"><img src="../resources/images/house/3dd.png" width="100%" height="100%"></a></div>
       <div v-if="topic == '建外SOHO' && zdh == 2 && fybh == 705" style="position: absolute;z-index: 12;left:0.3rem;width: 0.45rem;top:4.2rem;"><a href="javascript:;"><img src="../resources/images/house/3d.png" width="100%" height="100%"></a></div>
       <div @click="jianwai" v-if="topic == '建外SOHO' && zdh == 2 && fybh == 705" style="position: absolute;right:0.3rem;top:4.85rem;z-index: 12;width: 1.8rem;box-shadow: 1px 1px 3px #616161;border-radius:25px;"><a href="javascript:;"><img src="../resources/images/house/3dd.png" width="100%" height="100%"></a></div>
       <div v-if="topic == '天元港中心' && zdh == 'B' && fybh == 1805" style="position: absolute;z-index: 12;left:0.3rem;width: 0.45rem;top:4.2rem;"><a href="javascript:;"><img src="../resources/images/house/3d.png" width="100%" height="100%"></a></div>
@@ -195,9 +195,9 @@
           <span>供&nbsp;&nbsp;暖&nbsp;&nbsp;费：<i v-text="gnf" style="color: #5b5b5b;"></i></span>
           <span class="row">网络公司：<i v-text="wlgs" style="color: #5b5b5b;"></i></span>
         </div>
-        <div class="weixin_head gift clearfix">
+        <!--<div class="weixin_head gift clearfix">
           <span class="row">礼品等级：<i v-text="lpdj"></i></i></span>
-        </div>
+        </div>-->
         <div class="weixin_bot clearfix">
           <div class="fl weixin_bot_box">
             <span>销售顾问：<i v-text="name"></i></span>
@@ -256,7 +256,7 @@
         fjcg: "",
         chx: "",
         wygs: '',//物业公司
-          zdh:'',
+        zdh:'',
         fybh:"",
         wyf: '',//物业费
         kprq: '',//建成年代
@@ -400,9 +400,10 @@
                   _this.zdh = data.zdh || '暂无数据';
                   _this.locat_floor = data.lc || '暂无数据';
               }
-              _this.name = data.name || '暂无数据';
-              _this.phone = data.phone || '暂无数据';
-
+                _this.name = data.name || '暂无数据';
+//            _this.name = '幼狮管家';
+                _this.phone = data.phone || '暂无数据';
+//            _this.phone = '400-078-8800';
               _this.house_image = data.housing_icon.split(";");
               _this.house_image1 = _this.house_image;
               _this.topic = result.data[0].topic;
@@ -441,6 +442,7 @@
               _this.tcf = !data.tcf ? '暂无数据' : data.tcf + '元/月';
               _this.wlgs = data.wlgs || '暂无数据';
               _this.lpdj = data.lpsort || '暂无数据';
+
             }
 
             setTimeout(function(){
