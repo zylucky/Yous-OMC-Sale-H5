@@ -1019,6 +1019,7 @@
         Indicator.close();
       },
       getData(){
+          console.log(this.para.area);
         const paraObj = {
           "parameters": {
             "search_keywork": this.para.search_keywork,

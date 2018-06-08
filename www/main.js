@@ -239,6 +239,7 @@ var router = new VueRouter({
     ]
 });
 
+<<<<<<< HEAD
 //router.beforeEach((to, from, next) => {
 //  document.title = to.meta.title || '';
 //// 根据路由变化去改变页面的title
@@ -386,6 +387,121 @@ var router = new VueRouter({
 //      }
 //  }
 //});
+=======
+router.beforeEach((to, from, next) => {
+
+    document.title = to.meta.title || '';
+// 根据路由变化去改变页面的title
+    if (to.meta.title) {
+      document.title = to.meta.title;
+    }else{
+      next();
+    }
+    // 统计代码
+    if (from.name) {
+        _hmt.push(['_trackPageview'
+            , '/#' + to.fullPath
+            , window.location.origin ]);
+    } else {
+        _hmt.push(['_trackPageview'
+            , '/#' + to.fullPath]);
+    }
+
+    if(window.location.href.indexOf('from') !=-1){
+      var url=window.location.href;
+      //分享的链接
+      var index1 = url.indexOf('?'),index2 = url.indexOf('#');
+
+      var url1=url.substring(0,index1-1),url2=url.substring(index2);
+      var ul1=url1+"/"+url2;
+      var ul=encodeURIComponent(ul1);
+        $.post("http://omc.urskongjian.com/yhcms/web/jcsj/getChqxz.do",
+            function (data) {
+                window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx109df14878717ecb&redirect_uri="+ul+"&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect";
+            }, "json").catch(function (error) {
+            window.location.href = "http://omc.urskongjian.com/error/uphtm.html";
+        });
+    }else{
+          var name="code";
+          var wxcode=null;
+          var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+          var r = window.location.search.substr(1).match(reg);
+          if (r!=null)
+              {wxcode= r[2];
+
+              }
+        if(wxcode == null){
+         var charString=window.location.href;
+         var tt=encodeURIComponent(charString);
+                   $.post("http://omc.urskongjian.com/yhcms/web/jcsj/getChqxz.do",
+                       function (data) {
+                           window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx109df14878717ecb&redirect_uri="+tt+"&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect";
+                           //alert(data); // John
+                       }, "json").catch(function (error) {
+                       window.location.href = "http://omc.urskongjian.com/error/uphtm.html";
+                   });
+      }else{
+            $.post("http://omc.urskongjian.com/yhcms/web/jcsj/getChqxz.do",
+                function (data) {
+                  $.post(
+                       "http://omc.urskongjian.com/yhcms/web/jcsj/getOpenid11.do?code="+wxcode
+                  ).then(function (res) {
+                      var data = JSON.parse(res);
+                      if (data.success) {
+                          if(data.subscribe){
+                          if (data.subscribe == 1 || data.subscribe == 3 ) {
+                                if(to.path=='/register'||to.path=='/forgot_pwd'||to.path.indexOf('/reset_pwd')!=-1){
+                                    next();
+                                }else{
+                                    if(localStorage.getItem('nxhead')){
+                                        next();
+                                    }else{
+                                        //存微信的头像
+                                        const head = data.headimgurl;
+                                        localStorage.setItem('nxhead', JSON.stringify(head));
+                                        next();
+
+                                    }
+
+                                    const user = JSON.parse(localStorage.getItem('cooknx'));
+                                    if (!user && to.path != '/login') {
+                                        next({ path: '/login' });
+                                    }else  if (!user && to.path == '/login') {
+                                        next();
+                                    }else  if (user && to.path == '/login') {
+                                        next();
+                                    }
+                                    else{
+                                        if(user!=null) {
+                                            const time = user.time == null ? 0 : user.time, now = (new Date).getMilliseconds(), delta = now - time;
+                                            if (delta > 86400 * 30) {
+                                                next({path: '/login'});
+                                            } else {
+                                                $.post("http://omc.urskongjian.com/yhcms/web/qduser/getQdLogin.do", {
+                                                        "foreEndType": 2,
+                                                        "code": "300000045",
+                                                        "cookie": user.sjs,
+                                                    },
+                                                    function (data) {
+                                                        if (data.success) {
+                                                            next();
+                                                        } else {
+                                                            if (data.userzt == 2) {
+                                                                next({path: '/login'});
+                                                            } else {
+                                                                next({path: '/login'});
+                                                            }
+                                                        }
+                                                        //alert(data); // John
+                                                    }, "json");
+                                            }
+                                        }else{
+                                            next({path: '/login'});
+                                            //next();
+                                        }
+                                    }
+
+>>>>>>> e862b91ecbc29e031c43a5df6768380744e6eb73
 
 router.beforeEach((to, from, next) => {
     /!* 路由发生变化修改页面title *!/
