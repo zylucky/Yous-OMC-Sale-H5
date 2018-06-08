@@ -368,7 +368,7 @@
 
 
             if(localStorage.getItem("areastalist")){
-              /*对于缓存的判断时要考虑他的双重引号*/
+              /*对于缓存的判断时要考虑他的双重引号132456*/
                 this.areasta = JSON.parse(localStorage.getItem("areastalist"));
                 /*localStorage.removeItem("areasta");*/
             }
