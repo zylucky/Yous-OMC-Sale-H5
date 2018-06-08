@@ -134,8 +134,8 @@ export default{
 			username:'',
 			bankplace:'',
 			usernumber:'',
-			value:'',//是否设置默认
-			value1:1,
+			value:false,//是否设置默认
+			value1:0,
 			id:'',//银行账户id
 			btntext:'',//按钮文字
 			zhData:{},//账户信息
@@ -200,7 +200,18 @@ export default{
 					  position: 'center',
 					  duration: 1000
 					});
-
+					if(this.$route.query.zhgl == 1){
+						this.$router.push({
+							path:'/income_number',//跳转到账号列表
+							query:{
+								"zhid":res.data.data.id,//所传参数
+								"qdid":this.$route.query.qdid,
+								"passzt":this.$route.query.passzt,
+								"zhgl":this.$route.query.zhgl
+							}
+						})
+						return;
+					}
 					if(location.hash.indexOf('?') == -1){
 						this.$router.push({
 							path:'/income_number',//跳转到账号列表
@@ -224,7 +235,7 @@ export default{
 									"passzt":this.$route.query.passzt
 								}
 							})
-						}						
+						}
 					}
 					console.log(res);
 	            }, (err)=>{
@@ -258,6 +269,14 @@ export default{
 	},
 	mounted(){
 		this.hqzh();
+		if(this.$route.query.isfirst == 0){
+			this.value=false;
+			this.btntext = '保存';
+		}
+		if(this.$route.query.isfirst == '1'){
+			this.value=true;
+			this.btntext = '保存';
+		}
 	},
 	
 }

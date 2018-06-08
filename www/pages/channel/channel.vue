@@ -304,7 +304,7 @@
 						<span>销售姓名：</span>
 						<span>{{qdlist.xiaoshou}}</span>
 					</li>
-					<li>
+					<li v-if="false">
 						<span>联系方式：</span>
 						<span>{{qdlist.xsqvdaotel}}</span>
 					</li>

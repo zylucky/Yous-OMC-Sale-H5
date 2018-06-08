@@ -195,7 +195,7 @@
           <span>供&nbsp;&nbsp;暖&nbsp;&nbsp;费：<i v-text="gnf" style="color: #5b5b5b;"></i></span>
           <span class="row">网络公司：<i v-text="wlgs" style="color: #5b5b5b;"></i></span>
         </div>
-        <div class="weixin_head gift clearfix">
+        <div class="weixin_head gift clearfix" v-if="false">
           <span class="row">礼品等级：<i v-text="lpdj"></i></i></span>
         </div>
         <div class="weixin_bot clearfix">

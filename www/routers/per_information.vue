@@ -204,7 +204,7 @@
                     this.$http.post(this.$api + "/yhcms/web/qduser/getQdCompany.do", {
                         "companyName": this.company
                     }).then((res) => {
-                        this.companyList = JSON.parse(res.data).data;
+                        this.companyList = JSON.parse(JSON.stringify(res.data)).data;
                         if(this.companyList.length == 0){
                             this.projectjy = true;
                             this.project = "";
@@ -333,7 +333,7 @@
                         canvas.width = imgx.naturalWidth;
                         canvas.height = imgx.naturalHeight;
                         canvas.getContext("2d").drawImage(imgx, 0, 0);
-                        ret = canvas.toDataURL(type, .2);
+                        ret = canvas.toDataURL(type, .2);//图片压缩比例
 
                         const obj = {
                             id: "xxx",
@@ -582,6 +582,7 @@
             fanhui(){
                 window.history.go(-1);
             },
+        
         },
         mounted(){
             this.getInitData();

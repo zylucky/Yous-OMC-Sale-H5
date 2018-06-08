@@ -139,7 +139,12 @@
             },
             my_zhgl(){//帐户管理
             	if(localStorage.getItem('cooknx')){
-                    this.$router.push({path:'/income_number'});
+                    this.$router.push({
+                    	path:'/income_number',
+                    	query:{
+                    		zhgl:1
+                    	}
+                    });
                 }else{
                     this.$router.push({path:'/login'});
                 }
