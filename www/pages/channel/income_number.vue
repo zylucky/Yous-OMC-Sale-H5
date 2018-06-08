@@ -183,7 +183,7 @@
 						</p>
 					</div>
 					<div class="userright">
-						<p class="bj" @click.stop='bjclick(item.id)'></p>
+						<p class="bj" @click.stop='bjclick(item.id,item.isfirst)'></p>
 						<p class="mr" @click.stop="setdefault(item.id)">设置默认</p>
 						<p class="del" @click.stop="del(item.id,index)">删除</p>
 					</div>
@@ -217,13 +217,15 @@ export default{
 		this.id = this.$route.query.zhid;
 	},
 	methods:{
-		bjclick(id){
+		bjclick(id,isfirst){
 			this.$router.push({
 				path:'/adduser',//跳转到账户数据保存
 				query:{
 					"zhid":id,//所传参数
 					"qdid":this.$route.query.qdid,
-					"passzt":this.$route.query.passzt
+					"passzt":this.$route.query.passzt,
+					"zhgl":this.$route.query.zhgl,
+					"isfirst":isfirst
 				}
 			})
 		},
@@ -279,14 +281,18 @@ export default{
 			if(location.hash.indexOf('?') == -1){
 				return;
 			}else{
-				this.$router.push({
-					path:'/channel',//跳转到渠道数据保存
-					query:{
-						"zhid":id,//所传参数
-						"qdid":this.$route.query.qdid,
-						"passzt":this.$route.query.passzt
-					}
-				})				
+				if(this.$route.query.zhgl == 1){
+					return;
+				}else{
+					this.$router.push({
+						path:'/channel',//跳转到渠道数据保存
+						query:{
+							"zhid":id,//所传参数
+							"qdid":this.$route.query.qdid,
+							"passzt":this.$route.query.passzt
+						}
+					})									
+				}
 			}
 
 		},
