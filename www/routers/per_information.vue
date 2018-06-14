@@ -67,6 +67,12 @@
                     <span class=""><a style="background-color: rgb(123,198,249);border:1px solid rgb(123,198,249);color: white;padding:0.05rem;" href="javascript:;" @click="chang_phone">更换手机号</a></span>
                 </li>
                 <li class="clearfix">
+                    <span class="ys_tit" style="width: 1.5rem !important;">推荐人</span>
+                    <div class="ys_item_con fl">
+                        <input type="text" name="yqma" value="" onkeyup="this.value=this.value.replace(/[^0-9a-zA-Z]/g,'')" v-model="tjperson" placeholder="请输入推荐人邀请码">
+                    </div>
+                </li>
+                <li class="clearfix">
                     <div class="ys_item_con fl" style="width: 6rem !important;">
                         <mt-field label="渠道公司" placeholder="" v-model="company"></mt-field>
                         <mt-cell
@@ -181,6 +187,7 @@
                 companyShow:false,
                 companyList:[],
                 company:'',
+                tjperson:'',
                 companyId:'',
                 projectjy:false,
                 bindcompid:'',
@@ -431,7 +438,7 @@
                     });
                     this.$http.post(
                         this.$api + "/yhcms/web/qduser/updateUser.do",
-                        {"parameters":{"gsid":this.bindcompid,"gsname":this.company,"xmname":this.project,"cookie":user22.sjs,"name":this.name,"phone":this.phone,"card":this.code,"mptp1":fp,"mptp2":fm},"foreEndType":2,"code":"2"}).then((res)=>{
+                        {"parameters":{"saleNum":this.tjperson,"gsid":this.bindcompid,"gsname":this.company,"xmname":this.project,"cookie":user22.sjs,"name":this.name,"phone":this.phone,"card":this.code,"mptp1":fp,"mptp2":fm},"foreEndType":2,"code":"2"}).then((res)=>{
                         Indicator.close();
                         var result = JSON.parse(res.bodyText);
                         if (result.success) {
@@ -471,7 +478,7 @@
 
                         this.$http.post(
                             this.$api + "/yhcms/web/qduser/updateUser.do",
-                            {"parameters":{"gsid":this.bindcompid,"gsname":this.company,"xmname":this.project,"cookie":user22.sjs,"name":this.name,"phone":this.phone,"card":this.code,"mptp1":fp,"mptp2":fm},"foreEndType":2,"code":"2"}).then((res)=>{
+                            {"parameters":{"saleNum":this.tjperson,"gsid":this.bindcompid,"gsname":this.company,"xmname":this.project,"cookie":user22.sjs,"name":this.name,"phone":this.phone,"card":this.code,"mptp1":fp,"mptp2":fm},"foreEndType":2,"code":"2"}).then((res)=>{
                             Indicator.close();
                             var result = JSON.parse(res.bodyText);
                             if (result.success) {
@@ -566,6 +573,12 @@
                         this.fmList = data2;
                         this.il = this.imgList.length;
                         this.fl = this.fmList.length;
+                        if(data.saleName == ''){
+                            //邀请码是输入状态
+                        }else{
+                            this.tjperson = data.saleName;
+                            $('input[name=yqma]').attr('readonly','readonly');
+                        }
                         this.statu = data.status2;
                     }else{
                         Toast({
@@ -582,7 +595,6 @@
             fanhui(){
                 window.history.go(-1);
             },
-        
         },
         mounted(){
             this.getInitData();

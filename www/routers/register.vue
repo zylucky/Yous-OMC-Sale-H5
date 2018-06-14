@@ -66,6 +66,12 @@
                     </div>
                 </li>
                 <li class="clearfix">
+                    <span class="ys_tit" style="width: 1.5rem !important;">推荐人</span>
+                    <div class="ys_item_con fl">
+                        <input type="text" value="" onkeyup="this.value=this.value.replace(/[^0-9a-zA-Z]/g,'')" v-model="tjperson" placeholder="请输入推荐人邀请码">
+                    </div>
+                </li>
+                <li class="clearfix">
                     <div class="ys_item_con fl" style="width: 7rem !important;">
                         <span class="ys_tit" style="width: 1.5rem !important;">渠道公司</span>
                         <input label="渠道公司" placeholder="请输入渠道公司" v-model="company">
@@ -125,6 +131,7 @@
                 companyShow:false,
                 companyList:[],
                 company:'',
+                tjperson:'',
                 companyId:'',
                 projectjy:false,
                 registerqd:1,
@@ -422,7 +429,7 @@
                                     const password = md5.digest("hex");
                                     this.registerqd = 2;
                                     let head = JSON.parse(localStorage.getItem('nxhead'));
-                                    this.$http.post(url, {"parameters":{"cookie":user22.sjs,"img":head,"name":this.name,"phone":this.phone,"pass":password,"gsid":this.bindcompid,"gsname":this.company,"xmname":this.project},"foreEndType":2,"code":"1"}).then((res)=>{
+                                    this.$http.post(url, {"parameters":{"cookie":user22.sjs,"img":head,"name":this.name,"phone":this.phone,"pass":password,"gsid":this.bindcompid,"gsname":this.company,"xmname":this.project,"saleNum":this.tjperson},"foreEndType":2,"code":"1"}).then((res)=>{
                                         Indicator.close();
                                         var result = JSON.parse(res.bodyText);
                                         if(result.success){
