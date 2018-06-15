@@ -227,11 +227,13 @@
 </template>
 
 <script>
+	import axios from 'axios';
   import header1 from '../components/header.vue';
   import footer1 from '../components/footer.vue';
   import {Indicator} from 'mint-ui';
   import {Toast} from 'mint-ui';
   import {InfiniteScroll} from 'mint-ui';
+  import wx from 'weixin-js-sdk';
 
   export default {
     components: {header1, footer1},
@@ -246,7 +248,7 @@
         floors:0, //总楼层
         locat_floor:0, //所在楼层
         fjzt: "",
-        topic:'',
+        topic:'',//楼盘名称
 
         house_image1:[],
         house_image: [],
@@ -256,8 +258,8 @@
         fjcg: "",
         chx: "",
         wygs: '',//物业公司
-        zdh:'',
-        fybh:"",
+        zdh:'',//座栋
+        fybh:"",//房间编号
         wyf: '',//物业费
         kprq: '',//建成年代
         tcf: "",
@@ -443,6 +445,7 @@
               _this.wlgs = data.wlgs || '暂无数据';
               _this.lpdj = data.lpsort || '暂无数据';
 
+							this.fx_send();//微信分享调取
             }
 
             setTimeout(function(){
@@ -552,6 +555,62 @@
             Indicator.close();
         });
       },
+      wechat_share(){//微信分享
+      	const url = "http://omc.urskongjian.com/yhcms/web/weixin/share.do";
+      	var url_share = window.location.href;
+      	url_share = url_share.split('#')[0];
+      	console.log(url_share);
+				axios.post(url,{
+					"url":url_share
+	     }).then((res)=>{
+	        let we_cs = res.data;
+	        console.log(we_cs);	          
+					//微信签名调取
+					wx.config({
+					      debug: false, // 开启调试模式
+					      appId: we_cs.appId, // 必填，公众号的唯一标识
+					      timestamp: we_cs.timestamp, // 必填，生成签名的时间戳
+					      nonceStr: we_cs.nonceStr, // 必填，生成签名的随机串
+					      signature: we_cs.signature, // 必填，签名
+					      jsApiList: ["onMenuShareTimeline", "onMenuShareAppMessage", "onMenuShareQQ", "onMenuShareWeibo", "onMenuShareQZone", "getLocation", "scanQRCode", "closeWindow", "addCard", "chooseWxPay"]
+					});
+					
+	      }, (err)=>{
+					console.log(err);
+	      });
+      },
+      fx_send(){
+      	wx.ready(()=>{
+					wx.onMenuShareAppMessage({
+					    title: this.topic + '  ' + this.zdh + this.fybh, // 分享标题
+					    desc: "面积："+this.room_area + '     ' + "月租金："+ this.monthly_price, // 分享描述
+					    link: location.href,
+					    imgUrl: 'http://omc.urskongjian.com:81/yskjapp/shi_ion.png', // 分享图标
+					    type: 'link', // 分享类型,music、video或link，不填默认为link
+					    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+					    success: function () { 
+
+					    },
+					    
+					    cancel: function () { 
+
+					    }
+					});
+							
+					wx.onMenuShareTimeline({
+					    title: this.topic + '  ' + this.zdh + this.fybh, // 分享标题
+					    link: location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+					    imgUrl: 'http://omc.urskongjian.com:81/yskjapp/shi_ion.png', // 分享图标
+					    success: function () { 
+
+					    },
+					    cancel: function () { 
+					    	
+					    }
+					});
+				})
+      },
+      
     },
     mounted(){
      /* Indicator.open({
@@ -560,6 +619,8 @@
       });*/
       this.coole();
       this.getPerDetail();
+      this.wechat_share();//微信分享调用
+      
     }
   }
 </script>
