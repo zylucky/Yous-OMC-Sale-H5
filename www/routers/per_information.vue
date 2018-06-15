@@ -66,10 +66,11 @@
                     </div>
                     <span class=""><a style="background-color: rgb(123,198,249);border:1px solid rgb(123,198,249);color: white;padding:0.05rem;" href="javascript:;" @click="chang_phone">更换手机号</a></span>
                 </li>
-                <li class="clearfix">
-                    <span class="ys_tit" style="width: 1.5rem !important;">推荐人</span>
+                <li class="clearfix" style="margin-top: .2rem;">
+                    <span class="ys_tit" style="width: 1.7rem !important;">推荐人</span>
                     <div class="ys_item_con fl">
-                        <input type="text" name="yqma" value="" onkeyup="this.value=this.value.replace(/[^0-9a-zA-Z]/g,'')" v-model="tjperson" placeholder="请输入推荐人邀请码">
+                        <input v-if="tuijairestatus" type="text" name="yqma" @blur="tuijianre" value="" onkeyup="this.value=this.value.replace(/[^0-9a-zA-Z]/g,'')" v-model="tjperson" placeholder="请输入推荐人邀请码">
+                        <input v-else type="text" name="yqma" value="" onkeyup="this.value=this.value.replace(/[^0-9a-zA-Z]/g,'')" v-model="tjperson" placeholder="请输入推荐人邀请码">
                     </div>
                 </li>
                 <li class="clearfix">
@@ -189,6 +190,7 @@
                 company:'',
                 tjperson:'',
                 companyId:'',
+                tuijairestatus:true,
                 projectjy:false,
                 bindcompid:'',
                 sm:'',//佣金列表实名认证状态
@@ -575,9 +577,11 @@
                         this.fl = this.fmList.length;
                         if(data.saleName == ''){
                             //邀请码是输入状态
+                            this.tuijairestatus = true;
                         }else{
                             this.tjperson = data.saleName;
                             $('input[name=yqma]').attr('readonly','readonly');
+                            this.tuijairestatus = false;
                         }
                         this.statu = data.status2;
                     }else{
@@ -594,6 +598,27 @@
             },
             fanhui(){
                 window.history.go(-1);
+            },
+            //推荐人邀请码的验证
+            tuijianre(){
+                if(this.tjperson == ''){
+
+                }else{
+                    const url = this.$api + "/yhcms/web/wxqx/getInviteInfo.do";
+                    this.$http.post(url, {"saleNum":this.tjperson}).then((res)=> {
+                        Indicator.close();
+                        var result = JSON.parse(res.bodyText);
+                        if (result.success) {
+
+                        } else {
+                            Toast({
+                                message: result.message,
+                                position: 'bottom'
+                            });
+                        }
+                    });
+                }
+
             },
         },
         mounted(){

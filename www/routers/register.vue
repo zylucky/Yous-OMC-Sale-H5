@@ -68,7 +68,7 @@
                 <li class="clearfix">
                     <span class="ys_tit" style="width: 1.5rem !important;">推荐人</span>
                     <div class="ys_item_con fl">
-                        <input type="text" value="" onkeyup="this.value=this.value.replace(/[^0-9a-zA-Z]/g,'')" v-model="tjperson" placeholder="请输入推荐人邀请码">
+                        <input type="text" value="" @blur="tuijianre" onkeyup="this.value=this.value.replace(/[^0-9a-zA-Z]/g,'')" v-model="tjperson" placeholder="请输入推荐人邀请码">
                     </div>
                 </li>
                 <li class="clearfix">
@@ -535,6 +535,26 @@
                 });
 
 }
+            },
+            //推荐人邀请码的验证
+            tuijianre(){
+                if(this.tjperson == ''){
+
+                }else{
+                    const url = this.$api + "/yhcms/web/wxqx/getInviteInfo.do";
+                    this.$http.post(url, {"saleNum":this.tjperson}).then((res)=> {
+                        Indicator.close();
+                        var result = JSON.parse(res.bodyText);
+                        if (result.success) {
+
+                        } else {
+                            Toast({
+                                message: result.message,
+                                position: 'bottom'
+                            });
+                        }
+                    });
+                }
             },
             getInitData(){
                 this.$http.post(
