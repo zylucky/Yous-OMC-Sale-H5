@@ -327,19 +327,26 @@
                               Indicator.close();
                               var result = JSON.parse(res.bodyText);
                               if(result.success){*/
-                                  const user22 = JSON.parse(localStorage.getItem('cooknx'));
-                                  const _this = this, url1 = this.$api + "/yhcms/web/qduser/compareFy.do";
-                                  this.$http.post(url1, {"parameters":{"cookie":user22.sjs,"id":this.$route.query.house_id},"foreEndType":2,"code":"30000001"}).then((res)=>{
-                                      Indicator.close();
-                                      var result = JSON.parse(res.bodyText);
-                                      if(result.success){
-                                          this.colle = 1;//还没有收藏这个房源
-                                      }else{
-                                          this.colle = 2;
-                                      }
-                                  }, (res)=>{
-                                      Indicator.close();
-                                  });
+
+                                  //这里和main.js中的强制登录有关系
+                                  if(JSON.parse(localStorage.getItem('cooknx'))){
+                                      const user22 = JSON.parse(localStorage.getItem('cooknx'));
+                                      const _this = this, url1 = this.$api + "/yhcms/web/qduser/compareFy.do";
+                                      this.$http.post(url1, {"parameters":{"cookie":user22.sjs,"id":this.$route.query.house_id},"foreEndType":2,"code":"30000001"}).then((res)=>{
+                                          Indicator.close();
+                                          var result = JSON.parse(res.bodyText);
+                                          if(result.success){
+                                              this.colle = 1;//还没有收藏这个房源
+                                          }else{
+                                              this.colle = 2;
+                                          }
+                                      }, (res)=>{
+                                          Indicator.close();
+                                      });
+                                  }else{
+                                      this.colle = 1;
+                                  }
+
                               /*}else{
 
                               }
@@ -472,7 +479,8 @@
           this.$router.push({path: '/reser_page?house_id=' + this.$route.query.house_id});
       },
       Collectionss(){
-          /*const user = JSON.parse(localStorage.getItem('loginnx'));
+          //这里和main.js中的强制登录有关系
+          const user = JSON.parse(localStorage.getItem('loginnx'));
           if (!user) {
               next({ path: '/login' });
           }else{
@@ -492,7 +500,10 @@
                               }).then((res)=>{
                               Indicator.close();
                               var result = JSON.parse(res.bodyText);
-                              if(result.success){*/
+                              if(result.success){
+
+
+
                                   const user22 = JSON.parse(localStorage.getItem('cooknx'));
                                   const url = this.$api + "/yhcms/web/collecthouse/saveCollect.do";
                                   let that = this;
@@ -514,7 +525,11 @@
                                   }, (res)=>{
                                       Indicator.close();
                                   });
-                              /*}else{
+
+
+
+                                  //这里和main.js中的强制登录有关系
+                              }else{
 
                               }
                           }, (res)=>{
@@ -529,7 +544,7 @@
                   this.$router.push({path: '/login'});
                   //next();
               }
-          }*/
+          }
 
       },
       Collectionss2(){

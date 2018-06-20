@@ -258,12 +258,12 @@ router.beforeEach((to, from, next) => {
         _hmt.push(['_trackPageview'
             , '/#' + to.fullPath]);
     }
-    
+
        if(window.location.href.indexOf('from') !=-1){
          var url=window.location.href;
          //分享的链接
          var index1 = url.indexOf('?'),index2 = url.indexOf('#');
-      
+
          var url1=url.substring(0,index1-1),url2=url.substring(index2);
          var ul1=url1+"/"+url2;
          var ul=encodeURIComponent(ul1);
@@ -280,7 +280,7 @@ router.beforeEach((to, from, next) => {
              var r = window.location.search.substr(1).match(reg);
              if (r!=null)
                  {wxcode= r[2];
-      
+
                  }
            if(wxcode == null){
             var charString=window.location.href;
@@ -312,12 +312,13 @@ router.beforeEach((to, from, next) => {
                                            const head = data.headimgurl;
                                            localStorage.setItem('nxhead', JSON.stringify(head));
                                            next();
-      
+
                                        }
-      
+
                                        const user = JSON.parse(localStorage.getItem('cooknx'));
                                        if (!user && to.path != '/login') {
-                                           next({ path: '/login' });
+                                           // next({ path: '/login' });
+                                           next();
                                        }else  if (!user && to.path == '/login') {
                                            next();
                                        }else  if (user && to.path == '/login') {
@@ -348,14 +349,14 @@ router.beforeEach((to, from, next) => {
                                                        }, "json");
                                                }
                                            }else{
-                                               next({path: '/login'});
-                                               //next();
+                                               // next({path: '/login'});
+                                               next();
                                            }
                                        }
-      
-      
-      
-      
+
+
+
+
                                    }
                                    next();
                                } else {
@@ -366,9 +367,9 @@ router.beforeEach((to, from, next) => {
                            }else{
                                next();
                            }
-      
+
                            }
-      
+
                            else {
                                Toast({
                                    message: '获取状态失败:! 请稍候再试 ' + data.message,
@@ -388,61 +389,63 @@ router.beforeEach((to, from, next) => {
        }
 });
 
-/*router.beforeEach((to, from, next) => {
-//   路由发生变化修改页面title
-    if (to.meta.title) {
-      document.title = to.meta.title;
-    }
-    next();
-
-    if(to.path=='/register'||to.path=='/forgot_pwd'||to.path.indexOf('/reset_pwd')!=-1){
-        next();
-    }else{
-        next();
-        const user = JSON.parse(localStorage.getItem('loginnx'));
-        if (!user && to.path != '/login') {
-            next({ path: '/login' });
-        }else  if (!user && to.path == '/login') {
-            next();
-        }else  if (user && to.path == '/login') {
-            next();
-        }else{
-            if(user!=null) {
-                const time = user.time == null ? 0 : user.time, now = (new Date).getMilliseconds(), delta = now - time;
-                if (delta > 86400 * 3) {
-                    next({path: '/login'});
-                } else {
-                    const user22 = JSON.parse(localStorage.getItem('cooknx'));
-                    if(user22 != null){
-                    }else{
-                        next({path: '/login'});
-                    }
-                    $.post("http://omc.urskongjian.com/yhcms/web/qduser/getQdLogin.do", {
-                            "foreEndType": 2,
-                            "code": "300000045",
-                            "cookie": user22.sjs,
-                        },
-                        function (data) {
-                            next();
-                            if (data.success) {
-                            } else {
-                                if (data.userzt == 2) {
-                                    next({path: '/login'});
-                                } else {
-                                    next({path: '/login'});
-                                }
-                            }
-                            //alert(data); // John
-                        }, "json");
-                }
-            }else{
-                next({path: '/login'});
-                //next();
-            }
-        }
-
-    }
-});*/
+// router.beforeEach((to, from, next) => {
+// //   路由发生变化修改页面title
+//     if (to.meta.title) {
+//       document.title = to.meta.title;
+//     }
+//     next();
+//
+//     if(to.path=='/register'||to.path=='/forgot_pwd'||to.path.indexOf('/reset_pwd')!=-1){
+//         next();
+//     }else{
+//         next();
+//         const user = JSON.parse(localStorage.getItem('loginnx'));
+//         if (!user && to.path != '/login') {
+//             // next({ path: '/login' });
+//             next();
+//         }else  if (!user && to.path == '/login') {
+//             next();
+//         }else  if (user && to.path == '/login') {
+//             next();
+//         }else{
+//             if(user!=null) {
+//                 const time = user.time == null ? 0 : user.time, now = (new Date).getMilliseconds(), delta = now - time;
+//                 if (delta > 86400 * 3) {
+//                     next({path: '/login'});
+//                 } else {
+//                     const user22 = JSON.parse(localStorage.getItem('cooknx'));
+//                     if(user22 != null){
+//                     }else{
+//                         // next({path: '/login'});
+//                         next();
+//                     }
+//                     $.post("http://omc.urskongjian.com/yhcms/web/qduser/getQdLogin.do", {
+//                             "foreEndType": 2,
+//                             "code": "300000045",
+//                             "cookie": user22.sjs,
+//                         },
+//                         function (data) {
+//                             next();
+//                             if (data.success) {
+//                             } else {
+//                                 if (data.userzt == 2) {
+//                                     next({path: '/login'});
+//                                 } else {
+//                                     next({path: '/login'});
+//                                 }
+//                             }
+//                             //alert(data); // John
+//                         }, "json");
+//                 }
+//             }else{
+//                 // next({path: '/login'});
+//                 next();
+//             }
+//         }
+//
+//     }
+// });
 
 new Vue({
     el: '#app',
