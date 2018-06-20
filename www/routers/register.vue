@@ -16,7 +16,7 @@
         font-size: 14px !important;
     }
     /*.clearfix{line-height: 1 !important;}
-    .ys_tit{padding-top: 0.2rem;}*/
+    .ys_tit{padding-top: 0.2rem;}123*/
 </style>
 <style>
     .mint-cell-wrapper{
