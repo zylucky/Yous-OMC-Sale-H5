@@ -287,41 +287,48 @@ import axios from 'axios';
 			}
 		},
 		created(){
-			if(this.$store.state.tabzt != ''){//tab切换状态
-				this.tabq = this.$store.state.tabzt;
-			}
-			if(this.$store.state.page1 != ''){//当前数据页
-				this.page1 = this.$store.state.page1;
-			}
-			if(this.$store.state.page != ''){//当前数据页
-				this.page = this.$store.state.page;
-			}
-			if(this.$store.state.datas != ''){//当前tab数据
-				if(this.$route.query.resault == 'success'){
-					window.location.reload();
+			if(localStorage.getItem('back_page') == '/channel_list'){
+				if(!JSON.stringify(localStorage.getItem('cooknx')) || JSON.stringify(localStorage.getItem('cooknx')) == 'null'){
+					this.$router.push({path:'/login'});
 				}else{
-					this.pendData = this.$store.state.datas;					
+					if(this.$store.state.tabzt != ''){//tab切换状态
+						this.tabq = this.$store.state.tabzt;
+					}
+					if(this.$store.state.page1 != ''){//当前数据页
+						this.page1 = this.$store.state.page1;
+					}
+					if(this.$store.state.page != ''){//当前数据页
+						this.page = this.$store.state.page;
+					}
+					if(this.$store.state.datas != ''){//当前tab数据
+						if(this.$route.query.resault == 'success'){
+							window.location.reload();
+						}else{
+							this.pendData = this.$store.state.datas;					
+						}
+					}else{		
+						Indicator.open({
+						  text: 'Loading...',
+						  spinnerType: 'fading-circle'
+						});
+						this.init();	
+					}
+					if(this.$store.state.datas1 != ''){//
+						if(this.$route.query.resault == 'success'){
+							window.location.reload();
+						}else{
+							this.passData = this.$store.state.datas1;					
+						}
+					}else{
+						Indicator.open({
+						  text: 'Loading...',
+						  spinnerType: 'fading-circle'
+						});
+						this.init1();
+					}
 				}
-			}else{		
-				Indicator.open({
-				  text: 'Loading...',
-				  spinnerType: 'fading-circle'
-				});
-				this.init();	
 			}
-			if(this.$store.state.datas1 != ''){//
-				if(this.$route.query.resault == 'success'){
-					window.location.reload();
-				}else{
-					this.passData = this.$store.state.datas1;					
-				}
-			}else{
-				Indicator.open({
-				  text: 'Loading...',
-				  spinnerType: 'fading-circle'
-				});
-				this.init1();
-			}
+			
 		},
 		methods:{
 			init(){//待处理接口
