@@ -249,6 +249,11 @@ router.beforeEach((to, from, next) => {
     }else{
       next();
     }
+    if (to.path == '/channel_list') {//佣金管理
+		localStorage.setItem('back_page','/channel_list');
+//	  	alert('佣金管理');
+	  	next();
+	}
     // 统计代码
     if (from.name) {
         _hmt.push(['_trackPageview'
@@ -395,6 +400,11 @@ router.beforeEach((to, from, next) => {
 //       document.title = to.meta.title;
 //     }
 //     next();
+//		if (to.path == '/channel_list') {//佣金管理
+//			localStorage.setItem('back_page','/channel_list');
+////		  	alert('佣金管理');
+//		  	next();
+//		}
 //
 //     if(to.path=='/register'||to.path=='/forgot_pwd'||to.path.indexOf('/reset_pwd')!=-1){
 //         next();
