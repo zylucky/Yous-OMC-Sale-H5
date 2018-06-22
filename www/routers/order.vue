@@ -482,7 +482,8 @@
           //这里和main.js中的强制登录有关系
           const user = JSON.parse(localStorage.getItem('loginnx'));
           if (!user) {
-              next({ path: '/login' });
+//              next({ path: '/login' });
+              this.$router.push({path: '/login'});
           }else{
               if(user!=null) {
                   const time = user.time == null ? 0 : user.time, now = (new Date).getMilliseconds(), delta = now - time;
