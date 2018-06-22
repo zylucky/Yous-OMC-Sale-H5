@@ -365,7 +365,7 @@
               }
           }*/
       },
-      //获取某一办公楼详情
+      //获取某一办公楼详情123
       getPerDetail(){
         var _this = this;
         this.fyid = this.$route.query.house_id;
