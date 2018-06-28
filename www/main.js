@@ -337,7 +337,7 @@ router.beforeEach((to, from, next) => {
                                                    next();
                                                } else {
                                                    next();
-                                                   //没有强制登录时要把这块去掉
+                                                   //没有强制登录时要把这块去掉1
                                                    // $.post("http://omc.urskongjian.com/yhcms/web/qduser/getQdLogin.do", {
                                                    //         "foreEndType": 2,
                                                    //         "code": "300000045",
