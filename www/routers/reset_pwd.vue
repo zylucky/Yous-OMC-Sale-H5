@@ -2,7 +2,6 @@
     @import "../resources/css/reset.css";
     @import "../resources/css/base2.less";
     .pin{
-        //border:1px solid red;
         margin: 2.5rem;
         display: none;
     }
@@ -105,6 +104,7 @@
                             Indicator.close();
                             var result = JSON.parse(res.bodyText);
                             if (result.success) {
+                            	localStorage.removeItem('cooknx');
                                 Toast({
                                     message: '修改密码成功',
                                     position: 'bottom',

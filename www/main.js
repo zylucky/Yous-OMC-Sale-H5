@@ -80,11 +80,14 @@ var router = new VueRouter({
     mode: "hash",
     hashbang: false,
     routes: [
+    	{
+            path: '/index',
+            component: require('./routers/list.vue')
+        },
         {
             path: '/list',
             component: require('./routers/list.vue')
         },
-
         {
             path: '/jianwai',
             component: require('./routers/jianwai.vue')

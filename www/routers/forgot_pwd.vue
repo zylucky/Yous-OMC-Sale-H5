@@ -2,7 +2,6 @@
     @import "../resources/css/reset.css";
     @import "../resources/css/base2.less";
     .pin{
-        //border:1px solid red;
         margin: 2.5rem;
         display: none;
     }
@@ -17,36 +16,33 @@
                 <li class="clearfix pr" style="margin-top: 0.2rem;">
                     <span class="ys_tit w224"><i>*</i> 手机号：</span>
                     <div class="ys_item_con fl"">
-                    <input style="width: 53% !important;" type="number"  value="" v-model.trim="phone" placeholder="请输入手机号">
-                    <span id="example">
-                        <span v-if="sendMsgDisabled == 2"><a href="javascript:;">{{time+'秒后获取'}}</a></span>
-                        <span v-if="!sendMsgDisabled"><a href="javascript:;" style="background-color: rgb(123,198,249);border:1px solid rgb(123,198,249);color: white;padding:0.05rem;" @click="send">获取验证码</a></span>
-                        <span v-if="sendMsgDisabled == 3"><a href="javascript:;" style="background-color: rgb(123,198,249);border:1px solid rgb(123,198,249);color: white;padding:0.05rem;" @click="send">重新获取验证码</a></span>
-                    </span>
-        </div>
-
-        </li>
-        <li class="clearfix pr">
-            <span class="ys_tit w224"><i>*</i> 验证码：</span>
-            <div class="ys_item_con fl">
-                <input class="npwd" type="number" value="" v-model="verificode" placeholder="请输入验证码">
-            </div>
-        </li>
-        <div>
-            <span class="pin"></span>
-        </div>
-        </ul>
-        <a href="javascript:;" class="ys_default_btn mb80" @click="yzverificode">下一步</a>
-    </div>
+	                    <input style="width: 53% !important;" type="number"  value="" v-model.trim="phone" placeholder="请输入手机号">
+	                    <span id="example">
+	                        <span v-if="sendMsgDisabled == 2"><a href="javascript:;">{{time+'秒后获取'}}</a></span>
+	                        <span v-if="!sendMsgDisabled"><a href="javascript:;" style="background-color: rgb(123,198,249);border:1px solid rgb(123,198,249);color: white;padding:0.05rem;" @click="send">获取验证码</a></span>
+	                        <span v-if="sendMsgDisabled == 3"><a href="javascript:;" style="background-color: rgb(123,198,249);border:1px solid rgb(123,198,249);color: white;padding:0.05rem;" @click="send">重新获取验证码</a></span>
+	                    </span>
+			        </div>
+		        </li>
+		        <li class="clearfix pr">
+		            <span class="ys_tit w224"><i>*</i> 验证码：</span>
+		            <div class="ys_item_con fl">
+		                <input class="npwd" type="number" value="" v-model="verificode" placeholder="请输入验证码">
+		            </div>
+		        </li>
+		        <div>
+		            <span class="pin"></span>
+		        </div>
+        	</ul>
+        	<a href="javascript:;" class="ys_default_btn mb80" @click="yzverificode">下一步</a>
+    	</div>
     </div>
 </template>
 <script>
-
     import { Toast } from 'mint-ui'; //toast
     import { Indicator } from 'mint-ui';
     import crypto from 'crypto';
     import { MessageBox } from 'mint-ui'; //弹窗
-
     export default {
         data () {
             return {
@@ -69,7 +65,6 @@
                     if (result.success) {
                         var data = JSON.parse(res.bodyText).data;
                         console.log(data);
-
                     } else {
                         Toast({
                             message: result.message,
@@ -168,7 +163,6 @@
                                     position: 'bottom'
                                 });
                                 this.phone=null;
-
                             }
                         }, function (res) {
                             Indicator.close();
@@ -199,7 +193,6 @@
                     this.phone = null;
                     return false;
                 }
-
                   if(this.phone != ''){
                     const _this = this;
                     this.$http.post(
@@ -215,7 +208,6 @@
                         Indicator.close();
                         var result = JSON.parse(res.bodyText);
                         if (result.success) {      
-
                         } else {
                             Toast({
                                 message: result.message,
@@ -231,11 +223,9 @@
                         });
                     });
                 }
-
                 }
             },
             getverificode(){
-
             },
             //验证验证码
             yzverificode(){
@@ -277,7 +267,6 @@
                                 setTimeout(function(){
                                     _this.$router.push({path:'/reset_pwd/'+_this.phone});
                                 },1000);
-
                             }else{
                                 this.verificode = null;
                                 Toast({
@@ -296,7 +285,6 @@
                         duration: 1000
                     });
                 }
-
             },
             saveAreaMsg(){
                 if(this.phone != null && this.verificode != null){
@@ -317,7 +305,6 @@
                             setTimeout(function(){
                                 _this.$router.push({path:'/reset_pwd/'+_this.phone});
                             },1000);
-
                         } else {
                             Toast({
                                 message: result.message,
