@@ -103,8 +103,12 @@
                 "tsbq_all":[],
                 "ryzt":"",//人员状态的权限
                 "qxzt":"",//权限状态码
-                status:"",
+                "status":"",
+                "dlzt":'',//登陆状态
             }
+        },
+        created(){
+        	this.Collectionss();
         },
         computed:{
 
@@ -114,7 +118,7 @@
                 this.$router.push({path:'/login'});
             },
             modify_pwd(){
-                if(localStorage.getItem('cooknx')){
+                if(localStorage.getItem('cooknx') && this.dlzt == '6'){
                     this.$router.push({path:'/modify_pwd'});
                 }else{
                     this.$router.push({path:'/login'});
@@ -122,7 +126,7 @@
 
             },
             per_information(){
-                if(localStorage.getItem('cooknx')){
+                if(localStorage.getItem('cooknx') && this.dlzt == '6'){
                     this.$router.push({path:'/per_information'});
                 }else{
                     this.$router.push({path:'/login'});
@@ -130,7 +134,7 @@
 
             },
             my_collection(){
-                if(localStorage.getItem('cooknx')){
+                if(localStorage.getItem('cooknx') && this.dlzt == '6'){
                     this.$router.push({path:'/my_collection'});
                 }else{
                     this.$router.push({path:'/login'});
@@ -138,7 +142,7 @@
 
             },
             my_zhgl(){//帐户管理
-            	if(localStorage.getItem('cooknx')){
+            	if(localStorage.getItem('cooknx') && this.dlzt == '6'){
                     this.$router.push({
                     	path:'/income_number',
                     	query:{
@@ -366,7 +370,52 @@
                         position: 'bottom'
                     });
                 });
-            }
+            },
+            Collectionss(){
+	          //这里和main.js中的强制登录有关系
+	          const user = JSON.parse(localStorage.getItem('cooknx'));
+	          if (!user) {
+	//              next({ path: '/login' });
+//	              this.$router.push({path: '/login'});
+	          }else{
+	              if(user!=null) {
+	                   const time = user.sjs == null ? 0 : user.sjs, now = new Date().getTime() , delta = now - time;
+                  	   if (delta > 86400 * 1000 * 30) {
+//                	   if (delta > 60 * 1000) {
+	                      //next({path: '/login'});
+//	                      this.$router.push({path: '/login'});
+						localStorage.removeItem('cooknx');
+	                   } else {
+	                      const user22 = JSON.parse(localStorage.getItem('cooknx'));
+	                      if(user22 != null){
+	                          const urlll = this.$api + "/yhcms/web/qduser/getQdLogin.do";
+	                          this.$http.post(urlll, {
+	                                  "foreEndType": 2,
+	                                  "code": "300000045",
+	                                  "cookie": user22.sjs,
+	                              }).then((res)=>{
+	                              Indicator.close();
+	                              var result = JSON.parse(res.bodyText);
+	                              if(result.success){
+	                              	this.dlzt = '6';//登陆成功
+	                              }else{
+	
+	                              }
+	                          }, (res)=>{
+	                              Indicator.close();
+	                          });
+	                      }else{
+	                          this.$router.push({path: '/login'});
+	                      }
+	                  }
+	              }else{
+	                  //next({path: '/login'});
+	                  this.$router.push({path: '/login'});
+	                  //next();
+	              }
+	          }
+	
+	      },
 
         },
         mounted(){

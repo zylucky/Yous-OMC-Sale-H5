@@ -480,15 +480,17 @@
       },
       Collectionss(){
           //这里和main.js中的强制登录有关系
-          const user = JSON.parse(localStorage.getItem('loginnx'));
+          const user = JSON.parse(localStorage.getItem('cooknx'));
           if (!user) {
 //              next({ path: '/login' });
               this.$router.push({path: '/login'});
           }else{
               if(user!=null) {
-                  const time = user.time == null ? 0 : user.time, now = (new Date).getMilliseconds(), delta = now - time;
-                  if (delta > 86400 * 3) {
+                  const time = user.sjs == null ? 0 : user.sjs, now = new Date().getTime() , delta = now - time;
+                  if (delta > 86400 * 1000 * 30) {
+//                if (delta > 60 * 1000) {
                       //next({path: '/login'});
+                      localStorage.removeItem('cooknx');
                       this.$router.push({path: '/login'});
                   } else {
                       const user22 = JSON.parse(localStorage.getItem('cooknx'));
@@ -502,9 +504,6 @@
                               Indicator.close();
                               var result = JSON.parse(res.bodyText);
                               if(result.success){
-
-
-
                                   const user22 = JSON.parse(localStorage.getItem('cooknx'));
                                   const url = this.$api + "/yhcms/web/collecthouse/saveCollect.do";
                                   let that = this;
@@ -526,9 +525,6 @@
                                   }, (res)=>{
                                       Indicator.close();
                                   });
-
-
-
                                   //这里和main.js中的强制登录有关系
                               }else{
 
@@ -549,27 +545,65 @@
 
       },
       Collectionss2(){
-        const user22 = JSON.parse(localStorage.getItem('cooknx'));
-        const url = this.$api + "/yhcms/web/collecthouse/cancelCollect.do";
-        let that = this;
-        this.$http.post(url, {"cookie":user22.sjs,"fyid":this.$route.query.house_id}).then((res)=>{
-            Indicator.close();
-            var result = JSON.parse(res.bodyText);
-            if(result.success){
-                this.colle = 1;
-                Toast({
-                    message: '取消收藏房源成功！',
-                    position: 'bottom'
-                });
-            }else{
-                Toast({
-                    message: result.message,
-                    position: 'bottom'
-                });
-            }
-        }, (res)=>{
-            Indicator.close();
-        });
+      	const user = JSON.parse(localStorage.getItem('cooknx'));
+          if (!user) {
+            this.$router.push({path: '/login'});
+          }else{
+          	if(user!=null) {
+          		const time = user.sjs == null ? 0 : user.sjs, now = new Date().getTime() , delta = now - time;
+                  if (delta > 86400 * 1000 * 30) {
+//                if (delta > 60 * 1000) {
+											localStorage.removeItem('cooknx');
+                      this.$router.push({path: '/login'});
+                  } else {
+                  	
+                      const user22 = JSON.parse(localStorage.getItem('cooknx'));
+                      if(user22 != null){
+                          const urlll = this.$api + "/yhcms/web/qduser/getQdLogin.do";
+                          this.$http.post(urlll, {
+                                  "foreEndType": 2,
+                                  "code": "300000045",
+                                  "cookie": user22.sjs,
+                              }).then((res)=>{
+                              Indicator.close();
+                              var result = JSON.parse(res.bodyText);
+                              if(result.success){
+                              	const user22 = JSON.parse(localStorage.getItem('cooknx'));
+												        const url = this.$api + "/yhcms/web/collecthouse/cancelCollect.do";
+												        let that = this;
+												        this.$http.post(url, {"cookie":user22.sjs,"fyid":this.$route.query.house_id}).then((res)=>{
+												            Indicator.close();
+												            var result = JSON.parse(res.bodyText);
+												            if(result.success){
+												                this.colle = 1;
+												                Toast({
+												                    message: '取消收藏房源成功！',
+												                    position: 'bottom'
+												                });
+												            }else{
+												                Toast({
+												                    message: result.message,
+												                    position: 'bottom'
+												                });
+												            }
+												        }, (res)=>{
+												            Indicator.close();
+												        });
+                              }else{
+
+                              }
+                          }, (res)=>{
+                              Indicator.close();
+                          });
+                      }else{
+                          this.$router.push({path: '/login'});
+                      }
+                  
+                  }
+          	}else{
+          		this.$router.push({path: '/login'});
+          	}
+          }
       },
       wechat_share(){//微信分享
       	const url = "http://omc.urskongjian.com/yhcms/web/weixin/share.do";
@@ -636,7 +670,6 @@
       this.coole();
       this.getPerDetail();
       this.wechat_share();//微信分享调用
-      
     }
   }
 </script>

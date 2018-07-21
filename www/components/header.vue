@@ -150,6 +150,7 @@ import axios from 'axios';
           userid:'',//用户id
           newData:[],//消息通知数据
           status:0,
+          dlzt:''
       };
     },
     created(){
@@ -162,6 +163,7 @@ import axios from 'axios';
     		this.newshow = false;
     	}
       this.takeid();
+      this.Collectionss();
     },
     methods: {
       takeid(){//获取用户id
@@ -342,6 +344,51 @@ import axios from 'axios';
           }
           localStorage.removeItem("xzfystatus1");
       },
+      Collectionss(){
+	          //这里和main.js中的强制登录有关系
+	          const user = JSON.parse(localStorage.getItem('cooknx'));
+	          if (!user) {
+	//              next({ path: '/login' });
+//	              this.$router.push({path: '/login'});
+	          }else{
+	              if(user!=null) {
+	                   const time = user.sjs == null ? 0 : user.sjs, now = new Date().getTime() , delta = now - time;
+                  	   if (delta > 86400 * 1000 * 30) {
+//                	   if (delta > 60 * 1000) {
+	                      //next({path: '/login'});
+//	                      this.$router.push({path: '/login'});
+													localStorage.removeItem('cooknx');
+	                   } else {
+	                      const user22 = JSON.parse(localStorage.getItem('cooknx'));
+	                      if(user22 != null){
+	                          const urlll = this.$api + "/yhcms/web/qduser/getQdLogin.do";
+	                          this.$http.post(urlll, {
+	                                  "foreEndType": 2,
+	                                  "code": "300000045",
+	                                  "cookie": user22.sjs,
+	                              }).then((res)=>{
+	                              Indicator.close();
+	                              var result = JSON.parse(res.bodyText);
+	                              if(result.success){
+	                              	this.dlzt = '6';//登陆成功
+	                              }else{
+	
+	                              }
+	                          }, (res)=>{
+	                              Indicator.close();
+	                          });
+	                      }else{
+	                          this.$router.push({path: '/login'});
+	                      }
+	                  }
+	              }else{
+	                  //next({path: '/login'});
+	                  this.$router.push({path: '/login'});
+	                  //next();
+	              }
+	          }
+	
+	      },
       list(){
         if(window.location.href.indexOf("list") != -1 || window.location.href.indexOf("index") != -1 || window.location.href.lastIndexOf("/") != -1){
             $('.sidenav').animate({
@@ -385,7 +432,7 @@ import axios from 'axios';
 				this.$store.state.datas = '';//数据
 				this.$store.state.datas1 = '';//数据
       	 
-         if(localStorage.getItem('cooknx')){
+         if(localStorage.getItem('cooknx') && this.dlzt == '6'){
               $("#zhezhao").remove();
               $('html').removeAttr("style");
               $("body").removeAttr("style");
@@ -483,7 +530,7 @@ import axios from 'axios';
     mounted: function () {
       var _this = this;
 
-      if(localStorage.getItem('usernx')){
+      if(localStorage.getItem('usernx') && localStorage.getItem('cooknx')){
           this.userif = true;
           this.tuichu = true;
           let user = JSON.parse(localStorage.getItem('usernx'));
