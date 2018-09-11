@@ -80,11 +80,14 @@ var router = new VueRouter({
     mode: "hash",
     hashbang: false,
     routes: [
+    	{
+            path: '/index',
+            component: require('./routers/list.vue')
+        },
         {
             path: '/list',
             component: require('./routers/list.vue')
         },
-
         {
             path: '/jianwai',
             component: require('./routers/jianwai.vue')
@@ -337,7 +340,7 @@ router.beforeEach((to, from, next) => {
                                                    next();
                                                } else {
                                                    next();
-                                                   //没有强制登录时要把这块去掉
+                                                   //没有强制登录时要把这块去掉1
                                                    // $.post("http://omc.urskongjian.com/yhcms/web/qduser/getQdLogin.do", {
                                                    //         "foreEndType": 2,
                                                    //         "code": "300000045",
@@ -425,7 +428,7 @@ router.beforeEach((to, from, next) => {
 //             if(user!=null) {
 //                 const time = user.time == null ? 0 : user.time, now = (new Date).getMilliseconds(), delta = now - time;
 //                 if (delta > 86400 * 3) {
-//                     next({path: '/login'});
+////                     next({path: '/login'});
 //                 } else {
 //                     const user22 = JSON.parse(localStorage.getItem('cooknx'));
 //                     if(user22 != null){
@@ -433,7 +436,7 @@ router.beforeEach((to, from, next) => {
 //                         // next({path: '/login'});
 //                         next();
 //                     }
-//                     $.post("http://omc.urskongjian.com/yhcms/web/qduser/getQdLogin.do", {
+//                     $.post("http://116.62.68.26:8080/yhcms/web/qduser/getQdLogin.do", {
 //                             "foreEndType": 2,
 //                             "code": "300000045",
 //                             "cookie": user22.sjs,
@@ -443,9 +446,9 @@ router.beforeEach((to, from, next) => {
 //                             if (data.success) {
 //                             } else {
 //                                 if (data.userzt == 2) {
-//                                     next({path: '/login'});
+////                                     next({path: '/login'});
 //                                 } else {
-//                                     next({path: '/login'});
+////                                     next({path: '/login'});
 //                                 }
 //                             }
 //                             //alert(data); // John
