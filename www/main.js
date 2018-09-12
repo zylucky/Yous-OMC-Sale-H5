@@ -20,7 +20,7 @@ Vue.use(MintUI);
 //生产
 Vue.prototype.$api = "http://omc.urskongjian.com" //api地址
 Vue.prototype.$export = "http://omc.urskongjian.com" //导出
-Vue.prototype.$prefix = "http://47.92.145.21:81" //图片前缀
+Vue.prototype.$prefix = "http://47.92.6.78:81" //图片前缀
 
 //测试
 // Vue.prototype.$api = "http://116.62.68.26:8080" //api地址116的地址ip
@@ -428,7 +428,7 @@ router.beforeEach((to, from, next) => {
 //             if(user!=null) {
 //                 const time = user.time == null ? 0 : user.time, now = (new Date).getMilliseconds(), delta = now - time;
 //                 if (delta > 86400 * 3) {
-////                     next({path: '/login'});
+// //                     next({path: '/login'});
 //                 } else {
 //                     const user22 = JSON.parse(localStorage.getItem('cooknx'));
 //                     if(user22 != null){
@@ -446,9 +446,9 @@ router.beforeEach((to, from, next) => {
 //                             if (data.success) {
 //                             } else {
 //                                 if (data.userzt == 2) {
-////                                     next({path: '/login'});
+// //                                     next({path: '/login'});
 //                                 } else {
-////                                     next({path: '/login'});
+// //                                     next({path: '/login'});
 //                                 }
 //                             }
 //                             //alert(data); // John

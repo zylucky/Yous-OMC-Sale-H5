@@ -43,6 +43,7 @@
     margin-right: .3rem;
     margin-top: .3rem;
   }
+  .fjldcss{margin-top: .3rem;}
 </style>
 <template>
   <div>
@@ -195,6 +196,10 @@
           <span>供&nbsp;&nbsp;暖&nbsp;&nbsp;费：<i v-text="gnf" style="color: #5b5b5b;"></i></span>
           <span class="row">网络公司：<i v-text="wlgs" style="color: #5b5b5b;"></i></span>
         </div>
+        <div class="weixin_head clearfix">
+          <span class="fjldcss" style="width: 100% !important;">房间亮点：</span>
+          <span v-text="fangjlidian" style="width: 100% !important;"></span>
+        </div>
         <!--<div class="weixin_head gift clearfix">
           <span class="row">礼品等级：<i v-text="lpdj"></i></i></span>
         </div>-->
@@ -204,6 +209,7 @@
             <span>联系方式：<a :href="'tel:' + phone"><i class="con_telephone" v-text="phone"></i></a></span>
           </div>
         </div>
+
       </div>
       <div v-if="colle == 1" class="tel-order clearfix" style="width: 40% !important;left: 0%;" @click="Collectionss">
         <a id="semwaploupanxiangqingdibu400" href="javascript:;" class="phone--tel-order">
@@ -272,6 +278,7 @@
         property: {"1":"写字楼", "2":"公寓","3":"商务楼","4":"住宅","5":"商业","6":"酒店","7":"综合","8":"别墅","9":"商业综合体","10":"酒店式公寓"},
         Collection:true,
         colle:1,
+        fangjlidian:"",
 
       }
     },
@@ -383,6 +390,7 @@
           Indicator.close();
           if (result.success) {
               const data = result.data[0];
+              _this.fangjlidian = !result.data1.roomBrightSpot ? '暂无数据' : result.data1.roomBrightSpot;
               $('title').html(result.data[0].topic);
               _this.daily_price = !data.dj ? '暂无数据' : data.dj + '元/㎡/天';
               _this.monthly_price = !data.yzj ? '暂无数据' : data.yzj + '元/月';

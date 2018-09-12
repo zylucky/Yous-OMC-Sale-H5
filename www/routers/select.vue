@@ -246,14 +246,14 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
           infinite-scroll-disabled="loading"
           infinite-scroll-distance="100"
           infinite-scroll-immediate-check="checked" class="clearfix" style="height: 55em;" id="zhezcly">
-          <li @click.stop.prevent="makeSelect" :rel="item.id" class="ys_listcon pv15 clearfix" :class="{'linked': select.indexOf(item.id) > -1}" v-for="item in resultData">
+          <li style="display: flex;align-items: center;" @click.stop.prevent="makeSelect" :rel="item.id" class="ys_listcon pv15 clearfix" :class="{'linked': select.indexOf(item.id) > -1}" v-for="item in resultData">
               <div v-if="item.djbsh == 1" class="cell" :class="{'dingjin': item.djbsh==1}">
                 <span>{{item.topic}}</span>
               </div>
               <div v-else class="cell" :class="{'new': item.bsh==1}">
                 <span>{{item.topic}}</span>
               </div>
-              <div class="cell">
+              <div class="cell" style="text-overflow: ellipsis;overflow: hidden;">
                 <span v-if="item.zdh.indexOf('独栋') > -1"><label v-if="item.decoration_level == '预租房'">即将上线</label><label v-else>{{item.fybh}}</label></span>
                 <span v-else><label v-if="item.decoration_level == '预租房'">即将上线</label><label v-else>{{item.zdh}} - {{item.fybh}}</label></span>
               </div>

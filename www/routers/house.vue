@@ -106,7 +106,7 @@
               </ul>
             </section>
 
-            <div class="wacfc" v-if="xzfystatus == ''" @click="yzfydj">
+            <!--<div class="wacfc" v-if="xzfystatus == ''" @click="yzfydj">
               <div class="fuc">
                 <div style="color: white;">预租<br/>房源</div>
               </div>
@@ -115,7 +115,7 @@
               <div class="fuc">
                 <div style="color: white;">精选<br/>房源</div>
               </div>
-            </div>
+            </div>-->
             <!--筛选条件标题结束-->
 
             <!--筛选条件内容start-->
