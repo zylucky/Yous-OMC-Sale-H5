@@ -43,4 +43,4 @@ export default new Vuex.Store({
 			state.smcode = obj;
 		}
 	}
-})
+});

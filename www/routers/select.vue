@@ -64,7 +64,7 @@ li.ys_listcon:not(:last-child){border-bottom: 1px solid #DCDCDC}
       <a class="export" href="#" @click.stop.prevent="exportExcel"><img src="../resources/images/icons/down.png"></a>
     </section>
     <a href="javascript:;" class="detail-search" style="position: fixed;left: 0; top: 0;border-radius: 0.1rem;">
-      <input type="text" id="keyword" placeholder="请输入楼盘关键字搜索" v-model.trim="para.search_keywork" maxlength="50"
+      <input type="text" id="keyword" placeholder="区域/写字楼名称/房间号" v-model.trim="para.search_keywork" maxlength="50"
              @focus="changeRou">
     </a>
     <section class="section"

@@ -318,7 +318,9 @@ router.beforeEach((to, from, next) => {
                                        }else{
                                            //存微信的头像
                                            const head = data.headimgurl;
+                                           const opid = data.openid;
                                            localStorage.setItem('nxhead', JSON.stringify(head));
+                                           localStorage.setItem('nxopenid', JSON.stringify(opid));
                                            next();
 
                                        }

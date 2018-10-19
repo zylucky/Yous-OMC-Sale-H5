@@ -200,6 +200,15 @@
           <span class="fjldcss" style="width: 100% !important;">房间亮点：</span>
           <span v-text="fangjlidian" style="width: 100% !important;"></span>
         </div>
+        <div class="weixin_head clearfix">
+          <span class="fjldcss" style="width: 100% !important;">房间动态：</span>
+          <div>
+            <span style="display: flex;justify-content: center;">房间带看（次）</span>
+            <span style="display: flex;justify-content: center;">房间收藏（人）</span>
+            <span style="display: flex;justify-content: center;color: rgb(91, 91, 91);" v-text="fjdkcshu"></span>
+            <span style="display: flex;justify-content: center;color: rgb(91, 91, 91);" v-text="fjscrenshu"></span>
+          </div>
+        </div>
         <!--<div class="weixin_head gift clearfix">
           <span class="row">礼品等级：<i v-text="lpdj"></i></i></span>
         </div>-->
@@ -268,6 +277,8 @@
         fybh:"",//房间编号
         wyf: '',//物业费
         kprq: '',//建成年代
+        fjdkcshu:'',
+        fjscrenshu:'',
         tcf: "",
         wlgs: "",
         gnf: "",
@@ -404,7 +415,8 @@
                   _this.wyf = !data.wyf ? '暂无数据' : data.wyf + '元/㎡/月'; //物业费
               }
 
-
+              _this.fjdkcshu = result.dkcount == 0 ? '暂无数据' : result.dkcount;
+              _this.fjscrenshu = result.sccount == 0 ? '暂无数据' : result.sccount;
               _this.wygs = data.wygs || '暂无数据';
               _this.fjcg = !data.fjcg ? '暂无数据' : data.fjcg + "m";
               _this.fjzt = data.fjzt || '暂无数据';

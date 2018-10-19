@@ -135,11 +135,11 @@
     <div class="search">
       <div id="s-header">
           <a href="javascript:void(0);" class="search-text">
-            <input type="text" id="keyword" placeholder="请输入楼盘关键字搜索" maxlength="50" v-model.trim="search_keyword" autofocus="autofocus" @keyup.enter="find">
+            <input type="text" class="keywords" id="keyword" placeholder="区域/写字楼名称/房间号" maxlength="50" v-model.trim="search_keyword" autofocus="autofocus" @keyup.enter="find">
             <i class="sbtn" @click="toList2"></i>
           </a>
         <a href="javascript:void(0);" class="close-icon" @click="toList">
-            <img src="http://img2.static.uban.com/www/images/xuan-close_1.png" alt="">
+            <img src="../resources/images/xuan-close_1.png" alt="">
         </a>
       </div>
       <div class="more-house">
@@ -149,7 +149,7 @@
             <li v-for="item in hotArray" @click="toListw(item.name)">{{item.name}}</li>
           </ul>
         </div>
-        <!--<div class="pr history-out">
+        <div class="pr history-out">
           <h3 class="more-house-title mt10 mb15">历史搜索</h3>
           <a href="javascript:;" class="del-btn" @click="clearHistoty">
             <img src="../resources/images/list/del-icon.png" alt="清除">
@@ -157,7 +157,7 @@
           <ul class="search-list clearfix historyArray">
             <li v-for="item in historyArray" @click="toListw(item.name)">{{item.name}}</li>
           </ul>
-        </div>-->
+        </div>
         <ul class="result-search">
           <li class="clearfix">
             <span class="ellipsis">北京万达广场</span>
@@ -243,29 +243,42 @@
     data () {
       return {
         search_keyword:'',
-        historyArray:[
-          {name:"望京soho"},
-          {name:"盈科中心"},
-          {name:"万达广场"},
-          {name:"银河soho"},
-        ],
+        historyArray:[],
         hotArray:[
           {name:"建外SOHO"},
           {name:"住邦2000"},
           {name:"万达广场"}
         ],
         resultData: [],
-        r: ""
+        histjilu:[],
+        array:[],
+        r: "",
+        openid:333,
+        searchtype:'',
       }
     },
-    created:function(){
-        var history = localStorage.getItem("historyData");
-        if(history){
-          this.historyArray = JSON.parse(history);
-        }
+    created(){
+        this.histylishi();
+
     },
     mounted(){
-      this.init()
+        this.init();
+        var that = this;
+        $(".keywords").on('keypress',function(e) {
+            var keycode = e.keyCode;
+            var searchName = $(this).val();
+            if(keycode=='13') {
+                e.preventDefault();
+                //请求搜索接口  
+                that.changeHistory(searchName);
+            }
+        });
+        if(this.r == 'house' || this.r == 'select'){
+
+        }else{
+            $(".keywords").attr('placeholder','请输入楼盘关键字搜索');
+        }
+
     },
     methods:{
       init(){
@@ -276,24 +289,151 @@
         axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
         const r = this.$route.query.r;
         this.r = !r ? "" : r;
+
+      },
+      histylishi(){
+          //历史记录的判断
+//          this.openid = JSON.parse(localStorage.getItem("nxopenid"));
+          var that = this;
+          if(localStorage.getItem('cooknx')){
+              //已经登录状态
+              var er = that.$route.query.r;
+              if(er == 'house'){
+                  that.searchtype = '精选房源';
+              }else if(er == 'select'){
+                  that.searchtype = '今日销控';
+              }else{
+                  that.searchtype = '楼盘列表';
+              }
+              const url = that.$api + "/yhcms/web/jcsj/getHistory.do";
+
+              that.$http.post(url,{
+                  "openid":this.openid,"sourcetype":"微信公众号","searchtype":that.searchtype
+              }).then((res)=>{
+                  Indicator.close()
+                  const data = JSON.parse(res.bodyText).data;
+                  that.array = data;
+//                      for(var i=0;i<that.array.length;i++){
+//                          that.historyArray[i] = {"name":that.array[i].topic};
+//                      }
+                  let fp = that.array.map((item, idx)=>{
+                      return {"name": item.topic};
+                  });
+                  that.historyArray = fp;
+//                      console.log(fp);
+//                      alert(JSON.stringify(that.historyArray));
+              }, (res)=>{
+                  Indicator.close();
+              });
+          }else{
+              //未登录状态
+              var er = that.$route.query.r;
+              if(er == 'house' || er == 'select'){
+                  if(localStorage.getItem("historyData")){
+                      var hoslidata = JSON.parse(localStorage.getItem("historyData")).split('-');
+                      that.array = JSON.parse(localStorage.getItem("historyData")).split('-');
+                      for(var i=0;i<hoslidata.length;i++){
+                          that.historyArray[i] = {name:hoslidata[i]};
+                      }
+                  }
+              }else{
+                  if(localStorage.getItem("historyDataList")){
+                      var hoslidata = JSON.parse(localStorage.getItem("historyDataList")).split('-');
+                      that.array = JSON.parse(localStorage.getItem("historyDataList")).split('-');
+                      for(var i=0;i<hoslidata.length;i++){
+                          that.historyArray[i] = {name:hoslidata[i]};
+                      }
+                  }
+              }
+          }
       },
       clearHistoty:function(){
            this.historyArray = [];
-           localStorage.removeItem("historyData");
+           if(localStorage.getItem('cooknx')){
+               const url = this.$api + "/yhcms/web/jcsj/delHistory.do";
+               this.$http.post(url,{
+                   "openid":this.openid,"searchtopic":"","sourcetype":"微信公众号","searchtype":this.searchtype
+               }).then((res)=>{
+                   Indicator.close()
+               }, (res)=>{
+                   Indicator.close();
+               });
+           }else{
+               if(this.r == 'house' || this.r == 'select'){
+                   localStorage.removeItem("historyData");
+               }else{
+                   localStorage.removeItem("historyDataList");
+               }
+
+           }
+
       },
       changeHistory:function(arg){
-           this.historyArray.unshift({name:arg});
-           localStorage.setItem("historyData",JSON.stringify(this.hotArray));
+          if(localStorage.getItem('cooknx')){
+              const url = this.$api + "/yhcms/web/jcsj/saveHistory.do";
+              axios.post(url,{
+              "openid":this.openid,"searchtopic":arg,"sourcetype":"微信公众号","searchtype":this.searchtype
+              }).then((res)=>{
+                  Indicator.close()
+              }, (res)=>{
+                  Indicator.close();
+              });
+          }else{
+              this.histjilu.push(arg);
+              if(this.r == 'house' || this.r == 'select'){
+                  if(localStorage.getItem("historyData")){
+                      localStorage.removeItem("historyData");
+                      var c = this.histjilu.concat(this.array);
+                      //数组去重
+                      var temp = []; //一个新的临时数组
+                      for(var i = 0; i < c.length; i++){
+                          if(temp.indexOf(c[i]) == -1){
+                              temp.push(c[i]);
+                          }
+                      }
+
+                      if(temp.length > 5){
+                          temp = temp.slice(0,5);
+                      }
+                      this.histjilu = temp;
+                      localStorage.setItem("historyData",JSON.stringify(this.histjilu.join('-')));
+                  }else{
+                      localStorage.setItem("historyData",JSON.stringify(this.histjilu.join('-')));
+                  }
+              }else{
+                  if(localStorage.getItem("historyDataList")){
+                      localStorage.removeItem("historyDataList");
+                      var c = this.histjilu.concat(this.array);
+                      //数组去重
+                      var temp = []; //一个新的临时数组
+                      for(var i = 0; i < c.length; i++){
+                          if(temp.indexOf(c[i]) == -1){
+                              temp.push(c[i]);
+                          }
+                      }
+
+                      if(temp.length > 5){
+                          temp = temp.slice(0,5);
+                      }
+                      this.histjilu = temp;
+                      localStorage.setItem("historyDataList",JSON.stringify(this.histjilu.join('-')));
+                  }else{
+                      localStorage.setItem("historyDataList",JSON.stringify(this.histjilu.join('-')));
+                  }
+              }
+
+          }
+
+          this.historyArray.unshift({name:arg});
       },
       toList:function(){
         this.$router.push({path: '/' + this.r});
           //history.go(-1);
       },
       toList2:function(){
-        if(this.search_keyword){
+        if(this.search_keyword != ""){
              this.changeHistory(this.search_keyword);
         }
-
         this.$router.push({path: '/' + this.r, query: {keyword: this.search_keyword}});
       },
       find:function(){
@@ -304,11 +444,14 @@
         this.$router.push({path: '/' + this.r, query: {keyword: this.search_keyword}});
       },
       toListw:function(k){
+        this.changeHistory(k);
         this.$router.push({path: '/' + this.r, query: {keyword:k}});
       },
       closeFilter:function(){
         this.currentFilterTab='nth';
-      }
+      },
+
+
     }
   }
 </script>
