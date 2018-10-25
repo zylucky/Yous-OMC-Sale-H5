@@ -62,8 +62,8 @@
         <div id="slideBox" class="slideBox">
           <div class="swiper-container">
             <div class="swiper-wrapper">
-              <div class="swiper-slide" v-for="image in building_images">
-                <a href="javascript:;" @click="enlarge">
+              <div class="swiper-slide" v-for="(image,index) in building_images">
+                <a href="javascript:;" @click="see_img(image,index)">
                   <img :src="$prefix + '/' + image" alt="">
                 </a>
               </div>
@@ -203,8 +203,8 @@
         <div id="slideBox" class="slideBox">
           <div class="swiper-container">
             <div class="swiper-wrapper">
-              <div class="swiper-slide" v-for="image in building_images">
-                <span @click="enlarge">
+              <div class="swiper-slide" v-for="(image,index) in building_images">
+                <span @click="see_img(image,index)">
                   <img :src="$prefix + '/' + image" alt="">
                 </span>
               </div>
@@ -292,6 +292,19 @@
           $("body").css({"overflow":"hidden"});
           $("html").css({"overflow":"hidden"});
           this.large = true;
+      },
+      see_img(item,index) {
+          var _this = this;
+          var url_img = []; //图片列表
+          for (var i = 0; i < _this.building_images.length; i++) {
+              url_img.push(_this.$prefix +'/'+ _this.building_images[i]);
+          }
+          wx.ready(function() {
+              wx.previewImage({
+                  current: _this.$prefix +'/'+item,
+                  urls: url_img
+              });
+          });
       },
       //获取筛选条件
       getSortList(){
@@ -558,7 +571,7 @@
 					      timestamp: we_cs.timestamp, // 必填，生成签名的时间戳
 					      nonceStr: we_cs.nonceStr, // 必填，生成签名的随机串
 					      signature: we_cs.signature, // 必填，签名
-					      jsApiList: ["onMenuShareTimeline", "onMenuShareAppMessage", "onMenuShareQQ", "onMenuShareWeibo", "onMenuShareQZone", "getLocation", "scanQRCode", "closeWindow", "addCard", "chooseWxPay"]
+					      jsApiList: ["onMenuShareTimeline", "onMenuShareAppMessage", "onMenuShareQQ", "onMenuShareWeibo", "onMenuShareQZone", "getLocation", "scanQRCode", "closeWindow", "addCard", "chooseWxPay","chooseImage", "previewImage", "uploadImage", "downloadImage", "getLocalImgData"]
 					});
 					
 	      }, (err)=>{

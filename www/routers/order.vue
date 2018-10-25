@@ -56,7 +56,7 @@
           <div class="swiper-container">
             <div class="swiper-wrapper" style="position: relative;">
               <div class="swiper-slide" v-for="(image,index) in house_image">
-                <a href="javascript:;" @click="enlarge">
+                <a href="javascript:;" @click="see_img(image,index)">
                   <img v-if="image && index > 0" :src="$prefix + '/' + image" alt="">
                   <img v-else-if="image && index == 0" :src="image" alt="">
                   <img v-else :src="$prefix + '/upload/2017-08-27/6404b4de960b81fc5403c870aefcea34.png'" alt="">
@@ -94,7 +94,7 @@
           <div class="swiper-container">
             <div class="swiper-wrapper" style="position: relative;">
               <div class="swiper-slide" v-for="(image,index) in house_image">
-                <a href="javascript:;" @click="enlarge">
+                <a href="javascript:;" @click="see_img(image,index)">
                   <img v-if="image" :src="$prefix + '/' + image" alt="">
                   <img v-else :src="$prefix + '/upload/2017-08-27/6404b4de960b81fc5403c870aefcea34.png'" alt="">
                 </a>
@@ -294,6 +294,20 @@
       }
     },
     methods: {
+      //使用微信jsdk里面的图片放大的方法
+      see_img(item,index) {
+          var _this = this;
+          var url_img = []; //图片列表
+          for (var i = 0; i < _this.house_image.length; i++) {
+              url_img.push(_this.$prefix +'/'+ _this.house_image[i]);
+          }
+          wx.ready(function() {
+              wx.previewImage({
+                  current: _this.$prefix +'/'+item,
+                  urls: url_img
+              });
+          });
+      },
       sandlianj(){
           this.$router.push({path: '/iframee'});
       },
@@ -316,11 +330,6 @@
           $("body").css({"overflow":"auto"});
           $("html").css({"overflow":"auto"});
           this.large = false;
-      },
-      enlarge(){
-          $("body").css({"overflow":"hidden"});
-          $("html").css({"overflow":"hidden"});
-          this.large = true;
       },
       coole(){
           /*const user = JSON.parse(localStorage.getItem('loginnx'));
@@ -642,7 +651,7 @@
 					      timestamp: we_cs.timestamp, // 必填，生成签名的时间戳
 					      nonceStr: we_cs.nonceStr, // 必填，生成签名的随机串
 					      signature: we_cs.signature, // 必填，签名
-					      jsApiList: ["onMenuShareTimeline", "onMenuShareAppMessage", "onMenuShareQQ", "onMenuShareWeibo", "onMenuShareQZone", "getLocation", "scanQRCode", "closeWindow", "addCard", "chooseWxPay"]
+					      jsApiList: ["onMenuShareTimeline", "onMenuShareAppMessage", "onMenuShareQQ", "onMenuShareWeibo", "onMenuShareQZone", "getLocation", "scanQRCode", "closeWindow", "addCard", "chooseWxPay","chooseImage", "previewImage", "uploadImage", "downloadImage", "getLocalImgData"]
 					});
 					
 	      }, (err)=>{

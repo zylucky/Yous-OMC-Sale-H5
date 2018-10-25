@@ -24,7 +24,7 @@ Vue.prototype.$prefix = "http://47.92.6.78:81" //图片前缀
 
 //测试
 // Vue.prototype.$api = "http://116.62.68.26:8080" //api地址116的地址ip
-// Vue.prototype.$prefix = "http://116.62.68.26:81" //图片前缀
+// Vue.prototype.$prefix = "http://116.62.68.26" //图片前缀
 
 //java后台本地地址
 
@@ -413,7 +413,7 @@ router.beforeEach((to, from, next) => {
 // //		  	alert('佣金管理');
 // 		  	next();
 // 		}
-//
+// 
 //     if(to.path=='/register'||to.path=='/forgot_pwd'||to.path.indexOf('/reset_pwd')!=-1){
 //         next();
 //     }else{
@@ -461,7 +461,7 @@ router.beforeEach((to, from, next) => {
 //                 next();
 //             }
 //         }
-//
+// 
 //     }
 // });
 
