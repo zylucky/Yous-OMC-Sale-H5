@@ -126,7 +126,13 @@ import { Indicator } from 'mint-ui';
 					).then((res)=>{
 						console.log(res);
 						if(res.success){
-							this.$router.push({path: '/k_page'});
+							if(res.status){
+								this.$router.push({path: '/k_page'});
+							}else{
+								MessageBox('提示',res.activationcode);
+								return;
+							}
+							
 						}else{
 							MessageBox('提示',res.message);
 							return;
