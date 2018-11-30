@@ -12,7 +12,7 @@
 				<span class="send_btn" @click="getCode">{{!show?'重新获取'+count:'获取验证码'}}</span>
 			</p>
 			<p class="inp_box">
-				<input type="text" placeholder="请输入VIP卡激活码"/>
+				<input type="text" placeholder="请输入VIP卡激活码" v-model="actcode"/>
 			</p>
 			<p class="btn_t" @click="to_active">激活VIP卡</p>
 		</div>
@@ -46,6 +46,7 @@ import { Indicator } from 'mint-ui';
 				timer: null,
 				phone: '',
 				code: '',
+				actcode:'',
 			}
 		},
 		methods:{
@@ -81,7 +82,7 @@ import { Indicator } from 'mint-ui';
 				axios.post(url,{
 					"parameters":{
 						"phone": this.phone,
-						"cookie": JSON.parse(localStorage.getItem('cookxs')).sjs,
+						"cookie": JSON.parse(localStorage.getItem('cooknx')).sjs,
 					},
 					"foreEndType":2,
 					"code":"14"
@@ -92,22 +93,52 @@ import { Indicator } from 'mint-ui';
 				});
 			},
 			yz_code(){//验证验证码
-				const url = this.$api + "/yhcms/web/qduser/compareCode.do";
-				axios.post(url,{
-					"parameters":{
-						"code": this.code,
-						"cookie": JSON.parse(localStorage.getItem('cookxs')).sjs,
-					},
-					"foreEndType":2,
-					"code":"15"
-				}).then((res)=>{
-					console.log(res);
-				}, (err)=>{
-					console.log(err);
-				});
+				if(this.code == ''){
+					MessageBox('提示', '验证码不能为空！');
+					return;
+				}else{
+					const url = this.$api + "/yhcms/web/qduser/compareCode.do";
+					axios.post(url,{
+						"parameters":{
+							"code": this.code,
+							"cookie": JSON.parse(localStorage.getItem('cooknx')).sjs,
+						},
+						"foreEndType":2,
+						"code":"15"
+					}).then((res)=>{
+						this.activation();//验证激活码 
+					}, (err)=>{
+						console.log(err);
+					});
+				}
+			},
+			activation(){
+				if(this.actcode == ''){
+					MessageBox('提示', '激活码不能为空！');
+					return;
+				}else{
+					const url = this.$api + "/yhcms/web/vipcard/cardActivation.do";
+					axios.post(url,{
+							"cookie":JSON.parse(localStorage.getItem('cooknx')).sjs,
+							"activationcode":this.actcode,
+							"customerphone":this.phone,
+						}
+					).then((res)=>{
+						console.log(res);
+						if(res.success){
+							this.$router.push({path: '/k_page'});
+						}else{
+							MessageBox('提示',res.message);
+							return;
+						}
+					}, (err)=>{
+						console.log(err);
+					});
+				}
 			},
 			to_active(){
 				this.yz_code();//验证验证码
+				
 			}
 
 		},
