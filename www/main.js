@@ -240,6 +240,13 @@ var router = new VueRouter({
                 title: '消息通知'
             }
         },
+				{//会员卡激活页面
+					path: '/card_active',
+					component: require('./pages/vip_card/card_active.vue'),
+					meta: {
+						title: '激活'
+					}
+				},
 				{//会员卡激活完成页面
 					path: '/k_page',
 					component: require('./pages/vip_card/k_page.vue'),
