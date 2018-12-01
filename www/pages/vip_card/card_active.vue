@@ -78,11 +78,14 @@ import { Indicator } from 'mint-ui';
 				}
 			},
 			send_code(){
+				const time1 = Date.parse(new Date());
+				const sjsd = {"sjs":(time1)};
+				localStorage.setItem('cook_code', JSON.stringify(sjsd));
 				const url = this.$api + "/yhcms/web/qduser/getCode.do";
 				axios.post(url,{
 					"parameters":{
 						"phone": this.phone,
-						"cookie": JSON.parse(localStorage.getItem('cooknx')).sjs,
+						"cookie": JSON.parse(localStorage.getItem('cook_code')).sjs,
 					},
 					"foreEndType":2,
 					"code":"14"
@@ -101,7 +104,7 @@ import { Indicator } from 'mint-ui';
 					axios.post(url,{
 						"parameters":{
 							"code": this.code,
-							"cookie": JSON.parse(localStorage.getItem('cooknx')).sjs,
+							"cookie": JSON.parse(localStorage.getItem('cook_code')).sjs,
 						},
 						"foreEndType":2,
 						"code":"15"
@@ -119,7 +122,6 @@ import { Indicator } from 'mint-ui';
 				}else{
 					const url = this.$api + "/yhcms/web/vipcard/cardActivation.do";
 					axios.post(url,{
-							"cookie":JSON.parse(localStorage.getItem('cooknx')).sjs,
 							"activationcode":this.actcode,
 							"customerphone":this.phone,
 						}
@@ -149,7 +151,6 @@ import { Indicator } from 'mint-ui';
 		},
 		mounted() {
 			var _this = this;
-			
 		}
 	}
 </script>
