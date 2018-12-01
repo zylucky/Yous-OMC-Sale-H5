@@ -124,18 +124,16 @@ import { Indicator } from 'mint-ui';
 							"customerphone":this.phone,
 						}
 					).then((res)=>{
-						console.log(res);
-						alert(res.success);
-						if(res.success){
-							if(res.status){
+						if(res.data.success){
+							if(res.data.status){
 								this.$router.push({path: '/k_page'});
 							}else{
-								MessageBox('提示',res.activationcode);
+								MessageBox('提示',res.data.activationcode);
 								return;
 							}
 							
 						}else{
-							MessageBox('提示',res.message);
+							MessageBox('提示',res.data.message);
 							return;
 						}
 					}, (err)=>{
