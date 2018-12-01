@@ -125,6 +125,7 @@ import { Indicator } from 'mint-ui';
 						}
 					).then((res)=>{
 						console.log(res);
+						alert(res.success);
 						if(res.success){
 							if(res.status){
 								this.$router.push({path: '/k_page'});
