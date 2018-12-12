@@ -38,6 +38,7 @@
 import axios from 'axios';
 import { MessageBox } from 'mint-ui';
 import { Indicator } from 'mint-ui';
+import { Toast } from 'mint-ui';
 	export default {
 		data(){
 			return{
@@ -93,6 +94,13 @@ import { Indicator } from 'mint-ui';
 					console.log(res);
 				}, (err)=>{
 					console.log(err);
+					if(this.$api = "http://116.62.68.26:8080"){
+						Toast({
+						message: '网络异常请稍后再试！',
+						position: 'center',
+						duration: 5000
+						});
+					}
 				});
 			},
 			yz_code(){//验证验证码
@@ -170,7 +178,7 @@ import { Indicator } from 'mint-ui';
 }
 .top_box{
 	height: 4.92rem;
-	background: url(../../resources/images/active_bg.png) no-repeat center;
+	background: url(../../resources/images/active_bg.jpg) no-repeat center;
 	background-size: 100% auto;
 }
 .card_bottom{

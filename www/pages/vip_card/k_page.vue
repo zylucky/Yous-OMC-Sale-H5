@@ -99,6 +99,6 @@
 	.ergelef{margin-left: 0.18rem;}
 	.topshb{margin-top: 0.18rem;}
 	.sssfimg{width: 3.47rem;height: 3.46rem;background:url(../../resources/images/shisffwj.jpg) no-repeat;background-size: 100% auto;}
-	.kdgwimg{width: 3.47rem;height: 3.46rem;background:url(../../resources/images/kuadifwwj.jpg) no-repeat;background-size: 100% auto;}
+	.kdgwimg{width: 3.47rem;height: 3.46rem;background:url(../../resources/images/kuadifwwj.png) no-repeat;background-size: 100% auto;}
 	.zxzsimg{width: 3.47rem;height: 3.46rem;background:url(../../resources/images/zxwjzs.jpg) no-repeat;background-size: 100% auto;}
 </style>
