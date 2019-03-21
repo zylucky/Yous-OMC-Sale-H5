@@ -36,13 +36,13 @@
                         <input type="text" value="" v-model.trim="name"  placeholder="请输入真实姓名">
                     </div>
                 </li>
-                <li class="clearfix">
+                <li class="clearfix" v-if="false">
                     <span class="ys_tit" style="width: 1.5rem !important;"><i>*</i>密码</span>
                     <div class="ys_item_con fl">
                         <input type="password" value="" @blur="lose_pwd" v-model="pwd" placeholder="请设置密码">
                     </div>
                 </li>
-                <li class="clearfix">
+                <li class="clearfix" v-if="false">
                     <span class="ys_tit" style="width: 1.5rem !important;"><i>*</i>确认密码</span>
                     <div class="ys_item_con fl">
                         <input type="password" value="" v-model="apwd" placeholder="请再次确认密码">
@@ -65,7 +65,7 @@
                         <input type="number" value="" v-model="verificode" @blur="yzverificode" placeholder="请输入验证码">
                     </div>
                 </li>
-                <li class="clearfix">
+                <li class="clearfix" v-if="false">
                     <span class="ys_tit" style="width: 1.5rem !important;">推荐人</span>
                     <div class="ys_item_con fl">
                         <input type="text" value="" @blur="tuijianre" onkeyup="this.value=this.value.replace(/[^0-9a-zA-Z]/g,'')" v-model="tjperson" placeholder="请输入推荐人邀请码">
@@ -84,7 +84,7 @@
                         </mt-cell>
                     </div>
                 </li>
-                <li class="clearfix">
+                <li class="clearfix" v-if="false">
                     <span class="ys_tit" style="width: 1.5rem !important;">所属项目</span>
                     <div class="ys_item_con fl">
                         <input v-if="projectjy" type="text" @blur="ssxm" value="" v-model="project" placeholder="所属项目">
@@ -415,21 +415,35 @@
                             Indicator.close();
                             var result = JSON.parse(res.bodyText);
                             if(result.success){
-                                if(this.name != null && this.phone != null && this.verificode != null && this.pwd != null && this.apwd != null){
+                                if(this.name != null && this.phone != null && this.verificode != null){
 
                                     const sjsd = {"sjs":(new Date)};
                                     localStorage.setItem('cooknx', JSON.stringify(sjsd));
                                     const _this = this, user22 = JSON.parse(localStorage.getItem('cooknx'));
                                     const url = this.$api + "/yhcms/web/qduser/register.do";
                                     let that = this;
-                                    const sha1 = crypto.createHash('sha1'), md5 = crypto.createHash('md5');
-                                    sha1.update(this.pwd);
-                                    const pwd = sha1.digest('hex');
-                                    md5.update(pwd);
-                                    const password = md5.digest("hex");
+//                                  const sha1 = crypto.createHash('sha1'), md5 = crypto.createHash('md5');
+//                                  sha1.update(this.pwd);
+//                                  const pwd = sha1.digest('hex');
+//                                  md5.update(pwd);
+//                                  const password = md5.digest("hex");
                                     this.registerqd = 2;
                                     let head = JSON.parse(localStorage.getItem('nxhead'));
-                                    this.$http.post(url, {"parameters":{"cookie":user22.sjs,"img":head,"name":this.name,"phone":this.phone,"pass":password,"gsid":this.bindcompid,"gsname":this.company,"xmname":this.project,"saleNum":this.tjperson},"foreEndType":2,"code":"1"}).then((res)=>{
+                                    this.$http.post(url, {
+                                    	"parameters":{
+	                                    	"cookie":user22.sjs,
+	                                    	"img":head,
+	                                    	"name":this.name,
+	                                    	"phone":this.phone,
+	                                    	"pass":'',
+	                                    	"gsid":this.bindcompid,
+	                                    	"gsname":this.company,
+//	                                    	"xmname":this.project,
+//	                                    	"saleNum":this.tjperson
+	                                    },
+	                                    "foreEndType":2,
+	                                    "code":"1"
+	                                    }).then((res)=>{
                                         Indicator.close();
                                         var result = JSON.parse(res.bodyText);
                                         if(result.success){

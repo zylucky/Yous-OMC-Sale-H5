@@ -9,6 +9,7 @@
     .headb{background: url("../resources/images/per_cen/per_cenba.png") no-repeat;background-size: 100% 100%;}
     .perli{width: 50%;float: left;height: 3rem;background-color:rgb(238,238,238) !important;padding-top: 0.6rem;padding-left: 1.35rem !important;img{width: 1.2rem;}border-bottom: 1px solid rgb(219, 218, 223);}
     .perbott{height: 2.55rem;margin-top: 6rem;}
+    .sing_out{width: 4rem;height: 0.8rem;line-height: 0.8rem;border-radius: 0.1rem;font-size: 0.32rem;text-align: center;margin: 6.6rem auto 0;background: url(../resources/images/invite/btn_bg.png) no-repeat center;background-size: 100% 100%;overflow: hidden;color: #fff;}
 </style>
 <template>
     <div class="all_elements" style="background-color:rgb(238,238,238);">
@@ -39,10 +40,10 @@
                     <span class="ys_tit"><a href="javascript:;"><img src="../resources/images/per_cen/per_infor.png"></a></span>
                     <div class="ys_item_con fl">个人信息</div>
                 </li>
-                <li class="clearfix perli" @click="modify_pwd">
+                <!--<li class="clearfix perli" @click="modify_pwd">
                     <span @click="modify_pwd" class="ys_tit"><a href="javascript:;"><img src="../resources/images/per_cen/mod_pwd.png"></a></span>
                     <div class="ys_item_con fl">修改密码</div>
-                </li>
+                </li>-->
                 <li class="clearfix perli" @click="my_collection" style="border-right: 1px solid #dbdadf;">
                     <span class="ys_tit"><a href="javascript:;"><img src="../resources/images/per_cen/my_col.png"></a></span>
                     <div class="ys_item_con fl">我的收藏</div>
@@ -55,10 +56,15 @@
                     <span class="ys_tit"><a href="javascript:;"><img src="../resources/images/per_cen/zhgl.png"></a></span>
                     <div class="ys_item_con fl">账户管理</div>
                 </li>
+                <li class="clearfix perli">
+                    <span class="ys_tit"><a href="javascript:;"><img src="../resources/images/per_cen/mod_pwd.png"></a></span>
+                    <div class="ys_item_con fl">敬请期待...</div>
+                </li>
             </ul>
             <div class="perbott">
-                <div style=""><img style="width: 44%;height: 1.7rem;margin-left: 0.2rem;margin-top: 0.5rem;float: left;" src="../resources/images/per_cen/per_pop.png"></div>
-                <div style="margin-left: 4.2rem !important;width:3.3rem;padding-top: 0.6rem;line-height: 0.5rem;color: rgb(168,168,168);font-size: 0.32rem;">我们的程序员正在挑灯夜战努力建设中...........更多功能，敬请期待！</div>
+            	<div class="sing_out" @click="login_out" v-show="dlzt==6">退出登录</div>
+                <!--<div style=""><img style="width: 44%;height: 1.7rem;margin-left: 0.2rem;margin-top: 0.5rem;float: left;" src="../resources/images/per_cen/per_pop.png"></div>
+                <div style="margin-left: 4.2rem !important;width:3.3rem;padding-top: 0.6rem;line-height: 0.5rem;color: rgb(168,168,168);font-size: 0.32rem;">我们的程序员正在挑灯夜战努力建设中...........更多功能，敬请期待！</div>-->
             </div>
         </div>
     </div>
@@ -114,6 +120,32 @@
 
         },
         methods: {
+        	login_out(){
+	          const url = this.$api + "/yhcms/web/qduser/loginOut.do";
+	          const user22 = JSON.parse(localStorage.getItem('cooknx'));
+	          let that = this;
+	          this.$http.post(url,{"cookie":user22.sjs,"foreEndType":2,"code":"10"}).then((res)=>{
+	              Indicator.close();
+	              const data = JSON.parse(res.bodyText).success;
+	              if(data){
+	                  localStorage.removeItem('cooknx');
+	                  localStorage.removeItem('usernx');
+	                  localStorage.removeItem('nxhead');
+	                  localStorage.removeItem("xzfystatus1");
+	                  //this.$router.push({path:'/login'});
+	                  this.$router.push({path:'/'});
+	                  location.reload();
+	              }else{
+	                  Toast({
+	                      message: '系统异常，请稍后再试!',
+	                      position: 'middle',
+	                      duration: 3000
+	                  });
+	              }
+	          }, (res)=>{
+	              Indicator.close();
+	          });
+	        },
             denglu(){
                 this.$router.push({path:'/login'});
             },

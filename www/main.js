@@ -18,13 +18,13 @@ Vue.use(VueResource);
 Vue.use(MintUI);
 
 //生产
-Vue.prototype.$api = "http://omc.urskongjian.com" //api地址
-Vue.prototype.$export = "http://omc.urskongjian.com" //导出
-Vue.prototype.$prefix = "http://47.92.6.78:81" //图片前缀
+// Vue.prototype.$api = "http://omc.urskongjian.com" //api地址
+// Vue.prototype.$export = "http://omc.urskongjian.com" //导出
+// Vue.prototype.$prefix = "http://47.92.6.78:81" //图片前缀
 
 //测试
-// Vue.prototype.$api = "http://116.62.68.26:8080" //api地址116的地址ip
-// Vue.prototype.$prefix = "http://116.62.68.26" //图片前缀
+Vue.prototype.$api = "http://116.62.68.26:8080" //api地址116的地址ip
+Vue.prototype.$prefix = "http://116.62.68.26" //图片前缀
 
 //java后台本地地址
 
@@ -150,7 +150,7 @@ var router = new VueRouter({
             component: require('./routers/register.vue')
         },
         {
-            path: '/login',
+            path: '/newlogin',
             component: require('./routers/login.vue')
         },
         {
@@ -240,244 +240,275 @@ var router = new VueRouter({
                 title: '消息通知'
             }
         },
-				{//会员卡激活页面
-					path: '/card_active',
-					component: require('./pages/vip_card/card_active.vue'),
-					meta: {
-						title: '激活'
-					}
-				},
-				{//会员卡激活完成页面
-					path: '/k_page',
-					component: require('./pages/vip_card/k_page.vue'),
-					meta: {
-						title: '激活成功'
-					}
-				},
+		{//会员卡激活页面
+			path: '/card_active',
+			component: require('./pages/vip_card/card_active.vue'),
+			meta: {
+				title: '激活'
+			}
+		},
+		{//会员卡激活完成页面
+			path: '/k_page',
+			component: require('./pages/vip_card/k_page.vue'),
+			meta: {
+				title: '激活成功'
+			}
+		},
+		{//测试
+			path: '/tolink',
+			component: require('./pages/test.vue'),
+			meta: {
+				title: '测试'
+			}
+		},
+		{//邀请渠道
+			path:'/invite',
+			name:'invite',
+			component: require('./pages/invite.vue'),
+			meta:{
+				title:'邀请好友'
+			}
+		},
+		{//新登陆
+			path:'/login',
+			name:'newlogin',
+			component: require('./pages/newlogin.vue'),
+			meta:{
+				title:'用户登录'
+			}
+		},
+		{//微信绑定
+			path:'/we_concat',
+			name:'we_concat',
+			component: require('./pages/we_concat.vue'),
+			meta:{
+				title:'微信登录'
+			}
+		},
     ]
 });
 
-router.beforeEach((to, from, next) => {
+//router.beforeEach((to, from, next) => {
+//
+//  document.title = to.meta.title || '';
+//// 根据路由变化去改变页面的title
+//  if (to.meta.title) {
+//    document.title = to.meta.title;
+//  }else{
+//    next();
+//  }
+//  if (to.path == '/channel_list') {//佣金管理
+//		localStorage.setItem('back_page','/channel_list');
+////	  	alert('佣金管理');
+//	  	next();
+//	}
+//  // 统计代码
+//  if (from.name) {
+//      _hmt.push(['_trackPageview'
+//          , '/#' + to.fullPath
+//          , window.location.origin ]);
+//  } else {
+//      _hmt.push(['_trackPageview'
+//          , '/#' + to.fullPath]);
+//  }
+//
+//     if(window.location.href.indexOf('from') !=-1){
+//       var url=window.location.href;
+//       //分享的链接
+//       var index1 = url.indexOf('?'),index2 = url.indexOf('#');
+//
+//       var url1=url.substring(0,index1-1),url2=url.substring(index2);
+//       var ul1=url1+"/"+url2;
+//       var ul=encodeURIComponent(ul1);
+//         $.post("http://omc.urskongjian.com/yhcms/web/jcsj/getChqxz.do",
+//             function (data) {
+//                 window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx109df14878717ecb&redirect_uri="+ul+"&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect";
+//             }, "json").catch(function (error) {
+//             window.location.href = "http://omc.urskongjian.com/error/uphtm.html";
+//         });
+//     }else{
+//           var name="code";
+//           var wxcode=null;
+//           var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+//           var r = window.location.search.substr(1).match(reg);
+//           if (r!=null)
+//               {wxcode= r[2];
+//
+//               }
+//         if(wxcode == null){
+//          var charString=window.location.href;
+//          var tt=encodeURIComponent(charString);
+//                    $.post("http://omc.urskongjian.com/yhcms/web/jcsj/getChqxz.do",
+//                        function (data) {
+//                            window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx109df14878717ecb&redirect_uri="+tt+"&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect";
+//                            //alert(data); // John
+//                        }, "json").catch(function (error) {
+//                        window.location.href = "http://omc.urskongjian.com/error/uphtm.html";
+//                    });
+//       }else{
+//             $.post("http://omc.urskongjian.com/yhcms/web/jcsj/getChqxz.do",
+//                 function (data) {
+//                   $.post(
+//                        "http://omc.urskongjian.com/yhcms/web/jcsj/getOpenid11.do?code="+wxcode
+//                   ).then(function (res) {
+//                       var data = JSON.parse(res);
+//                       if (data.success) {
+//                           if(data.subscribe){
+//                           if (data.subscribe == 1 || data.subscribe == 3 ) {
+//                                 if(to.path=='/register'||to.path=='/forgot_pwd'||to.path.indexOf('/reset_pwd')!=-1){
+//                                     next();
+//                                 }else{
+//                                     if(localStorage.getItem('nxhead')){
+//                                         next();
+//                                     }else{
+//                                         //存微信的头像
+//                                         const head = data.headimgurl;
+//                                         const opid = data.openid;
+//                                         localStorage.setItem('nxhead', JSON.stringify(head));
+//                                         localStorage.setItem('nxopenid', JSON.stringify(opid));
+//                                         next();
+//
+//                                     }
+//
+//                                     const user = JSON.parse(localStorage.getItem('cooknx'));
+//                                     if (!user && to.path != '/login') {
+//                                         // next({ path: '/login' });
+//                                         next();
+//                                     }else  if (!user && to.path == '/login') {
+//                                         next();
+//                                     }else  if (user && to.path == '/login') {
+//                                         next();
+//                                     }
+//                                     else{
+//                                         if(user!=null) {
+//                                             const time = user.time == null ? 0 : user.time, now = (new Date).getMilliseconds(), delta = now - time;
+//                                             if (delta > 86400 * 30) {
+//                                                 // next({path: '/login'});
+//                                                 next();
+//                                             } else {
+//                                                 next();
+//                                                 //没有强制登录时要把这块去掉1
+//                                                 // $.post("http://omc.urskongjian.com/yhcms/web/qduser/getQdLogin.do", {
+//                                                 //         "foreEndType": 2,
+//                                                 //         "code": "300000045",
+//                                                 //         "cookie": user.sjs,
+//                                                 //     },
+//                                                 //     function (data) {
+//                                                 //         if (data.success) {
+//                                                 //             next();
+//                                                 //         } else {
+//                                                 //             if (data.userzt == 2) {
+//                                                 //                 next({path: '/login'});
+//                                                 //             } else {
+//                                                 //                 next({path: '/login'});
+//                                                 //             }
+//                                                 //         }
+//                                                 //         //alert(data); // John
+//                                                 //     }, "json");
+//                                             }
+//                                         }else{
+//                                             // next({path: '/login'});
+//                                             next();
+//                                         }
+//                                     }
+//
+//
+//
+//
+//                                 }
+//                                 next();
+//                             } else {
+//                                 confirm("您还没有关注我们的公众号，请先关注我们的公众号！");
+//                                 window.location.href="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI0NjY4ODM5OQ==&scene=123&from=singlemessage#wechat_redirect";
+//                                 //window.location.href = "https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI0NjY4ODM5OQ==#wechat_redirect";
+//                             }
+//                         }else{
+//                             next();
+//                         }
+//
+//                         }
+//
+//                         else {
+//                             Toast({
+//                                 message: '获取状态失败:! 请稍候再试 ' + data.message,
+//                                 position: 'bottom'
+//                             });
+//                         }
+//                     }), function (res) {
+//                       Toast({
+//                           message: '获取状态失败! 请稍候再试',
+//                           position: 'bottom'
+//                       });
+//                   }
+//                 }, "json").catch(function (error) {
+//                     window.location.href = "http://omc.urskongjian.com/error/uphtm.html";
+//             });
+//         }
+//     }
+//});
 
-    document.title = to.meta.title || '';
-// 根据路由变化去改变页面的title
+router.beforeEach((to, from, next) => {
+//   路由发生变化修改页面title
     if (to.meta.title) {
       document.title = to.meta.title;
+    }
+    next();
+		if (to.path == '/channel_list') {//佣金管理
+			localStorage.setItem('back_page','/channel_list');
+//		  	alert('佣金管理');
+		  	next();
+		}
+
+    if(to.path=='/register'||to.path=='/forgot_pwd'||to.path.indexOf('/reset_pwd')!=-1){
+        next();
     }else{
-      next();
+        next();
+        const user = JSON.parse(localStorage.getItem('loginnx'));
+        if (!user && to.path != '/login') {
+            // next({ path: '/login' });
+            next();
+        }else  if (!user && to.path == '/login') {
+            next();
+        }else  if (user && to.path == '/login') {
+            next();
+        }else{
+            if(user!=null) {
+                const time = user.time == null ? 0 : user.time, now = (new Date).getMilliseconds(), delta = now - time;
+                if (delta > 86400 * 3) {
+//                     next({path: '/login'});
+                } else {
+                    const user22 = JSON.parse(localStorage.getItem('cooknx'));
+                    if(user22 != null){
+                    }else{
+                        // next({path: '/login'});
+                        next();
+                    }
+                    $.post("http://116.62.68.26:8080/yhcms/web/qduser/getQdLogin.do", {
+                            "foreEndType": 2,
+                            "code": "300000045",
+                            "cookie": user22.sjs,
+                        },
+                        function (data) {
+                            next();
+                            if (data.success) {
+                            } else {
+                                if (data.userzt == 2) {
+//                                     next({path: '/login'});
+                                } else {
+//                                     next({path: '/login'});
+                                }
+                            }
+                            //alert(data); // John
+                        }, "json");
+                }
+            }else{
+                // next({path: '/login'});
+                next();
+            }
+        }
+
     }
-    if (to.path == '/channel_list') {//佣金管理
-		localStorage.setItem('back_page','/channel_list');
-//	  	alert('佣金管理');
-	  	next();
-	}
-    // 统计代码
-    if (from.name) {
-        _hmt.push(['_trackPageview'
-            , '/#' + to.fullPath
-            , window.location.origin ]);
-    } else {
-        _hmt.push(['_trackPageview'
-            , '/#' + to.fullPath]);
-    }
-
-       if(window.location.href.indexOf('from') !=-1){
-         var url=window.location.href;
-         //分享的链接
-         var index1 = url.indexOf('?'),index2 = url.indexOf('#');
-
-         var url1=url.substring(0,index1-1),url2=url.substring(index2);
-         var ul1=url1+"/"+url2;
-         var ul=encodeURIComponent(ul1);
-           $.post("http://omc.urskongjian.com/yhcms/web/jcsj/getChqxz.do",
-               function (data) {
-                   window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx109df14878717ecb&redirect_uri="+ul+"&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect";
-               }, "json").catch(function (error) {
-               window.location.href = "http://omc.urskongjian.com/error/uphtm.html";
-           });
-       }else{
-             var name="code";
-             var wxcode=null;
-             var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
-             var r = window.location.search.substr(1).match(reg);
-             if (r!=null)
-                 {wxcode= r[2];
-
-                 }
-           if(wxcode == null){
-            var charString=window.location.href;
-            var tt=encodeURIComponent(charString);
-                      $.post("http://omc.urskongjian.com/yhcms/web/jcsj/getChqxz.do",
-                          function (data) {
-                              window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx109df14878717ecb&redirect_uri="+tt+"&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect";
-                              //alert(data); // John
-                          }, "json").catch(function (error) {
-                          window.location.href = "http://omc.urskongjian.com/error/uphtm.html";
-                      });
-         }else{
-               $.post("http://omc.urskongjian.com/yhcms/web/jcsj/getChqxz.do",
-                   function (data) {
-                     $.post(
-                          "http://omc.urskongjian.com/yhcms/web/jcsj/getOpenid11.do?code="+wxcode
-                     ).then(function (res) {
-                         var data = JSON.parse(res);
-                         if (data.success) {
-                             if(data.subscribe){
-                             if (data.subscribe == 1 || data.subscribe == 3 ) {
-                                   if(to.path=='/register'||to.path=='/forgot_pwd'||to.path.indexOf('/reset_pwd')!=-1){
-                                       next();
-                                   }else{
-                                       if(localStorage.getItem('nxhead')){
-                                           next();
-                                       }else{
-                                           //存微信的头像
-                                           const head = data.headimgurl;
-                                           const opid = data.openid;
-                                           localStorage.setItem('nxhead', JSON.stringify(head));
-                                           localStorage.setItem('nxopenid', JSON.stringify(opid));
-                                           next();
-
-                                       }
-
-                                       const user = JSON.parse(localStorage.getItem('cooknx'));
-                                       if (!user && to.path != '/login') {
-                                           // next({ path: '/login' });
-                                           next();
-                                       }else  if (!user && to.path == '/login') {
-                                           next();
-                                       }else  if (user && to.path == '/login') {
-                                           next();
-                                       }
-                                       else{
-                                           if(user!=null) {
-                                               const time = user.time == null ? 0 : user.time, now = (new Date).getMilliseconds(), delta = now - time;
-                                               if (delta > 86400 * 30) {
-                                                   // next({path: '/login'});
-                                                   next();
-                                               } else {
-                                                   next();
-                                                   //没有强制登录时要把这块去掉1
-                                                   // $.post("http://omc.urskongjian.com/yhcms/web/qduser/getQdLogin.do", {
-                                                   //         "foreEndType": 2,
-                                                   //         "code": "300000045",
-                                                   //         "cookie": user.sjs,
-                                                   //     },
-                                                   //     function (data) {
-                                                   //         if (data.success) {
-                                                   //             next();
-                                                   //         } else {
-                                                   //             if (data.userzt == 2) {
-                                                   //                 next({path: '/login'});
-                                                   //             } else {
-                                                   //                 next({path: '/login'});
-                                                   //             }
-                                                   //         }
-                                                   //         //alert(data); // John
-                                                   //     }, "json");
-                                               }
-                                           }else{
-                                               // next({path: '/login'});
-                                               next();
-                                           }
-                                       }
-
-
-
-
-                                   }
-                                   next();
-                               } else {
-                                   confirm("您还没有关注我们的公众号，请先关注我们的公众号！");
-                                   window.location.href="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI0NjY4ODM5OQ==&scene=123&from=singlemessage#wechat_redirect";
-                                   //window.location.href = "https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI0NjY4ODM5OQ==#wechat_redirect";
-                               }
-                           }else{
-                               next();
-                           }
-
-                           }
-
-                           else {
-                               Toast({
-                                   message: '获取状态失败:! 请稍候再试 ' + data.message,
-                                   position: 'bottom'
-                               });
-                           }
-                       }), function (res) {
-                         Toast({
-                             message: '获取状态失败! 请稍候再试',
-                             position: 'bottom'
-                         });
-                     }
-                   }, "json").catch(function (error) {
-                       window.location.href = "http://omc.urskongjian.com/error/uphtm.html";
-               });
-           }
-       }
 });
-
-// router.beforeEach((to, from, next) => {
-// //   路由发生变化修改页面title
-//     if (to.meta.title) {
-//       document.title = to.meta.title;
-//     }
-//     next();
-// 		if (to.path == '/channel_list') {//佣金管理
-// 			localStorage.setItem('back_page','/channel_list');
-// //		  	alert('佣金管理');
-// 		  	next();
-// 		}
-// 
-//     if(to.path=='/register'||to.path=='/forgot_pwd'||to.path.indexOf('/reset_pwd')!=-1){
-//         next();
-//     }else{
-//         next();
-//         const user = JSON.parse(localStorage.getItem('loginnx'));
-//         if (!user && to.path != '/login') {
-//             // next({ path: '/login' });
-//             next();
-//         }else  if (!user && to.path == '/login') {
-//             next();
-//         }else  if (user && to.path == '/login') {
-//             next();
-//         }else{
-//             if(user!=null) {
-//                 const time = user.time == null ? 0 : user.time, now = (new Date).getMilliseconds(), delta = now - time;
-//                 if (delta > 86400 * 3) {
-// //                     next({path: '/login'});
-//                 } else {
-//                     const user22 = JSON.parse(localStorage.getItem('cooknx'));
-//                     if(user22 != null){
-//                     }else{
-//                         // next({path: '/login'});
-//                         next();
-//                     }
-//                     $.post("http://116.62.68.26:8080/yhcms/web/qduser/getQdLogin.do", {
-//                             "foreEndType": 2,
-//                             "code": "300000045",
-//                             "cookie": user22.sjs,
-//                         },
-//                         function (data) {
-//                             next();
-//                             if (data.success) {
-//                             } else {
-//                                 if (data.userzt == 2) {
-// //                                     next({path: '/login'});
-//                                 } else {
-// //                                     next({path: '/login'});
-//                                 }
-//                             }
-//                             //alert(data); // John
-//                         }, "json");
-//                 }
-//             }else{
-//                 // next({path: '/login'});
-//                 next();
-//             }
-//         }
-// 
-//     }
-// });
 
 new Vue({
     el: '#app',
