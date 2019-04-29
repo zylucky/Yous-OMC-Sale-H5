@@ -183,9 +183,10 @@
 					if(result.success){//验证成功
 						//验证成功与微信建立绑定
 						let url = this.$api + "/yhcms/web/qduser/authBind.do";
+						var nxopenid = localStorage.getItem('nxopenid');//用户openid
 						axios.post(url,{
 							"cookie": "",
-							"openid": "ofeaP0TSCOVtHPJSM51m8yZUESOY",
+							"openid": nxopenid,
 							"phone": _this.phone
 						}).then((res)=>{
 							let result = res.data;

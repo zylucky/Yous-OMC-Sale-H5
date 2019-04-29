@@ -241,10 +241,13 @@
 			},
 			wechat_login(){
 				var _this = this;
+				
+				var nxopenid = localStorage.getItem('nxopenid');//用户openid
+				
 				const url = this.$api + "/yhcms/web/qduser/getOpenid.do";
 				axios.post(url,{
 					"cookie":"",
-					"openid":"ofeaP0TSCOVtHPJSM51m8yZUESOY"
+					"openid": nxopenid
 				}).then((res)=>{
 					let result = res.data;
 					if(result.success){

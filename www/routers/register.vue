@@ -429,6 +429,7 @@
 //                                  const password = md5.digest("hex");
                                     this.registerqd = 2;
                                     let head = JSON.parse(localStorage.getItem('nxhead'));
+                                    var nxopenid = localStorage.getItem('nxopenid');//用户openid
                                     this.$http.post(url, {
                                     	"parameters":{
 	                                    	"cookie":user22.sjs,
@@ -438,6 +439,7 @@
 	                                    	"pass":'',
 	                                    	"gsid":this.bindcompid,
 	                                    	"gsname":this.company,
+	                                    	"openid": nxopenid
 //	                                    	"xmname":this.project,
 //	                                    	"saleNum":this.tjperson
 	                                    },
